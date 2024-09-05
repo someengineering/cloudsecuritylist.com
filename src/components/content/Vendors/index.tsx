@@ -85,29 +85,15 @@ export default async function Vendors({
   };
 
   return (
-    <>
-      <div className="px-6 py-12 sm:py-16 lg:px-8">
-        <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-            Cloud security vendors
-          </h2>
-          <p className="mt-6 text-lg leading-8 text-gray-600">
-            Cloud security engineers are notoriously overworked and
-            under-resourced. This curated list of tools, frameworks, and
-            resources makes their lives easier.
-          </p>
-        </div>
-      </div>
-      <FiltersProvider initialValues={filters}>
-        {marketSegments.length > 0 && productCategories.length > 0 ? (
-          <FilterPanel
-            marketSegments={marketSegments}
-            productCategories={productCategories}
-            organizationTypes={organizationTypes}
-          />
-        ) : null}
-        <List initialData={await getVendors(filters)} getVendors={getVendors} />
-      </FiltersProvider>
-    </>
+    <FiltersProvider initialValues={filters}>
+      {marketSegments.length > 0 && productCategories.length > 0 ? (
+        <FilterPanel
+          marketSegments={marketSegments}
+          productCategories={productCategories}
+          organizationTypes={organizationTypes}
+        />
+      ) : null}
+      <List initialData={await getVendors(filters)} getVendors={getVendors} />
+    </FiltersProvider>
   );
 }

@@ -31,55 +31,41 @@ export default async function ProductCategories({
   });
 
   return (
-    <>
-      <div className="px-6 py-12 sm:py-16 lg:px-8">
-        <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-            Cloud security product categories
-          </h2>
-          <p className="mt-6 text-lg leading-8 text-gray-600">
-            Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui
-            lorem cupidatat commodo. Elit sunt amet fugiat veniam occaecat
-            fugiat aliqua.
-          </p>
-        </div>
-      </div>
-      <FiltersProvider initialValues={filters}>
-        {marketSegments.length > 0 ? (
-          <FilterButtons marketSegments={marketSegments} />
-        ) : null}
-        <List
-          getProductCategories={async (activeFilters: Filters) => {
-            'use server';
+    <FiltersProvider initialValues={filters}>
+      {marketSegments.length > 0 ? (
+        <FilterButtons marketSegments={marketSegments} />
+      ) : null}
+      <List
+        getProductCategories={async (activeFilters: Filters) => {
+          'use server';
 
-            const marketSegment = activeFilters.marketSegment
-              ? (
-                  await sanityFetch<MARKET_SEGMENT_QUERYResult>({
-                    query: MARKET_SEGMENT_QUERY,
-                    params: { slug: activeFilters.marketSegment },
-                    tags: ['marketSegment'],
-                  })
-                )?._id
-              : undefined;
+          const marketSegment = activeFilters.marketSegment
+            ? (
+                await sanityFetch<MARKET_SEGMENT_QUERYResult>({
+                  query: MARKET_SEGMENT_QUERY,
+                  params: { slug: activeFilters.marketSegment },
+                  tags: ['marketSegment'],
+                })
+              )?._id
+            : undefined;
 
-            if (!marketSegment) {
-              return await sanityFetch<PRODUCT_CATEGORIES_QUERYResult>({
-                query: PRODUCT_CATEGORIES_QUERY,
-                tags: ['marketSegment', 'productCategory'],
-              });
-            }
+          if (!marketSegment) {
+            return await sanityFetch<PRODUCT_CATEGORIES_QUERYResult>({
+              query: PRODUCT_CATEGORIES_QUERY,
+              tags: ['marketSegment', 'productCategory'],
+            });
+          }
 
-            return await sanityFetch<PRODUCT_CATEGORIES_BY_MARKET_SEGMENT_QUERYResult>(
-              {
-                query: PRODUCT_CATEGORIES_BY_MARKET_SEGMENT_QUERY,
-                params: {
-                  marketSegment,
-                },
+          return await sanityFetch<PRODUCT_CATEGORIES_BY_MARKET_SEGMENT_QUERYResult>(
+            {
+              query: PRODUCT_CATEGORIES_BY_MARKET_SEGMENT_QUERY,
+              params: {
+                marketSegment,
               },
-            );
-          }}
-        />
-      </FiltersProvider>
-    </>
+            },
+          );
+        }}
+      />
+    </FiltersProvider>
   );
 }

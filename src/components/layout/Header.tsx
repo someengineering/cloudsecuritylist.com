@@ -6,16 +6,13 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { useState } from 'react';
 
-const navigation = [
-  { name: 'Vendors', href: '/' },
-  { name: 'Categories', href: '/categories' },
-  // { name: 'Frameworks', href: '/research' },
-  // { name: 'Research', href: '/research' },
-  // { name: 'Publications', href: '/publications' },
-  // { name: 'Conferences', href: '/conferences' },
-];
-
-export default function Example() {
+export default function Header({
+  title,
+  navigation,
+}: {
+  title?: string;
+  navigation?: { name: string; href: string }[];
+}) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
@@ -29,7 +26,7 @@ export default function Example() {
           className="-m-1.5 flex items-center p-1.5 text-xl font-bold"
         >
           <Icon className="mr-1.5 h-12 w-12 text-cyan-600" aria-hidden="true" />
-          Cloud Security List
+          {title}
         </Link>
         <div className="flex lg:hidden">
           <button
@@ -42,7 +39,7 @@ export default function Example() {
           </button>
         </div>
         <div className="hidden lg:flex lg:gap-x-12">
-          {navigation.map((item) => (
+          {navigation?.map((item) => (
             <Link
               key={item.name}
               href={item.href}
@@ -76,7 +73,7 @@ export default function Example() {
           <div className="mt-6 flow-root">
             <div className="-my-6 divide-y divide-gray-500/10">
               <div className="space-y-2 py-6">
-                {navigation.map((item) => (
+                {navigation?.map((item) => (
                   <Link
                     key={item.name}
                     href={item.href}

@@ -1,6 +1,9 @@
+import Footer from '@/components/layout/Footer';
 import Header from '@/components/layout/Header';
+import { sanityFetch } from '@/lib/sanity/client';
+import { SITE_SETTINGS_QUERY } from '@/lib/sanity/queries/siteSettings';
+import { SITE_SETTINGS_QUERYResult } from '@/lib/sanity/types';
 import '@/styles/globals.css';
-import type { Metadata } from 'next';
 import { Plus_Jakarta_Sans } from 'next/font/google';
 
 const plusJakartaSans = Plus_Jakarta_Sans({
@@ -9,18 +12,23 @@ const plusJakartaSans = Plus_Jakarta_Sans({
   variable: '--font-plus-jakarta-sans',
 });
 
-export const metadata: Metadata = {
-  title: 'Cloud Security List',
-  description:
-    'Cloud security engineers are notoriously overworked and under-resourced. This curated list of tools, frameworks, and resources makes their lives easier.',
-};
+export default async function Layout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const { title, navigation, copyright } =
+    (await sanityFetch<SITE_SETTINGS_QUERYResult>({
+      query: SITE_SETTINGS_QUERY,
+      tags: ['siteSettings'],
+    })) ?? {};
 
-export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`scroll-smooth ${plusJakartaSans.variable}`}>
       <body className="bg-white">
-        <Header />
+        <Header title={title} navigation={navigation} />
         {children}
+        <Footer copyright={copyright} navigation={navigation} />
       </body>
     </html>
   );

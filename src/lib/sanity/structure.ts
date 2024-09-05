@@ -1,5 +1,6 @@
 import {
   CaseIcon,
+  CogIcon,
   DashboardIcon,
   DocumentsIcon,
   SchemaIcon,
@@ -68,4 +69,12 @@ export const structure: StructureResolver = (S) =>
       S.documentTypeListItem('framework')
         .title('Frameworks')
         .icon(DocumentsIcon),
+      S.divider(),
+      S.documentTypeListItem('page').title('Pages').icon(DocumentsIcon),
+      S.listItem()
+        .title('Site settings')
+        .icon(CogIcon)
+        .child(
+          S.document().schemaType('siteSettings')?.documentId('siteSettings'),
+        ),
     ]);
