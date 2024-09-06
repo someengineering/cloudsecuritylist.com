@@ -25,8 +25,8 @@ export default defineType({
     defineField({
       name: 'description',
       title: 'Description',
-      type: 'string',
-      // validation: (rule) => rule.required().min(1),
+      type: 'text',
+      rows: 5,
     }),
   ],
 });

@@ -6,7 +6,6 @@ export const PAGE_QUERY = groq`
     slug.current == $slug
   ] [0] {
     title,
-    shortTitle,
     description,
   }
 `;

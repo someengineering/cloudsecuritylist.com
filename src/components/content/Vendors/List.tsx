@@ -168,7 +168,7 @@ export default function List({
                 </div>
               </div>
             </div>
-            <div className="line-clamp-4 h-20 text-sm text-gray-500">
+            <div className="line-clamp-5 h-[6.25rem] text-sm text-gray-500">
               {vendor.description}
             </div>
             {vendor.productCategories?.length ? (

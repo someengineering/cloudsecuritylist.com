@@ -16,7 +16,6 @@ export const structure: StructureResolver = (S) =>
       S.documentTypeListItem('marketSegment')
         .title('Market segments')
         .icon(DashboardIcon),
-      S.divider(),
       S.documentTypeListItem('productCategory')
         .title('Product categories')
         .icon(TagsIcon),

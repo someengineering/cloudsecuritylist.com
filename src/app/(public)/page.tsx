@@ -7,7 +7,7 @@ import { PAGE_QUERYResult } from '@/lib/sanity/types';
 import { Metadata } from 'next';
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { title, shortTitle, description } =
+  const { title, description } =
     (await sanityFetch<PAGE_QUERYResult>({
       query: PAGE_QUERY,
       params: { slug: 'vendors' },
@@ -15,7 +15,7 @@ export async function generateMetadata(): Promise<Metadata> {
     })) ?? {};
 
   return {
-    title: shortTitle ?? title ?? 'Vendors',
+    title,
     description,
   };
 }

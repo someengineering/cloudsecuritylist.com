@@ -14,11 +14,6 @@ export default defineType({
       validation: (rule) => rule.required().min(1),
     }),
     defineField({
-      name: 'shortTitle',
-      title: 'Short title',
-      type: 'string',
-    }),
-    defineField({
       name: 'slug',
       title: 'Slug',
       type: 'slug',

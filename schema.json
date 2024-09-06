@@ -698,13 +698,6 @@
         },
         "optional": false
       },
-      "shortTitle": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "string"
-        },
-        "optional": true
-      },
       "slug": {
         "type": "objectAttribute",
         "value": {
@@ -1443,7 +1436,7 @@
         "value": {
           "type": "string"
         },
-        "optional": false
+        "optional": true
       }
     }
   },
