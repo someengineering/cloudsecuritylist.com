@@ -10,6 +10,8 @@ export default defineType({
     defineField({
       name: 'name',
       title: 'Name (acronym/abbreviation)',
+      description:
+        'Should be lowercase except for proper nouns an acronyms. For categories with a common acronym or abbreviation, enter it here and fill in the expansion field below.',
       type: 'string',
       validation: (rule) => rule.required().min(1),
     }),

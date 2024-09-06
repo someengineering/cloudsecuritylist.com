@@ -10,6 +10,7 @@ export default defineType({
     defineField({
       name: 'name',
       title: 'Name',
+      description: 'Should be lowercase except for proper nouns an acronyms.',
       type: 'string',
       validation: (rule) => rule.required().min(1),
     }),

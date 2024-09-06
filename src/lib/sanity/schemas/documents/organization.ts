@@ -101,6 +101,7 @@ export default defineType({
     defineField({
       name: 'description',
       title: 'Description',
+      description: 'Maximum 250 characters.',
       type: 'text',
       rows: 5,
       validation: (rule) => rule.required().min(100).max(250),

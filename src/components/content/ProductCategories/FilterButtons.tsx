@@ -26,7 +26,7 @@ export default function FilterButtons({
   }, [filters, pathname, router]);
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-3 sm:px-6 lg:px-8">
+    <div className="mx-auto max-w-4xl px-6 py-3 lg:px-8">
       <div className="isolate flex rounded-md shadow-sm">
         {marketSegments.map((marketSegment, idx) => (
           <button

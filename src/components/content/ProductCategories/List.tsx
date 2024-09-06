@@ -50,12 +50,13 @@ export default function List({
           <div
             key={productCategory._id}
             id={productCategory.slug}
-            className="pt-8 text-base leading-7 lg:grid lg:grid-cols-8 lg:gap-8"
+            className="pt-8 text-base leading-7 lg:grid lg:grid-cols-5 lg:gap-8"
           >
             <dt className="font-semibold text-gray-900 lg:col-span-1">
-              {productCategory.name}
+              {productCategory.name[0].toUpperCase() +
+                productCategory.name.slice(1)}
             </dt>
-            <dd className="mt-4 text-gray-600 lg:col-span-7 lg:mt-0">
+            <dd className="mt-4 text-gray-600 lg:col-span-4 lg:mt-0">
               {productCategory.expansion ? (
                 <div className="mb-4 font-semibold">
                   {productCategory.expansion[0].toUpperCase() +

@@ -156,7 +156,7 @@ export default function FilterPanel({
                           {selectedCategory.name}
                         </abbr>
                       ) : (
-                        <span>selectedCategory.name</span>
+                        <span>{selectedCategory.name}</span>
                       )}
                       <button
                         type="button"

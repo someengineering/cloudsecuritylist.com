@@ -16,6 +16,7 @@ export default defineType({
     defineField({
       name: 'description',
       title: 'Site description',
+      description: 'Maximum 160 characters.',
       type: 'text',
       rows: 3,
       validation: (rule) => rule.required().min(50).max(160),
@@ -45,7 +46,9 @@ export default defineType({
             },
             {
               name: 'href',
-              title: 'URL (relative path if internal)',
+              title: 'Target',
+              description:
+                'Should be a relative path for internal links (e.g., /some-path).',
               type: 'url',
               validation: (rule) =>
                 rule.required().uri({ allowRelative: true }),
