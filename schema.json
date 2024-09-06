@@ -350,14 +350,6 @@
         {
           "type": "string",
           "value": "academic"
-        },
-        {
-          "type": "string",
-          "value": "open-source"
-        },
-        {
-          "type": "string",
-          "value": "subsidiary"
         }
       ]
     }

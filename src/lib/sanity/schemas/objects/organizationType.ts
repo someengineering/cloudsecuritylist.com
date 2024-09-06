@@ -2,10 +2,8 @@ import {
   AcademicCapIcon,
   BuildingOffice2Icon,
   BuildingOfficeIcon,
-  CodeBracketSquareIcon,
   GiftTopIcon,
   ShieldCheckIcon,
-  Squares2X2Icon,
 } from '@heroicons/react/16/solid';
 import { defineType } from 'sanity';
 
@@ -15,8 +13,6 @@ export enum ORGANIZATION_TYPE {
   NONPROFIT = 'nonprofit',
   GOVERNMENT = 'government',
   ACADEMIC = 'academic',
-  OPEN_SOURCE = 'open-source',
-  SUBSIDIARY = 'subsidiary',
 }
 
 export const ORGANIZATION_TYPES = [
@@ -44,16 +40,6 @@ export const ORGANIZATION_TYPES = [
     title: 'Academic institution',
     value: ORGANIZATION_TYPE.ACADEMIC,
     icon: AcademicCapIcon,
-  },
-  {
-    title: 'Open-source project',
-    value: ORGANIZATION_TYPE.OPEN_SOURCE,
-    icon: CodeBracketSquareIcon,
-  },
-  {
-    title: 'Corporate subsidiary',
-    value: ORGANIZATION_TYPE.SUBSIDIARY,
-    icon: Squares2X2Icon,
   },
 ];
 

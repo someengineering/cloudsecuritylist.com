@@ -3,7 +3,9 @@
 import Icon from '@/assets/icon.svg';
 import { Dialog, DialogPanel } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+import { clsx } from 'clsx';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 
 export default function Header({
@@ -13,6 +15,7 @@ export default function Header({
   title?: string;
   navigation?: { name: string; href: string }[];
 }) {
+  const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
@@ -43,7 +46,12 @@ export default function Header({
             <Link
               key={item.name}
               href={item.href}
-              className="text-sm font-semibold leading-6 text-gray-900"
+              className={clsx(
+                'text-sm leading-6',
+                pathname === item.href
+                  ? 'font-bold text-cyan-700 hover:text-cyan-800'
+                  : 'font-semibold text-gray-900 hover:text-gray-950',
+              )}
             >
               {item.name}
             </Link>
@@ -77,7 +85,12 @@ export default function Header({
                   <Link
                     key={item.name}
                     href={item.href}
-                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                    className={clsx(
+                      '-mx-3 block rounded-lg px-3 py-2 text-base leading-7',
+                      pathname === item.href
+                        ? 'bg-cyan-50 font-bold text-cyan-900'
+                        : 'font-semibold text-gray-900 hover:bg-gray-50',
+                    )}
                   >
                     {item.name}
                   </Link>

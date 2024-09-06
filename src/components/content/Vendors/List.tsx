@@ -26,14 +26,14 @@ export default function List({
   const [lastItem, setLastItem] = useState<string | undefined>(
     initialData[initialData.length - 1]?.name,
   );
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
 
   const [sentryRef] = useInfiniteScroll({
-    loading: isLoading,
+    loading: loading,
     hasNextPage: !!lastItem,
     onLoadMore: async () => {
-      setIsLoading(true);
+      setLoading(true);
 
       if (lastItem) {
         const data = await getVendors(filters, lastItem);
@@ -46,13 +46,14 @@ export default function List({
         if (data.length > 0 && data[data.length - 1].name !== lastItem) {
           setLastItem(data[data.length - 1].name);
           setVendors([...vendors, ...data]);
+        } else {
+          setLastItem(undefined);
         }
       }
 
-      setIsLoading(false);
+      setLoading(false);
     },
-    disabled: !!error,
-    rootMargin: '0px 0px 5px 0px',
+    disabled: error,
   });
 
   useEffect(() => {
@@ -69,7 +70,7 @@ export default function List({
   return (
     <ul
       role="list"
-      className="container mx-auto grid max-w-7xl grid-cols-1 gap-4 py-8 sm:px-6 lg:grid-cols-3 lg:px-8 xl:gap-6"
+      className="container mx-auto grid max-w-7xl auto-rows-fr grid-cols-1 gap-4 py-8 sm:px-6 lg:grid-cols-3 lg:px-8 xl:gap-6"
     >
       {vendors?.map((vendor) => {
         const organizationType = ORGANIZATION_TYPES.find(
@@ -168,11 +169,11 @@ export default function List({
                 </div>
               </div>
             </div>
-            <div className="line-clamp-5 h-[6.25rem] text-sm text-gray-500">
+            <div className="line-clamp-5 text-sm text-gray-500">
               {vendor.description}
             </div>
             {vendor.productCategories?.length ? (
-              <div className="flex grow flex-wrap items-end gap-x-3 gap-y-1.5">
+              <div className="flex grow flex-wrap content-end items-end gap-x-3 gap-y-1.5">
                 {vendor.productCategories.map((productCategory) => (
                   <span
                     className="inline-flex items-center rounded-md bg-cyan-50 px-2 py-1 text-xs font-medium text-cyan-600 ring-1 ring-inset ring-cyan-500/10"
@@ -195,7 +196,61 @@ export default function List({
           </li>
         );
       })}
-      {(isLoading || lastItem) && <li ref={sentryRef} />}
+      {!error && (loading || lastItem) && (
+        <li
+          ref={sentryRef}
+          className="relative rounded-lg border border-gray-300 bg-white px-5 py-4 shadow-sm"
+        >
+          <div className="flex h-full animate-pulse flex-col space-y-4">
+            <div className="flex items-center space-x-3">
+              <div className="dark:bg-slate h-14 w-14 flex-shrink-0 rounded bg-slate-200" />
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center justify-between">
+                  <div className="flex flex-grow flex-col items-start">
+                    <div className="mb-2 h-5 w-3/4 rounded bg-slate-200" />
+                    <div className="h-3 w-1/2 rounded bg-slate-200" />
+                  </div>
+                  <ul role="list" className="flex items-end gap-x-3">
+                    {[...Array(3)].map((i) => (
+                      <li key={`skeleton-icon-${i}`}>
+                        <div className="h-5 w-5 rounded bg-slate-200" />
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div className="space-y-3 pt-1.5">
+              <div className="grid grid-cols-3 gap-4">
+                <div className="col-span-2 h-2 rounded bg-slate-200" />
+                <div className="col-span-1 h-2 rounded bg-slate-200" />
+              </div>
+              <div className="grid grid-cols-5 gap-4">
+                <div className="col-span-2 h-2 rounded bg-slate-200" />
+                <div className="col-span-3 h-2 rounded bg-slate-200" />
+              </div>
+              <div className="grid grid-cols-5 gap-4">
+                <div className="col-span-1 h-2 rounded bg-slate-200" />
+                <div className="col-span-2 h-2 rounded bg-slate-200" />
+                <div className="col-span-2 h-2 rounded bg-slate-200" />
+              </div>
+              <div className="grid grid-cols-3 gap-4">
+                <div className="col-span-1 h-2 rounded bg-slate-200" />
+                <div className="col-span-2 h-2 rounded bg-slate-200" />
+              </div>
+              <div className="h-2 w-1/2 rounded bg-slate-200" />
+            </div>
+            <div className="flex grow flex-wrap items-end gap-x-3 gap-y-2 pb-1">
+              {[...Array(5)].map((i) => (
+                <div
+                  className="flex h-4 w-10 rounded bg-slate-200"
+                  key={`skeleton-tag-${i}`}
+                />
+              ))}
+            </div>
+          </div>
+        </li>
+      )}
     </ul>
   );
 }

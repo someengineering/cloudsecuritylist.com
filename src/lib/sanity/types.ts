@@ -73,9 +73,7 @@ export type OrganizationType =
   | 'private'
   | 'nonprofit'
   | 'government'
-  | 'academic'
-  | 'open-source'
-  | 'subsidiary';
+  | 'academic';
 
 export type SiteSettings = {
   _id: string;
