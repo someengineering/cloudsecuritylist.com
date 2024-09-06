@@ -7,6 +7,9 @@ import {
   PRODUCT_CATEGORIES_QUERYResult,
 } from '@/lib/sanity/types';
 import {
+  Dialog,
+  DialogBackdrop,
+  DialogPanel,
   Disclosure,
   DisclosureButton,
   DisclosurePanel,
@@ -17,7 +20,7 @@ import {
 } from '@headlessui/react';
 import { ChevronDownIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import { usePathname, useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function FilterPanel({
   marketSegments,
@@ -28,6 +31,7 @@ export default function FilterPanel({
   productCategories: PRODUCT_CATEGORIES_QUERYResult;
   organizationTypes: string[];
 }) {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { filters, setFilters } = useFilters();
   const router = useRouter();
   const pathname = usePathname();
@@ -55,58 +59,56 @@ export default function FilterPanel({
 
         <div className="border-b border-gray-200 bg-white pb-4">
           <div className="mx-auto flex max-w-7xl items-center justify-end px-4 sm:px-6 lg:px-8">
-            <div className="hidden sm:block">
-              <div className="flow-root">
-                <PopoverGroup className="-mx-4 flex items-center divide-x divide-gray-200">
-                  <Popover className="relative ml-auto inline-block px-4 text-left">
-                    <PopoverButton className="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
-                      <span>Organization type</span>
-                      {filters.organizationTypes.length ? (
-                        <span className="ml-1.5 rounded bg-gray-200 px-1.5 py-0.5 text-xs font-semibold tabular-nums text-gray-700">
-                          {filters.organizationTypes.length}
-                        </span>
-                      ) : null}
-                      <ChevronDownIcon
-                        aria-hidden="true"
-                        className="ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500 data-[open]:rotate-180"
-                      />
-                    </PopoverButton>
+            <div className="hidden sm:flow-root">
+              <PopoverGroup className="-mx-4 flex items-center divide-x divide-gray-200">
+                <Popover className="relative ml-auto inline-block px-4 text-left">
+                  <PopoverButton className="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
+                    <span>Organization type</span>
+                    {filters.organizationTypes.length ? (
+                      <span className="ml-1.5 rounded bg-gray-200 px-1.5 py-0.5 text-xs font-semibold tabular-nums text-gray-700">
+                        {filters.organizationTypes.length}
+                      </span>
+                    ) : null}
+                    <ChevronDownIcon
+                      aria-hidden="true"
+                      className="ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500 data-[open]:rotate-180"
+                    />
+                  </PopoverButton>
 
-                    <PopoverPanel className="absolute right-2 z-10 mt-2 origin-top-right rounded-md bg-white p-4 shadow-2xl ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:opacity-0">
-                      <form className="space-y-4">
-                        {ORGANIZATION_TYPES.filter((type) =>
-                          organizationTypes.includes(type.value),
-                        ).map((type) => (
-                          <div className="flex items-center" key={type.value}>
-                            <input
-                              defaultValue="public"
-                              checked={filters.organizationTypes.includes(
-                                type.value,
-                              )}
-                              id={`filter-type-${type.value}`}
-                              name="organizationType[]"
-                              type="checkbox"
-                              className="h-4 w-4 rounded border-gray-300 text-cyan-600 focus:ring-cyan-500"
-                              onChange={() => {
-                                setFilters({
-                                  type: 'organizationType',
-                                  value: type.value,
-                                });
-                              }}
-                            />
-                            <label
-                              htmlFor={`filter-type-${type.value}`}
-                              className="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-gray-900"
-                            >
-                              {type.title}
-                            </label>
-                          </div>
-                        ))}
-                      </form>
-                    </PopoverPanel>
-                  </Popover>
-                </PopoverGroup>
-              </div>
+                  <PopoverPanel className="absolute right-2 z-10 mt-2 origin-top-right rounded-md bg-white p-4 shadow-2xl ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:opacity-0">
+                    <form className="space-y-4">
+                      {ORGANIZATION_TYPES.filter((type) =>
+                        organizationTypes.includes(type.value),
+                      ).map((type) => (
+                        <div className="flex items-center" key={type.value}>
+                          <input
+                            defaultValue="public"
+                            checked={filters.organizationTypes.includes(
+                              type.value,
+                            )}
+                            id={`filter-type-${type.value}`}
+                            name="organizationType[]"
+                            type="checkbox"
+                            className="h-4 w-4 rounded border-gray-300 text-cyan-600 focus:ring-cyan-500"
+                            onChange={() => {
+                              setFilters({
+                                type: 'organizationType',
+                                value: type.value,
+                              });
+                            }}
+                          />
+                          <label
+                            htmlFor={`filter-type-${type.value}`}
+                            className="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-gray-900"
+                          >
+                            {type.title}
+                          </label>
+                        </div>
+                      ))}
+                    </form>
+                  </PopoverPanel>
+                </Popover>
+              </PopoverGroup>
             </div>
           </div>
         </div>
@@ -118,7 +120,10 @@ export default function FilterPanel({
         </h2>
         <div className="border-y border-gray-200 bg-gray-100">
           <div className="mx-auto max-w-7xl px-4 py-3 sm:flex sm:items-center sm:px-6 lg:px-8">
-            <DisclosureButton className="group flex items-center py-2 text-sm font-medium text-gray-700 hover:text-gray-900">
+            <DisclosureButton
+              className="group flex items-center py-2 text-sm font-medium text-gray-700 hover:text-gray-900"
+              onClick={() => setMobileMenuOpen(true)}
+            >
               Product categories
               <span className="sr-only">, selected</span>
               <ChevronDownIcon
@@ -178,18 +183,18 @@ export default function FilterPanel({
           </div>
         </div>
 
-        <DisclosurePanel className="border-y border-gray-200 py-10">
-          <div className="mx-auto grid max-w-7xl auto-rows-min grid-cols-2 gap-x-4 px-4 text-sm sm:px-6 md:grid-cols-3 md:gap-x-6 lg:grid-cols-6 lg:px-8">
+        <DisclosurePanel className="hidden border-y border-gray-200 py-10 sm:block">
+          <div className="mx-auto grid max-w-7xl auto-rows-min grid-cols-2 gap-x-4 gap-y-8 px-4 text-sm sm:px-6 md:grid-cols-4 md:gap-x-6 lg:grid-cols-7 lg:px-8">
             {marketSegments.map((segment) => (
               <fieldset key={segment._id}>
                 <legend className="block font-medium">
                   {segment.name[0].toUpperCase() + segment.name.slice(1)}
                 </legend>
-                <div className="space-y-6 pt-6 sm:space-y-4 sm:pt-4">
+                <div className="space-y-4 pt-4">
                   {segment.productCategories.map((category) => (
                     <div
                       key={category._id}
-                      className="flex items-center text-base sm:text-sm"
+                      className="flex items-center text-sm"
                     >
                       <input
                         defaultValue={category.slug}
@@ -230,6 +235,102 @@ export default function FilterPanel({
           </div>
         </DisclosurePanel>
       </Disclosure>
+
+      <Dialog
+        open={mobileMenuOpen}
+        onClose={setMobileMenuOpen}
+        className="relative z-40 sm:hidden"
+      >
+        <DialogBackdrop
+          transition
+          className="fixed inset-0 bg-black bg-opacity-25 transition-opacity duration-300 ease-linear data-[closed]:opacity-0"
+        />
+
+        <div className="fixed inset-0 z-40 flex">
+          <DialogPanel
+            transition
+            className="relative ml-auto flex h-full w-full max-w-xs transform flex-col overflow-y-auto bg-white py-4 pb-12 shadow-xl transition duration-300 ease-in-out data-[closed]:translate-x-full"
+          >
+            <div className="flex items-center justify-between px-4">
+              <h2 className="text-lg font-medium text-gray-900">Filters</h2>
+              <button
+                type="button"
+                onClick={() => setMobileMenuOpen(false)}
+                className="-mr-2 flex h-10 w-10 items-center justify-center rounded-md bg-white p-2 text-gray-400"
+              >
+                <span className="sr-only">Close menu</span>
+                <XMarkIcon aria-hidden="true" className="h-6 w-6" />
+              </button>
+            </div>
+
+            <form className="mt-4">
+              {marketSegments.map((segment) => (
+                <Disclosure
+                  key={segment.name}
+                  as="div"
+                  className="border-t border-gray-200 px-4 py-6"
+                >
+                  <h3 className="-mx-2 -my-3 flow-root">
+                    <DisclosureButton className="group flex w-full items-center justify-between bg-white px-2 py-3 text-sm text-gray-400">
+                      <span className="font-medium text-gray-900">
+                        {segment.name[0].toUpperCase() + segment.name.slice(1)}
+                      </span>
+                      <span className="ml-6 flex items-center">
+                        <ChevronDownIcon
+                          aria-hidden="true"
+                          className="h-5 w-5 rotate-0 transform group-data-[open]:-rotate-180"
+                        />
+                      </span>
+                    </DisclosureButton>
+                  </h3>
+                  <DisclosurePanel className="pt-6">
+                    <div className="space-y-6">
+                      {segment.productCategories.map((category) => (
+                        <div
+                          key={`mobile-${category._id}`}
+                          className="flex items-center"
+                        >
+                          <input
+                            defaultValue={category.slug}
+                            checked={filters.productCategories.includes(
+                              category.slug,
+                            )}
+                            id={`category-${category.slug}`}
+                            name="productCategories[]"
+                            type="checkbox"
+                            className="h-4 w-4 rounded border-gray-300 text-cyan-600 focus:ring-cyan-500"
+                            onChange={() => {
+                              setFilters({
+                                type: 'productCategory',
+                                slug: category.slug ?? '',
+                              });
+                            }}
+                          />
+                          <label
+                            htmlFor={`category-${category.slug}`}
+                            className="ml-3 text-sm text-gray-500"
+                          >
+                            {category.expansion ? (
+                              <abbr
+                                title={category.expansion}
+                                className="no-underline"
+                              >
+                                {category.name}
+                              </abbr>
+                            ) : (
+                              category.name
+                            )}
+                          </label>
+                        </div>
+                      ))}
+                    </div>
+                  </DisclosurePanel>
+                </Disclosure>
+              ))}
+            </form>
+          </DialogPanel>
+        </div>
+      </Dialog>
     </>
   );
 }
