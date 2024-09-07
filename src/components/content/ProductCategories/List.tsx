@@ -44,25 +44,27 @@ export default function List({
   }
 
   return (
-    <div className="mx-auto max-w-4xl divide-y divide-gray-900/10 px-6 lg:px-8">
+    <div className="mx-auto max-w-5xl divide-y divide-gray-900/10 px-6 lg:px-8">
       <dl className="mt-10 space-y-8 divide-y divide-gray-900/10">
         {productCategories.map((productCategory) => (
           <div
             key={productCategory._id}
             id={productCategory.slug}
-            className="pt-8 text-base leading-7 lg:grid lg:grid-cols-5 lg:gap-8"
+            className="pt-8 leading-7 md:grid md:grid-cols-4 md:gap-8"
           >
-            <dt className="font-semibold text-gray-900 lg:col-span-1">
-              {productCategory.name[0].toUpperCase() +
-                productCategory.name.slice(1)}
-            </dt>
-            <dd className="mt-4 text-gray-600 lg:col-span-4 lg:mt-0">
+            <dt className="col-span-1">
+              <span className="text-xl font-semibold text-cyan-800 md:block">
+                {productCategory.name[0].toUpperCase() +
+                  productCategory.name.slice(1)}
+              </span>
               {productCategory.expansion ? (
-                <div className="mb-4 font-semibold">
-                  {productCategory.expansion[0].toUpperCase() +
-                    productCategory.expansion?.slice(1)}
-                </div>
+                <span className="ml-2 text-base text-cyan-900 md:ml-0 md:mt-1 md:block">
+                  {' '}
+                  ({productCategory.expansion})
+                </span>
               ) : null}
+            </dt>
+            <dd className="mt-4 text-gray-600 md:col-span-3 md:mt-0.5">
               <p>{productCategory.description}</p>
               <div className="mt-4">
                 <Link

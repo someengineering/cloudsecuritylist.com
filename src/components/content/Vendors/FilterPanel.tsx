@@ -165,7 +165,7 @@ export default function FilterPanel({
                       )}
                       <button
                         type="button"
-                        className="ml-1 inline-flex h-4 w-4 flex-shrink-0 rounded-full p-0.5 text-cyan-400 hover:bg-cyan-200 hover:text-cyan-500"
+                        className="ml-1 inline-flex h-4 w-4 flex-shrink-0 rounded-full p-0.5 text-cyan-600 hover:bg-cyan-100 hover:text-cyan-700"
                         onClick={() => {
                           setFilters({ type: 'productCategory', slug });
                         }}
@@ -184,7 +184,7 @@ export default function FilterPanel({
         </div>
 
         <DisclosurePanel className="hidden border-y border-gray-200 py-10 sm:block">
-          <div className="mx-auto grid max-w-7xl auto-rows-min grid-cols-2 gap-x-4 gap-y-8 px-4 text-sm sm:px-6 md:grid-cols-4 md:gap-x-6 lg:grid-cols-7 lg:px-8">
+          <div className="mx-auto grid max-w-7xl auto-rows-min grid-cols-3 gap-x-6 gap-y-8 px-4 text-sm sm:px-6 md:grid-cols-4 lg:grid-cols-5 lg:px-8 xl:grid-cols-7">
             {marketSegments.map((segment) => (
               <fieldset key={segment._id}>
                 <legend className="block font-medium">
@@ -221,10 +221,12 @@ export default function FilterPanel({
                             title={category.expansion}
                             className="no-underline"
                           >
-                            {category.name}
+                            {category.name[0].toUpperCase() +
+                              category.name.slice(1)}
                           </abbr>
                         ) : (
-                          category.name
+                          category.name[0].toUpperCase() +
+                          category.name.slice(1)
                         )}
                       </label>
                     </div>
@@ -252,7 +254,9 @@ export default function FilterPanel({
             className="relative ml-auto flex h-full w-full max-w-xs transform flex-col overflow-y-auto bg-white py-4 pb-12 shadow-xl transition duration-300 ease-in-out data-[closed]:translate-x-full"
           >
             <div className="flex items-center justify-between px-4">
-              <h2 className="text-lg font-medium text-gray-900">Filters</h2>
+              <h2 className="text-lg font-medium text-gray-900">
+                Product categories
+              </h2>
               <button
                 type="button"
                 onClick={() => setMobileMenuOpen(false)}
@@ -315,10 +319,12 @@ export default function FilterPanel({
                                 title={category.expansion}
                                 className="no-underline"
                               >
-                                {category.name}
+                                {category.name[0].toUpperCase() +
+                                  category.name.slice(1)}
                               </abbr>
                             ) : (
-                              category.name
+                              category.name[0].toUpperCase() +
+                              category.name.slice(1)
                             )}
                           </label>
                         </div>

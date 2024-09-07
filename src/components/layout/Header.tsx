@@ -25,7 +25,7 @@ export default function Header({
         className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
       >
         <Link
-          href="#"
+          href="/"
           className="-m-1.5 flex items-center p-1.5 text-xl font-bold"
         >
           <Icon className="mr-1.5 h-12 w-12 text-cyan-600" aria-hidden="true" />
@@ -66,8 +66,12 @@ export default function Header({
         <div className="fixed inset-0 z-10" />
         <DialogPanel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
           <div className="flex items-center justify-between">
-            <Link href="#" className="-m-1.5 p-1.5 text-xl font-bold">
-              Cloud Security List
+            <Link
+              href="/"
+              className="-m-1.5 p-1.5 text-xl font-bold"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              {title}
             </Link>
             <button
               type="button"

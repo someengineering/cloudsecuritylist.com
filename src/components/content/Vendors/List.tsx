@@ -70,7 +70,7 @@ export default function List({
   return (
     <ul
       role="list"
-      className="container mx-auto grid max-w-7xl auto-rows-fr grid-cols-1 gap-4 py-8 sm:px-6 lg:grid-cols-3 lg:px-8 xl:gap-6"
+      className="container mx-auto grid max-w-7xl auto-rows-fr grid-cols-1 gap-4 px-4 py-8 sm:px-6 md:grid-cols-2 lg:grid-cols-3 lg:px-8 xl:gap-6"
     >
       {vendors?.map((vendor) => {
         const organizationType = ORGANIZATION_TYPES.find(
@@ -97,7 +97,7 @@ export default function List({
                   <div className="flex flex-col items-start">
                     <Link
                       href={vendor.website}
-                      className="text-lg font-semibold text-gray-900 focus:outline-none"
+                      className="text-ellipsis text-lg font-semibold text-gray-900 focus:outline-none"
                     >
                       {vendor.name}
                     </Link>
