@@ -150,6 +150,7 @@ export type Organization = {
   slug: Slug;
   organizationType: OrganizationType;
   stockSymbol?: string;
+  description: string;
   productCategories?: Array<{
     _ref: string;
     _type: 'reference';
@@ -182,7 +183,6 @@ export type Organization = {
   website: string;
   linkedin?: string;
   crunchbase?: string;
-  description: string;
 };
 
 export type SanityImageCrop = {

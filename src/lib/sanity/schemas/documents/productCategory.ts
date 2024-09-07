@@ -9,7 +9,7 @@ export default defineType({
   fields: [
     defineField({
       name: 'name',
-      title: 'Name (acronym/abbreviation)',
+      title: 'Name',
       description:
         'Should be lowercase except for proper nouns an acronyms. For categories with a common acronym or abbreviation, enter it here and fill in the expansion field below.',
       type: 'string',
@@ -28,6 +28,8 @@ export default defineType({
       name: 'expansion',
       title: 'Acronym expansion',
       type: 'string',
+      description:
+        'Leave empty if category name is not an acronym or abbreviation.',
     }),
     defineField({
       name: 'marketSegment',
