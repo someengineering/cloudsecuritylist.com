@@ -83,6 +83,7 @@ export type SiteSettings = {
   _rev: string;
   title: string;
   description: string;
+  url: string;
   copyright: string;
   navigation: Array<{
     name: string;
@@ -322,8 +323,11 @@ export type MARKET_SEGMENT_QUERYResult = {
 } | null;
 
 // Source: ./src/lib/sanity/queries/organizations.ts
+// Variable: ORGANIZATIONS_COUNT_QUERY
+// Query: count(    *[      _type == "organization" &&      (count($organizationTypes) == 0 || organizationType in $organizationTypes)    ]  )
+export type ORGANIZATIONS_COUNT_QUERYResult = number;
 // Variable: ORGANIZATIONS_QUERY
-// Query: *[    _type == "organization" &&    (count($organizationTypes) == 0 || organizationType in $organizationTypes)  ] | order(lower(name) asc) [0...20] {      _id,  name,  "slug": slug.current,  organizationType,  stockSymbol,  logo,  icon,  productCategories[] -> {   _id,  name,  "slug": slug.current,  expansion,  marketSegment -> {   _id,  name,  "slug": slug.current,  description, },  description, },  "research": *[_type == "research" && organization._ref == ^._id] {      _id,  name,  "slug": slug.current,  website,  description,  },  website,  linkedin,  crunchbase,  description,  }
+// Query: *[    _type == "organization" &&    (count($organizationTypes) == 0 || organizationType in $organizationTypes) &&    lower(name) > lower($prev)  ] | order(lower(name) asc) [0...20] {      _id,  name,  "slug": slug.current,  organizationType,  stockSymbol,  logo,  icon,  productCategories[] -> {   _id,  name,  "slug": slug.current,  expansion,  marketSegment -> {   _id,  name,  "slug": slug.current,  description, },  description, },  "research": *[_type == "research" && organization._ref == ^._id] {      _id,  name,  "slug": slug.current,  website,  description,  },  website,  linkedin,  crunchbase,  description,  }
 export type ORGANIZATIONS_QUERYResult = Array<{
   _id: string;
   name: string;
@@ -490,61 +494,6 @@ export type VENDORS_QUERYResult = Array<{
   crunchbase: string | null;
   description: string;
 }>;
-// Variable: VENDOR_QUERY
-// Query: *[    _type == "organization" &&    slug.current == $slug &&    count(productCategories) > 0  ] [0] {      _id,  name,  "slug": slug.current,  organizationType,  stockSymbol,  logo,  icon,  productCategories[] -> {   _id,  name,  "slug": slug.current,  expansion,  marketSegment -> {   _id,  name,  "slug": slug.current,  description, },  description, },  "research": *[_type == "research" && organization._ref == ^._id] {      _id,  name,  "slug": slug.current,  website,  description,  },  website,  linkedin,  crunchbase,  description,  }
-export type VENDOR_QUERYResult = {
-  _id: string;
-  name: string;
-  slug: string;
-  organizationType: OrganizationType;
-  stockSymbol: string | null;
-  logo: {
-    asset?: {
-      _ref: string;
-      _type: 'reference';
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
-    };
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    _type: 'image';
-  } | null;
-  icon: {
-    asset: {
-      _ref: string;
-      _type: 'reference';
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
-    };
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    _type: 'image';
-  };
-  productCategories: Array<{
-    _id: string;
-    name: string;
-    slug: string;
-    expansion: string | null;
-    marketSegment: {
-      _id: string;
-      name: string;
-      slug: string;
-      description: string | null;
-    };
-    description: string;
-  }> | null;
-  research: Array<{
-    _id: string;
-    name: string;
-    slug: string;
-    website: string;
-    description: string | null;
-  }>;
-  website: string;
-  linkedin: string | null;
-  crunchbase: string | null;
-  description: string;
-} | null;
 
 // Source: ./src/lib/sanity/queries/page.ts
 // Variable: PAGE_QUERY
@@ -729,10 +678,11 @@ export type RESEARCH_QUERYResult = {
 
 // Source: ./src/lib/sanity/queries/siteSettings.ts
 // Variable: SITE_SETTINGS_QUERY
-// Query: *[    _type == "siteSettings" &&    _id == "siteSettings"  ] [0] {    title,    description,    copyright,    navigation[] {      name,      href,    },  }
+// Query: *[    _type == "siteSettings" &&    _id == "siteSettings"  ] [0] {    title,    description,    url,    copyright,    navigation[] {      name,      href,    },  }
 export type SITE_SETTINGS_QUERYResult = {
   title: string;
   description: string;
+  url: string;
   copyright: string;
   navigation: Array<{
     name: string;
@@ -746,17 +696,17 @@ declare module '@sanity/client' {
   interface SanityQueries {
     '\n  *[\n    _type == "marketSegment" &&\n    defined(slug.current) &&\n    count(\n      *[\n        _type == "productCategory" &&\n        marketSegment._ref == ^._id && \n        count(*[_type == "organization" && references(^._id)]) > 0\n      ]\n    ) > 0\n  ] | order(lower(name) asc) [0...20] {\n    \n  _id,\n  name,\n  "slug": slug.current,\n  description,\n\n    "productCategories": *[_type == "productCategory" && marketSegment._ref == ^._id && count(*[_type == "organization" && references(^._id)]) > 0] | order(lower(name) asc) {\n      _id,\n      name,\n      "slug": slug.current,\n      expansion,\n    }\n  }\n': MARKET_SEGMENTS_QUERYResult;
     '\n  *[\n    _type == "marketSegment" &&\n    slug.current == $slug\n  ] [0] {\n    \n  _id,\n  name,\n  "slug": slug.current,\n  description,\n\n    "productCategories": *[_type == "productCategory" && marketSegment._ref == ^._id && count(*[_type == "organization" && references(^._id)]) > 0] | order(lower(name) asc) {\n      _id,\n      name,\n      "slug": slug.current,\n      expansion,\n    }\n  }\n': MARKET_SEGMENT_QUERYResult;
-    '\n  *[\n    _type == "organization" &&\n    (count($organizationTypes) == 0 || organizationType in $organizationTypes)\n  ] | order(lower(name) asc) [0...20] {\n    \n  _id,\n  name,\n  "slug": slug.current,\n  organizationType,\n  stockSymbol,\n  logo,\n  icon,\n  productCategories[] -> { \n  _id,\n  name,\n  "slug": slug.current,\n  expansion,\n  marketSegment -> { \n  _id,\n  name,\n  "slug": slug.current,\n  description,\n },\n  description,\n },\n  "research": *[_type == "research" && organization._ref == ^._id] {\n    \n  _id,\n  name,\n  "slug": slug.current,\n  website,\n  description,\n\n  },\n  website,\n  linkedin,\n  crunchbase,\n  description,\n\n  }\n': ORGANIZATIONS_QUERYResult;
+    '\n  count(\n    *[\n      _type == "organization" &&\n      (count($organizationTypes) == 0 || organizationType in $organizationTypes)\n    ]\n  )\n': ORGANIZATIONS_COUNT_QUERYResult;
+    '\n  *[\n    _type == "organization" &&\n    (count($organizationTypes) == 0 || organizationType in $organizationTypes) &&\n    lower(name) > lower($prev)\n  ] | order(lower(name) asc) [0...20] {\n    \n  _id,\n  name,\n  "slug": slug.current,\n  organizationType,\n  stockSymbol,\n  logo,\n  icon,\n  productCategories[] -> { \n  _id,\n  name,\n  "slug": slug.current,\n  expansion,\n  marketSegment -> { \n  _id,\n  name,\n  "slug": slug.current,\n  description,\n },\n  description,\n },\n  "research": *[_type == "research" && organization._ref == ^._id] {\n    \n  _id,\n  name,\n  "slug": slug.current,\n  website,\n  description,\n\n  },\n  website,\n  linkedin,\n  crunchbase,\n  description,\n\n  }\n': ORGANIZATIONS_QUERYResult;
     '\n  *[\n    _type == "organization" &&\n    slug.current == $slug\n  ] [0] {\n    \n  _id,\n  name,\n  "slug": slug.current,\n  organizationType,\n  stockSymbol,\n  logo,\n  icon,\n  productCategories[] -> { \n  _id,\n  name,\n  "slug": slug.current,\n  expansion,\n  marketSegment -> { \n  _id,\n  name,\n  "slug": slug.current,\n  description,\n },\n  description,\n },\n  "research": *[_type == "research" && organization._ref == ^._id] {\n    \n  _id,\n  name,\n  "slug": slug.current,\n  website,\n  description,\n\n  },\n  website,\n  linkedin,\n  crunchbase,\n  description,\n\n  }\n': ORGANIZATION_QUERYResult;
     '\n  count(\n    *[\n      _type == "organization" &&\n      count(productCategories) > 0 &&\n      (count($productCategories) == 0 || references($productCategories)) &&\n      (count($organizationTypes) == 0 || organizationType in $organizationTypes)\n    ]\n  )\n': VENDORS_COUNT_QUERYResult;
     '\n  *[\n    _type == "organization" &&\n    count(productCategories) > 0 &&\n    (count($productCategories) == 0 || references($productCategories)) &&\n    (count($organizationTypes) == 0 || organizationType in $organizationTypes) &&\n    lower(name) > lower($prev)\n  ] | order(lower(name) asc) [0...20] {\n    \n  _id,\n  name,\n  "slug": slug.current,\n  organizationType,\n  stockSymbol,\n  logo,\n  icon,\n  productCategories[] -> { \n  _id,\n  name,\n  "slug": slug.current,\n  expansion,\n  marketSegment -> { \n  _id,\n  name,\n  "slug": slug.current,\n  description,\n },\n  description,\n },\n  "research": *[_type == "research" && organization._ref == ^._id] {\n    \n  _id,\n  name,\n  "slug": slug.current,\n  website,\n  description,\n\n  },\n  website,\n  linkedin,\n  crunchbase,\n  description,\n\n  }\n': VENDORS_QUERYResult;
-    '\n  *[\n    _type == "organization" &&\n    slug.current == $slug &&\n    count(productCategories) > 0\n  ] [0] {\n    \n  _id,\n  name,\n  "slug": slug.current,\n  organizationType,\n  stockSymbol,\n  logo,\n  icon,\n  productCategories[] -> { \n  _id,\n  name,\n  "slug": slug.current,\n  expansion,\n  marketSegment -> { \n  _id,\n  name,\n  "slug": slug.current,\n  description,\n },\n  description,\n },\n  "research": *[_type == "research" && organization._ref == ^._id] {\n    \n  _id,\n  name,\n  "slug": slug.current,\n  website,\n  description,\n\n  },\n  website,\n  linkedin,\n  crunchbase,\n  description,\n\n  }\n': VENDOR_QUERYResult;
     '\n  *[\n    _type == "page" &&\n    slug.current == $slug\n  ] [0] {\n    title,\n    description,\n  }\n': PAGE_QUERYResult;
     '\n  *[\n    _type == "productCategory" &&\n    count(*[_type == "organization" && references(^._id)]) > 0\n  ] | order(lower(name) asc) [0...20] {\n    \n  _id,\n  name,\n  "slug": slug.current,\n  expansion,\n  marketSegment -> { \n  _id,\n  name,\n  "slug": slug.current,\n  description,\n },\n  description,\n\n  }\n': PRODUCT_CATEGORIES_QUERYResult;
     '\n  *[\n    _type == "productCategory" &&\n    count(*[_type == "organization" && references(^._id)]) > 0 &&\n    references($marketSegment)\n  ] | order(lower(name) asc) [0...20] {\n    \n  _id,\n  name,\n  "slug": slug.current,\n  expansion,\n  marketSegment -> { \n  _id,\n  name,\n  "slug": slug.current,\n  description,\n },\n  description,\n\n  }\n': PRODUCT_CATEGORIES_BY_MARKET_SEGMENT_QUERYResult;
     '\n  *[\n    _type == "productCategory" &&\n    slug.current == $slug\n  ] [0] {\n    \n  _id,\n  name,\n  "slug": slug.current,\n  expansion,\n  marketSegment -> { \n  _id,\n  name,\n  "slug": slug.current,\n  description,\n },\n  description,\n\n  }\n': PRODUCT_CATEGORY_QUERYResult;
     '\n  *[\n    _type == "research" &&\n    (!defined($productCategories) || count($productCategories) == 0 || references($productCategories))\n  ] | order(lower(name) asc) [0...20] {\n    \n  _id,\n  name,\n  "slug": slug.current,\n  website,\n  description,\n\n    organization -> { \n  _id,\n  name,\n  "slug": slug.current,\n  organizationType,\n  stockSymbol,\n  logo,\n  icon,\n  productCategories[] -> { \n  _id,\n  name,\n  "slug": slug.current,\n  expansion,\n  marketSegment -> { \n  _id,\n  name,\n  "slug": slug.current,\n  description,\n },\n  description,\n },\n  "research": *[_type == "research" && organization._ref == ^._id] {\n    \n  _id,\n  name,\n  "slug": slug.current,\n  website,\n  description,\n\n  },\n  website,\n  linkedin,\n  crunchbase,\n  description,\n },\n  }\n': RESEARCHES_QUERYResult;
     '\n  *[\n    _type == "research" &&\n    slug.current == $slug\n  ] [0] {\n    \n  _id,\n  name,\n  "slug": slug.current,\n  website,\n  description,\n\n    organization -> { \n  _id,\n  name,\n  "slug": slug.current,\n  organizationType,\n  stockSymbol,\n  logo,\n  icon,\n  productCategories[] -> { \n  _id,\n  name,\n  "slug": slug.current,\n  expansion,\n  marketSegment -> { \n  _id,\n  name,\n  "slug": slug.current,\n  description,\n },\n  description,\n },\n  "research": *[_type == "research" && organization._ref == ^._id] {\n    \n  _id,\n  name,\n  "slug": slug.current,\n  website,\n  description,\n\n  },\n  website,\n  linkedin,\n  crunchbase,\n  description,\n },\n  }\n': RESEARCH_QUERYResult;
-    '\n  *[\n    _type == "siteSettings" &&\n    _id == "siteSettings"\n  ] [0] {\n    title,\n    description,\n    copyright,\n    navigation[] {\n      name,\n      href,\n    },\n  }\n': SITE_SETTINGS_QUERYResult;
+    '\n  *[\n    _type == "siteSettings" &&\n    _id == "siteSettings"\n  ] [0] {\n    title,\n    description,\n    url,\n    copyright,\n    navigation[] {\n      name,\n      href,\n    },\n  }\n': SITE_SETTINGS_QUERYResult;
   }
 }

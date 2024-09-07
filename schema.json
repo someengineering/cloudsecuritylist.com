@@ -403,6 +403,13 @@
         },
         "optional": false
       },
+      "url": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        },
+        "optional": false
+      },
       "copyright": {
         "type": "objectAttribute",
         "value": {

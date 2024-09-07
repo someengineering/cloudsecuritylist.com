@@ -3,9 +3,9 @@ import FilterPanel from '@/components/content/Vendors/FilterPanel';
 import List from '@/components/content/Vendors/List';
 import {
   getMarketSegments,
-  getOrganizationTypes,
   getProductCategories,
   getVendors,
+  getVendorTypes,
 } from '@/lib/sanity';
 
 export default async function Vendors({
@@ -15,7 +15,7 @@ export default async function Vendors({
 }) {
   const marketSegmentsData = getMarketSegments();
   const productCategoriesData = getProductCategories();
-  const organizationTypesData = getOrganizationTypes();
+  const organizationTypesData = getVendorTypes();
   const vendorsData = getVendors(filters ?? {});
 
   const [marketSegments, productCategories, organizationTypes, vendors] =

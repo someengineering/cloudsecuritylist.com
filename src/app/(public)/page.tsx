@@ -2,6 +2,7 @@ import Vendors from '@/components/content/Vendors';
 import PageHeading from '@/components/page/Heading';
 import { getPage } from '@/lib/sanity';
 import { ORGANIZATION_TYPE } from '@/lib/sanity/schemas/objects/organizationType';
+import { isValidSlug } from '@/utils/slug';
 import { Metadata } from 'next';
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -29,18 +30,20 @@ export default async function VendorsPage({
         filters={{
           productCategories:
             typeof productCategories === 'string'
-              ? [productCategories]
-              : (productCategories ?? []),
+              ? isValidSlug(productCategories)
+                ? [productCategories]
+                : []
+              : (productCategories ?? []).filter((category) =>
+                  isValidSlug(category),
+                ),
           organizationTypes:
             typeof organizationTypes === 'string'
-              ? Object.values<string>(ORGANIZATION_TYPE).includes(
-                  organizationTypes,
-                )
+              ? organizationTypes in ORGANIZATION_TYPE
                 ? [organizationTypes as ORGANIZATION_TYPE]
                 : []
-              : ((organizationTypes?.filter(
+              : ((organizationTypes ?? []).filter(
                   (type) => type in ORGANIZATION_TYPE,
-                ) as ORGANIZATION_TYPE[]) ?? []),
+                ) as ORGANIZATION_TYPE[]),
         }}
       />
     </>

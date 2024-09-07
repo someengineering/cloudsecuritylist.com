@@ -1,10 +1,20 @@
 import { ORGANIZATION } from '@/lib/sanity/queries/fragments/organization';
 import { groq } from 'next-sanity';
 
+export const ORGANIZATIONS_COUNT_QUERY = groq`
+  count(
+    *[
+      _type == "organization" &&
+      (count($organizationTypes) == 0 || organizationType in $organizationTypes)
+    ]
+  )
+`;
+
 export const ORGANIZATIONS_QUERY = groq`
   *[
     _type == "organization" &&
-    (count($organizationTypes) == 0 || organizationType in $organizationTypes)
+    (count($organizationTypes) == 0 || organizationType in $organizationTypes) &&
+    lower(name) > lower($prev)
   ] | order(lower(name) asc) [0...20] {
     ${ORGANIZATION}
   }
@@ -38,16 +48,6 @@ export const VENDORS_QUERY = groq`
     (count($organizationTypes) == 0 || organizationType in $organizationTypes) &&
     lower(name) > lower($prev)
   ] | order(lower(name) asc) [0...20] {
-    ${ORGANIZATION}
-  }
-`;
-
-export const VENDOR_QUERY = groq`
-  *[
-    _type == "organization" &&
-    slug.current == $slug &&
-    count(productCategories) > 0
-  ] [0] {
     ${ORGANIZATION}
   }
 `;

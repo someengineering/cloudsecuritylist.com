@@ -1,5 +1,6 @@
 'use client';
 
+import { isValidSlug } from '@/utils/slug';
 import React, { createContext, useContext, useReducer } from 'react';
 
 export type Filters = { marketSegment?: string };
@@ -15,7 +16,9 @@ const filtersReducer = (state: Filters, action: FiltersAction): Filters => {
       return {
         ...state,
         marketSegment:
-          state.marketSegment !== action.slug ? action.slug : undefined,
+          state.marketSegment !== action.slug && isValidSlug(action.slug)
+            ? action.slug
+            : undefined,
       };
     }
 

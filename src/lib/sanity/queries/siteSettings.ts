@@ -7,6 +7,7 @@ export const SITE_SETTINGS_QUERY = groq`
   ] [0] {
     title,
     description,
+    url,
     copyright,
     navigation[] {
       name,

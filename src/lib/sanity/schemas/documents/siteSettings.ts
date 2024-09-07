@@ -22,6 +22,12 @@ export default defineType({
       validation: (rule) => rule.required().min(50).max(160),
     }),
     defineField({
+      name: 'url',
+      title: 'Site URL',
+      type: 'url',
+      validation: (rule) => rule.required().uri({ scheme: 'https' }),
+    }),
+    defineField({
       name: 'copyright',
       title: 'Copyright text',
       type: 'text',

@@ -6,6 +6,7 @@ import { type NextRequest, NextResponse } from 'next/server';
 type WebhookPayload = {
   _type: string;
   slug?: string;
+  organizationType?: string;
 };
 
 export async function POST(req: NextRequest) {
@@ -33,7 +34,14 @@ export async function POST(req: NextRequest) {
     }
 
     revalidateTag(body._type);
-    revalidateTag(`${body._type}${body.slug ? `-${body.slug}` : ''}`);
+
+    if (body.slug) {
+      revalidateTag(`${body._type}${body.slug}`);
+    }
+
+    if (body._type === 'organization' && body.organizationType) {
+      revalidateTag(`organization-${body.organizationType}`);
+    }
 
     return NextResponse.json({ body });
   } catch (err) {

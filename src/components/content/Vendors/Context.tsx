@@ -1,6 +1,7 @@
 'use client';
 
 import { ORGANIZATION_TYPE } from '@/lib/sanity/schemas/objects/organizationType';
+import { isValidSlug } from '@/utils/slug';
 import { createContext, useContext, useReducer } from 'react';
 
 export type Filters = {
@@ -27,7 +28,7 @@ const filtersReducer = (state: Filters, action: FiltersAction): Filters => {
         productCategories = productCategories.filter(
           (category) => category !== action.slug,
         );
-      } else {
+      } else if (isValidSlug(action.slug)) {
         productCategories = [...state.productCategories, action.slug];
       }
 
@@ -39,7 +40,7 @@ const filtersReducer = (state: Filters, action: FiltersAction): Filters => {
 
       if (state.organizationTypes.includes(action.value)) {
         organizationTypes = organizationTypes.filter(
-          (category) => category !== action.value,
+          (type) => type !== action.value,
         );
       } else {
         organizationTypes = [...state.organizationTypes, action.value];

@@ -1,3 +1,4 @@
+import { apiVersion } from '@/lib/sanity/env';
 import {
   CaseIcon,
   CogIcon,
@@ -24,12 +25,14 @@ export const structure: StructureResolver = (S) =>
         .icon(SchemaIcon)
         .child(
           S.documentTypeList('marketSegment')
+            .apiVersion(apiVersion)
             .filter(
               'count(*[_type == "productCategory" && references(^._id)]) > 0',
             )
             .child((id) =>
               S.documentList()
                 .title('Product categories')
+                .apiVersion(apiVersion)
                 .filter(
                   '_type == "productCategory" && $id == marketSegment._ref',
                 )
@@ -43,12 +46,14 @@ export const structure: StructureResolver = (S) =>
         .icon(CaseIcon)
         .child(
           S.documentTypeList('marketSegment')
+            .apiVersion(apiVersion)
             .filter(
               'count(*[_type == "productCategory" && references(^._id)]) > 0',
             )
             .child((id) =>
               S.documentList()
                 .title('Product categories')
+                .apiVersion(apiVersion)
                 .filter(
                   '_type == "productCategory" && $id == marketSegment._ref',
                 )

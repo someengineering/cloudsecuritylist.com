@@ -1,6 +1,7 @@
 import ProductCategories from '@/components/content/ProductCategories';
 import PageHeading from '@/components/page/Heading';
 import { getPage } from '@/lib/sanity';
+import { isValidSlug } from '@/utils/slug';
 import { Metadata } from 'next';
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -27,7 +28,9 @@ export default async function ProductCategoriesPage({
       <ProductCategories
         filters={{
           marketSegment:
-            typeof marketSegment == 'string' ? marketSegment : undefined,
+            typeof marketSegment == 'string' && isValidSlug(marketSegment)
+              ? marketSegment
+              : undefined,
         }}
       />
     </>

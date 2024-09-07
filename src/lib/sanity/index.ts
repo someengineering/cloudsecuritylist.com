@@ -6,7 +6,9 @@ import {
   MARKET_SEGMENTS_QUERY,
 } from '@/lib/sanity/queries/marketSegments';
 import {
-  VENDOR_QUERY,
+  ORGANIZATION_QUERY,
+  ORGANIZATIONS_COUNT_QUERY,
+  ORGANIZATIONS_QUERY,
   VENDORS_COUNT_QUERY,
   VENDORS_QUERY,
 } from '@/lib/sanity/queries/organizations';
@@ -24,12 +26,14 @@ import {
 import {
   MARKET_SEGMENT_QUERYResult,
   MARKET_SEGMENTS_QUERYResult,
+  ORGANIZATION_QUERYResult,
+  ORGANIZATIONS_COUNT_QUERYResult,
+  ORGANIZATIONS_QUERYResult,
   PAGE_QUERYResult,
   PRODUCT_CATEGORIES_BY_MARKET_SEGMENT_QUERYResult,
   PRODUCT_CATEGORIES_QUERYResult,
   PRODUCT_CATEGORY_QUERYResult,
   SITE_SETTINGS_QUERYResult,
-  VENDOR_QUERYResult,
   VENDORS_COUNT_QUERYResult,
   VENDORS_QUERYResult,
 } from '@/lib/sanity/types';
@@ -101,20 +105,96 @@ export const getOrganizationTypes = async () => {
   const data = (
     await Promise.all(
       ORGANIZATION_TYPES.map(async (type) => {
-        const vendorsCount = await sanityFetch<VENDORS_COUNT_QUERYResult>({
+        const count = await sanityFetch<ORGANIZATIONS_COUNT_QUERYResult>({
+          query: ORGANIZATIONS_COUNT_QUERY,
+          params: {
+            organizationTypes: [type.value],
+          },
+          tags: ['organization'],
+        });
+
+        return { value: type.value, count };
+      }),
+    )
+  )
+    .filter((type) => type.count > 0)
+    .map((type) => type.value);
+
+  return data;
+};
+
+export const getOrganizationSlugs = async () => {
+  const data = await getOrganizations({});
+
+  let slugs = data.map((organization) => organization.slug);
+
+  const fetchMore = async (prev: string) => {
+    const data = await getOrganizations({ prev });
+
+    slugs = [...slugs, ...data.map((organization) => organization.slug)];
+
+    if (data.length > 0) {
+      await fetchMore(data[data.length - 1].slug);
+    }
+  };
+
+  if (data.length > 0) {
+    fetchMore(data[data.length - 1].slug);
+  }
+
+  return slugs;
+};
+
+export const getOrganizations = async ({
+  organizationTypes,
+  prev,
+}: {
+  organizationTypes?: ORGANIZATION_TYPE[];
+  prev?: string;
+}) => {
+  const data = await sanityFetch<ORGANIZATIONS_QUERYResult>({
+    query: ORGANIZATIONS_QUERY,
+    params: {
+      organizationTypes: organizationTypes ?? [],
+      prev: prev ?? '',
+    },
+    tags: [
+      'organization',
+      ...(organizationTypes ?? []).map((slug) => `organization-${slug}`),
+    ],
+  });
+
+  return data;
+};
+
+export const getOrganization = async (slug: string) => {
+  const data = await sanityFetch<ORGANIZATION_QUERYResult>({
+    query: ORGANIZATION_QUERY,
+    params: { slug },
+    tags: [`organization-${slug}`],
+  });
+
+  return data;
+};
+
+export const getVendorTypes = async () => {
+  const data = (
+    await Promise.all(
+      ORGANIZATION_TYPES.map(async (type) => {
+        const count = await sanityFetch<VENDORS_COUNT_QUERYResult>({
           query: VENDORS_COUNT_QUERY,
           params: {
             productCategories: [],
             organizationTypes: [type.value],
           },
-          tags: ['vendor'],
+          tags: ['organization'],
         });
 
-        return { value: type.value, vendorsCount };
+        return { value: type.value, count };
       }),
     )
   )
-    .filter((type) => type.vendorsCount > 0)
+    .filter((type) => type.count > 0)
     .map((type) => type.value);
 
   return data;
@@ -141,19 +221,10 @@ export const getVendors = async ({
       prev: prev ?? '',
     },
     tags: [
-      'vendor',
+      'organization',
       ...(productCategories ?? []).map((slug) => `productCategory-${slug}`),
+      ...(organizationTypes ?? []).map((slug) => `organization-${slug}`),
     ],
-  });
-
-  return data;
-};
-
-export const getVendor = async (slug: string) => {
-  const data = await sanityFetch<VENDOR_QUERYResult>({
-    query: VENDOR_QUERY,
-    params: { slug },
-    tags: [`vendor-${slug}`],
   });
 
   return data;

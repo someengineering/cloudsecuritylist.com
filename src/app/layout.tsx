@@ -3,7 +3,7 @@ import '@/styles/globals.css';
 import { Metadata } from 'next';
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { title, description } = (await getSiteSettings()) ?? {};
+  const { title, description, url } = (await getSiteSettings()) ?? {};
 
   return {
     title: {
@@ -11,6 +11,7 @@ export async function generateMetadata(): Promise<Metadata> {
       template: `%s | ${title}`,
     },
     description,
+    metadataBase: url ? new URL(url) : undefined,
   };
 }
 
