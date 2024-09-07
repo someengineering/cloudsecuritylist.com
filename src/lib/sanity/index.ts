@@ -132,7 +132,11 @@ export const getVendors = async ({
   const data = await sanityFetch<VENDORS_QUERYResult>({
     query: VENDORS_QUERY,
     params: {
-      productCategories: productCategories ?? [],
+      productCategories: await Promise.all(
+        (productCategories ?? []).map(
+          async (slug) => (await getProductCategory(slug))?._id,
+        ),
+      ),
       organizationTypes: organizationTypes ?? [],
       prev: prev ?? '',
     },

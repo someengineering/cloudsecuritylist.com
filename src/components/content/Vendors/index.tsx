@@ -16,12 +16,14 @@ export default async function Vendors({
   const marketSegmentsData = getMarketSegments();
   const productCategoriesData = getProductCategories();
   const organizationTypesData = getOrganizationTypes();
+  const vendorsData = getVendors(filters ?? {});
 
-  const [marketSegments, productCategories, organizationTypes] =
+  const [marketSegments, productCategories, organizationTypes, vendors] =
     await Promise.all([
       marketSegmentsData,
       productCategoriesData,
       organizationTypesData,
+      vendorsData,
     ]);
 
   return (
@@ -34,7 +36,7 @@ export default async function Vendors({
         />
       ) : null}
       <List
-        initialData={await getVendors(filters ?? {})}
+        initialData={vendors}
         getVendors={async (
           activeFilters: Partial<Filters>,
           lastItem?: string,
