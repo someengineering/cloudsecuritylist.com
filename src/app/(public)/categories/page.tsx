@@ -1,17 +1,10 @@
 import ProductCategories from '@/components/content/ProductCategories';
 import PageHeading from '@/components/page/Heading';
-import { sanityFetch } from '@/lib/sanity/client';
-import { PAGE_QUERY } from '@/lib/sanity/queries/page';
-import { PAGE_QUERYResult } from '@/lib/sanity/types';
+import { getPage } from '@/lib/sanity';
 import { Metadata } from 'next';
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { title, description } =
-    (await sanityFetch<PAGE_QUERYResult>({
-      query: PAGE_QUERY,
-      params: { slug: 'categories' },
-      tags: ['page'],
-    })) ?? {};
+  const { title, description } = (await getPage('categories')) ?? {};
 
   return {
     title,
@@ -26,12 +19,7 @@ export default async function ProductCategoriesPage({
 }) {
   const { segment: marketSegment } = searchParams;
 
-  const { title, description } =
-    (await sanityFetch<PAGE_QUERYResult>({
-      query: PAGE_QUERY,
-      params: { slug: 'categories' },
-      tags: ['page'],
-    })) ?? {};
+  const { title, description } = (await getPage('categories')) ?? {};
 
   return (
     <>

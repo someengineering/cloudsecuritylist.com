@@ -1,19 +1,13 @@
-import { sanityFetch } from '@/lib/sanity/client';
-import { SITE_SETTINGS_QUERY } from '@/lib/sanity/queries/siteSettings';
-import { SITE_SETTINGS_QUERYResult } from '@/lib/sanity/types';
+import { getSiteSettings } from '@/lib/sanity';
 import '@/styles/globals.css';
-import type { Metadata } from 'next';
+import { Metadata } from 'next';
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { title, description } =
-    (await sanityFetch<SITE_SETTINGS_QUERYResult>({
-      query: SITE_SETTINGS_QUERY,
-      tags: ['siteSettings'],
-    })) ?? {};
+  const { title, description } = (await getSiteSettings()) ?? {};
 
   return {
     title: {
-      default: title ?? 'Cloud Security List',
+      default: title ?? '',
       template: `%s | ${title}`,
     },
     description,

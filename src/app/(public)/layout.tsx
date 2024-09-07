@@ -1,8 +1,6 @@
 import Footer from '@/components/layout/Footer';
 import Header from '@/components/layout/Header';
-import { sanityFetch } from '@/lib/sanity/client';
-import { SITE_SETTINGS_QUERY } from '@/lib/sanity/queries/siteSettings';
-import { SITE_SETTINGS_QUERYResult } from '@/lib/sanity/types';
+import { getSiteSettings } from '@/lib/sanity';
 import '@/styles/globals.css';
 import { Plus_Jakarta_Sans } from 'next/font/google';
 
@@ -17,11 +15,7 @@ export default async function Layout({
 }: {
   children: React.ReactNode;
 }) {
-  const { title, navigation, copyright } =
-    (await sanityFetch<SITE_SETTINGS_QUERYResult>({
-      query: SITE_SETTINGS_QUERY,
-      tags: ['siteSettings'],
-    })) ?? {};
+  const { title, navigation, copyright } = (await getSiteSettings()) ?? {};
 
   return (
     <html lang="en" className={`scroll-smooth ${plusJakartaSans.variable}`}>

@@ -5,6 +5,7 @@ import { type NextRequest, NextResponse } from 'next/server';
 
 type WebhookPayload = {
   _type: string;
+  slug?: string;
 };
 
 export async function POST(req: NextRequest) {
@@ -27,11 +28,12 @@ export async function POST(req: NextRequest) {
         status: 401,
       });
     } else if (!body?._type) {
-      const message = 'Bad Request';
+      const message = 'Bad request';
       return new Response(JSON.stringify({ message, body }), { status: 400 });
     }
 
     revalidateTag(body._type);
+    revalidateTag(`${body._type}${body.slug ? `-${body.slug}` : ''}`);
 
     return NextResponse.json({ body });
   } catch (err) {

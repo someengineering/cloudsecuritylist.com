@@ -1,18 +1,11 @@
 import Vendors from '@/components/content/Vendors';
 import PageHeading from '@/components/page/Heading';
-import { sanityFetch } from '@/lib/sanity/client';
-import { PAGE_QUERY } from '@/lib/sanity/queries/page';
+import { getPage } from '@/lib/sanity';
 import { ORGANIZATION_TYPE } from '@/lib/sanity/schemas/objects/organizationType';
-import { PAGE_QUERYResult } from '@/lib/sanity/types';
 import { Metadata } from 'next';
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { title, description } =
-    (await sanityFetch<PAGE_QUERYResult>({
-      query: PAGE_QUERY,
-      params: { slug: 'vendors' },
-      tags: ['page'],
-    })) ?? {};
+  const { title, description } = (await getPage('vendors')) ?? {};
 
   return {
     title,
@@ -27,12 +20,7 @@ export default async function VendorsPage({
 }) {
   const { category: productCategories, type: organizationTypes } = searchParams;
 
-  const { title, description } =
-    (await sanityFetch<PAGE_QUERYResult>({
-      query: PAGE_QUERY,
-      params: { slug: 'vendors' },
-      tags: ['page'],
-    })) ?? {};
+  const { title, description } = (await getPage('vendors')) ?? {};
 
   return (
     <>
