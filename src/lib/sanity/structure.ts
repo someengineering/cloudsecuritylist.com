@@ -61,6 +61,7 @@ export const structure: StructureResolver = (S) =>
                 .child((id) =>
                   S.documentList()
                     .title('Vendors')
+                    .apiVersion(apiVersion)
                     .filter(
                       '_type == "organization" && $id in productCategories[]._ref',
                     )
