@@ -10,6 +10,12 @@ export const ORGANIZATIONS_COUNT_QUERY = groq`
   )
 `;
 
+export const ORGANIZATION_SLUGS_QUERY = groq`
+  *[
+    _type == "organization"
+  ].slug.current
+`;
+
 export const ORGANIZATIONS_QUERY = groq`
   *[
     _type == "organization" &&

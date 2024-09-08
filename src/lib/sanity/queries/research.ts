@@ -6,7 +6,7 @@ export const RESEARCHES_QUERY = groq`
   *[
     _type == "research" &&
     (!defined($productCategories) || count($productCategories) == 0 || references($productCategories))
-  ] | order(lower(name) asc) [0...20] {
+  ] | order(lower(name) asc) {
     ${RESEARCH}
     organization -> { ${ORGANIZATION} },
   }

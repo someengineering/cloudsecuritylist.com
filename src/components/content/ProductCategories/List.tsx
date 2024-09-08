@@ -4,21 +4,23 @@ import {
   Filters,
   useFilters,
 } from '@/components/content/ProductCategories/Context';
-import { PRODUCT_CATEGORIES_BY_MARKET_SEGMENT_QUERYResult } from '@/lib/sanity/types';
+import { PRODUCT_CATEGORIES_QUERYResult } from '@/lib/sanity/types';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 export default function List({
+  initialData,
   getProductCategories,
 }: {
+  initialData: PRODUCT_CATEGORIES_QUERYResult;
   getProductCategories: (
     filters: Filters,
-  ) => Promise<PRODUCT_CATEGORIES_BY_MARKET_SEGMENT_QUERYResult>;
+  ) => Promise<PRODUCT_CATEGORIES_QUERYResult>;
 }) {
   const { filters } = useFilters();
   const [productCategories, setProductCategories] =
-    useState<PRODUCT_CATEGORIES_BY_MARKET_SEGMENT_QUERYResult>();
+    useState<PRODUCT_CATEGORIES_QUERYResult>(initialData);
 
   useEffect(() => {
     const fetchGlossary = async () => {

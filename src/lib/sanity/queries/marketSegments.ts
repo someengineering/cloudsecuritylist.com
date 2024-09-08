@@ -12,7 +12,7 @@ export const MARKET_SEGMENTS_QUERY = groq`
         count(*[_type == "organization" && references(^._id)]) > 0
       ]
     ) > 0
-  ] | order(lower(name) asc) [0...20] {
+  ] | order(lower(name) asc) {
     ${MARKET_SEGMENT}
     "productCategories": *[_type == "productCategory" && marketSegment._ref == ^._id && count(*[_type == "organization" && references(^._id)]) > 0] | order(lower(name) asc) {
       _id,

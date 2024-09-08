@@ -15,7 +15,17 @@ export default async function ProductCategories({
 }: {
   filters: Partial<Filters>;
 }) {
-  const marketSegments = await getMarketSegments();
+  const marketSegmentsData = getMarketSegments();
+  const productCategoriesData = getProductCategories(
+    filters.marketSegment
+      ? (await getMarketSegment(filters.marketSegment))?._id
+      : undefined,
+  );
+
+  const [marketSegments, productCategories] = await Promise.all([
+    marketSegmentsData,
+    productCategoriesData,
+  ]);
 
   return (
     <FiltersProvider initialValues={filters}>
@@ -23,6 +33,7 @@ export default async function ProductCategories({
         <FilterButtons marketSegments={marketSegments} />
       ) : null}
       <List
+        initialData={productCategories}
         getProductCategories={async (activeFilters: Filters) => {
           'use server';
 

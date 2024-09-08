@@ -4,18 +4,9 @@ import { groq } from 'next-sanity';
 export const PRODUCT_CATEGORIES_QUERY = groq`
   *[
     _type == "productCategory" &&
-    count(*[_type == "organization" && references(^._id)]) > 0
-  ] | order(lower(name) asc) [0...20] {
-    ${PRODUCT_CATEGORY}
-  }
-`;
-
-export const PRODUCT_CATEGORIES_BY_MARKET_SEGMENT_QUERY = groq`
-  *[
-    _type == "productCategory" &&
     count(*[_type == "organization" && references(^._id)]) > 0 &&
-    references($marketSegment)
-  ] | order(lower(name) asc) [0...20] {
+    ($marketSegment == "" || references($marketSegment))
+  ] | order(lower(name) asc) {
     ${PRODUCT_CATEGORY}
   }
 `;

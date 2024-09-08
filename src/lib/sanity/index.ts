@@ -7,6 +7,7 @@ import {
 } from '@/lib/sanity/queries/marketSegments';
 import {
   ORGANIZATION_QUERY,
+  ORGANIZATION_SLUGS_QUERY,
   ORGANIZATIONS_COUNT_QUERY,
   ORGANIZATIONS_QUERY,
   VENDORS_COUNT_QUERY,
@@ -14,7 +15,6 @@ import {
 } from '@/lib/sanity/queries/organizations';
 import { PAGE_QUERY } from '@/lib/sanity/queries/page';
 import {
-  PRODUCT_CATEGORIES_BY_MARKET_SEGMENT_QUERY,
   PRODUCT_CATEGORIES_QUERY,
   PRODUCT_CATEGORY_QUERY,
 } from '@/lib/sanity/queries/productCategories';
@@ -27,10 +27,10 @@ import {
   MARKET_SEGMENT_QUERYResult,
   MARKET_SEGMENTS_QUERYResult,
   ORGANIZATION_QUERYResult,
+  ORGANIZATION_SLUGS_QUERYResult,
   ORGANIZATIONS_COUNT_QUERYResult,
   ORGANIZATIONS_QUERYResult,
   PAGE_QUERYResult,
-  PRODUCT_CATEGORIES_BY_MARKET_SEGMENT_QUERYResult,
   PRODUCT_CATEGORIES_QUERYResult,
   PRODUCT_CATEGORY_QUERYResult,
   SITE_SETTINGS_QUERYResult,
@@ -77,16 +77,14 @@ export const getMarketSegment = async (slug: string) => {
 };
 
 export const getProductCategories = async (marketSegment?: string) => {
-  const data = marketSegment
-    ? await sanityFetch<PRODUCT_CATEGORIES_BY_MARKET_SEGMENT_QUERYResult>({
-        query: PRODUCT_CATEGORIES_BY_MARKET_SEGMENT_QUERY,
-        params: { marketSegment },
-        tags: [`marketSegment-${marketSegment}`, 'productCategory'],
-      })
-    : await sanityFetch<PRODUCT_CATEGORIES_QUERYResult>({
-        query: PRODUCT_CATEGORIES_QUERY,
-        tags: ['marketSegment', 'productCategory'],
-      });
+  const data = await sanityFetch<PRODUCT_CATEGORIES_QUERYResult>({
+    query: PRODUCT_CATEGORIES_QUERY,
+    params: { marketSegment: marketSegment ?? '' },
+    tags: [
+      marketSegment ? `marketSegment-${marketSegment}` : 'marketSegment',
+      'productCategory',
+    ],
+  });
 
   return data;
 };
@@ -124,25 +122,13 @@ export const getOrganizationTypes = async () => {
 };
 
 export const getOrganizationSlugs = async () => {
-  const data = await getOrganizations({});
+  const data = await sanityFetch<ORGANIZATION_SLUGS_QUERYResult>({
+    query: ORGANIZATION_SLUGS_QUERY,
+    tags: ['organization'],
+    respectDraftMode: false,
+  });
 
-  let slugs = data.map((organization) => organization.slug);
-
-  const fetchMore = async (prev: string) => {
-    const data = await getOrganizations({ prev });
-
-    slugs = [...slugs, ...data.map((organization) => organization.slug)];
-
-    if (data.length > 0) {
-      await fetchMore(data[data.length - 1].slug);
-    }
-  };
-
-  if (data.length > 0) {
-    fetchMore(data[data.length - 1].slug);
-  }
-
-  return slugs;
+  return data;
 };
 
 export const getOrganizations = async ({
