@@ -21,7 +21,7 @@ export async function sanityFetch<QueryResponse>({
   params = {},
   revalidate = 60,
   tags = [],
-  respectDraftMode = true
+  respectDraftMode = true,
 }: {
   query: string;
   params?: QueryParams;

@@ -80,7 +80,7 @@ export default function List({
         return (
           <li
             key={vendor._id}
-            className="relative flex flex-col space-y-4 rounded-lg border border-gray-300 bg-white px-5 py-4 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:border-gray-400"
+            className="relative flex flex-col space-y-4 rounded-lg border border-gray-300 bg-white px-5 py-4 shadow-sm focus-within:ring-2 focus-within:ring-cyan-500 focus-within:ring-offset-2 hover:border-gray-400"
           >
             <div className="flex items-center space-x-3">
               <div className="flex-shrink-0">
