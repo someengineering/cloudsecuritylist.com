@@ -9,6 +9,7 @@ import {
   getMarketSegments,
   getProductCategories,
 } from '@/lib/sanity';
+import { isValidSlug } from '@/utils/slug';
 
 export default async function ProductCategories({
   filters,
@@ -17,7 +18,7 @@ export default async function ProductCategories({
 }) {
   const marketSegmentsData = getMarketSegments();
   const productCategoriesData = getProductCategories(
-    filters.marketSegment
+    filters.marketSegment && isValidSlug(filters.marketSegment)
       ? (await getMarketSegment(filters.marketSegment))?._id
       : undefined,
   );
@@ -37,9 +38,11 @@ export default async function ProductCategories({
         getProductCategories={async (activeFilters: Filters) => {
           'use server';
 
-          const marketSegment = activeFilters.marketSegment
-            ? (await getMarketSegment(activeFilters.marketSegment))?._id
-            : undefined;
+          const marketSegment =
+            activeFilters.marketSegment &&
+            isValidSlug(activeFilters.marketSegment)
+              ? (await getMarketSegment(activeFilters.marketSegment))?._id
+              : undefined;
 
           return await getProductCategories(marketSegment);
         }}

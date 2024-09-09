@@ -1,6 +1,12 @@
 import { PRODUCT_CATEGORY } from '@/lib/sanity/queries/fragments/productCategory';
 import { groq } from 'next-sanity';
 
+export const PRODUCT_CATEGORY_SLUGS_QUERY = groq`
+  *[
+    _type == "productCategory"
+  ].slug.current
+`;
+
 export const PRODUCT_CATEGORIES_QUERY = groq`
   *[
     _type == "productCategory" &&

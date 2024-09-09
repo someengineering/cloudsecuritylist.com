@@ -23,7 +23,9 @@ export default function FilterButtons({
       params.set('segment', filters.marketSegment);
     }
 
-    router.push(`${pathname}?${params.toString()}${window.location.hash}`);
+    router.push(`${pathname}?${params.toString()}${window.location.hash}`, {
+      scroll: false,
+    });
   }, [filters, pathname, router]);
 
   return (

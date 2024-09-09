@@ -17,6 +17,7 @@ import { PAGE_QUERY } from '@/lib/sanity/queries/page';
 import {
   PRODUCT_CATEGORIES_QUERY,
   PRODUCT_CATEGORY_QUERY,
+  PRODUCT_CATEGORY_SLUGS_QUERY,
 } from '@/lib/sanity/queries/productCategories';
 import { SITE_SETTINGS_QUERY } from '@/lib/sanity/queries/siteSettings';
 import {
@@ -33,6 +34,7 @@ import {
   PAGE_QUERYResult,
   PRODUCT_CATEGORIES_QUERYResult,
   PRODUCT_CATEGORY_QUERYResult,
+  PRODUCT_CATEGORY_SLUGS_QUERYResult,
   SITE_SETTINGS_QUERYResult,
   VENDORS_COUNT_QUERYResult,
   VENDORS_QUERYResult,
@@ -71,6 +73,16 @@ export const getMarketSegment = async (slug: string) => {
     query: MARKET_SEGMENT_QUERY,
     params: { slug },
     tags: [`marketSegment-${slug}`],
+  });
+
+  return data;
+};
+
+export const getProductCategorySlugs = async () => {
+  const data = await sanityFetch<PRODUCT_CATEGORY_SLUGS_QUERYResult>({
+    query: PRODUCT_CATEGORY_SLUGS_QUERY,
+    tags: ['productCategory'],
+    respectDraftMode: false,
   });
 
   return data;
