@@ -38,17 +38,17 @@ export function middleware(request: NextRequest) {
             .join('')
         : ''
     };
-    script-src 'self' 'nonce-${nonce}'${
+    script-src 'self'${
       process.env.NODE_ENV === 'production' ? '' : " 'unsafe-eval'"
     }${
       request.nextUrl.pathname.startsWith('/studio')
-        ? " 'unsafe-inline'"
+        ? " 'nonce-${nonce}' 'unsafe-inline'"
         : " 'strict-dynamic'"
     };
     style-src 'self' 'unsafe-inline';
-    img-src 'self' blob: data: ${
+    img-src 'self' blob: data: https://cdn.sanity.io ${
       request.nextUrl.pathname.startsWith('/studio')
-        ? ' https://cdn.sanity.io https://lh3.googleusercontent.com'
+        ? ' https://lh3.googleusercontent.com'
         : ''
     };
     media-src 'self';
