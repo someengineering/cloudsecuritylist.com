@@ -28,13 +28,15 @@ export default async function PageHeader({
     <section className="px-6 py-12 sm:py-16 lg:px-8">
       <div className="mx-auto max-w-2xl text-center">
         {image ? (
-          <h1 className="relative mb-8 h-20">
+          <h1 className="relative h-28">
+            <span className="sr-only">{title}</span>
             <Image
               src={image}
               fill={true}
               alt=""
               aria-hidden="true"
-              className="mx-auto object-contain"
+              className="mx-auto max-w-72 object-contain"
+              title={title}
             />
           </h1>
         ) : (
