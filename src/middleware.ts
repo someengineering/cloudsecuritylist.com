@@ -24,7 +24,6 @@ export const config = {
 };
 
 export function middleware(request: NextRequest) {
-  const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
   const cspHeader = `
     default-src 'self';
     connect-src 'self'${
@@ -38,12 +37,8 @@ export function middleware(request: NextRequest) {
             .join('')
         : ''
     };
-    script-src 'self'${
+    script-src 'self' 'unsafe-inline'${
       process.env.NODE_ENV === 'production' ? '' : " 'unsafe-eval'"
-    }${
-      request.nextUrl.pathname.startsWith('/studio')
-        ? " 'nonce-${nonce}' 'unsafe-inline'"
-        : " 'strict-dynamic'"
     };
     style-src 'self' 'unsafe-inline';
     img-src 'self' blob: data: https://cdn.sanity.io ${
@@ -64,7 +59,6 @@ export function middleware(request: NextRequest) {
     .trim();
 
   const requestHeaders = new Headers(request.headers);
-  requestHeaders.set('x-nonce', nonce);
   requestHeaders.set('Content-Security-Policy', cspHeader);
 
   const response = NextResponse.next({
