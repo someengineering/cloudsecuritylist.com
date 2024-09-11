@@ -2,11 +2,11 @@
 
 import Icon from '@/assets/icon.svg';
 import { Dialog, DialogPanel } from '@headlessui/react';
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { clsx } from 'clsx';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
+import { HiBars3, HiXMark } from 'react-icons/hi2';
 
 export default function Header({
   title,
@@ -28,19 +28,10 @@ export default function Header({
           href="/"
           className="-m-1.5 flex items-center p-1.5 text-xl font-bold"
         >
-          <Icon className="mr-1.5 h-12 w-12 text-cyan-600" aria-hidden="true" />
+          <Icon className="mr-1.5 h-12 w-12 text-cyan-600" />
           {title}
         </Link>
-        <div className="flex lg:hidden">
-          <button
-            type="button"
-            onClick={() => setMobileMenuOpen(true)}
-            className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
-          >
-            <span className="sr-only">Open main menu</span>
-            <Bars3Icon aria-hidden="true" className="h-6 w-6" />
-          </button>
-        </div>
+
         <div className="hidden lg:flex lg:gap-x-12">
           {navigation?.map((item) => (
             <Link
@@ -56,6 +47,17 @@ export default function Header({
               {item.name}
             </Link>
           ))}
+        </div>
+
+        <div className="flex lg:hidden">
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen(true)}
+            className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
+          >
+            <span className="sr-only">Open main menu</span>
+            <HiBars3 className="h-6 w-6" />
+          </button>
         </div>
       </nav>
       <Dialog
@@ -79,7 +81,7 @@ export default function Header({
               className="-m-2.5 rounded-md p-2.5 text-gray-700"
             >
               <span className="sr-only">Close menu</span>
-              <XMarkIcon aria-hidden="true" className="h-6 w-6" />
+              <HiXMark className="h-6 w-6" />
             </button>
           </div>
           <div className="mt-6 flow-root">

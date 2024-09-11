@@ -23,5 +23,12 @@ export const PRODUCT_CATEGORY_QUERY = groq`
     slug.current == $slug
   ] [0] {
     ${PRODUCT_CATEGORY}
+    "vendors": *[_type == "organization" && references(^._id)] | order(lower(name) asc) {
+      _id,
+      name,
+      "slug": slug.current,
+      logo,
+      icon,
+    }
   }
 `;

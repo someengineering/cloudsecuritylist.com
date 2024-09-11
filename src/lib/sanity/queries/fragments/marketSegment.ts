@@ -3,4 +3,5 @@ export const MARKET_SEGMENT = `
   name,
   "slug": slug.current,
   description,
+  "icon": icon.name,
 `;

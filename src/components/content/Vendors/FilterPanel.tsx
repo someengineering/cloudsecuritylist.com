@@ -6,6 +6,7 @@ import {
   MARKET_SEGMENTS_QUERYResult,
   PRODUCT_CATEGORIES_QUERYResult,
 } from '@/lib/sanity/types';
+import { toSentenceCase } from '@/utils/string';
 import {
   Dialog,
   DialogBackdrop,
@@ -18,9 +19,9 @@ import {
   PopoverGroup,
   PopoverPanel,
 } from '@headlessui/react';
-import { ChevronDownIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { HiChevronDown, HiXMark } from 'react-icons/hi2';
 
 export default function FilterPanel({
   marketSegments,
@@ -71,10 +72,7 @@ export default function FilterPanel({
                         {filters.organizationTypes.length}
                       </span>
                     ) : null}
-                    <ChevronDownIcon
-                      aria-hidden="true"
-                      className="ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500 data-[open]:rotate-180"
-                    />
+                    <HiChevronDown className="ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500 data-[open]:rotate-180" />
                   </PopoverButton>
 
                   <PopoverPanel className="absolute right-2 z-10 mt-2 origin-top-right rounded-md bg-white p-4 shadow-2xl ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:opacity-0">
@@ -128,10 +126,7 @@ export default function FilterPanel({
             >
               Product categories
               <span className="sr-only">, selected</span>
-              <ChevronDownIcon
-                aria-hidden="true"
-                className="ml-1 hidden h-5 w-5 text-gray-400 group-hover:text-gray-500 group-data-[open]:rotate-180 sm:block"
-              />
+              <HiChevronDown className="ml-1 hidden h-5 w-5 text-gray-400 group-hover:text-gray-500 group-data-[open]:rotate-180 sm:block" />
             </DisclosureButton>
 
             <div
@@ -175,7 +170,7 @@ export default function FilterPanel({
                         <span className="sr-only">
                           Remove filter for {selectedCategory.name}
                         </span>
-                        <XMarkIcon className="h-3 w-3" />
+                        <HiXMark className="h-3 w-3" />
                       </button>
                     </span>
                   );
@@ -190,7 +185,7 @@ export default function FilterPanel({
             {marketSegments.map((segment) => (
               <fieldset key={segment._id}>
                 <legend className="block font-medium">
-                  {segment.name[0].toUpperCase() + segment.name.slice(1)}
+                  {toSentenceCase(segment.name)}
                 </legend>
                 <div className="space-y-4 pt-4">
                   {segment.productCategories.map((category) => (
@@ -223,12 +218,10 @@ export default function FilterPanel({
                             title={category.expansion}
                             className="no-underline"
                           >
-                            {category.name[0].toUpperCase() +
-                              category.name.slice(1)}
+                            {toSentenceCase(category.name)}
                           </abbr>
                         ) : (
-                          category.name[0].toUpperCase() +
-                          category.name.slice(1)
+                          toSentenceCase(category.name)
                         )}
                       </label>
                     </div>
@@ -265,7 +258,7 @@ export default function FilterPanel({
                 className="-mr-2 flex h-10 w-10 items-center justify-center rounded-md bg-white p-2 text-gray-400"
               >
                 <span className="sr-only">Close menu</span>
-                <XMarkIcon aria-hidden="true" className="h-6 w-6" />
+                <HiXMark className="h-6 w-6" />
               </button>
             </div>
 
@@ -279,13 +272,10 @@ export default function FilterPanel({
                   <h3 className="-mx-2 -my-3 flow-root">
                     <DisclosureButton className="group flex w-full items-center justify-between bg-white px-2 py-3 text-sm text-gray-400">
                       <span className="font-medium text-gray-900">
-                        {segment.name[0].toUpperCase() + segment.name.slice(1)}
+                        {toSentenceCase(segment.name)}
                       </span>
                       <span className="ml-6 flex items-center">
-                        <ChevronDownIcon
-                          aria-hidden="true"
-                          className="h-5 w-5 rotate-0 transform group-data-[open]:-rotate-180"
-                        />
+                        <HiChevronDown className="h-5 w-5 rotate-0 transform group-data-[open]:-rotate-180" />
                       </span>
                     </DisclosureButton>
                   </h3>
@@ -321,12 +311,10 @@ export default function FilterPanel({
                                 title={category.expansion}
                                 className="no-underline"
                               >
-                                {category.name[0].toUpperCase() +
-                                  category.name.slice(1)}
+                                {toSentenceCase(category.name)}
                               </abbr>
                             ) : (
-                              category.name[0].toUpperCase() +
-                              category.name.slice(1)
+                              toSentenceCase(category.name)
                             )}
                           </label>
                         </div>

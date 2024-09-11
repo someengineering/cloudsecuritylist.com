@@ -1,5 +1,5 @@
 import ProductCategories from '@/components/content/ProductCategories';
-import PageHeading from '@/components/page/Heading';
+import PageHeader from '@/components/page/Header';
 import { getPage } from '@/lib/sanity';
 import { isValidSlug } from '@/utils/slug';
 import { Metadata } from 'next';
@@ -24,7 +24,7 @@ export default async function ProductCategoriesPage({
 
   return (
     <>
-      <PageHeading title={title} description={description} />
+      <PageHeader title={title} description={description} />
       <ProductCategories
         filters={{
           marketSegment:

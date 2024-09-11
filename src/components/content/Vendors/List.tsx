@@ -4,11 +4,11 @@ import { Filters, useFilters } from '@/components/content/Vendors/Context';
 import { urlFor } from '@/lib/sanity/image';
 import { ORGANIZATION_TYPES } from '@/lib/sanity/schemas/objects/organizationType';
 import { VENDORS_QUERYResult } from '@/lib/sanity/types';
-import { ArrowTrendingUpIcon, LinkIcon } from '@heroicons/react/24/solid';
-import { SiCrunchbase, SiLinkedin } from '@icons-pack/react-simple-icons';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { HiArrowTrendingUp, HiOutlineGlobeAlt } from 'react-icons/hi2';
+import { SiCrunchbase, SiLinkedin } from 'react-icons/si';
 import useInfiniteScroll from 'react-infinite-scroll-hook';
 
 export default function List({
@@ -89,6 +89,7 @@ export default function List({
                   width={56}
                   height={56}
                   alt=""
+                  aria-hidden="true"
                   className="h-14 w-14 object-cover"
                 />
               </div>
@@ -96,9 +97,10 @@ export default function List({
                 <div className="flex items-center justify-between">
                   <div className="flex flex-col items-start">
                     <Link
-                      href={vendor.website}
+                      href={`/organization/${vendor.slug}`}
                       className="text-ellipsis text-lg font-semibold text-gray-900 focus:outline-none"
                     >
+                      <span aria-hidden="true" className="absolute inset-0" />
                       {vendor.name}
                     </Link>
                     {organizationType ? (
@@ -111,15 +113,16 @@ export default function List({
                       </span>
                     ) : null}
                   </div>
-                  <ul role="list" className="flex items-end gap-x-3">
+                  <ul role="list" className="z-10 flex items-end gap-x-3">
                     <li>
                       <Link
                         href={vendor.website}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="text-gray-400 hover:text-gray-500 focus:outline-none"
                       >
                         <span className="sr-only">Website</span>
-                        <LinkIcon
-                          aria-hidden="true"
+                        <HiOutlineGlobeAlt
                           className="h-5 w-5"
                           title="Website"
                         />
@@ -129,10 +132,13 @@ export default function List({
                       <li>
                         <Link
                           href={vendor.linkedin}
+                          target="_blank"
+                          rel="noopener noreferrer"
                           className="text-gray-400 hover:text-gray-500 focus:outline-none"
+                          title="LinkedIn"
                         >
                           <span className="sr-only">LinkedIn</span>
-                          <SiLinkedin aria-hidden="true" className="h-5 w-5" />
+                          <SiLinkedin className="h-5 w-5" />
                         </Link>
                       </li>
                     ) : null}
@@ -140,13 +146,13 @@ export default function List({
                       <li>
                         <Link
                           href={vendor.crunchbase}
+                          target="_blank"
+                          rel="noopener noreferrer"
                           className="text-gray-400 hover:text-gray-500 focus:outline-none"
+                          title="Crunchbase"
                         >
                           <span className="sr-only">Crunchbase</span>
-                          <SiCrunchbase
-                            aria-hidden="true"
-                            className="h-5 w-5"
-                          />
+                          <SiCrunchbase className="h-5 w-5" />
                         </Link>
                       </li>
                     ) : null}
@@ -156,11 +162,12 @@ export default function List({
                           href={`https://finance.yahoo.com/quote/${vendor.stockSymbol}`}
                           className="text-gray-400 hover:text-gray-500 focus:outline-none"
                         >
-                          <span className="sr-only">Stock</span>
-                          <ArrowTrendingUpIcon
-                            aria-hidden="true"
+                          <span className="sr-only">
+                            Stock ({vendor.stockSymbol})
+                          </span>
+                          <HiArrowTrendingUp
                             className="h-5 w-5"
-                            title="Stock"
+                            title={`Stock (${vendor.stockSymbol})`}
                           />
                         </Link>
                       </li>
@@ -211,8 +218,8 @@ export default function List({
                     <div className="h-3 w-1/2 rounded bg-slate-200" />
                   </div>
                   <ul role="list" className="flex items-end gap-x-3">
-                    {[...Array(3)].map((i) => (
-                      <li key={`skeleton-icon-${i}`}>
+                    {[...Array(3)].map((_val, idx) => (
+                      <li key={`skeleton-icon-${idx}`}>
                         <div className="h-5 w-5 rounded bg-slate-200" />
                       </li>
                     ))}
@@ -241,10 +248,10 @@ export default function List({
               <div className="h-2 w-1/2 rounded bg-slate-200" />
             </div>
             <div className="flex grow flex-wrap items-end gap-x-3 gap-y-2 pb-1">
-              {[...Array(5)].map((i) => (
+              {[...Array(5)].map((_val, idx) => (
                 <div
                   className="flex h-4 w-10 rounded bg-slate-200"
-                  key={`skeleton-tag-${i}`}
+                  key={`skeleton-tag-${idx}`}
                 />
               ))}
             </div>

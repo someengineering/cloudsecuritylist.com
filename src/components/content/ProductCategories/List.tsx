@@ -5,7 +5,7 @@ import {
   useFilters,
 } from '@/components/content/ProductCategories/Context';
 import { PRODUCT_CATEGORIES_QUERYResult } from '@/lib/sanity/types';
-import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
+import { toSentenceCase } from '@/utils/string';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
@@ -52,13 +52,16 @@ export default function List({
           <div
             key={productCategory._id}
             id={productCategory.slug}
-            className="pt-8 leading-7 md:grid md:grid-cols-4 md:gap-8"
+            className="relative pt-8 leading-7 md:grid md:grid-cols-4 md:gap-8"
           >
             <dt className="col-span-1">
-              <span className="text-xl font-semibold text-cyan-800 md:block">
-                {productCategory.name[0].toUpperCase() +
-                  productCategory.name.slice(1)}
-              </span>
+              <Link
+                href={`/category/${productCategory.slug}`}
+                className="text-xl font-semibold text-cyan-800 md:block"
+              >
+                <span aria-hidden="true" className="absolute inset-0" />
+                {toSentenceCase(productCategory.name)}
+              </Link>
               {productCategory.expansion ? (
                 <span className="ml-2 text-base text-cyan-900 md:ml-0 md:mt-1 md:block">
                   {' '}
@@ -68,18 +71,6 @@ export default function List({
             </dt>
             <dd className="mt-4 text-gray-600 md:col-span-3 md:mt-0.5">
               <p>{productCategory.description}</p>
-              <div className="mt-4">
-                <Link
-                  href={`/?category=${productCategory.slug}`}
-                  className="inline-flex items-center gap-x-1.5 rounded-md bg-cyan-50 px-2.5 py-1.5 text-sm font-semibold text-cyan-600 shadow-sm hover:bg-cyan-100"
-                >
-                  <MagnifyingGlassIcon
-                    aria-hidden="true"
-                    className="-ml-0.5 h-5 w-5"
-                  />
-                  View vendors
-                </Link>
-              </div>
             </dd>
           </div>
         ))}

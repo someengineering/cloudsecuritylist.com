@@ -1,5 +1,6 @@
 import { SquareIcon } from '@sanity/icons';
 import { defineField, defineType } from 'sanity';
+import { preview } from 'sanity-plugin-icon-picker';
 
 export default defineType({
   name: 'marketSegment',
@@ -24,10 +25,30 @@ export default defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
-      name: 'description',
-      title: 'Description',
-      type: 'text',
-      rows: 5,
+      name: 'icon',
+      title: 'Icon',
+      type: 'iconPicker',
+      options: {
+        providers: ['hi'],
+        filter: [/^HiOutline/],
+        outputFormat: 'react',
+      },
+      validation: (rule) => rule.required(),
     }),
   ],
+  preview: {
+    select: {
+      title: 'name',
+      subtitle: 'description',
+      iconName: 'icon.name',
+      iconProvider: 'icon.provider',
+    },
+    prepare({ title, subtitle, iconName, iconProvider }) {
+      return {
+        title,
+        subtitle,
+        media: preview({ name: iconName, provider: iconProvider }),
+      };
+    },
+  },
 });

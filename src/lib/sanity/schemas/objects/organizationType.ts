@@ -1,10 +1,10 @@
 import {
-  AcademicCapIcon,
-  BuildingOffice2Icon,
-  BuildingOfficeIcon,
-  GiftTopIcon,
-  ShieldCheckIcon,
-} from '@heroicons/react/16/solid';
+  HiAcademicCap,
+  HiBuildingOffice,
+  HiBuildingOffice2,
+  HiGiftTop,
+  HiShieldCheck,
+} from 'react-icons/hi2';
 import { defineType } from 'sanity';
 
 export enum ORGANIZATION_TYPE {
@@ -19,27 +19,27 @@ export const ORGANIZATION_TYPES = [
   {
     title: 'Public company',
     value: ORGANIZATION_TYPE.PUBLIC,
-    icon: BuildingOffice2Icon,
+    icon: HiBuildingOffice2,
   },
   {
     title: 'Private company',
     value: ORGANIZATION_TYPE.PRIVATE,
-    icon: BuildingOfficeIcon,
+    icon: HiBuildingOffice,
   },
   {
     title: 'Nonprofit',
     value: ORGANIZATION_TYPE.NONPROFIT,
-    icon: GiftTopIcon,
+    icon: HiGiftTop,
   },
   {
     title: 'Government entity',
     value: ORGANIZATION_TYPE.GOVERNMENT,
-    icon: ShieldCheckIcon,
+    icon: HiShieldCheck,
   },
   {
     title: 'Academic institution',
     value: ORGANIZATION_TYPE.ACADEMIC,
-    icon: AcademicCapIcon,
+    icon: HiAcademicCap,
   },
 ];
 

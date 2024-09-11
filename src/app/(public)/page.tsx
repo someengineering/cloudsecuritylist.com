@@ -1,5 +1,5 @@
 import Vendors from '@/components/content/Vendors';
-import PageHeading from '@/components/page/Heading';
+import PageHeader from '@/components/page/Header';
 import { getPage } from '@/lib/sanity';
 import { ORGANIZATION_TYPE } from '@/lib/sanity/schemas/objects/organizationType';
 import { isValidSlug } from '@/utils/slug';
@@ -25,7 +25,7 @@ export default async function VendorsPage({
 
   return (
     <>
-      <PageHeading title={title} description={description} />
+      <PageHeader title={title} description={description} />
       <Vendors
         filters={{
           productCategories:

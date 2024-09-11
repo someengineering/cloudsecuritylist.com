@@ -2,10 +2,10 @@
 
 import { useFilters } from '@/components/content/ProductCategories/Context';
 import { MARKET_SEGMENTS_QUERYResult } from '@/lib/sanity/types';
-import { XMarkIcon } from '@heroicons/react/24/solid';
 import { clsx } from 'clsx';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import { HiXMark } from 'react-icons/hi2';
 
 export default function FilterButtons({
   marketSegments,
@@ -81,7 +81,7 @@ export default function FilterButtons({
             {marketSegment.name}
             {filters.marketSegment === marketSegment.slug ? (
               <span className="absolute inset-y-auto right-3 h-4 w-4 rounded-full p-0.5 text-cyan-600 group-hover:bg-cyan-100 group-hover:text-cyan-700 lg:right-1.5">
-                <XMarkIcon className="h-3 w-3" />
+                <HiXMark className="h-3 w-3" />
               </span>
             ) : null}
           </button>

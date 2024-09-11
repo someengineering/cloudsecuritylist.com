@@ -1364,12 +1364,13 @@
         },
         "optional": false
       },
-      "description": {
+      "icon": {
         "type": "objectAttribute",
         "value": {
-          "type": "string"
+          "type": "inline",
+          "name": "iconPicker"
         },
-        "optional": true
+        "optional": false
       }
     }
   },
@@ -1460,6 +1461,43 @@
           "optional": false
         },
         "source": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
+    "name": "iconPicker",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "iconPicker"
+          }
+        },
+        "provider": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        },
+        "name": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        },
+        "svg": {
           "type": "objectAttribute",
           "value": {
             "type": "string"
