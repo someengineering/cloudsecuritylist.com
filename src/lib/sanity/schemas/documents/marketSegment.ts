@@ -39,14 +39,12 @@ export default defineType({
   preview: {
     select: {
       title: 'name',
-      subtitle: 'description',
       iconName: 'icon.name',
       iconProvider: 'icon.provider',
     },
-    prepare({ title, subtitle, iconName, iconProvider }) {
+    prepare({ title, iconName, iconProvider }) {
       return {
         title,
-        subtitle,
         media: preview({ name: iconName, provider: iconProvider }),
       };
     },

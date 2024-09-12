@@ -9,11 +9,12 @@ import {
 } from '@sanity/icons';
 import type { StructureResolver } from 'sanity/structure';
 
-// https://www.sanity.io/docs/structure-builder-cheat-sheet
 export const structure: StructureResolver = (S) =>
   S.list()
     .title('Content')
     .items([
+      S.documentTypeListItem('cloudProvider').title('Cloud providers'),
+      S.divider(),
       S.documentTypeListItem('marketSegment')
         .title('Market segments')
         .icon(DashboardIcon),
@@ -47,9 +48,6 @@ export const structure: StructureResolver = (S) =>
         .child(
           S.documentTypeList('marketSegment')
             .apiVersion(apiVersion)
-            .filter(
-              'count(*[_type == "productCategory" && references(^._id)]) > 0',
-            )
             .child((id) =>
               S.documentList()
                 .title('Product categories')
@@ -67,6 +65,22 @@ export const structure: StructureResolver = (S) =>
                     )
                     .params({ id }),
                 ),
+            ),
+        ),
+      S.listItem()
+        .title('Vendors by cloud provider')
+        .icon(CaseIcon)
+        .child(
+          S.documentTypeList('cloudProvider')
+            .apiVersion(apiVersion)
+            .child((id) =>
+              S.documentList()
+                .title('Vendors')
+                .apiVersion(apiVersion)
+                .filter(
+                  '_type == "organization" && $id in supportedCloudProviders[]._ref',
+                )
+                .params({ id }),
             ),
         ),
       S.divider(),

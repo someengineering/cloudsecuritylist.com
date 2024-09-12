@@ -1,13 +1,12 @@
-import { ORGANIZATION_TYPE } from '@/lib/sanity/schemas/objects/organizationType';
 import { getExtension, getImageDimensions } from '@sanity/asset-utils';
-import { ComponentIcon } from '@sanity/icons';
+import { DatabaseIcon } from '@sanity/icons';
 import { CustomValidatorResult, defineField, defineType } from 'sanity';
 
 export default defineType({
-  name: 'organization',
-  title: 'Organization',
+  name: 'cloudProvider',
+  title: 'Cloud provider',
   type: 'document',
-  icon: ComponentIcon,
+  icon: DatabaseIcon,
   fieldsets: [
     {
       name: 'images',
@@ -41,55 +40,22 @@ export default defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
-      name: 'organizationType',
-      title: 'Organization type',
-      type: 'organizationType',
-      validation: (rule) => rule.required(),
-    }),
-    defineField({
-      name: 'parentOrganization',
-      title: 'Parent organization',
-      type: 'reference',
-      to: [{ type: 'organization' }],
-      hidden: ({ parent, value }) =>
-        !value && parent.organizationType !== ORGANIZATION_TYPE.ACQUIRED,
-    }),
-    defineField({
-      name: 'stockSymbol',
-      title: 'Stock symbol',
-      type: 'string',
-      hidden: ({ parent, value }) =>
-        !value && parent.organizationType !== ORGANIZATION_TYPE.PUBLIC,
-      validation: (rule) =>
-        rule
-          .uppercase()
-          .min(1)
-          .max(5)
-          .error('Stock symbols must consist of 1 to 5 uppercase characters.'),
-    }),
-    defineField({
       name: 'description',
       title: 'Description',
-      description: 'Description length must be between 100 and 250 characters.',
       type: 'text',
       rows: 5,
-      validation: (rule) => rule.required().min(100).max(250),
+      validation: (rule) => rule.required().min(50),
     }),
     defineField({
-      name: 'productCategories',
-      title: 'Product categories',
-      type: 'array',
-      of: [{ type: 'reference', to: [{ type: 'productCategory' }] }],
-      validation: (rule) => rule.unique(),
-    }),
-    defineField({
-      name: 'supportedCloudProviders',
-      title: 'Supported cloud providers',
-      type: 'array',
-      of: [{ type: 'reference', to: [{ type: 'cloudProvider' }] }],
-      hidden: ({ parent, value }) =>
-        !value && (parent.productCategories ?? []).length === 0,
-      validation: (rule) => rule.unique(),
+      name: 'icon',
+      title: 'Icon',
+      type: 'iconPicker',
+      options: {
+        providers: ['si'],
+        outputFormat: 'react',
+      },
+      validation: (rule) => rule.required(),
+      fieldset: 'images',
     }),
     defineField({
       name: 'mark',
@@ -165,13 +131,6 @@ export default defineType({
     defineField({
       name: 'linkedin',
       title: 'LinkedIn URL',
-      type: 'url',
-      validation: (rule) => rule.uri({ scheme: 'https' }),
-      fieldset: 'links',
-    }),
-    defineField({
-      name: 'crunchbase',
-      title: 'Crunchbase URL',
       type: 'url',
       validation: (rule) => rule.uri({ scheme: 'https' }),
       fieldset: 'links',

@@ -45,7 +45,7 @@ export default defineType({
     select: {
       title: 'name',
       subtitle: 'organization.name',
-      media: 'organization.icon',
+      media: 'organization.mark',
     },
   },
 });

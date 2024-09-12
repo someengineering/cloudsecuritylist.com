@@ -1,3 +1,4 @@
+import cloudProvider from '@/lib/sanity/schemas/documents/cloudProvider';
 import framework from '@/lib/sanity/schemas/documents/framework';
 import marketSegment from '@/lib/sanity/schemas/documents/marketSegment';
 import organization from '@/lib/sanity/schemas/documents/organization';
@@ -11,6 +12,7 @@ import { type SchemaTypeDefinition } from 'sanity';
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
     // Documents
+    cloudProvider,
     framework,
     marketSegment,
     organization,

@@ -3,6 +3,7 @@ import {
   HiBuildingOffice,
   HiBuildingOffice2,
   HiGiftTop,
+  HiPuzzlePiece,
   HiShieldCheck,
 } from 'react-icons/hi2';
 import { defineType } from 'sanity';
@@ -10,6 +11,7 @@ import { defineType } from 'sanity';
 export enum ORGANIZATION_TYPE {
   PUBLIC = 'public',
   PRIVATE = 'private',
+  ACQUIRED = 'acquired',
   NONPROFIT = 'nonprofit',
   GOVERNMENT = 'government',
   ACADEMIC = 'academic',
@@ -25,6 +27,11 @@ export const ORGANIZATION_TYPES = [
     title: 'Private company',
     value: ORGANIZATION_TYPE.PRIVATE,
     icon: HiBuildingOffice,
+  },
+  {
+    title: 'Acquired entity',
+    value: ORGANIZATION_TYPE.ACQUIRED,
+    icon: HiPuzzlePiece,
   },
   {
     title: 'Nonprofit',

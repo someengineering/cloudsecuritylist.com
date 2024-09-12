@@ -14,12 +14,6 @@ export const MARKET_SEGMENTS_QUERY = groq`
     ) > 0
   ] | order(lower(name) asc) {
     ${MARKET_SEGMENT}
-    "productCategories": *[_type == "productCategory" && marketSegment._ref == ^._id && count(*[_type == "organization" && references(^._id)]) > 0] | order(lower(name) asc) {
-      _id,
-      name,
-      "slug": slug.current,
-      expansion,
-    }
   }
 `;
 
@@ -29,11 +23,5 @@ export const MARKET_SEGMENT_QUERY = groq`
     slug.current == $slug
   ] [0] {
     ${MARKET_SEGMENT}
-    "productCategories": *[_type == "productCategory" && marketSegment._ref == ^._id && count(*[_type == "organization" && references(^._id)]) > 0] | order(lower(name) asc) {
-      _id,
-      name,
-      "slug": slug.current,
-      expansion,
-    }
   }
 `;

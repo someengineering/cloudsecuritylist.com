@@ -72,7 +72,7 @@ export default async function Organization({
         title={organization.name}
         description={organization.description}
         links={links}
-        image={urlFor(organization.logo ?? organization.icon).url()}
+        image={urlFor(organization.logo ?? organization.mark).url()}
       />
       {(organization.productCategories ?? []).length > 0 ? (
         <section className="mx-auto max-w-7xl px-6 py-12 sm:py-16 lg:px-8">

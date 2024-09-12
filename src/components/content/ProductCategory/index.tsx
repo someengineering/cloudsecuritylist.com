@@ -38,7 +38,7 @@ export default async function ProductCategory({
             </h2>
             <div className="col-span-2 -mx-6 grid grid-cols-2 gap-1 overflow-hidden sm:mx-0 sm:rounded-2xl md:grid-cols-3">
               {productCategory.vendors.map((vendor) => {
-                const image = vendor.logo ?? vendor.icon;
+                const image = vendor.logo ?? vendor.mark;
                 const { aspectRatio } = getImageDimensions(
                   image.asset?._ref ?? '',
                 );
