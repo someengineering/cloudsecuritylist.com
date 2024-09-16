@@ -159,7 +159,14 @@ export default defineType({
       name: 'website',
       title: 'Website URL',
       type: 'url',
-      validation: (rule) => rule.required().uri({ scheme: 'https' }),
+      validation: (rule) =>
+        rule
+          .custom((value, context) =>
+            !!value || context.document?.organizationType === 'acquired'
+              ? true
+              : 'Website URL is required.',
+          )
+          .uri({ scheme: 'https' }),
       fieldset: 'links',
     }),
     defineField({

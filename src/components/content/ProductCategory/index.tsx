@@ -57,11 +57,11 @@ export default async function ProductCategory({
                         fill={true}
                         className={clsx(
                           'my-auto w-full object-contain object-center',
-                          aspectRatio > 2.165
-                            ? 'max-h-16'
-                            : aspectRatio > 1.5
-                              ? 'max-h-20'
-                              : 'max-h-24',
+                          aspectRatio > 1.625
+                            ? 'max-h-14'
+                            : aspectRatio > 1
+                              ? 'max-h-16'
+                              : 'max-h-20',
                         )}
                       />
                     </div>

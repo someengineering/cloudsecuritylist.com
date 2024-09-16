@@ -28,29 +28,23 @@ export default async function PageHeader({
     <section className="px-6 py-12 sm:py-16 lg:px-8">
       <div className="mx-auto max-w-2xl text-center">
         {image ? (
-          <h1 className="relative h-28">
-            <span className="sr-only">{title}</span>
+          <div className="relative mb-6 h-20">
             <Image
               src={image}
               fill={true}
               alt=""
               aria-hidden="true"
-              className="mx-auto max-w-72 object-contain"
-              title={title}
+              className="mx-auto max-w-52 object-contain"
             />
-          </h1>
-        ) : (
-          <>
-            {eyebrow ? (
-              <p className="mb-2 text-lg font-semibold text-cyan-600 sm:text-2xl">
-                {eyebrow}
-              </p>
-            ) : null}
-            <h1 className="text-balance text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-              {title}
-            </h1>
-          </>
-        )}
+          </div>
+        ) : eyebrow ? (
+          <p className="mb-2 text-lg font-semibold text-cyan-600 sm:text-2xl">
+            {eyebrow}
+          </p>
+        ) : null}
+        <h1 className="text-balance text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+          {title}
+        </h1>
         {description ? (
           <p className="mt-6 max-w-prose text-pretty text-lg leading-8 text-gray-600">
             {description}
