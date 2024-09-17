@@ -33,14 +33,16 @@ export default async function Organization({
     icon: (
       props: React.JSX.IntrinsicAttributes & React.SVGProps<SVGSVGElement>,
     ) => React.JSX.Element;
-  }[] = [
-    {
+  }[] = [];
+
+  if (organization.website) {
+    links.push({
       label: 'Website',
       href: organization.website,
       props: { target: '_blank', rel: 'noopener noreferrer' },
       icon: HiOutlineGlobeAlt,
-    },
-  ];
+    });
+  }
 
   if (organization.linkedin) {
     links.push({

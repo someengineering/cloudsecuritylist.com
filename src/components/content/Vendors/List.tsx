@@ -114,20 +114,22 @@ export default function List({
                     ) : null}
                   </div>
                   <ul role="list" className="z-10 flex items-end gap-x-3">
-                    <li>
-                      <Link
-                        href={vendor.website}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-gray-400 hover:text-gray-500 focus:outline-none"
-                      >
-                        <span className="sr-only">Website</span>
-                        <HiOutlineGlobeAlt
-                          className="h-5 w-5"
-                          title="Website"
-                        />
-                      </Link>
-                    </li>
+                    {vendor.website ? (
+                      <li>
+                        <Link
+                          href={vendor.website}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-gray-400 hover:text-gray-500 focus:outline-none"
+                        >
+                          <span className="sr-only">Website</span>
+                          <HiOutlineGlobeAlt
+                            className="h-5 w-5"
+                            title="Website"
+                          />
+                        </Link>
+                      </li>
+                    ) : null}
                     {vendor.linkedin ? (
                       <li>
                         <Link

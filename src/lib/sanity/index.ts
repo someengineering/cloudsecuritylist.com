@@ -2,6 +2,11 @@ import 'server-only';
 
 import { sanityFetch } from '@/lib/sanity/client';
 import {
+  CLOUD_PROVIDER_QUERY,
+  CLOUD_PROVIDER_SLUGS_QUERY,
+  CLOUD_PROVIDERS_QUERY,
+} from '@/lib/sanity/queries/cloudProvider';
+import {
   MARKET_SEGMENT_QUERY,
   MARKET_SEGMENTS_QUERY,
 } from '@/lib/sanity/queries/marketSegments';
@@ -25,6 +30,9 @@ import {
   ORGANIZATION_TYPES,
 } from '@/lib/sanity/schemas/objects/organizationType';
 import {
+  CLOUD_PROVIDER_QUERYResult,
+  CLOUD_PROVIDER_SLUGS_QUERYResult,
+  CLOUD_PROVIDERS_QUERYResult,
   MARKET_SEGMENT_QUERYResult,
   MARKET_SEGMENTS_QUERYResult,
   ORGANIZATION_QUERYResult,
@@ -106,6 +114,35 @@ export const getProductCategory = async (slug: string) => {
     query: PRODUCT_CATEGORY_QUERY,
     params: { slug },
     tags: [`productCategory-${slug}`],
+  });
+
+  return data;
+};
+
+export const getCloudProviderSlugs = async () => {
+  const data = await sanityFetch<CLOUD_PROVIDER_SLUGS_QUERYResult>({
+    query: CLOUD_PROVIDER_SLUGS_QUERY,
+    tags: ['cloudProvider'],
+    respectDraftMode: false,
+  });
+
+  return data;
+};
+
+export const getCloudProviders = async () => {
+  const data = await sanityFetch<CLOUD_PROVIDERS_QUERYResult>({
+    query: CLOUD_PROVIDERS_QUERY,
+    tags: ['cloudProvider'],
+  });
+
+  return data;
+};
+
+export const getCloudProvider = async (slug: string) => {
+  const data = await sanityFetch<CLOUD_PROVIDER_QUERYResult>({
+    query: CLOUD_PROVIDER_QUERY,
+    params: { slug },
+    tags: [`cloudProvider-${slug}`],
   });
 
   return data;

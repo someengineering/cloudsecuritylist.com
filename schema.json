@@ -1037,7 +1037,7 @@
         "value": {
           "type": "string"
         },
-        "optional": false
+        "optional": true
       },
       "linkedin": {
         "type": "objectAttribute",

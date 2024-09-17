@@ -194,7 +194,7 @@ export type Organization = {
     crop?: SanityImageCrop;
     _type: 'image';
   };
-  website: string;
+  website?: string;
   linkedin?: string;
   crunchbase?: string;
 };
@@ -356,12 +356,13 @@ export declare const internalGroqTypeReferenceTo: unique symbol;
 // Query: *[    _type == "cloudProvider"  ].slug.current
 export type CLOUD_PROVIDER_SLUGS_QUERYResult = Array<string>;
 // Variable: CLOUD_PROVIDERS_QUERY
-// Query: *[    _type == "cloudProvider" &&    lower(name) > lower($prev)  ] | order(lower(name) asc) {        _id,  name,  "slug": slug.current,  description,  mark,  logo,  website,  linkedin,  crunchbase,  organizationType,  stockSymbol,  supportedCloudProviders[] -> {   _id,  name,  "slug": slug.current,  description,  "icon": icon.name,  mark,  logo,  website,  linkedin, },  productCategories[] -> {   _id,  name,  "slug": slug.current,  expansion,  description,  marketSegment -> {   _id,  name,  "slug": slug.current,  description,  "icon": icon.name, }, },  "research": *[_type == "research" && organization._ref == ^._id] {      _id,  name,  "slug": slug.current,  description,  website,  },  "acquiredOrganizations": *[_type == "organization" && parentOrganization._ref == ^._id] {      _id,  name,  "slug": slug.current,  description,  mark,  logo,  website,  linkedin,  crunchbase,  },  }
+// Query: *[    _type == "cloudProvider" &&    lower(name) > lower($prev)  ] | order(lower(name) asc) {      _id,  name,  "slug": slug.current,  description,  "icon": icon.name,  mark,  logo,  website,  linkedin,  }
 export type CLOUD_PROVIDERS_QUERYResult = Array<{
   _id: string;
   name: string;
   slug: string;
   description: string;
+  icon: string | null;
   mark: {
     asset: {
       _ref: string;
@@ -386,57 +387,15 @@ export type CLOUD_PROVIDERS_QUERYResult = Array<{
   } | null;
   website: string;
   linkedin: string | null;
-  crunchbase: null;
-  organizationType: null;
-  stockSymbol: null;
-  supportedCloudProviders: null;
-  productCategories: null;
-  research: Array<{
-    _id: string;
-    name: string;
-    slug: string;
-    description: string | null;
-    website: string;
-  }>;
-  acquiredOrganizations: Array<{
-    _id: string;
-    name: string;
-    slug: string;
-    description: string;
-    mark: {
-      asset: {
-        _ref: string;
-        _type: 'reference';
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
-      };
-      hotspot?: SanityImageHotspot;
-      crop?: SanityImageCrop;
-      _type: 'image';
-    };
-    logo: {
-      asset?: {
-        _ref: string;
-        _type: 'reference';
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
-      };
-      hotspot?: SanityImageHotspot;
-      crop?: SanityImageCrop;
-      _type: 'image';
-    } | null;
-    website: string;
-    linkedin: string | null;
-    crunchbase: string | null;
-  }>;
 }>;
 // Variable: CLOUD_PROVIDER_QUERY
-// Query: *[    _type == "cloudProvider" &&    slug.current == $slug  ] [0] {        _id,  name,  "slug": slug.current,  description,  mark,  logo,  website,  linkedin,  crunchbase,  organizationType,  stockSymbol,  supportedCloudProviders[] -> {   _id,  name,  "slug": slug.current,  description,  "icon": icon.name,  mark,  logo,  website,  linkedin, },  productCategories[] -> {   _id,  name,  "slug": slug.current,  expansion,  description,  marketSegment -> {   _id,  name,  "slug": slug.current,  description,  "icon": icon.name, }, },  "research": *[_type == "research" && organization._ref == ^._id] {      _id,  name,  "slug": slug.current,  description,  website,  },  "acquiredOrganizations": *[_type == "organization" && parentOrganization._ref == ^._id] {      _id,  name,  "slug": slug.current,  description,  mark,  logo,  website,  linkedin,  crunchbase,  },  }
+// Query: *[    _type == "cloudProvider" &&    slug.current == $slug  ] [0] {      _id,  name,  "slug": slug.current,  description,  "icon": icon.name,  mark,  logo,  website,  linkedin,    "vendors": *[_type == "organization" && references(^._id)] | order(lower(name) asc) {        _id,  name,  "slug": slug.current,  description,  mark,  logo,  website,  linkedin,  crunchbase,    }  }
 export type CLOUD_PROVIDER_QUERYResult = {
   _id: string;
   name: string;
   slug: string;
   description: string;
+  icon: string | null;
   mark: {
     asset: {
       _ref: string;
@@ -461,19 +420,7 @@ export type CLOUD_PROVIDER_QUERYResult = {
   } | null;
   website: string;
   linkedin: string | null;
-  crunchbase: null;
-  organizationType: null;
-  stockSymbol: null;
-  supportedCloudProviders: null;
-  productCategories: null;
-  research: Array<{
-    _id: string;
-    name: string;
-    slug: string;
-    description: string | null;
-    website: string;
-  }>;
-  acquiredOrganizations: Array<{
+  vendors: Array<{
     _id: string;
     name: string;
     slug: string;
@@ -500,7 +447,7 @@ export type CLOUD_PROVIDER_QUERYResult = {
       crop?: SanityImageCrop;
       _type: 'image';
     } | null;
-    website: string;
+    website: string | null;
     linkedin: string | null;
     crunchbase: string | null;
   }>;
@@ -574,7 +521,7 @@ export type ORGANIZATIONS_QUERYResult = Array<{
     crop?: SanityImageCrop;
     _type: 'image';
   } | null;
-  website: string;
+  website: string | null;
   linkedin: string | null;
   crunchbase: string | null;
   organizationType: OrganizationType;
@@ -658,7 +605,7 @@ export type ORGANIZATIONS_QUERYResult = Array<{
       crop?: SanityImageCrop;
       _type: 'image';
     } | null;
-    website: string;
+    website: string | null;
     linkedin: string | null;
     crunchbase: string | null;
   }>;
@@ -692,7 +639,7 @@ export type ORGANIZATION_QUERYResult = {
     crop?: SanityImageCrop;
     _type: 'image';
   } | null;
-  website: string;
+  website: string | null;
   linkedin: string | null;
   crunchbase: string | null;
   organizationType: OrganizationType;
@@ -776,7 +723,7 @@ export type ORGANIZATION_QUERYResult = {
       crop?: SanityImageCrop;
       _type: 'image';
     } | null;
-    website: string;
+    website: string | null;
     linkedin: string | null;
     crunchbase: string | null;
   }>;
@@ -813,7 +760,7 @@ export type VENDORS_QUERYResult = Array<{
     crop?: SanityImageCrop;
     _type: 'image';
   } | null;
-  website: string;
+  website: string | null;
   linkedin: string | null;
   crunchbase: string | null;
   organizationType: OrganizationType;
@@ -897,7 +844,7 @@ export type VENDORS_QUERYResult = Array<{
       crop?: SanityImageCrop;
       _type: 'image';
     } | null;
-    website: string;
+    website: string | null;
     linkedin: string | null;
     crunchbase: string | null;
   }>;
@@ -973,7 +920,7 @@ export type PRODUCT_CATEGORY_QUERYResult = {
       crop?: SanityImageCrop;
       _type: 'image';
     } | null;
-    website: string;
+    website: string | null;
     linkedin: string | null;
     crunchbase: string | null;
   }>;
@@ -1015,7 +962,7 @@ export type RESEARCHES_QUERYResult = Array<{
       crop?: SanityImageCrop;
       _type: 'image';
     } | null;
-    website: string;
+    website: string | null;
     linkedin: string | null;
     crunchbase: string | null;
     organizationType: OrganizationType;
@@ -1099,7 +1046,7 @@ export type RESEARCHES_QUERYResult = Array<{
         crop?: SanityImageCrop;
         _type: 'image';
       } | null;
-      website: string;
+      website: string | null;
       linkedin: string | null;
       crunchbase: string | null;
     }>;
@@ -1140,7 +1087,7 @@ export type RESEARCH_QUERYResult = {
       crop?: SanityImageCrop;
       _type: 'image';
     } | null;
-    website: string;
+    website: string | null;
     linkedin: string | null;
     crunchbase: string | null;
     organizationType: OrganizationType;
@@ -1224,7 +1171,7 @@ export type RESEARCH_QUERYResult = {
         crop?: SanityImageCrop;
         _type: 'image';
       } | null;
-      website: string;
+      website: string | null;
       linkedin: string | null;
       crunchbase: string | null;
     }>;
@@ -1250,8 +1197,8 @@ import '@sanity/client';
 declare module '@sanity/client' {
   interface SanityQueries {
     '\n  *[\n    _type == "cloudProvider"\n  ].slug.current\n': CLOUD_PROVIDER_SLUGS_QUERYResult;
-    '\n  *[\n    _type == "cloudProvider" &&\n    lower(name) > lower($prev)\n  ] | order(lower(name) asc) {\n    \n  \n  _id,\n  name,\n  "slug": slug.current,\n  description,\n  mark,\n  logo,\n  website,\n  linkedin,\n  crunchbase,\n\n  organizationType,\n  stockSymbol,\n  supportedCloudProviders[] -> { \n  _id,\n  name,\n  "slug": slug.current,\n  description,\n  "icon": icon.name,\n  mark,\n  logo,\n  website,\n  linkedin,\n },\n  productCategories[] -> { \n  _id,\n  name,\n  "slug": slug.current,\n  expansion,\n  description,\n  marketSegment -> { \n  _id,\n  name,\n  "slug": slug.current,\n  description,\n  "icon": icon.name,\n },\n },\n  "research": *[_type == "research" && organization._ref == ^._id] {\n    \n  _id,\n  name,\n  "slug": slug.current,\n  description,\n  website,\n\n  },\n  "acquiredOrganizations": *[_type == "organization" && parentOrganization._ref == ^._id] {\n    \n  _id,\n  name,\n  "slug": slug.current,\n  description,\n  mark,\n  logo,\n  website,\n  linkedin,\n  crunchbase,\n\n  },\n\n  }\n': CLOUD_PROVIDERS_QUERYResult;
-    '\n  *[\n    _type == "cloudProvider" &&\n    slug.current == $slug\n  ] [0] {\n    \n  \n  _id,\n  name,\n  "slug": slug.current,\n  description,\n  mark,\n  logo,\n  website,\n  linkedin,\n  crunchbase,\n\n  organizationType,\n  stockSymbol,\n  supportedCloudProviders[] -> { \n  _id,\n  name,\n  "slug": slug.current,\n  description,\n  "icon": icon.name,\n  mark,\n  logo,\n  website,\n  linkedin,\n },\n  productCategories[] -> { \n  _id,\n  name,\n  "slug": slug.current,\n  expansion,\n  description,\n  marketSegment -> { \n  _id,\n  name,\n  "slug": slug.current,\n  description,\n  "icon": icon.name,\n },\n },\n  "research": *[_type == "research" && organization._ref == ^._id] {\n    \n  _id,\n  name,\n  "slug": slug.current,\n  description,\n  website,\n\n  },\n  "acquiredOrganizations": *[_type == "organization" && parentOrganization._ref == ^._id] {\n    \n  _id,\n  name,\n  "slug": slug.current,\n  description,\n  mark,\n  logo,\n  website,\n  linkedin,\n  crunchbase,\n\n  },\n\n  }\n': CLOUD_PROVIDER_QUERYResult;
+    '\n  *[\n    _type == "cloudProvider" &&\n    lower(name) > lower($prev)\n  ] | order(lower(name) asc) {\n    \n  _id,\n  name,\n  "slug": slug.current,\n  description,\n  "icon": icon.name,\n  mark,\n  logo,\n  website,\n  linkedin,\n\n  }\n': CLOUD_PROVIDERS_QUERYResult;
+    '\n  *[\n    _type == "cloudProvider" &&\n    slug.current == $slug\n  ] [0] {\n    \n  _id,\n  name,\n  "slug": slug.current,\n  description,\n  "icon": icon.name,\n  mark,\n  logo,\n  website,\n  linkedin,\n\n    "vendors": *[_type == "organization" && references(^._id)] | order(lower(name) asc) {\n      \n  _id,\n  name,\n  "slug": slug.current,\n  description,\n  mark,\n  logo,\n  website,\n  linkedin,\n  crunchbase,\n\n    }\n  }\n': CLOUD_PROVIDER_QUERYResult;
     '\n  *[\n    _type == "marketSegment" &&\n    defined(slug.current) &&\n    count(\n      *[\n        _type == "productCategory" &&\n        marketSegment._ref == ^._id && \n        count(*[_type == "organization" && references(^._id)]) > 0\n      ]\n    ) > 0\n  ] | order(lower(name) asc) {\n    \n  \n  _id,\n  name,\n  "slug": slug.current,\n  description,\n  "icon": icon.name,\n\n  "productCategories": *[_type == "productCategory" && marketSegment._ref == ^._id && count(*[_type == "organization" && references(^._id)]) > 0] | order(lower(name) asc) {\n    _id,\n    name,\n    "slug": slug.current,\n    expansion,\n  },\n\n  }\n': MARKET_SEGMENTS_QUERYResult;
     '\n  *[\n    _type == "marketSegment" &&\n    slug.current == $slug\n  ] [0] {\n    \n  \n  _id,\n  name,\n  "slug": slug.current,\n  description,\n  "icon": icon.name,\n\n  "productCategories": *[_type == "productCategory" && marketSegment._ref == ^._id && count(*[_type == "organization" && references(^._id)]) > 0] | order(lower(name) asc) {\n    _id,\n    name,\n    "slug": slug.current,\n    expansion,\n  },\n\n  }\n': MARKET_SEGMENT_QUERYResult;
     '\n  count(\n    *[\n      _type == "organization" &&\n      (count($organizationTypes) == 0 || organizationType in $organizationTypes)\n    ]\n  )\n': ORGANIZATIONS_COUNT_QUERYResult;
