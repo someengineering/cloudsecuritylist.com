@@ -141,15 +141,10 @@ export default defineType({
       validation: (rule) =>
         rule
           .custom((value, context) =>
-            value
-              ? context.document?.organizationType ===
-                ORGANIZATION_TYPE.ACQUIRED
-                ? true
-                : 'Acquisition price can only be specified for acquired entities.'
-              : context.document?.organizationType ===
-                  ORGANIZATION_TYPE.ACQUIRED
-                ? 'Acquisition price is required.'
-                : true,
+            value &&
+            context.document?.organizationType !== ORGANIZATION_TYPE.ACQUIRED
+              ? 'Acquisition price can only be specified for acquired entities.'
+              : true,
           )
           .positive()
           .integer(),
