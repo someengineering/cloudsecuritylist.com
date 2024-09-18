@@ -3,15 +3,7 @@ import { groq } from 'next-sanity';
 
 export const MARKET_SEGMENTS_QUERY = groq`
   *[
-    _type == "marketSegment" &&
-    defined(slug.current) &&
-    count(
-      *[
-        _type == "productCategory" &&
-        marketSegment._ref == ^._id && 
-        count(*[_type == "organization" && references(^._id)]) > 0
-      ]
-    ) > 0
+    _type == "marketSegment"
   ] | order(lower(name) asc) {
     ${MARKET_SEGMENT}
   }

@@ -23,7 +23,9 @@ export const CLOUD_PROVIDER_QUERY = groq`
     slug.current == $slug
   ] [0] {
     ${CLOUD_PROVIDER}
-    "vendors": *[_type == "organization" && references(^._id)] | order(lower(name) asc) {
+    "vendors": *[
+      _type == "organization" && ^._id in supportedCloudProviders[]._ref
+    ] | order(lower(name) asc) {
       ${ORGANIZATION_BASE}
     }
   }

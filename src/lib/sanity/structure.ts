@@ -27,9 +27,6 @@ export const structure: StructureResolver = (S) =>
         .child(
           S.documentTypeList('marketSegment')
             .apiVersion(apiVersion)
-            .filter(
-              'count(*[_type == "productCategory" && references(^._id)]) > 0',
-            )
             .child((id) =>
               S.documentList()
                 .title('Product categories')

@@ -11,7 +11,7 @@ export const PRODUCT_CATEGORY_SLUGS_QUERY = groq`
 export const PRODUCT_CATEGORIES_QUERY = groq`
   *[
     _type == "productCategory" &&
-    ($marketSegment == "" || references($marketSegment))
+    ($marketSegment == "" || $marketSegment == marketSegment._ref)
   ] | order(lower(name) asc) {
     ${PRODUCT_CATEGORY}
   }
@@ -23,7 +23,9 @@ export const PRODUCT_CATEGORY_QUERY = groq`
     slug.current == $slug
   ] [0] {
     ${PRODUCT_CATEGORY}
-    "vendors": *[_type == "organization" && references(^._id)] | order(lower(name) asc) {
+    "vendors": *[
+      _type == "organization" && ^._id in supportedCloudProviders[]._ref
+    ] | order(lower(name) asc) {
       ${ORGANIZATION_BASE}
     }
   }

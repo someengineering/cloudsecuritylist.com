@@ -79,14 +79,16 @@ export default defineType({
       name: 'productCategories',
       title: 'Product categories',
       type: 'array',
-      of: [{ type: 'reference', to: [{ type: 'productCategory' }] }],
+      of: [
+        { type: 'reference', weak: true, to: [{ type: 'productCategory' }] },
+      ],
       validation: (rule) => rule.unique(),
     }),
     defineField({
       name: 'supportedCloudProviders',
       title: 'Supported cloud providers',
       type: 'array',
-      of: [{ type: 'reference', to: [{ type: 'cloudProvider' }] }],
+      of: [{ type: 'reference', weak: true, to: [{ type: 'cloudProvider' }] }],
       hidden: ({ parent, value }) =>
         !value && (parent.productCategories ?? []).length === 0,
       validation: (rule) => rule.unique(),

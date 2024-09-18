@@ -61,7 +61,7 @@ export const getPage = async (slug: string) => {
   const data = await sanityFetch<PAGE_QUERYResult>({
     query: PAGE_QUERY,
     params: { slug },
-    tags: [`page-${slug}`],
+    tags: [`page:${slug}`],
   });
 
   return data;
@@ -80,7 +80,7 @@ export const getMarketSegment = async (slug: string) => {
   const data = await sanityFetch<MARKET_SEGMENT_QUERYResult>({
     query: MARKET_SEGMENT_QUERY,
     params: { slug },
-    tags: [`marketSegment-${slug}`],
+    tags: [`marketSegment:${slug}`],
   });
 
   return data;
@@ -101,8 +101,7 @@ export const getProductCategories = async (marketSegment?: string) => {
     query: PRODUCT_CATEGORIES_QUERY,
     params: { marketSegment: marketSegment ?? '' },
     tags: [
-      marketSegment ? `marketSegment-${marketSegment}` : 'marketSegment',
-      'productCategory',
+      marketSegment ? `marketSegment:${marketSegment}` : 'productCategory',
     ],
   });
 
@@ -113,7 +112,7 @@ export const getProductCategory = async (slug: string) => {
   const data = await sanityFetch<PRODUCT_CATEGORY_QUERYResult>({
     query: PRODUCT_CATEGORY_QUERY,
     params: { slug },
-    tags: [`productCategory-${slug}`],
+    tags: [`productCategory:${slug}`],
   });
 
   return data;
@@ -142,7 +141,7 @@ export const getCloudProvider = async (slug: string) => {
   const data = await sanityFetch<CLOUD_PROVIDER_QUERYResult>({
     query: CLOUD_PROVIDER_QUERY,
     params: { slug },
-    tags: [`cloudProvider-${slug}`],
+    tags: [`cloudProvider:${slug}`],
   });
 
   return data;
@@ -193,10 +192,10 @@ export const getOrganizations = async ({
       organizationTypes: organizationTypes ?? [],
       prev: prev ?? '',
     },
-    tags: [
-      'organization',
-      ...(organizationTypes ?? []).map((slug) => `organization-${slug}`),
-    ],
+    tags:
+      (organizationTypes ?? []).length > 0
+        ? ['organization']
+        : (organizationTypes ?? []).map((slug) => `organizationType:${slug}`),
   });
 
   return data;
@@ -206,7 +205,7 @@ export const getOrganization = async (slug: string) => {
   const data = await sanityFetch<ORGANIZATION_QUERYResult>({
     query: ORGANIZATION_QUERY,
     params: { slug },
-    tags: [`organization-${slug}`],
+    tags: [`organization:${slug}`],
   });
 
   return data;
@@ -255,11 +254,17 @@ export const getVendors = async ({
       organizationTypes: organizationTypes ?? [],
       prev: prev ?? '',
     },
-    tags: [
-      'organization',
-      ...(productCategories ?? []).map((slug) => `productCategory-${slug}`),
-      ...(organizationTypes ?? []).map((slug) => `organization-${slug}`),
-    ],
+    tags:
+      (productCategories ?? []).length + (organizationTypes ?? []).length > 0
+        ? ['organization']
+        : [
+            ...(productCategories ?? []).map(
+              (slug) => `productCategory:${slug}`,
+            ),
+            ...(organizationTypes ?? []).map(
+              (slug) => `organizationType:${slug}`,
+            ),
+          ],
   });
 
   return data;

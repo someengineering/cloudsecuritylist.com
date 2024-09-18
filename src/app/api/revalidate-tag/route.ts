@@ -4,9 +4,7 @@ import { revalidateTag } from 'next/cache';
 import { type NextRequest, NextResponse } from 'next/server';
 
 type WebhookPayload = {
-  _type: string;
-  slug?: string;
-  organizationType?: string;
+  tags: string[];
 };
 
 export async function POST(req: NextRequest) {
@@ -28,20 +26,12 @@ export async function POST(req: NextRequest) {
       return new Response(JSON.stringify({ message, isValidSignature, body }), {
         status: 401,
       });
-    } else if (!body?._type) {
+    } else if (!body?.tags || body.tags.length === 0) {
       const message = 'Bad request';
       return new Response(JSON.stringify({ message, body }), { status: 400 });
     }
 
-    revalidateTag(body._type);
-
-    if (body.slug) {
-      revalidateTag(`${body._type}${body.slug}`);
-    }
-
-    if (body._type === 'organization' && body.organizationType) {
-      revalidateTag(`organization-${body.organizationType}`);
-    }
+    body.tags.forEach((tag) => revalidateTag(tag));
 
     return NextResponse.json({ body });
   } catch (err) {

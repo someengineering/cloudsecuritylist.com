@@ -4,8 +4,7 @@ import { groq } from 'next-sanity';
 
 export const RESEARCHES_QUERY = groq`
   *[
-    _type == "research" &&
-    (!defined($productCategories) || count($productCategories) == 0 || references($productCategories))
+    _type == "research"
   ] | order(lower(name) asc) {
     ${RESEARCH}
     organization -> { ${ORGANIZATION} },

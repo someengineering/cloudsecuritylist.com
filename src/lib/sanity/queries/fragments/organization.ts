@@ -20,10 +20,14 @@ export const ORGANIZATION = `
   stockSymbol,
   supportedCloudProviders[] -> { ${CLOUD_PROVIDER} },
   productCategories[] -> { ${PRODUCT_CATEGORY} },
-  "research": *[_type == "research" && organization._ref == ^._id] {
+  "research": *[
+    _type == "research" && organization._ref == ^._id
+  ] {
     ${RESEARCH}
   },
-  "acquiredOrganizations": *[_type == "organization" && parentOrganization._ref == ^._id] {
+  "acquiredOrganizations": *[
+    _type == "organization" && parentOrganization._ref == ^._id
+  ] {
     ${ORGANIZATION_BASE}
   },
 `;
