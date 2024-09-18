@@ -32,7 +32,7 @@ export default defineType({
       name: 'description',
       title: 'Description',
       type: 'text',
-      rows: 5,
+      rows: 4,
     }),
   ],
   preview: {
@@ -41,4 +41,5 @@ export default defineType({
       subtitle: 'website',
     },
   },
+  __experimental_formPreviewTitle: false,
 });

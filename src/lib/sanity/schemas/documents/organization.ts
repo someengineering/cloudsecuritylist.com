@@ -23,6 +23,20 @@ export default defineType({
         collapsible: true,
       },
     },
+    {
+      name: 'acquisition',
+      title: 'Acquisition details',
+      options: {
+        collapsible: true,
+      },
+    },
+    {
+      name: 'product',
+      title: 'Product offering(s)',
+      options: {
+        collapsible: true,
+      },
+    },
   ],
   fields: [
     defineField({
@@ -41,18 +55,18 @@ export default defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: 'description',
+      title: 'Description',
+      description: 'Description length must be between 100 and 250 characters.',
+      type: 'text',
+      rows: 4,
+      validation: (rule) => rule.required().min(100).max(250),
+    }),
+    defineField({
       name: 'organizationType',
       title: 'Organization type',
       type: 'organizationType',
       validation: (rule) => rule.required(),
-    }),
-    defineField({
-      name: 'parentOrganization',
-      title: 'Parent organization',
-      type: 'reference',
-      to: [{ type: 'organization' }],
-      hidden: ({ parent, value }) =>
-        !value && parent.organizationType !== ORGANIZATION_TYPE.ACQUIRED,
     }),
     defineField({
       name: 'stockSymbol',
@@ -65,97 +79,80 @@ export default defineType({
           .uppercase()
           .min(1)
           .max(5)
-          .error('Stock symbols must consist of 1 to 5 uppercase characters.'),
+          .error('Stock symbols must consist of 1 to 5 uppercase characters.')
+          .custom((value, context) =>
+            value
+              ? context.document?.organizationType === ORGANIZATION_TYPE.PUBLIC
+                ? true
+                : 'Stock symbol can only be specified for public companies.'
+              : context.document?.organizationType === ORGANIZATION_TYPE.PUBLIC
+                ? 'Stock symbol is required.'
+                : true,
+          ),
     }),
     defineField({
-      name: 'description',
-      title: 'Description',
-      description: 'Description length must be between 100 and 250 characters.',
-      type: 'text',
-      rows: 5,
-      validation: (rule) => rule.required().min(100).max(250),
-    }),
-    defineField({
-      name: 'productCategories',
-      title: 'Product categories',
-      type: 'array',
-      of: [
-        { type: 'reference', weak: true, to: [{ type: 'productCategory' }] },
-      ],
-      validation: (rule) => rule.unique(),
-    }),
-    defineField({
-      name: 'supportedCloudProviders',
-      title: 'Supported cloud providers',
-      type: 'array',
-      of: [{ type: 'reference', weak: true, to: [{ type: 'cloudProvider' }] }],
+      name: 'parentOrganization',
+      title: 'Parent organization',
+      type: 'reference',
+      to: [{ type: 'organization' }],
+      fieldset: 'acquisition',
       hidden: ({ parent, value }) =>
-        !value && (parent.productCategories ?? []).length === 0,
-      validation: (rule) => rule.unique(),
+        !value && parent.organizationType !== ORGANIZATION_TYPE.ACQUIRED,
+      validation: (rule) =>
+        rule.custom((value, context) =>
+          value
+            ? context.document?.organizationType === ORGANIZATION_TYPE.ACQUIRED
+              ? true
+              : 'Parent organization can only be specified for acquired entities.'
+            : context.document?.organizationType === ORGANIZATION_TYPE.ACQUIRED
+              ? 'Parent organization is required.'
+              : true,
+        ),
     }),
     defineField({
-      name: 'mark',
-      title: 'Brand mark',
-      description: 'Square brand mark image in SVG format.',
-      type: 'image',
+      name: 'acquisitionDate',
+      title: 'Acquisition date',
+      type: 'date',
       options: {
-        storeOriginalFilename: false,
+        dateFormat: 'LL',
       },
+      fieldset: 'acquisition',
+      hidden: ({ parent, value }) =>
+        !value && parent.organizationType !== ORGANIZATION_TYPE.ACQUIRED,
+      validation: (rule) =>
+        rule.custom((value, context) =>
+          value
+            ? context.document?.organizationType === ORGANIZATION_TYPE.ACQUIRED
+              ? true
+              : 'Acquisition date can only be specified for acquired entities.'
+            : context.document?.organizationType === ORGANIZATION_TYPE.ACQUIRED
+              ? 'Acquisition date is required.'
+              : true,
+        ),
+    }),
+    defineField({
+      name: 'acquisitionPrice',
+      title: 'Acquisition price',
+      description: 'Acquisition price in US Dollars ($).',
+      type: 'number',
+      fieldset: 'acquisition',
+      hidden: ({ parent, value }) =>
+        !value && parent.organizationType !== ORGANIZATION_TYPE.ACQUIRED,
       validation: (rule) =>
         rule
-          .required()
-          .assetRequired()
-          .custom((value): CustomValidatorResult => {
-            if (!value?.asset?._ref) {
-              return 'Brand mark image is required.';
-            }
-
-            const filetype = getExtension(value.asset._ref);
-
-            if (filetype !== 'svg') {
-              return 'Brand mark must be an SVG image.';
-            }
-
-            const { width, height } = getImageDimensions(value.asset._ref);
-
-            if (width !== height) {
-              return 'Brand mark image must be square.';
-            }
-
-            return true;
-          }),
-      fieldset: 'images',
-    }),
-    defineField({
-      name: 'logo',
-      title: 'Logo',
-      description:
-        'Horizontal (landscape) logo image in SVG format. Leave empty if same as the square icon image.',
-      type: 'image',
-      options: {
-        storeOriginalFilename: false,
-      },
-      validation: (rule) =>
-        rule.custom((value): CustomValidatorResult => {
-          if (!value?.asset?._ref) {
-            return true;
-          }
-
-          const filetype = getExtension(value.asset._ref);
-
-          if (filetype !== 'svg') {
-            return 'Logo must be an SVG image.';
-          }
-
-          const { width, height } = getImageDimensions(value.asset._ref);
-
-          if (width <= height) {
-            return 'Logo image must be horizontal (landscape).';
-          }
-
-          return true;
-        }),
-      fieldset: 'images',
+          .custom((value, context) =>
+            value
+              ? context.document?.organizationType ===
+                ORGANIZATION_TYPE.ACQUIRED
+                ? true
+                : 'Acquisition price can only be specified for acquired entities.'
+              : context.document?.organizationType ===
+                  ORGANIZATION_TYPE.ACQUIRED
+                ? 'Acquisition price is required.'
+                : true,
+          )
+          .positive()
+          .integer(),
     }),
     defineField({
       name: 'website',
@@ -164,7 +161,8 @@ export default defineType({
       validation: (rule) =>
         rule
           .custom((value, context) =>
-            !!value || context.document?.organizationType === 'acquired'
+            !!value ||
+            context.document?.organizationType === ORGANIZATION_TYPE.ACQUIRED
               ? true
               : 'Website URL is required.',
           )
@@ -185,6 +183,100 @@ export default defineType({
       validation: (rule) => rule.uri({ scheme: 'https' }),
       fieldset: 'links',
     }),
+    defineField({
+      name: 'mark',
+      title: 'Brand mark',
+      description: 'Square brand mark image in SVG format.',
+      type: 'image',
+      options: {
+        accept: 'image/svg+xml',
+        sources: [],
+        storeOriginalFilename: false,
+      },
+      fieldset: 'images',
+      validation: (rule) =>
+        rule.custom((value, context): CustomValidatorResult => {
+          if (!value?.asset?._ref) {
+            return context.document?.organizationType ===
+              ORGANIZATION_TYPE.ACQUIRED
+              ? true
+              : 'Brand mark image is required.';
+          }
+
+          const filetype = getExtension(value.asset._ref);
+
+          if (filetype !== 'svg') {
+            return 'Brand mark must be an SVG image.';
+          }
+
+          const { width, height } = getImageDimensions(value.asset._ref);
+
+          if (width !== height) {
+            return 'Brand mark image must be square.';
+          }
+
+          return true;
+        }),
+    }),
+    defineField({
+      name: 'logo',
+      title: 'Logo',
+      description:
+        'Horizontal (landscape) logo image in SVG format. Leave empty if same as the square icon image.',
+      type: 'image',
+      options: {
+        accept: 'image/svg+xml',
+        sources: [],
+        storeOriginalFilename: false,
+      },
+      fieldset: 'images',
+      validation: (rule) =>
+        rule.custom((value, context): CustomValidatorResult => {
+          if (!value?.asset?._ref) {
+            return context.document?.organizationType ===
+              ORGANIZATION_TYPE.ACQUIRED
+              ? true
+              : 'Logo image is required.';
+          }
+
+          const filetype = getExtension(value.asset._ref);
+
+          if (filetype !== 'svg') {
+            return 'Logo must be an SVG image.';
+          }
+
+          const { width, height } = getImageDimensions(value.asset._ref);
+
+          if (width <= height) {
+            return 'Logo image must be horizontal (landscape).';
+          }
+
+          return true;
+        }),
+    }),
+    defineField({
+      name: 'productCategories',
+      title: 'Product categories',
+      type: 'array',
+      of: [
+        { type: 'reference', weak: true, to: [{ type: 'productCategory' }] },
+      ],
+      fieldset: 'product',
+      hidden: ({ parent }) =>
+        parent.organizationType === ORGANIZATION_TYPE.ACQUIRED,
+      validation: (rule) => rule.unique(),
+    }),
+    defineField({
+      name: 'supportedCloudProviders',
+      title: 'Supported cloud providers',
+      type: 'array',
+      of: [{ type: 'reference', weak: true, to: [{ type: 'cloudProvider' }] }],
+      fieldset: 'product',
+      hidden: ({ parent, value }) =>
+        (!value && (parent.productCategories ?? []).length === 0) ||
+        parent.organizationType === ORGANIZATION_TYPE.ACQUIRED,
+      validation: (rule) => rule.unique(),
+    }),
   ],
   preview: {
     select: {
@@ -193,4 +285,5 @@ export default defineType({
       media: 'mark',
     },
   },
+  __experimental_formPreviewTitle: false,
 });

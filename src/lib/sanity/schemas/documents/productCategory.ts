@@ -43,7 +43,7 @@ export default defineType({
       name: 'description',
       title: 'Description',
       type: 'text',
-      rows: 5,
+      rows: 4,
       validation: (rule) => rule.required().min(50),
     }),
   ],
@@ -62,4 +62,5 @@ export default defineType({
       };
     },
   },
+  __experimental_formPreviewTitle: false,
 });

@@ -38,7 +38,7 @@ export default defineType({
       name: 'description',
       title: 'Description',
       type: 'text',
-      rows: 5,
+      rows: 4,
     }),
   ],
   preview: {
@@ -48,4 +48,5 @@ export default defineType({
       media: 'organization.mark',
     },
   },
+  __experimental_formPreviewTitle: false,
 });

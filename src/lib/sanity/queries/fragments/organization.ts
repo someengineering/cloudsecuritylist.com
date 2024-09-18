@@ -7,27 +7,53 @@ export const ORGANIZATION_BASE = `
   name,
   "slug": slug.current,
   description,
-  mark,
-  logo,
+  organizationType,
   website,
   linkedin,
   crunchbase,
+  stockSymbol,
+  mark,
+  logo,
 `;
 
-export const ORGANIZATION = `
+export const VENDOR = `
   ${ORGANIZATION_BASE}
-  organizationType,
-  stockSymbol,
-  supportedCloudProviders[] -> { ${CLOUD_PROVIDER} },
   productCategories[] -> { ${PRODUCT_CATEGORY} },
+  supportedCloudProviders[] -> { ${CLOUD_PROVIDER} },
+`;
+
+export const ACQUIRED_ENTITY = `
+  ${ORGANIZATION_BASE}
+  acquisitionDate,
+  acquisitionPrice,
+`;
+
+export const NON_ACQUIRED_ENTITY = `
+  ${ORGANIZATION_BASE}
+  productCategories[] -> { ${PRODUCT_CATEGORY} },
+  supportedCloudProviders[] -> { ${CLOUD_PROVIDER} },
   "research": *[
     _type == "research" && organization._ref == ^._id
   ] {
     ${RESEARCH}
   },
-  "acquiredOrganizations": *[
+  "acquiredEntities": *[
     _type == "organization" && parentOrganization._ref == ^._id
   ] {
-    ${ORGANIZATION_BASE}
+    ${ACQUIRED_ENTITY}
   },
+`;
+
+export const ORGANIZATION = `
+  ...select(
+    organizationType == "acquired" => {
+      ${ACQUIRED_ENTITY}
+      parentOrganization -> {
+        ${ORGANIZATION_BASE}
+      },
+    },
+    organizationType != "acquired" => {
+      ${NON_ACQUIRED_ENTITY}
+    },
+  ),
 `;

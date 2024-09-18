@@ -77,12 +77,23 @@ export default async function Organization({
         title={organization.name}
         description={organization.description}
         links={links}
-        image={urlFor(organization.mark).url()}
+        image={
+          organization.mark?.asset?._ref
+            ? urlFor(organization.mark).url()
+            : undefined
+        }
       />
-      {(organization.productCategories ?? []).length > 0 ? (
-        <section className="mx-auto max-w-7xl px-6 py-12 sm:py-16 lg:px-8">
+      {'productCategories' in organization &&
+      (organization.productCategories ?? []).length > 0 ? (
+        <section
+          className="mx-auto max-w-7xl px-6 py-12 sm:py-16 lg:px-8"
+          aria-labelledby="product-categories"
+        >
           <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 md:max-w-none xl:mx-0 xl:grid-cols-3">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+            <h2
+              className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl"
+              id="product-categories"
+            >
               Product categories
             </h2>
             <dl className="col-span-2 grid grid-cols-1 gap-x-8 gap-y-16 md:grid-cols-2">
@@ -129,18 +140,28 @@ export default async function Organization({
           </div>
         </section>
       ) : null}
-      {(organization.supportedCloudProviders ?? []).length > 0 ? (
-        <section className="mx-auto max-w-7xl px-6 py-12 sm:py-16 lg:px-8">
+      {'supportedCloudProviders' in organization &&
+      (organization.supportedCloudProviders ?? []).length > 0 ? (
+        <section
+          className="mx-auto max-w-7xl px-6 py-12 sm:py-16 lg:px-8"
+          aria-labelledby="supported-cloud-providers"
+        >
           <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+            <h2
+              className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl"
+              id="supported-cloud-providers"
+            >
               Supported cloud providers
             </h2>
             <div className="col-span-2 -mx-6 grid grid-cols-2 gap-1 overflow-hidden sm:mx-0 sm:rounded-2xl md:grid-cols-3">
               {organization.supportedCloudProviders?.map((cloudProvider) => {
                 const image = cloudProvider.logo ?? cloudProvider.mark;
-                const { aspectRatio } = getImageDimensions(
-                  image.asset?._ref ?? '',
-                );
+
+                if (!image?.asset?._ref) {
+                  return null;
+                }
+
+                const { aspectRatio } = getImageDimensions(image.asset._ref);
 
                 return (
                   <Link
@@ -171,10 +192,17 @@ export default async function Organization({
           </div>
         </section>
       ) : null}
-      {(organization.research ?? []).length > 0 ? (
-        <section className="mx-auto max-w-7xl px-6 py-12 sm:py-16 lg:px-8">
+      {'research' in organization &&
+      (organization.research ?? []).length > 0 ? (
+        <section
+          className="mx-auto max-w-7xl px-6 py-12 sm:py-16 lg:px-8"
+          aria-labelledby="research"
+        >
           <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+            <h2
+              className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl"
+              id="research"
+            >
               Research
             </h2>
             <dl className="col-span-2 space-y-16">
@@ -193,6 +221,52 @@ export default async function Organization({
                     </dt>
                     <dd className="mt-1 text-base leading-7 text-gray-600">
                       {research.description}
+                    </dd>
+                  </div>
+                );
+              })}
+            </dl>
+          </div>
+        </section>
+      ) : null}
+      {'acquiredEntities' in organization &&
+      (organization.acquiredEntities ?? []).length > 0 ? (
+        <section
+          className="mx-auto max-w-7xl px-6 py-12 sm:py-16 lg:px-8"
+          aria-labelledby="acquired-entities"
+        >
+          <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
+            <h2
+              className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl"
+              id="acquired-entities"
+            >
+              Acquired entities
+            </h2>
+            <dl className="col-span-2 space-y-16">
+              {organization.acquiredEntities?.map((acquiredEntity) => {
+                return (
+                  <div key={acquiredEntity._id} id={acquiredEntity.slug}>
+                    <dt className="text-gray-900">
+                      <span className="text-lg font-semibold leading-8 text-cyan-700">
+                        {acquiredEntity.name}
+                      </span>
+                      {!!acquiredEntity.acquisitionDate ||
+                      !!acquiredEntity.acquisitionPrice ? (
+                        <>
+                          {' '}
+                          (acquired
+                          {acquiredEntity.acquisitionDate
+                            ? ` on ${new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'long', day: 'numeric' }).format(new Date(acquiredEntity.acquisitionDate))}`
+                            : ''}
+                          {acquiredEntity.acquisitionPrice
+                            ? ` for ${new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', trailingZeroDisplay: 'stripIfInteger' }).format(acquiredEntity.acquisitionPrice)}`
+                            : ''}
+                          )
+                        </>
+                      ) : null}
+                    </dt>
+                    <dd className="mt-1 text-base leading-7 text-gray-600">
+                      {acquiredEntity.description}
                     </dd>
                   </div>
                 );

@@ -65,4 +65,5 @@ export default defineType({
       validation: (rule) => rule.required().min(1),
     }),
   ],
+  __experimental_formPreviewTitle: false,
 });

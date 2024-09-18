@@ -43,8 +43,22 @@ export default defineType({
       name: 'description',
       title: 'Description',
       type: 'text',
-      rows: 5,
+      rows: 4,
       validation: (rule) => rule.required().min(50),
+    }),
+    defineField({
+      name: 'website',
+      title: 'Website URL',
+      type: 'url',
+      fieldset: 'links',
+      validation: (rule) => rule.required().uri({ scheme: 'https' }),
+    }),
+    defineField({
+      name: 'linkedin',
+      title: 'LinkedIn URL',
+      type: 'url',
+      fieldset: 'links',
+      validation: (rule) => rule.uri({ scheme: 'https' }),
     }),
     defineField({
       name: 'icon',
@@ -54,8 +68,8 @@ export default defineType({
         providers: ['si'],
         outputFormat: 'react',
       },
-      validation: (rule) => rule.required(),
       fieldset: 'images',
+      validation: (rule) => rule.required(),
     }),
     defineField({
       name: 'mark',
@@ -63,8 +77,11 @@ export default defineType({
       description: 'Square brand mark image in SVG format.',
       type: 'image',
       options: {
+        accept: 'image/svg+xml',
+        sources: [],
         storeOriginalFilename: false,
       },
+      fieldset: 'images',
       validation: (rule) =>
         rule
           .required()
@@ -88,7 +105,6 @@ export default defineType({
 
             return true;
           }),
-      fieldset: 'images',
     }),
     defineField({
       name: 'logo',
@@ -97,8 +113,11 @@ export default defineType({
         'Horizontal (landscape) logo image in SVG format. Leave empty if same as the square icon image.',
       type: 'image',
       options: {
+        accept: 'image/svg+xml',
+        sources: [],
         storeOriginalFilename: false,
       },
+      fieldset: 'images',
       validation: (rule) =>
         rule.custom((value): CustomValidatorResult => {
           if (!value?.asset?._ref) {
@@ -119,21 +138,6 @@ export default defineType({
 
           return true;
         }),
-      fieldset: 'images',
-    }),
-    defineField({
-      name: 'website',
-      title: 'Website URL',
-      type: 'url',
-      validation: (rule) => rule.required().uri({ scheme: 'https' }),
-      fieldset: 'links',
-    }),
-    defineField({
-      name: 'linkedin',
-      title: 'LinkedIn URL',
-      type: 'url',
-      validation: (rule) => rule.uri({ scheme: 'https' }),
-      fieldset: 'links',
     }),
   ],
   preview: {
@@ -143,4 +147,5 @@ export default defineType({
       media: 'mark',
     },
   },
+  __experimental_formPreviewTitle: false,
 });

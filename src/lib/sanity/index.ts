@@ -150,13 +150,15 @@ export const getCloudProvider = async (slug: string) => {
 export const getOrganizationTypes = async () => {
   const data = (
     await Promise.all(
-      ORGANIZATION_TYPES.map(async (type) => {
+      ORGANIZATION_TYPES.filter(
+        (type) => type.value !== ORGANIZATION_TYPE.ACQUIRED,
+      ).map(async (type) => {
         const count = await sanityFetch<ORGANIZATIONS_COUNT_QUERYResult>({
           query: ORGANIZATIONS_COUNT_QUERY,
           params: {
             organizationTypes: [type.value],
           },
-          tags: ['organization'],
+          tags: [`organizationType:${type.value}`],
         });
 
         return { value: type.value, count };
@@ -214,14 +216,16 @@ export const getOrganization = async (slug: string) => {
 export const getVendorTypes = async () => {
   const data = (
     await Promise.all(
-      ORGANIZATION_TYPES.map(async (type) => {
+      ORGANIZATION_TYPES.filter(
+        (type) => type.value !== ORGANIZATION_TYPE.ACQUIRED,
+      ).map(async (type) => {
         const count = await sanityFetch<VENDORS_COUNT_QUERYResult>({
           query: VENDORS_COUNT_QUERY,
           params: {
             productCategories: [],
             organizationTypes: [type.value],
           },
-          tags: ['organization'],
+          tags: [`organizationType:${type.value}`],
         });
 
         return { value: type.value, count };

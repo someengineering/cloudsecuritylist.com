@@ -1,10 +1,11 @@
 import { CLOUD_PROVIDER } from '@/lib/sanity/queries/fragments/cloudProvider';
-import { ORGANIZATION_BASE } from '@/lib/sanity/queries/fragments/organization';
+import { VENDOR } from '@/lib/sanity/queries/fragments/organization';
 import { groq } from 'next-sanity';
 
 export const CLOUD_PROVIDER_SLUGS_QUERY = groq`
   *[
-    _type == "cloudProvider"
+    _type == "cloudProvider" &&
+    defined(slug.current)
   ].slug.current
 `;
 
@@ -26,7 +27,7 @@ export const CLOUD_PROVIDER_QUERY = groq`
     "vendors": *[
       _type == "organization" && ^._id in supportedCloudProviders[]._ref
     ] | order(lower(name) asc) {
-      ${ORGANIZATION_BASE}
+      ${VENDOR}
     }
   }
 `;

@@ -49,4 +49,5 @@ export default defineType({
       };
     },
   },
+  __experimental_formPreviewTitle: false,
 });

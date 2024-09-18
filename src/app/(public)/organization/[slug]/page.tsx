@@ -1,8 +1,9 @@
 import Organization from '@/components/content/Organization';
 import { getOrganization, getOrganizationSlugs } from '@/lib/sanity';
+import { ORGANIZATION_TYPE } from '@/lib/sanity/schemas/objects/organizationType';
 import { isValidSlug } from '@/utils/slug';
 import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 
 export async function generateStaticParams() {
   const slugs = await getOrganizationSlugs();
@@ -47,5 +48,19 @@ export default async function OrganizationPage({
   if (organization === null) {
     notFound();
   }
+
+  if (organization.organizationType === ORGANIZATION_TYPE.ACQUIRED) {
+    if (
+      'parentOrganization' in organization &&
+      organization.parentOrganization?.slug
+    ) {
+      redirect(
+        `/organization/${organization.parentOrganization.slug}#${organization.slug}`,
+      );
+    }
+
+    notFound();
+  }
+
   return <Organization organization={organization} />;
 }

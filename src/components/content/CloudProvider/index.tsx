@@ -52,17 +52,26 @@ export default async function CloudProvider({
         image={urlFor(cloudProvider.mark).url()}
       />
       {cloudProvider.vendors.length > 0 ? (
-        <section className="mx-auto max-w-7xl px-6 py-12 sm:py-16 lg:px-8">
+        <section
+          className="mx-auto max-w-7xl px-6 py-12 sm:py-16 lg:px-8"
+          aria-labelledby="vendors"
+        >
           <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+            <h2
+              className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl"
+              id="vendors"
+            >
               Product vendors
             </h2>
             <div className="col-span-2 -mx-6 grid grid-cols-2 gap-1 overflow-hidden sm:mx-0 sm:rounded-2xl md:grid-cols-3">
               {cloudProvider.vendors.map((vendor) => {
                 const image = vendor.logo ?? vendor.mark;
-                const { aspectRatio } = getImageDimensions(
-                  image.asset?._ref ?? '',
-                );
+
+                if (!image?.asset?._ref) {
+                  return null;
+                }
+
+                const { aspectRatio } = getImageDimensions(image.asset._ref);
 
                 return (
                   <Link

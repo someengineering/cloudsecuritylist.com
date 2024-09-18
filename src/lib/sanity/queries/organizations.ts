@@ -1,10 +1,15 @@
-import { ORGANIZATION } from '@/lib/sanity/queries/fragments/organization';
+import {
+  ORGANIZATION,
+  ORGANIZATION_BASE,
+  VENDOR,
+} from '@/lib/sanity/queries/fragments/organization';
 import { groq } from 'next-sanity';
 
 export const ORGANIZATIONS_COUNT_QUERY = groq`
   count(
     *[
       _type == "organization" &&
+      organizationType != "acquired" &&
       (count($organizationTypes) == 0 || organizationType in $organizationTypes)
     ]
   )
@@ -12,7 +17,9 @@ export const ORGANIZATIONS_COUNT_QUERY = groq`
 
 export const ORGANIZATION_SLUGS_QUERY = groq`
   *[
-    _type == "organization"
+    _type == "organization" &&
+    defined(slug.current) &&
+    organizationType != "acquired"
   ].slug.current
 `;
 
@@ -23,7 +30,7 @@ export const ORGANIZATIONS_QUERY = groq`
     (count($organizationTypes) == 0 || organizationType in $organizationTypes) &&
     lower(name) > lower($prev)
   ] | order(lower(name) asc) [0...20] {
-    ${ORGANIZATION}
+    ${ORGANIZATION_BASE}
   }
 `;
 
@@ -57,6 +64,6 @@ export const VENDORS_QUERY = groq`
     (count($organizationTypes) == 0 || organizationType in $organizationTypes) &&
     lower(name) > lower($prev)
   ] | order(lower(name) asc) [0...20] {
-    ${ORGANIZATION}
+    ${VENDOR}
   }
 `;

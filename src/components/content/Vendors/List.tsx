@@ -83,16 +83,20 @@ export default function List({
             className="relative flex flex-col space-y-4 rounded-lg border border-gray-300 bg-white px-5 py-4 shadow-sm focus-within:ring-2 focus-within:ring-cyan-500 focus-within:ring-offset-2 hover:border-gray-400"
           >
             <div className="flex items-center space-x-3">
-              <div className="flex-shrink-0">
-                <Image
-                  src={urlFor(vendor.mark).url()}
-                  width={56}
-                  height={56}
-                  alt=""
-                  aria-hidden="true"
-                  className="h-14 w-14 object-cover"
-                />
-              </div>
+              {vendor.mark ? (
+                <div className="flex-shrink-0">
+                  <Image
+                    src={urlFor(vendor.mark).url()}
+                    width={56}
+                    height={56}
+                    alt=""
+                    aria-hidden="true"
+                    className="h-14 w-14 object-cover"
+                  />
+                </div>
+              ) : (
+                <div className="h-14 w-14 flex-shrink-0 rounded bg-slate-200" />
+              )}
               <div className="min-w-0 flex-1">
                 <div className="flex items-center justify-between">
                   <div className="flex flex-col items-start">
@@ -212,7 +216,7 @@ export default function List({
         >
           <div className="flex h-full animate-pulse flex-col space-y-4">
             <div className="flex items-center space-x-3">
-              <div className="dark:bg-slate h-14 w-14 flex-shrink-0 rounded bg-slate-200" />
+              <div className="h-14 w-14 flex-shrink-0 rounded bg-slate-200" />
               <div className="min-w-0 flex-1">
                 <div className="flex items-center justify-between">
                   <div className="flex flex-grow flex-col items-start">
