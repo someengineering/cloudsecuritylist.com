@@ -24,7 +24,7 @@ export const PRODUCT_CATEGORY_QUERY = groq`
   ] [0] {
     ${PRODUCT_CATEGORY}
     "vendors": *[
-      _type == "organization" && ^._id in supportedCloudProviders[]._ref
+      _type == "organization" && ^._id in productCategories[]._ref
     ] | order(lower(name) asc) {
       ${ORGANIZATION_BASE}
     }
