@@ -95,6 +95,10 @@ export default defineType({
       title: 'Parent organization',
       type: 'reference',
       to: [{ type: 'organization' }],
+      options: {
+        filter: 'organizationType != $acquiredType',
+        filterParams: { acquiredType: ORGANIZATION_TYPE.ACQUIRED },
+      },
       fieldset: 'acquisition',
       hidden: ({ parent, value }) =>
         !value && parent.organizationType !== ORGANIZATION_TYPE.ACQUIRED,

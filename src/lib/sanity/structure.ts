@@ -1,5 +1,10 @@
 import { apiVersion } from '@/lib/sanity/env';
 import {
+  ORGANIZATION_TYPE,
+  ORGANIZATION_TYPES,
+} from '@/lib/sanity/schemas/objects/organizationType';
+import {
+  BasketIcon,
   CaseIcon,
   CogIcon,
   DashboardIcon,
@@ -40,6 +45,29 @@ export const structure: StructureResolver = (S) =>
       S.divider(),
       S.documentTypeListItem('organization').title('Organizations'),
       S.listItem()
+        .title('Organizations by type')
+        .icon(TagsIcon)
+        .child(
+          S.list()
+            .id('organizationType')
+            .title('Organization types')
+            .items(
+              ORGANIZATION_TYPES.map((type) =>
+                S.listItem()
+                  .id(type.value)
+                  .title(type.title)
+                  .icon(type.icon)
+                  .child((id) =>
+                    S.documentTypeList('organization')
+                      .title('Organizations')
+                      .apiVersion(apiVersion)
+                      .filter('organizationType == $id')
+                      .params({ id }),
+                  ),
+              ),
+            ),
+        ),
+      S.listItem()
         .title('Vendors by product category')
         .icon(CaseIcon)
         .child(
@@ -76,6 +104,25 @@ export const structure: StructureResolver = (S) =>
                 .apiVersion(apiVersion)
                 .filter(
                   '_type == "organization" && $id in supportedCloudProviders[]._ref',
+                )
+                .params({ id }),
+            ),
+        ),
+      S.listItem()
+        .title('Acquisitions by organization')
+        .icon(BasketIcon)
+        .child(
+          S.documentTypeList('organization')
+            .apiVersion(apiVersion)
+            .filter(
+              `organizationType != ${ORGANIZATION_TYPE.ACQUIRED} && count(*[_type == "organization" && parentOrganization._ref == ^._id]) > 0`,
+            )
+            .child((id) =>
+              S.documentList()
+                .title('Acquired entities')
+                .apiVersion(apiVersion)
+                .filter(
+                  '_type == "organization" && $id == parentOrganization._ref',
                 )
                 .params({ id }),
             ),
