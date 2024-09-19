@@ -251,7 +251,7 @@ export default async function Organization({
                           href={acquiredEntity.pressRelease}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-cyan-700 focus:outline-none"
+                          className="text-lg font-semibold leading-8 text-cyan-700 focus:outline-none"
                         >
                           {acquiredEntity.name}
                         </Link>
