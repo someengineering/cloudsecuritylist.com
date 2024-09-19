@@ -1,3 +1,4 @@
+import { PAGE } from '@/lib/sanity/queries/fragments/page';
 import { groq } from 'next-sanity';
 
 export const SITE_SETTINGS_QUERY = groq`
@@ -13,5 +14,10 @@ export const SITE_SETTINGS_QUERY = groq`
       name,
       href,
     },
+    headline,
+    subheadline,
+    featuredPages[] -> {
+      ${PAGE}
+    }
   }
 `;

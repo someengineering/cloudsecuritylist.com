@@ -6,6 +6,15 @@ export default defineType({
   title: 'Site settings',
   type: 'document',
   icon: SearchIcon,
+  fieldsets: [
+    {
+      name: 'homepage',
+      title: 'Homepage',
+      options: {
+        collapsible: true,
+      },
+    },
+  ],
   fields: [
     defineField({
       name: 'title',
@@ -35,8 +44,9 @@ export default defineType({
       validation: (rule) => rule.required().min(1),
     }),
     defineField({
-      title: 'Navigation items',
       name: 'navigation',
+      title: 'Navigation items',
+      description: 'Links to display in the header navigation bar.',
       type: 'array',
       of: [
         {
@@ -62,6 +72,31 @@ export default defineType({
           ],
         },
       ],
+      validation: (rule) => rule.required().min(1),
+    }),
+    defineField({
+      name: 'headline',
+      title: 'Homepage headline',
+      type: 'text',
+      rows: 2,
+      fieldset: 'homepage',
+      validation: (rule) => rule.required().min(1),
+    }),
+    defineField({
+      name: 'subheadline',
+      title: 'Homepage subheadline',
+      type: 'text',
+      rows: 3,
+      fieldset: 'homepage',
+      validation: (rule) => rule.required().min(1),
+    }),
+    defineField({
+      name: 'featuredPages',
+      title: 'Featured pages',
+      description: 'Pages to feature on the homepage.',
+      type: 'array',
+      of: [{ type: 'reference', to: [{ type: 'page' }] }],
+      fieldset: 'homepage',
       validation: (rule) => rule.required().min(1),
     }),
   ],

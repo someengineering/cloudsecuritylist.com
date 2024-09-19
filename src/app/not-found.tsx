@@ -15,7 +15,7 @@ export default function NotFoundPage() {
           <div className="mt-10 flex items-center justify-center gap-x-6">
             <Link
               href="/"
-              className="text-sm font-semibold leading-7 text-cyan-600"
+              className="text-sm font-semibold leading-7 text-cyan-600 hover:text-cyan-700 focus:outline-none"
             >
               <span aria-hidden="true">&larr;</span> Back to home
             </Link>

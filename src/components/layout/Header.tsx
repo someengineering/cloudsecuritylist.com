@@ -28,7 +28,7 @@ export default function Header({
           href="/"
           className="-m-1.5 flex items-center p-1.5 text-xl font-bold"
         >
-          <Icon className="mr-1.5 h-12 w-12 text-cyan-600" />
+          <Icon className="mr-1.5 h-12 w-12 text-cyan-600 hover:text-cyan-700 focus:outline-none" />
           {title}
         </Link>
 

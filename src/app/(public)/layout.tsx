@@ -26,7 +26,7 @@ export default async function Layout({
   return (
     <>
       <Header title={title} navigation={navigation} />
-      {children}
+      <main>{children}</main>
       <Footer copyright={copyright} navigation={navigation} />
     </>
   );

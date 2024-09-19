@@ -1,7 +1,7 @@
 export const MARKET_SEGMENT_BASE = `
   _id,
-  name,
   "slug": slug.current,
+  name,
   description,
   "icon": icon.name,
 `;

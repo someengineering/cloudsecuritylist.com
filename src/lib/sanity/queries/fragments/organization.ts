@@ -4,8 +4,8 @@ import { RESEARCH } from '@/lib/sanity/queries/fragments/research';
 
 export const ORGANIZATION_BASE = `
   _id,
-  name,
   "slug": slug.current,
+  name,
   description,
   organizationType,
   website,

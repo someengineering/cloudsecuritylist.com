@@ -2,8 +2,8 @@ import { MARKET_SEGMENT_BASE } from '@/lib/sanity/queries/fragments/marketSegmen
 
 export const PRODUCT_CATEGORY = `
   _id,
-  name,
   "slug": slug.current,
+  name,
   expansion,
   description,
   marketSegment -> { ${MARKET_SEGMENT_BASE} },

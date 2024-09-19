@@ -17,8 +17,12 @@ import {
   ORGANIZATIONS_QUERY,
   VENDORS_COUNT_QUERY,
   VENDORS_QUERY,
-} from '@/lib/sanity/queries/organizations';
-import { PAGE_QUERY } from '@/lib/sanity/queries/page';
+} from '@/lib/sanity/queries/organization';
+import {
+  PAGE_QUERY,
+  PAGE_SLUGS_QUERY,
+  PAGES_QUERY,
+} from '@/lib/sanity/queries/page';
 import {
   PRODUCT_CATEGORIES_QUERY,
   PRODUCT_CATEGORY_QUERY,
@@ -40,6 +44,7 @@ import {
   ORGANIZATIONS_COUNT_QUERYResult,
   ORGANIZATIONS_QUERYResult,
   PAGE_QUERYResult,
+  PAGE_SLUGS_QUERYResult,
   PRODUCT_CATEGORIES_QUERYResult,
   PRODUCT_CATEGORY_QUERYResult,
   PRODUCT_CATEGORY_SLUGS_QUERYResult,
@@ -52,6 +57,25 @@ export const getSiteSettings = async () => {
   const data = await sanityFetch<SITE_SETTINGS_QUERYResult>({
     query: SITE_SETTINGS_QUERY,
     tags: ['siteSettings'],
+  });
+
+  return data;
+};
+
+export const getPageSlugs = async () => {
+  const data = await sanityFetch<PAGE_SLUGS_QUERYResult>({
+    query: PAGE_SLUGS_QUERY,
+    tags: ['page'],
+    respectDraftMode: false,
+  });
+
+  return data;
+};
+
+export const getPages = async () => {
+  const data = await sanityFetch<PAGE_QUERYResult>({
+    query: PAGES_QUERY,
+    tags: ['page'],
   });
 
   return data;

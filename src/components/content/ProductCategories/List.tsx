@@ -57,7 +57,7 @@ export default function List({
             <dt className="col-span-1">
               <Link
                 href={`/category/${productCategory.slug}`}
-                className="text-xl font-semibold text-cyan-800 md:block"
+                className="text-xl font-semibold text-cyan-600 hover:text-cyan-700 focus:outline-none md:block"
               >
                 <span aria-hidden="true" className="absolute inset-0" />
                 {toSentenceCase(productCategory.name)}

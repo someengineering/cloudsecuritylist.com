@@ -26,7 +26,7 @@ export default async function PageHeader({
 
   return (
     <section className="px-6 py-12 sm:py-16 lg:px-8">
-      <div className="mx-auto max-w-2xl text-center">
+      <div className="mx-auto max-w-3xl text-center">
         {image ? (
           <div className="relative mb-6 h-20">
             <Image
@@ -46,7 +46,7 @@ export default async function PageHeader({
           {title}
         </h1>
         {description ? (
-          <p className="mt-6 max-w-prose text-pretty text-lg leading-8 text-gray-600">
+          <p className="mx-auto mt-6 max-w-prose text-pretty text-lg leading-8 text-gray-600">
             {description}
           </p>
         ) : null}
