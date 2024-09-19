@@ -32,14 +32,18 @@ export const structure: StructureResolver = (S) =>
         .child(
           S.documentTypeList('marketSegment')
             .apiVersion(apiVersion)
-            .child((id) =>
-              S.documentList()
+            .child((marketSegmentId) =>
+              S.documentTypeList('productCategory')
                 .title('Product categories')
                 .apiVersion(apiVersion)
-                .filter(
-                  '_type == "productCategory" && $id == marketSegment._ref',
-                )
-                .params({ id }),
+                .filter('$marketSegmentId == marketSegment._ref')
+                .params({ marketSegmentId })
+                .initialValueTemplates([
+                  S.initialValueTemplateItem(
+                    'product-category-by-market-segment',
+                    { marketSegmentId },
+                  ),
+                ]),
             ),
         ),
       S.divider(),
@@ -57,12 +61,17 @@ export const structure: StructureResolver = (S) =>
                   .id(type.value)
                   .title(type.title)
                   .icon(type.icon)
-                  .child((id) =>
+                  .child((organizationType) =>
                     S.documentTypeList('organization')
                       .title('Organizations')
                       .apiVersion(apiVersion)
-                      .filter('organizationType == $id')
-                      .params({ id }),
+                      .filter('organizationType == $organizationType')
+                      .params({ organizationType })
+                      .initialValueTemplates([
+                        S.initialValueTemplateItem('organization-by-type', {
+                          organizationType,
+                        }),
+                      ]),
                   ),
               ),
             ),
@@ -73,22 +82,30 @@ export const structure: StructureResolver = (S) =>
         .child(
           S.documentTypeList('marketSegment')
             .apiVersion(apiVersion)
-            .child((id) =>
-              S.documentList()
+            .child((marketSegmentId) =>
+              S.documentTypeList('productCategory')
                 .title('Product categories')
                 .apiVersion(apiVersion)
-                .filter(
-                  '_type == "productCategory" && $id == marketSegment._ref',
-                )
-                .params({ id })
-                .child((id) =>
-                  S.documentList()
+                .filter('$marketSegmentId == marketSegment._ref')
+                .params({ marketSegmentId })
+                .initialValueTemplates([
+                  S.initialValueTemplateItem(
+                    'product-category-by-market-segment',
+                    { marketSegmentId },
+                  ),
+                ])
+                .child((productCategoryId) =>
+                  S.documentTypeList('organization')
                     .title('Vendors')
                     .apiVersion(apiVersion)
-                    .filter(
-                      '_type == "organization" && $id in productCategories[]._ref',
-                    )
-                    .params({ id }),
+                    .filter('$productCategoryId in productCategories[]._ref')
+                    .params({ productCategoryId })
+                    .initialValueTemplates([
+                      S.initialValueTemplateItem(
+                        'organization-by-product-category',
+                        { productCategoryId },
+                      ),
+                    ]),
                 ),
             ),
         ),
@@ -98,14 +115,17 @@ export const structure: StructureResolver = (S) =>
         .child(
           S.documentTypeList('cloudProvider')
             .apiVersion(apiVersion)
-            .child((id) =>
-              S.documentList()
+            .child((cloudProviderId) =>
+              S.documentTypeList('organization')
                 .title('Vendors')
                 .apiVersion(apiVersion)
-                .filter(
-                  '_type == "organization" && $id in supportedCloudProviders[]._ref',
-                )
-                .params({ id }),
+                .filter('$cloudProviderId in supportedCloudProviders[]._ref')
+                .params({ cloudProviderId })
+                .initialValueTemplates([
+                  S.initialValueTemplateItem('organization-by-cloud-provider', {
+                    cloudProviderId,
+                  }),
+                ]),
             ),
         ),
       S.listItem()
@@ -117,14 +137,17 @@ export const structure: StructureResolver = (S) =>
             .filter(
               `organizationType != ${ORGANIZATION_TYPE.ACQUIRED} && count(*[_type == "organization" && parentOrganization._ref == ^._id]) > 0`,
             )
-            .child((id) =>
-              S.documentList()
+            .child((parentOrganizationId) =>
+              S.documentTypeList('organization')
                 .title('Acquired entities')
                 .apiVersion(apiVersion)
-                .filter(
-                  '_type == "organization" && $id == parentOrganization._ref',
-                )
-                .params({ id }),
+                .filter('$parentOrganizationId == parentOrganization._ref')
+                .params({ parentOrganizationId })
+                .initialValueTemplates([
+                  S.initialValueTemplateItem('organization-by-parent', {
+                    parentOrganizationId,
+                  }),
+                ]),
             ),
         ),
       S.divider(),
