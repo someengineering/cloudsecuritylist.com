@@ -3,8 +3,6 @@ import Header from '@/components/layout/Header';
 import { getSiteSettings } from '@/lib/sanity';
 import '@/styles/globals.css';
 import { Metadata } from 'next';
-import PlausibleProvider from 'next-plausible';
-import Head from 'next/head';
 
 export async function generateMetadata(): Promise<Metadata> {
   const { url } = (await getSiteSettings()) ?? {};
@@ -27,9 +25,6 @@ export default async function Layout({
 
   return (
     <>
-      <Head>
-        <PlausibleProvider domain="cloudsecuritylist.com" trackOutboundLinks />
-      </Head>
       <Header title={title} navigation={navigation} />
       {children}
       <Footer copyright={copyright} navigation={navigation} />

@@ -1,6 +1,7 @@
 import { getSiteSettings } from '@/lib/sanity';
 import '@/styles/globals.css';
 import { Metadata } from 'next';
+import PlausibleProvider from 'next-plausible';
 import { Plus_Jakarta_Sans } from 'next/font/google';
 
 const plusJakartaSans = Plus_Jakarta_Sans({
@@ -29,6 +30,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`scroll-smooth ${plusJakartaSans.variable}`}>
+      <head>
+        <PlausibleProvider domain="cloudsecuritylist.com" trackOutboundLinks />
+      </head>
       <body className="bg-white">{children}</body>
     </html>
   );
