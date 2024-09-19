@@ -89,14 +89,14 @@ export default async function Organization({
           className="mx-auto max-w-7xl px-6 py-12 sm:py-16 lg:px-8"
           aria-labelledby="product-categories"
         >
-          <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 md:max-w-none xl:mx-0 xl:grid-cols-3">
+          <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-8 sm:gap-y-12 lg:mx-0 lg:max-w-none lg:grid-cols-3">
             <h2
               className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl"
               id="product-categories"
             >
               Product categories
             </h2>
-            <dl className="col-span-2 grid grid-cols-1 gap-x-8 gap-y-16 md:grid-cols-2">
+            <dl className="col-span-2 grid grid-cols-1 gap-x-8 gap-y-16 lg:grid-cols-2">
               {organization.productCategories?.map((productCategory) => {
                 const Icon = productCategory.marketSegment.icon
                   ? dynamic(() =>
@@ -145,14 +145,14 @@ export default async function Organization({
           className="mx-auto max-w-7xl px-6 py-12 sm:py-16 lg:px-8"
           aria-labelledby="supported-cloud-providers"
         >
-          <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
+          <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-8 sm:gap-y-12 lg:mx-0 lg:max-w-none lg:grid-cols-3">
             <h2
               className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl"
               id="supported-cloud-providers"
             >
               Supported cloud providers
             </h2>
-            <div className="col-span-2 -mx-6 grid grid-cols-2 gap-1 overflow-hidden sm:mx-0 sm:rounded-2xl md:grid-cols-3">
+            <div className="col-span-2 grid grid-cols-2 gap-1 overflow-hidden rounded-2xl md:grid-cols-3">
               {organization.supportedCloudProviders?.map((cloudProvider) => {
                 const image = cloudProvider.logo ?? cloudProvider.mark;
 
@@ -197,7 +197,7 @@ export default async function Organization({
           className="mx-auto max-w-7xl px-6 py-12 sm:py-16 lg:px-8"
           aria-labelledby="research"
         >
-          <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
+          <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-8 sm:gap-y-12 lg:mx-0 lg:max-w-none lg:grid-cols-3">
             <h2
               className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl"
               id="research"
@@ -234,7 +234,7 @@ export default async function Organization({
           className="mx-auto max-w-7xl px-6 py-12 sm:py-16 lg:px-8"
           aria-labelledby="acquired-entities"
         >
-          <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
+          <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-8 sm:gap-y-12 lg:mx-0 lg:max-w-none lg:grid-cols-3">
             <h2
               className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl"
               id="acquired-entities"
