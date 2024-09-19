@@ -19,9 +19,11 @@ import {
   PopoverGroup,
   PopoverPanel,
 } from '@headlessui/react';
+import dynamic from 'next/dynamic';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { HiChevronDown, HiXMark } from 'react-icons/hi2';
+import { HiChevronDown, HiOutlineSparkles, HiXMark } from 'react-icons/hi2';
+import { IconType } from 'react-icons/lib';
 
 export default function FilterPanel({
   marketSegments,
@@ -182,53 +184,69 @@ export default function FilterPanel({
 
         <DisclosurePanel className="hidden border-y border-gray-200 py-10 sm:block">
           <div className="mx-auto grid max-w-7xl auto-rows-min grid-cols-3 gap-x-6 gap-y-8 px-4 text-sm sm:px-6 md:grid-cols-4 lg:grid-cols-5 lg:px-8 xl:grid-cols-7">
-            {marketSegments.map((segment) => (
-              <fieldset key={segment._id}>
-                <legend className="block font-medium">
-                  {toSentenceCase(segment.name)}
-                </legend>
-                <div className="space-y-4 pt-4">
-                  {segment.productCategories.map((category) => (
-                    <div
-                      key={category._id}
-                      className="flex items-center text-sm"
-                    >
-                      <input
-                        defaultValue={category.slug}
-                        checked={filters.productCategories.includes(
-                          category.slug,
-                        )}
-                        id={`category-${category.slug}`}
-                        name="productCategories[]"
-                        type="checkbox"
-                        className="h-4 w-4 flex-shrink-0 rounded border-gray-300 text-cyan-600 focus:ring-cyan-500"
-                        onChange={() => {
-                          setFilters({
-                            type: 'productCategory',
-                            slug: category.slug ?? '',
-                          });
-                        }}
-                      />
-                      <label
-                        htmlFor={`category-${category.slug}`}
-                        className="ml-3 min-w-0 flex-1 text-gray-600"
+            {marketSegments.map((marketSegment) => {
+              const Icon = marketSegment.icon
+                ? dynamic(() =>
+                    import('react-icons/hi2')
+                      .then(
+                        (mod) =>
+                          (mod[
+                            marketSegment.icon as keyof typeof mod
+                          ] as IconType) ?? HiOutlineSparkles,
+                      )
+                      .catch(() => HiOutlineSparkles),
+                  )
+                : HiOutlineSparkles;
+
+              return (
+                <fieldset key={marketSegment._id}>
+                  <legend className="flex items-center gap-x-1.5 font-medium">
+                    <Icon className="h-5 w-5" />
+                    {toSentenceCase(marketSegment.name)}
+                  </legend>
+                  <div className="space-y-4 pt-4">
+                    {marketSegment.productCategories.map((category) => (
+                      <div
+                        key={category._id}
+                        className="flex items-center gap-x-1.5"
                       >
-                        {category.expansion ? (
-                          <abbr
-                            title={category.expansion}
-                            className="no-underline"
-                          >
-                            {toSentenceCase(category.name)}
-                          </abbr>
-                        ) : (
-                          toSentenceCase(category.name)
-                        )}
-                      </label>
-                    </div>
-                  ))}
-                </div>
-              </fieldset>
-            ))}
+                        <input
+                          defaultValue={category.slug}
+                          checked={filters.productCategories.includes(
+                            category.slug,
+                          )}
+                          id={`category-${category.slug}`}
+                          name="productCategories[]"
+                          type="checkbox"
+                          className="mx-0.5 h-4 w-4 flex-shrink-0 rounded border-gray-300 text-cyan-600 focus:ring-cyan-500"
+                          onChange={() => {
+                            setFilters({
+                              type: 'productCategory',
+                              slug: category.slug ?? '',
+                            });
+                          }}
+                        />
+                        <label
+                          htmlFor={`category-${category.slug}`}
+                          className="min-w-0 flex-1 text-sm text-gray-600"
+                        >
+                          {category.expansion ? (
+                            <abbr
+                              title={category.expansion}
+                              className="no-underline"
+                            >
+                              {toSentenceCase(category.name)}
+                            </abbr>
+                          ) : (
+                            toSentenceCase(category.name)
+                          )}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                </fieldset>
+              );
+            })}
           </div>
         </DisclosurePanel>
       </Disclosure>
@@ -263,66 +281,82 @@ export default function FilterPanel({
             </div>
 
             <form className="mt-4">
-              {marketSegments.map((segment) => (
-                <Disclosure
-                  key={segment.name}
-                  as="div"
-                  className="border-t border-gray-200 px-4 py-6"
-                >
-                  <h3 className="-mx-2 -my-3 flow-root">
-                    <DisclosureButton className="group flex w-full items-center justify-between bg-white px-2 py-3 text-sm text-gray-400">
-                      <span className="font-medium text-gray-900">
-                        {toSentenceCase(segment.name)}
-                      </span>
-                      <span className="ml-6 flex items-center">
-                        <HiChevronDown className="h-5 w-5 rotate-0 transform group-data-[open]:-rotate-180" />
-                      </span>
-                    </DisclosureButton>
-                  </h3>
-                  <DisclosurePanel className="pt-6">
-                    <div className="space-y-6">
-                      {segment.productCategories.map((category) => (
-                        <div
-                          key={`mobile-${category._id}`}
-                          className="flex items-center"
-                        >
-                          <input
-                            defaultValue={category.slug}
-                            checked={filters.productCategories.includes(
-                              category.slug,
-                            )}
-                            id={`category-${category.slug}`}
-                            name="productCategories[]"
-                            type="checkbox"
-                            className="h-4 w-4 rounded border-gray-300 text-cyan-600 focus:ring-cyan-500"
-                            onChange={() => {
-                              setFilters({
-                                type: 'productCategory',
-                                slug: category.slug ?? '',
-                              });
-                            }}
-                          />
-                          <label
-                            htmlFor={`category-${category.slug}`}
-                            className="ml-3 text-sm text-gray-500"
+              {marketSegments.map((marketSegment) => {
+                const Icon = marketSegment.icon
+                  ? dynamic(() =>
+                      import('react-icons/hi2')
+                        .then(
+                          (mod) =>
+                            (mod[
+                              marketSegment.icon as keyof typeof mod
+                            ] as IconType) ?? HiOutlineSparkles,
+                        )
+                        .catch(() => HiOutlineSparkles),
+                    )
+                  : HiOutlineSparkles;
+
+                return (
+                  <Disclosure
+                    key={marketSegment.name}
+                    as="div"
+                    className="border-t border-gray-200 px-4 py-6"
+                  >
+                    <h3 className="-mx-2 -my-3 flow-root">
+                      <DisclosureButton className="group flex w-full items-center justify-between bg-white px-2 py-3 text-sm text-gray-400">
+                        <span className="flex items-center gap-x-1.5 font-medium text-gray-900">
+                          <Icon className="h-5 w-5" />
+                          {toSentenceCase(marketSegment.name)}
+                        </span>
+                        <span className="ml-6 flex items-center">
+                          <HiChevronDown className="h-5 w-5 rotate-0 transform group-data-[open]:-rotate-180" />
+                        </span>
+                      </DisclosureButton>
+                    </h3>
+                    <DisclosurePanel className="pt-6">
+                      <div className="space-y-6">
+                        {marketSegment.productCategories.map((category) => (
+                          <div
+                            key={`mobile-${category._id}`}
+                            className="flex items-center gap-x-1.5"
                           >
-                            {category.expansion ? (
-                              <abbr
-                                title={category.expansion}
-                                className="no-underline"
-                              >
-                                {toSentenceCase(category.name)}
-                              </abbr>
-                            ) : (
-                              toSentenceCase(category.name)
-                            )}
-                          </label>
-                        </div>
-                      ))}
-                    </div>
-                  </DisclosurePanel>
-                </Disclosure>
-              ))}
+                            <input
+                              defaultValue={category.slug}
+                              checked={filters.productCategories.includes(
+                                category.slug,
+                              )}
+                              id={`category-${category.slug}`}
+                              name="productCategories[]"
+                              type="checkbox"
+                              className="mx-0.5 h-4 w-4 rounded border-gray-300 text-cyan-600 focus:ring-cyan-500"
+                              onChange={() => {
+                                setFilters({
+                                  type: 'productCategory',
+                                  slug: category.slug ?? '',
+                                });
+                              }}
+                            />
+                            <label
+                              htmlFor={`category-${category.slug}`}
+                              className="text-sm text-gray-500"
+                            >
+                              {category.expansion ? (
+                                <abbr
+                                  title={category.expansion}
+                                  className="no-underline"
+                                >
+                                  {toSentenceCase(category.name)}
+                                </abbr>
+                              ) : (
+                                toSentenceCase(category.name)
+                              )}
+                            </label>
+                          </div>
+                        ))}
+                      </div>
+                    </DisclosurePanel>
+                  </Disclosure>
+                );
+              })}
             </form>
           </DialogPanel>
         </div>
