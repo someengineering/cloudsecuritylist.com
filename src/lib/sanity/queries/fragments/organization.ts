@@ -40,7 +40,7 @@ export const NON_ACQUIRED_ENTITY = `
   },
   "acquiredEntities": *[
     _type == "organization" && parentOrganization._ref == ^._id
-  ] {
+  ] | order(acquisitionDate desc) {
     ${ACQUIRED_ENTITY}
   },
 `;

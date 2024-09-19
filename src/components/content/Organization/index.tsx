@@ -185,7 +185,7 @@ export default async function Organization({
       ) : null}
       {'acquiredEntities' in organization &&
       (organization.acquiredEntities ?? []).length > 0 ? (
-        <OffsetSection title="Acquired entities">
+        <OffsetSection title="Acquisitions">
           <dl className="space-y-16">
             {organization.acquiredEntities?.map((acquiredEntity) => {
               return (

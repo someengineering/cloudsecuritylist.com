@@ -139,7 +139,7 @@ export const structure: StructureResolver = (S) =>
             )
             .child((parentOrganizationId) =>
               S.documentTypeList('organization')
-                .title('Acquired entities')
+                .title('Acquisitions')
                 .apiVersion(apiVersion)
                 .filter('$parentOrganizationId == parentOrganization._ref')
                 .params({ parentOrganizationId })
