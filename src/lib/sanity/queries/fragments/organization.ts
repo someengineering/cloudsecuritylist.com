@@ -26,6 +26,7 @@ export const ACQUIRED_ENTITY = `
   ${ORGANIZATION_BASE}
   acquisitionDate,
   acquisitionPrice,
+  pressRelease,
 `;
 
 export const NON_ACQUIRED_ENTITY = `

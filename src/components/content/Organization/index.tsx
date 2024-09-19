@@ -113,16 +113,15 @@ export default async function Organization({
                   : HiOutlineSparkles;
 
                 return (
-                  <div key={productCategory._id} className="relative">
+                  <div key={productCategory._id}>
                     <dt>
                       <div className="mb-6 flex h-10 w-10 items-center justify-center rounded-lg bg-cyan-600">
                         <Icon className="h-6 w-6 text-white" />
                       </div>
                       <Link
                         href={`/category/${productCategory.slug}`}
-                        className="text-lg font-semibold leading-8 text-cyan-700 focus:outline-none group-hover:text-cyan-800"
+                        className="text-lg font-semibold leading-8 text-cyan-700 focus:outline-none"
                       >
-                        <span aria-hidden="true" className="absolute inset-0" />
                         {productCategory.expansion
                           ? `${toSentenceCase(
                               productCategory.expansion,
@@ -214,7 +213,7 @@ export default async function Organization({
                         href={research.website}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-cyan-700 focus:outline-none group-hover:text-cyan-800"
+                        className="text-cyan-700 focus:outline-none"
                       >
                         {research.name}
                       </Link>
@@ -247,19 +246,40 @@ export default async function Organization({
                 return (
                   <div key={acquiredEntity._id} id={acquiredEntity.slug}>
                     <dt className="text-gray-900">
-                      <span className="text-lg font-semibold leading-8 text-cyan-700">
-                        {acquiredEntity.name}
-                      </span>
+                      {acquiredEntity.pressRelease ? (
+                        <Link
+                          href={acquiredEntity.pressRelease}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-cyan-700 focus:outline-none"
+                        >
+                          {acquiredEntity.name}
+                        </Link>
+                      ) : (
+                        <span className="text-lg font-semibold leading-8 text-cyan-700">
+                          {acquiredEntity.name}
+                        </span>
+                      )}
                       {!!acquiredEntity.acquisitionDate ||
                       !!acquiredEntity.acquisitionPrice ? (
                         <>
                           {' '}
                           (acquired
                           {acquiredEntity.acquisitionDate
-                            ? ` on ${new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'long', day: 'numeric' }).format(new Date(acquiredEntity.acquisitionDate))}`
+                            ? ` on ${new Intl.DateTimeFormat('en-US', {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric',
+                              }).format(
+                                new Date(acquiredEntity.acquisitionDate),
+                              )}`
                             : ''}
                           {acquiredEntity.acquisitionPrice
-                            ? ` for ${new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', trailingZeroDisplay: 'stripIfInteger' }).format(acquiredEntity.acquisitionPrice)}`
+                            ? ` for ${new Intl.NumberFormat('en-US', {
+                                style: 'currency',
+                                currency: 'USD',
+                                trailingZeroDisplay: 'stripIfInteger',
+                              }).format(acquiredEntity.acquisitionPrice)}`
                             : ''}
                           )
                         </>

@@ -154,9 +154,27 @@ export default defineType({
           .integer(),
     }),
     defineField({
+      name: 'pressRelease',
+      title: 'Press release URL',
+      type: 'url',
+      fieldset: 'acquisition',
+      hidden: ({ parent, value }) =>
+        !value && parent.organizationType !== ORGANIZATION_TYPE.ACQUIRED,
+      validation: (rule) =>
+        rule
+          .custom((value, context) =>
+            value &&
+            context.document?.organizationType !== ORGANIZATION_TYPE.ACQUIRED
+              ? 'Press release URL can only be specified for acquired entities.'
+              : true,
+          )
+          .uri({ scheme: 'https' }),
+    }),
+    defineField({
       name: 'website',
       title: 'Website URL',
       type: 'url',
+      fieldset: 'links',
       validation: (rule) =>
         rule
           .custom((value, context) =>
@@ -166,21 +184,20 @@ export default defineType({
               : 'Website URL is required.',
           )
           .uri({ scheme: 'https' }),
-      fieldset: 'links',
     }),
     defineField({
       name: 'linkedin',
       title: 'LinkedIn URL',
       type: 'url',
-      validation: (rule) => rule.uri({ scheme: 'https' }),
       fieldset: 'links',
+      validation: (rule) => rule.uri({ scheme: 'https' }),
     }),
     defineField({
       name: 'crunchbase',
       title: 'Crunchbase URL',
       type: 'url',
-      validation: (rule) => rule.uri({ scheme: 'https' }),
       fieldset: 'links',
+      validation: (rule) => rule.uri({ scheme: 'https' }),
     }),
     defineField({
       name: 'mark',

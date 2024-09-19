@@ -834,6 +834,13 @@
         },
         "optional": true
       },
+      "pressRelease": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        },
+        "optional": true
+      },
       "website": {
         "type": "objectAttribute",
         "value": {
