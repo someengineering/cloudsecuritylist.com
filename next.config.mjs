@@ -1,71 +1,75 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  env: {
-    SC_DISABLE_SPEEDY: 'false',
-  },
+import { withPlausibleProxy } from 'next-plausible';
 
-  eslint: {
-    dirs: ['src'],
-  },
+const nextConfig = withPlausibleProxy()(
+  /** @type {import('next').NextConfig} */
+  {
+    env: {
+      SC_DISABLE_SPEEDY: 'false',
+    },
 
-  reactStrictMode: true,
-  swcMinify: true,
+    eslint: {
+      dirs: ['src'],
+    },
 
-  images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'cdn.sanity.io',
-      },
-    ],
-  },
+    reactStrictMode: true,
+    swcMinify: true,
 
-  async redirects() {
-    return [
-      {
-        source: '/vendor/:slug',
-        destination: '/organization/:slug',
-        permanent: true,
-      },
-    ];
-  },
-
-  webpack(config) {
-    // Grab the existing rule that handles SVG imports
-    const fileLoaderRule = config.module.rules.find((rule) =>
-      rule.test?.test?.('.svg'),
-    );
-
-    config.module.rules.push(
-      // Reapply the existing rule, but only for svg imports ending in ?url
-      {
-        ...fileLoaderRule,
-        test: /\.svg$/i,
-        resourceQuery: /url/, // *.svg?url
-      },
-      // Convert all other *.svg imports to React components
-      {
-        test: /\.svg$/i,
-        issuer: { not: /\.(css|scss|sass)$/ },
-        resourceQuery: { not: /url/ }, // exclude if *.svg?url
-        loader: '@svgr/webpack',
-        options: {
-          dimensions: false,
-          titleProp: true,
+    images: {
+      remotePatterns: [
+        {
+          protocol: 'https',
+          hostname: 'cdn.sanity.io',
         },
-      },
-    );
+      ],
+    },
 
-    // Modify the file loader rule to ignore *.svg, since we have it handled now.
-    fileLoaderRule.exclude = /\.svg$/i;
+    async redirects() {
+      return [
+        {
+          source: '/vendor/:slug',
+          destination: '/organization/:slug',
+          permanent: true,
+        },
+      ];
+    },
 
-    return config;
+    webpack(config) {
+      // Grab the existing rule that handles SVG imports
+      const fileLoaderRule = config.module.rules.find((rule) =>
+        rule.test?.test?.('.svg'),
+      );
+
+      config.module.rules.push(
+        // Reapply the existing rule, but only for svg imports ending in ?url
+        {
+          ...fileLoaderRule,
+          test: /\.svg$/i,
+          resourceQuery: /url/, // *.svg?url
+        },
+        // Convert all other *.svg imports to React components
+        {
+          test: /\.svg$/i,
+          issuer: { not: /\.(css|scss|sass)$/ },
+          resourceQuery: { not: /url/ }, // exclude if *.svg?url
+          loader: '@svgr/webpack',
+          options: {
+            dimensions: false,
+            titleProp: true,
+          },
+        },
+      );
+
+      // Modify the file loader rule to ignore *.svg, since we have it handled now.
+      fileLoaderRule.exclude = /\.svg$/i;
+
+      return config;
+    },
+
+    experimental: {
+      taint: true,
+      webpackBuildWorker: true,
+    },
   },
-
-  experimental: {
-    taint: true,
-    webpackBuildWorker: true,
-  },
-};
+);
 
 export default nextConfig;
