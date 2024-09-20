@@ -1,4 +1,4 @@
-import { ORGANIZATION } from '@/lib/sanity/queries/fragments/organization';
+import { ORGANIZATION_BASE } from '@/lib/sanity/queries/fragments/organization';
 import { RESEARCH } from '@/lib/sanity/queries/fragments/research';
 import { groq } from 'next-sanity';
 
@@ -7,7 +7,7 @@ export const RESEARCHES_QUERY = groq`
     _type == "research"
   ] | order(lower(name) asc) {
     ${RESEARCH}
-    organization -> { ${ORGANIZATION} },
+    organization -> { ${ORGANIZATION_BASE} },
   }
 `;
 
@@ -17,6 +17,6 @@ export const RESEARCH_QUERY = groq`
     slug.current == $slug
   ] [0] {
     ${RESEARCH}
-    organization -> { ${ORGANIZATION} },
+    organization -> { ${ORGANIZATION_BASE} },
   }
 `;

@@ -1,3 +1,4 @@
+import { ORGANIZATION_TYPE } from '@/lib/sanity/schemas/objects/organizationType';
 import { SearchIcon } from '@sanity/icons';
 import { defineField, defineType } from 'sanity';
 
@@ -17,9 +18,7 @@ export default defineType({
       name: 'slug',
       title: 'Slug',
       type: 'slug',
-      options: {
-        source: 'name',
-      },
+      options: { source: 'name' },
       validation: (rule) => rule.required(),
     }),
     defineField({
@@ -27,6 +26,11 @@ export default defineType({
       title: 'Organization',
       type: 'reference',
       to: [{ type: 'organization' }],
+      options: {
+        filter: 'organizationType != $acquiredType',
+        filterParams: { acquiredType: ORGANIZATION_TYPE.ACQUIRED },
+      },
+      validation: (rule) => rule.required(),
     }),
     defineField({
       name: 'website',

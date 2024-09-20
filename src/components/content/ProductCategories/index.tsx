@@ -10,6 +10,7 @@ import {
   getProductCategories,
 } from '@/lib/sanity';
 import { isValidSlug } from '@/utils/slug';
+import { redirect } from 'next/navigation';
 
 export default async function ProductCategories({
   filters,
@@ -27,6 +28,10 @@ export default async function ProductCategories({
     marketSegmentsData,
     productCategoriesData,
   ]);
+
+  if (productCategories.length === 0) {
+    redirect('/categories');
+  }
 
   return (
     <FiltersProvider initialValues={filters}>

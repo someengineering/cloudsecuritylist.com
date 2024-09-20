@@ -603,7 +603,7 @@
           },
           "dereferencesTo": "organization"
         },
-        "optional": true
+        "optional": false
       },
       "website": {
         "type": "objectAttribute",

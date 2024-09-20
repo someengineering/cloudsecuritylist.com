@@ -28,6 +28,10 @@ import {
   PRODUCT_CATEGORY_QUERY,
   PRODUCT_CATEGORY_SLUGS_QUERY,
 } from '@/lib/sanity/queries/productCategories';
+import {
+  RESEARCH_QUERY,
+  RESEARCHES_QUERY,
+} from '@/lib/sanity/queries/research';
 import { SITE_SETTINGS_QUERY } from '@/lib/sanity/queries/siteSettings';
 import {
   ORGANIZATION_TYPE,
@@ -48,6 +52,8 @@ import {
   PRODUCT_CATEGORIES_QUERYResult,
   PRODUCT_CATEGORY_QUERYResult,
   PRODUCT_CATEGORY_SLUGS_QUERYResult,
+  RESEARCH_QUERYResult,
+  RESEARCHES_QUERYResult,
   SITE_SETTINGS_QUERYResult,
   VENDORS_COUNT_QUERYResult,
   VENDORS_QUERYResult,
@@ -293,6 +299,25 @@ export const getVendors = async ({
               (slug) => `organizationType:${slug}`,
             ),
           ],
+  });
+
+  return data;
+};
+
+export const getResearches = async () => {
+  const data = await sanityFetch<RESEARCHES_QUERYResult>({
+    query: RESEARCHES_QUERY,
+    tags: ['research'],
+  });
+
+  return data;
+};
+
+export const getResearch = async (slug: string) => {
+  const data = await sanityFetch<RESEARCH_QUERYResult>({
+    query: RESEARCH_QUERY,
+    params: { slug },
+    tags: [`research:${slug}`],
   });
 
   return data;

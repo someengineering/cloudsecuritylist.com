@@ -111,7 +111,7 @@ export type Research = {
   _rev: string;
   name: string;
   slug: Slug;
-  organization?: {
+  organization: {
     _ref: string;
     _type: 'reference';
     _weak?: boolean;
@@ -588,7 +588,7 @@ export type ORGANIZATIONS_QUERYResult = Array<{
   } | null;
 }>;
 // Variable: ORGANIZATION_QUERY
-// Query: *[    _type == "organization" &&    slug.current == $slug  ] [0] {      ...select(    organizationType == "acquired" => {          _id,  "slug": slug.current,  name,  description,  organizationType,  website,  linkedin,  crunchbase,  stockSymbol,  mark,  logo,  acquisitionDate,  acquisitionPrice,  pressRelease,      parentOrganization -> {          _id,  "slug": slug.current,  name,  description,  organizationType,  website,  linkedin,  crunchbase,  stockSymbol,  mark,  logo,      },    },    organizationType != "acquired" => {          _id,  "slug": slug.current,  name,  description,  organizationType,  website,  linkedin,  crunchbase,  stockSymbol,  mark,  logo,  productCategories[] -> {   _id,  "slug": slug.current,  name,  expansion,  description,  marketSegment -> {   _id,  "slug": slug.current,  name,  description,  "icon": icon.name, }, },  supportedCloudProviders[] -> {   _id,  "slug": slug.current,  name,  description,  "icon": icon.name,  mark,  logo,  website,  linkedin, },  "research": *[    _type == "research" && organization._ref == ^._id  ] {      _id,  "slug": slug.current,  name,  description,  website,  },  "acquiredEntities": *[    _type == "organization" && parentOrganization._ref == ^._id  ] {        _id,  "slug": slug.current,  name,  description,  organizationType,  website,  linkedin,  crunchbase,  stockSymbol,  mark,  logo,  acquisitionDate,  acquisitionPrice,  pressRelease,  },    },  ),  }
+// Query: *[    _type == "organization" &&    slug.current == $slug  ] [0] {      ...select(    organizationType == "acquired" => {          _id,  "slug": slug.current,  name,  description,  organizationType,  website,  linkedin,  crunchbase,  stockSymbol,  mark,  logo,  acquisitionDate,  acquisitionPrice,  pressRelease,      parentOrganization -> {          _id,  "slug": slug.current,  name,  description,  organizationType,  website,  linkedin,  crunchbase,  stockSymbol,  mark,  logo,      },    },    organizationType != "acquired" => {          _id,  "slug": slug.current,  name,  description,  organizationType,  website,  linkedin,  crunchbase,  stockSymbol,  mark,  logo,  productCategories[] -> {   _id,  "slug": slug.current,  name,  expansion,  description,  marketSegment -> {   _id,  "slug": slug.current,  name,  description,  "icon": icon.name, }, },  supportedCloudProviders[] -> {   _id,  "slug": slug.current,  name,  description,  "icon": icon.name,  mark,  logo,  website,  linkedin, },  "research": *[    _type == "research" && organization._ref == ^._id  ] {      _id,  "slug": slug.current,  name,  description,  website,  },  "acquiredEntities": *[    _type == "organization" && parentOrganization._ref == ^._id  ] | order(acquisitionDate desc) {        _id,  "slug": slug.current,  name,  description,  organizationType,  website,  linkedin,  crunchbase,  stockSymbol,  mark,  logo,  acquisitionDate,  acquisitionPrice,  pressRelease,  },    },  ),  }
 export type ORGANIZATION_QUERYResult =
   | {
       _id: string;
@@ -1003,406 +1003,88 @@ export type PRODUCT_CATEGORY_QUERYResult = {
 
 // Source: ./src/lib/sanity/queries/research.ts
 // Variable: RESEARCHES_QUERY
-// Query: *[    _type == "research"  ] | order(lower(name) asc) {      _id,  "slug": slug.current,  name,  description,  website,    organization -> {   ...select(    organizationType == "acquired" => {          _id,  "slug": slug.current,  name,  description,  organizationType,  website,  linkedin,  crunchbase,  stockSymbol,  mark,  logo,  acquisitionDate,  acquisitionPrice,  pressRelease,      parentOrganization -> {          _id,  "slug": slug.current,  name,  description,  organizationType,  website,  linkedin,  crunchbase,  stockSymbol,  mark,  logo,      },    },    organizationType != "acquired" => {          _id,  "slug": slug.current,  name,  description,  organizationType,  website,  linkedin,  crunchbase,  stockSymbol,  mark,  logo,  productCategories[] -> {   _id,  "slug": slug.current,  name,  expansion,  description,  marketSegment -> {   _id,  "slug": slug.current,  name,  description,  "icon": icon.name, }, },  supportedCloudProviders[] -> {   _id,  "slug": slug.current,  name,  description,  "icon": icon.name,  mark,  logo,  website,  linkedin, },  "research": *[    _type == "research" && organization._ref == ^._id  ] {      _id,  "slug": slug.current,  name,  description,  website,  },  "acquiredEntities": *[    _type == "organization" && parentOrganization._ref == ^._id  ] {        _id,  "slug": slug.current,  name,  description,  organizationType,  website,  linkedin,  crunchbase,  stockSymbol,  mark,  logo,  acquisitionDate,  acquisitionPrice,  pressRelease,  },    },  ), },  }
+// Query: *[    _type == "research"  ] | order(lower(name) asc) {      _id,  "slug": slug.current,  name,  description,  website,    organization -> {   _id,  "slug": slug.current,  name,  description,  organizationType,  website,  linkedin,  crunchbase,  stockSymbol,  mark,  logo, },  }
 export type RESEARCHES_QUERYResult = Array<{
   _id: string;
   slug: string;
   name: string;
   description: string | null;
   website: string;
-  organization:
-    | {
-        _id: string;
-        slug: string;
-        name: string;
-        description: string;
-        organizationType: OrganizationType;
-        website: string | null;
-        linkedin: string | null;
-        crunchbase: string | null;
-        stockSymbol: string | null;
-        mark: {
-          asset?: {
-            _ref: string;
-            _type: 'reference';
-            _weak?: boolean;
-            [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
-          };
-          hotspot?: SanityImageHotspot;
-          crop?: SanityImageCrop;
-          _type: 'image';
-        } | null;
-        logo: {
-          asset?: {
-            _ref: string;
-            _type: 'reference';
-            _weak?: boolean;
-            [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
-          };
-          hotspot?: SanityImageHotspot;
-          crop?: SanityImageCrop;
-          _type: 'image';
-        } | null;
-        productCategories: Array<{
-          _id: string;
-          slug: string;
-          name: string;
-          expansion: string | null;
-          description: string;
-          marketSegment: {
-            _id: string;
-            slug: string;
-            name: string;
-            description: null;
-            icon: string | null;
-          };
-        }> | null;
-        supportedCloudProviders: Array<{
-          _id: string;
-          slug: string;
-          name: string;
-          description: string;
-          icon: string | null;
-          mark: {
-            asset: {
-              _ref: string;
-              _type: 'reference';
-              _weak?: boolean;
-              [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
-            };
-            hotspot?: SanityImageHotspot;
-            crop?: SanityImageCrop;
-            _type: 'image';
-          };
-          logo: {
-            asset?: {
-              _ref: string;
-              _type: 'reference';
-              _weak?: boolean;
-              [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
-            };
-            hotspot?: SanityImageHotspot;
-            crop?: SanityImageCrop;
-            _type: 'image';
-          } | null;
-          website: string;
-          linkedin: string | null;
-        }> | null;
-        research: Array<{
-          _id: string;
-          slug: string;
-          name: string;
-          description: string | null;
-          website: string;
-        }>;
-        acquiredEntities: Array<{
-          _id: string;
-          slug: string;
-          name: string;
-          description: string;
-          organizationType: OrganizationType;
-          website: string | null;
-          linkedin: string | null;
-          crunchbase: string | null;
-          stockSymbol: string | null;
-          mark: {
-            asset?: {
-              _ref: string;
-              _type: 'reference';
-              _weak?: boolean;
-              [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
-            };
-            hotspot?: SanityImageHotspot;
-            crop?: SanityImageCrop;
-            _type: 'image';
-          } | null;
-          logo: {
-            asset?: {
-              _ref: string;
-              _type: 'reference';
-              _weak?: boolean;
-              [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
-            };
-            hotspot?: SanityImageHotspot;
-            crop?: SanityImageCrop;
-            _type: 'image';
-          } | null;
-          acquisitionDate: string | null;
-          acquisitionPrice: number | null;
-          pressRelease: string | null;
-        }>;
-      }
-    | {
-        _id: string;
-        slug: string;
-        name: string;
-        description: string;
-        organizationType: OrganizationType;
-        website: string | null;
-        linkedin: string | null;
-        crunchbase: string | null;
-        stockSymbol: string | null;
-        mark: {
-          asset?: {
-            _ref: string;
-            _type: 'reference';
-            _weak?: boolean;
-            [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
-          };
-          hotspot?: SanityImageHotspot;
-          crop?: SanityImageCrop;
-          _type: 'image';
-        } | null;
-        logo: {
-          asset?: {
-            _ref: string;
-            _type: 'reference';
-            _weak?: boolean;
-            [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
-          };
-          hotspot?: SanityImageHotspot;
-          crop?: SanityImageCrop;
-          _type: 'image';
-        } | null;
-        acquisitionDate: string | null;
-        acquisitionPrice: number | null;
-        pressRelease: string | null;
-        parentOrganization: {
-          _id: string;
-          slug: string;
-          name: string;
-          description: string;
-          organizationType: OrganizationType;
-          website: string | null;
-          linkedin: string | null;
-          crunchbase: string | null;
-          stockSymbol: string | null;
-          mark: {
-            asset?: {
-              _ref: string;
-              _type: 'reference';
-              _weak?: boolean;
-              [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
-            };
-            hotspot?: SanityImageHotspot;
-            crop?: SanityImageCrop;
-            _type: 'image';
-          } | null;
-          logo: {
-            asset?: {
-              _ref: string;
-              _type: 'reference';
-              _weak?: boolean;
-              [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
-            };
-            hotspot?: SanityImageHotspot;
-            crop?: SanityImageCrop;
-            _type: 'image';
-          } | null;
-        } | null;
-      }
-    | null;
+  organization: {
+    _id: string;
+    slug: string;
+    name: string;
+    description: string;
+    organizationType: OrganizationType;
+    website: string | null;
+    linkedin: string | null;
+    crunchbase: string | null;
+    stockSymbol: string | null;
+    mark: {
+      asset?: {
+        _ref: string;
+        _type: 'reference';
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: 'image';
+    } | null;
+    logo: {
+      asset?: {
+        _ref: string;
+        _type: 'reference';
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: 'image';
+    } | null;
+  };
 }>;
 // Variable: RESEARCH_QUERY
-// Query: *[    _type == "research" &&    slug.current == $slug  ] [0] {      _id,  "slug": slug.current,  name,  description,  website,    organization -> {   ...select(    organizationType == "acquired" => {          _id,  "slug": slug.current,  name,  description,  organizationType,  website,  linkedin,  crunchbase,  stockSymbol,  mark,  logo,  acquisitionDate,  acquisitionPrice,  pressRelease,      parentOrganization -> {          _id,  "slug": slug.current,  name,  description,  organizationType,  website,  linkedin,  crunchbase,  stockSymbol,  mark,  logo,      },    },    organizationType != "acquired" => {          _id,  "slug": slug.current,  name,  description,  organizationType,  website,  linkedin,  crunchbase,  stockSymbol,  mark,  logo,  productCategories[] -> {   _id,  "slug": slug.current,  name,  expansion,  description,  marketSegment -> {   _id,  "slug": slug.current,  name,  description,  "icon": icon.name, }, },  supportedCloudProviders[] -> {   _id,  "slug": slug.current,  name,  description,  "icon": icon.name,  mark,  logo,  website,  linkedin, },  "research": *[    _type == "research" && organization._ref == ^._id  ] {      _id,  "slug": slug.current,  name,  description,  website,  },  "acquiredEntities": *[    _type == "organization" && parentOrganization._ref == ^._id  ] {        _id,  "slug": slug.current,  name,  description,  organizationType,  website,  linkedin,  crunchbase,  stockSymbol,  mark,  logo,  acquisitionDate,  acquisitionPrice,  pressRelease,  },    },  ), },  }
+// Query: *[    _type == "research" &&    slug.current == $slug  ] [0] {      _id,  "slug": slug.current,  name,  description,  website,    organization -> {   _id,  "slug": slug.current,  name,  description,  organizationType,  website,  linkedin,  crunchbase,  stockSymbol,  mark,  logo, },  }
 export type RESEARCH_QUERYResult = {
   _id: string;
   slug: string;
   name: string;
   description: string | null;
   website: string;
-  organization:
-    | {
-        _id: string;
-        slug: string;
-        name: string;
-        description: string;
-        organizationType: OrganizationType;
-        website: string | null;
-        linkedin: string | null;
-        crunchbase: string | null;
-        stockSymbol: string | null;
-        mark: {
-          asset?: {
-            _ref: string;
-            _type: 'reference';
-            _weak?: boolean;
-            [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
-          };
-          hotspot?: SanityImageHotspot;
-          crop?: SanityImageCrop;
-          _type: 'image';
-        } | null;
-        logo: {
-          asset?: {
-            _ref: string;
-            _type: 'reference';
-            _weak?: boolean;
-            [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
-          };
-          hotspot?: SanityImageHotspot;
-          crop?: SanityImageCrop;
-          _type: 'image';
-        } | null;
-        productCategories: Array<{
-          _id: string;
-          slug: string;
-          name: string;
-          expansion: string | null;
-          description: string;
-          marketSegment: {
-            _id: string;
-            slug: string;
-            name: string;
-            description: null;
-            icon: string | null;
-          };
-        }> | null;
-        supportedCloudProviders: Array<{
-          _id: string;
-          slug: string;
-          name: string;
-          description: string;
-          icon: string | null;
-          mark: {
-            asset: {
-              _ref: string;
-              _type: 'reference';
-              _weak?: boolean;
-              [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
-            };
-            hotspot?: SanityImageHotspot;
-            crop?: SanityImageCrop;
-            _type: 'image';
-          };
-          logo: {
-            asset?: {
-              _ref: string;
-              _type: 'reference';
-              _weak?: boolean;
-              [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
-            };
-            hotspot?: SanityImageHotspot;
-            crop?: SanityImageCrop;
-            _type: 'image';
-          } | null;
-          website: string;
-          linkedin: string | null;
-        }> | null;
-        research: Array<{
-          _id: string;
-          slug: string;
-          name: string;
-          description: string | null;
-          website: string;
-        }>;
-        acquiredEntities: Array<{
-          _id: string;
-          slug: string;
-          name: string;
-          description: string;
-          organizationType: OrganizationType;
-          website: string | null;
-          linkedin: string | null;
-          crunchbase: string | null;
-          stockSymbol: string | null;
-          mark: {
-            asset?: {
-              _ref: string;
-              _type: 'reference';
-              _weak?: boolean;
-              [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
-            };
-            hotspot?: SanityImageHotspot;
-            crop?: SanityImageCrop;
-            _type: 'image';
-          } | null;
-          logo: {
-            asset?: {
-              _ref: string;
-              _type: 'reference';
-              _weak?: boolean;
-              [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
-            };
-            hotspot?: SanityImageHotspot;
-            crop?: SanityImageCrop;
-            _type: 'image';
-          } | null;
-          acquisitionDate: string | null;
-          acquisitionPrice: number | null;
-          pressRelease: string | null;
-        }>;
-      }
-    | {
-        _id: string;
-        slug: string;
-        name: string;
-        description: string;
-        organizationType: OrganizationType;
-        website: string | null;
-        linkedin: string | null;
-        crunchbase: string | null;
-        stockSymbol: string | null;
-        mark: {
-          asset?: {
-            _ref: string;
-            _type: 'reference';
-            _weak?: boolean;
-            [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
-          };
-          hotspot?: SanityImageHotspot;
-          crop?: SanityImageCrop;
-          _type: 'image';
-        } | null;
-        logo: {
-          asset?: {
-            _ref: string;
-            _type: 'reference';
-            _weak?: boolean;
-            [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
-          };
-          hotspot?: SanityImageHotspot;
-          crop?: SanityImageCrop;
-          _type: 'image';
-        } | null;
-        acquisitionDate: string | null;
-        acquisitionPrice: number | null;
-        pressRelease: string | null;
-        parentOrganization: {
-          _id: string;
-          slug: string;
-          name: string;
-          description: string;
-          organizationType: OrganizationType;
-          website: string | null;
-          linkedin: string | null;
-          crunchbase: string | null;
-          stockSymbol: string | null;
-          mark: {
-            asset?: {
-              _ref: string;
-              _type: 'reference';
-              _weak?: boolean;
-              [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
-            };
-            hotspot?: SanityImageHotspot;
-            crop?: SanityImageCrop;
-            _type: 'image';
-          } | null;
-          logo: {
-            asset?: {
-              _ref: string;
-              _type: 'reference';
-              _weak?: boolean;
-              [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
-            };
-            hotspot?: SanityImageHotspot;
-            crop?: SanityImageCrop;
-            _type: 'image';
-          } | null;
-        } | null;
-      }
-    | null;
+  organization: {
+    _id: string;
+    slug: string;
+    name: string;
+    description: string;
+    organizationType: OrganizationType;
+    website: string | null;
+    linkedin: string | null;
+    crunchbase: string | null;
+    stockSymbol: string | null;
+    mark: {
+      asset?: {
+        _ref: string;
+        _type: 'reference';
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: 'image';
+    } | null;
+    logo: {
+      asset?: {
+        _ref: string;
+        _type: 'reference';
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: 'image';
+    } | null;
+  };
 } | null;
 
 // Source: ./src/lib/sanity/queries/siteSettings.ts
@@ -1439,7 +1121,7 @@ declare module '@sanity/client' {
     '\n  count(\n    *[\n      _type == "organization" &&\n      organizationType != "acquired" &&\n      (count($organizationTypes) == 0 || organizationType in $organizationTypes)\n    ]\n  )\n': ORGANIZATIONS_COUNT_QUERYResult;
     '\n  *[\n    _type == "organization" &&\n    defined(slug.current) &&\n    organizationType != "acquired"\n  ].slug.current\n': ORGANIZATION_SLUGS_QUERYResult;
     '\n  *[\n    _type == "organization" &&\n    organizationType != "acquired" &&\n    (count($organizationTypes) == 0 || organizationType in $organizationTypes) &&\n    lower(name) > lower($prev)\n  ] | order(lower(name) asc) [0...20] {\n    \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n\n  }\n': ORGANIZATIONS_QUERYResult;
-    '\n  *[\n    _type == "organization" &&\n    slug.current == $slug\n  ] [0] {\n    \n  ...select(\n    organizationType == "acquired" => {\n      \n  \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n\n  acquisitionDate,\n  acquisitionPrice,\n  pressRelease,\n\n      parentOrganization -> {\n        \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n\n      },\n    },\n    organizationType != "acquired" => {\n      \n  \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n\n  productCategories[] -> { \n  _id,\n  "slug": slug.current,\n  name,\n  expansion,\n  description,\n  marketSegment -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n },\n },\n  supportedCloudProviders[] -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n  mark,\n  logo,\n  website,\n  linkedin,\n },\n  "research": *[\n    _type == "research" && organization._ref == ^._id\n  ] {\n    \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  website,\n\n  },\n  "acquiredEntities": *[\n    _type == "organization" && parentOrganization._ref == ^._id\n  ] {\n    \n  \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n\n  acquisitionDate,\n  acquisitionPrice,\n  pressRelease,\n\n  },\n\n    },\n  ),\n\n  }\n': ORGANIZATION_QUERYResult;
+    '\n  *[\n    _type == "organization" &&\n    slug.current == $slug\n  ] [0] {\n    \n  ...select(\n    organizationType == "acquired" => {\n      \n  \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n\n  acquisitionDate,\n  acquisitionPrice,\n  pressRelease,\n\n      parentOrganization -> {\n        \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n\n      },\n    },\n    organizationType != "acquired" => {\n      \n  \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n\n  productCategories[] -> { \n  _id,\n  "slug": slug.current,\n  name,\n  expansion,\n  description,\n  marketSegment -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n },\n },\n  supportedCloudProviders[] -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n  mark,\n  logo,\n  website,\n  linkedin,\n },\n  "research": *[\n    _type == "research" && organization._ref == ^._id\n  ] {\n    \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  website,\n\n  },\n  "acquiredEntities": *[\n    _type == "organization" && parentOrganization._ref == ^._id\n  ] | order(acquisitionDate desc) {\n    \n  \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n\n  acquisitionDate,\n  acquisitionPrice,\n  pressRelease,\n\n  },\n\n    },\n  ),\n\n  }\n': ORGANIZATION_QUERYResult;
     '\n  count(\n    *[\n      _type == "organization" &&\n      organizationType != "acquired" &&\n      count(productCategories) > 0 &&\n      (count($productCategories) == 0 || references($productCategories)) &&\n      (count($organizationTypes) == 0 || organizationType in $organizationTypes)\n    ]\n  )\n': VENDORS_COUNT_QUERYResult;
     '\n  *[\n    _type == "organization" &&\n    organizationType != "acquired" &&\n    count(productCategories) > 0 &&\n    (count($productCategories) == 0 || references($productCategories)) &&\n    (count($organizationTypes) == 0 || organizationType in $organizationTypes) &&\n    lower(name) > lower($prev)\n  ] | order(lower(name) asc) [0...20] {\n    \n  \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n\n  productCategories[] -> { \n  _id,\n  "slug": slug.current,\n  name,\n  expansion,\n  description,\n  marketSegment -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n },\n },\n  supportedCloudProviders[] -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n  mark,\n  logo,\n  website,\n  linkedin,\n },\n\n  }\n': VENDORS_QUERYResult;
     '\n  *[\n    _type == "page" &&\n    defined(slug.current)\n  ].slug.current\n': PAGE_SLUGS_QUERYResult;
@@ -1448,8 +1130,8 @@ declare module '@sanity/client' {
     '\n  *[\n    _type == "productCategory" &&\n    defined(slug.current)\n  ].slug.current\n': PRODUCT_CATEGORY_SLUGS_QUERYResult;
     '\n  *[\n    _type == "productCategory" &&\n    ($marketSegment == "" || $marketSegment == marketSegment._ref)\n  ] | order(lower(name) asc) {\n    \n  _id,\n  "slug": slug.current,\n  name,\n  expansion,\n  description,\n  marketSegment -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n },\n\n  }\n': PRODUCT_CATEGORIES_QUERYResult;
     '\n  *[\n    _type == "productCategory" &&\n    slug.current == $slug\n  ] [0] {\n    \n  _id,\n  "slug": slug.current,\n  name,\n  expansion,\n  description,\n  marketSegment -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n },\n\n    "vendors": *[\n      _type == "organization" && ^._id in productCategories[]._ref\n    ] | order(lower(name) asc) {\n      \n  \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n\n  productCategories[] -> { \n  _id,\n  "slug": slug.current,\n  name,\n  expansion,\n  description,\n  marketSegment -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n },\n },\n  supportedCloudProviders[] -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n  mark,\n  logo,\n  website,\n  linkedin,\n },\n\n    }\n  }\n': PRODUCT_CATEGORY_QUERYResult;
-    '\n  *[\n    _type == "research"\n  ] | order(lower(name) asc) {\n    \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  website,\n\n    organization -> { \n  ...select(\n    organizationType == "acquired" => {\n      \n  \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n\n  acquisitionDate,\n  acquisitionPrice,\n  pressRelease,\n\n      parentOrganization -> {\n        \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n\n      },\n    },\n    organizationType != "acquired" => {\n      \n  \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n\n  productCategories[] -> { \n  _id,\n  "slug": slug.current,\n  name,\n  expansion,\n  description,\n  marketSegment -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n },\n },\n  supportedCloudProviders[] -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n  mark,\n  logo,\n  website,\n  linkedin,\n },\n  "research": *[\n    _type == "research" && organization._ref == ^._id\n  ] {\n    \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  website,\n\n  },\n  "acquiredEntities": *[\n    _type == "organization" && parentOrganization._ref == ^._id\n  ] {\n    \n  \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n\n  acquisitionDate,\n  acquisitionPrice,\n  pressRelease,\n\n  },\n\n    },\n  ),\n },\n  }\n': RESEARCHES_QUERYResult;
-    '\n  *[\n    _type == "research" &&\n    slug.current == $slug\n  ] [0] {\n    \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  website,\n\n    organization -> { \n  ...select(\n    organizationType == "acquired" => {\n      \n  \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n\n  acquisitionDate,\n  acquisitionPrice,\n  pressRelease,\n\n      parentOrganization -> {\n        \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n\n      },\n    },\n    organizationType != "acquired" => {\n      \n  \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n\n  productCategories[] -> { \n  _id,\n  "slug": slug.current,\n  name,\n  expansion,\n  description,\n  marketSegment -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n },\n },\n  supportedCloudProviders[] -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n  mark,\n  logo,\n  website,\n  linkedin,\n },\n  "research": *[\n    _type == "research" && organization._ref == ^._id\n  ] {\n    \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  website,\n\n  },\n  "acquiredEntities": *[\n    _type == "organization" && parentOrganization._ref == ^._id\n  ] {\n    \n  \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n\n  acquisitionDate,\n  acquisitionPrice,\n  pressRelease,\n\n  },\n\n    },\n  ),\n },\n  }\n': RESEARCH_QUERYResult;
+    '\n  *[\n    _type == "research"\n  ] | order(lower(name) asc) {\n    \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  website,\n\n    organization -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n },\n  }\n': RESEARCHES_QUERYResult;
+    '\n  *[\n    _type == "research" &&\n    slug.current == $slug\n  ] [0] {\n    \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  website,\n\n    organization -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n },\n  }\n': RESEARCH_QUERYResult;
     '\n  *[\n    _type == "siteSettings" &&\n    _id == "siteSettings"\n  ] [0] {\n    title,\n    description,\n    url,\n    copyright,\n    navigation[] {\n      name,\n      href,\n    },\n    headline,\n    subheadline,\n    featuredPages[] -> {\n      \n  "slug": slug.current,\n  title,\n  description,\n  "icon": icon.name,\n\n    }\n  }\n': SITE_SETTINGS_QUERYResult;
   }
 }
