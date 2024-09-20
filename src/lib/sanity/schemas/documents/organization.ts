@@ -152,7 +152,7 @@ export default defineType({
     }),
     defineField({
       name: 'pressRelease',
-      title: 'Announcement press release URL',
+      title: 'Press release URL',
       type: 'url',
       fieldset: 'acquisition',
       hidden: ({ parent, value }) =>

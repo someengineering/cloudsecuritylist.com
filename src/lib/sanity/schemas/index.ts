@@ -58,6 +58,7 @@ export const schema: { types: SchemaTypeDefinition[]; templates: Template[] } =
         }: {
           parentOrganizationId: string;
         }) => ({
+          organizationType: ORGANIZATION_TYPE.ACQUIRED,
           parentOrganization: {
             _type: 'reference',
             _ref: parentOrganizationId,
