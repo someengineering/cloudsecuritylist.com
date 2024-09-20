@@ -94,6 +94,7 @@ export default defineType({
       type: 'reference',
       to: [{ type: 'organization' }],
       options: {
+        disableNew: true,
         filter: 'organizationType != $acquiredType',
         filterParams: { acquiredType: ORGANIZATION_TYPE.ACQUIRED },
       },
@@ -272,7 +273,14 @@ export default defineType({
       title: 'Product categories',
       type: 'array',
       of: [
-        { type: 'reference', weak: true, to: [{ type: 'productCategory' }] },
+        {
+          type: 'reference',
+          weak: true,
+          to: [{ type: 'productCategory' }],
+          options: {
+            disableNew: true,
+          },
+        },
       ],
       fieldset: 'product',
       hidden: ({ parent }) =>
@@ -283,7 +291,16 @@ export default defineType({
       name: 'supportedCloudProviders',
       title: 'Supported cloud providers',
       type: 'array',
-      of: [{ type: 'reference', weak: true, to: [{ type: 'cloudProvider' }] }],
+      of: [
+        {
+          type: 'reference',
+          weak: true,
+          to: [{ type: 'cloudProvider' }],
+          options: {
+            disableNew: true,
+          },
+        },
+      ],
       fieldset: 'product',
       hidden: ({ parent, value }) =>
         (!value && (parent.productCategories ?? []).length === 0) ||

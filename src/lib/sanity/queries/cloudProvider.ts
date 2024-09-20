@@ -11,8 +11,7 @@ export const CLOUD_PROVIDER_SLUGS_QUERY = groq`
 
 export const CLOUD_PROVIDERS_QUERY = groq`
   *[
-    _type == "cloudProvider" &&
-    lower(name) > lower($prev)
+    _type == "cloudProvider"
   ] | order(lower(name) asc) {
     ${CLOUD_PROVIDER}
   }

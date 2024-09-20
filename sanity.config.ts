@@ -18,4 +18,13 @@ export default defineConfig({
     visionTool({ defaultApiVersion: apiVersion }),
     iconPicker(),
   ],
+  document: {
+    newDocumentOptions: (prev, { currentUser }) => {
+      if (!currentUser?.email?.includes('@some.engineering')) {
+        return [];
+      }
+
+      return prev;
+    },
+  },
 });
