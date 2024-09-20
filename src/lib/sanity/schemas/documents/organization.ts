@@ -114,10 +114,9 @@ export default defineType({
     defineField({
       name: 'acquisitionDate',
       title: 'Acquisition date',
+      description:
+        'Date when the acquisition was announced (formatted as YYYY-MM-DD).',
       type: 'date',
-      options: {
-        dateFormat: 'LL',
-      },
       fieldset: 'acquisition',
       hidden: ({ parent, value }) =>
         !value && parent.organizationType !== ORGANIZATION_TYPE.ACQUIRED,
@@ -153,7 +152,7 @@ export default defineType({
     }),
     defineField({
       name: 'pressRelease',
-      title: 'Press release URL',
+      title: 'Announcement press release URL',
       type: 'url',
       fieldset: 'acquisition',
       hidden: ({ parent, value }) =>
