@@ -5,7 +5,7 @@ import { MARKET_SEGMENTS_QUERYResult } from '@/lib/sanity/types';
 import { clsx } from 'clsx';
 import dynamic from 'next/dynamic';
 import { usePathname, useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { HiOutlineSparkles, HiXMark } from 'react-icons/hi2';
 import { IconType } from 'react-icons/lib';
 
@@ -18,6 +18,26 @@ export default function FilterButtons({
   const router = useRouter();
   const pathname = usePathname();
 
+  const marketSegmentIcons = useMemo(
+    () =>
+      marketSegments.map((marketSegment) => ({
+        slug: marketSegment.slug,
+        icon: marketSegment.icon
+          ? dynamic(() =>
+              import('react-icons/hi2')
+                .then(
+                  (mod) =>
+                    (mod[marketSegment.icon as keyof typeof mod] as IconType) ??
+                    HiOutlineSparkles,
+                )
+                .catch(() => HiOutlineSparkles),
+            )
+          : HiOutlineSparkles,
+      })),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
+
   useEffect(() => {
     const params = new URLSearchParams();
 
@@ -27,6 +47,8 @@ export default function FilterButtons({
 
     router.push(`${pathname}?${params.toString()}${window.location.hash}`, {
       scroll: false,
+      // @ts-expect-error 'shallow' does not exist in type 'NavigateOptions'
+      shallow: true,
     });
   }, [filters, pathname, router]);
 
@@ -34,18 +56,9 @@ export default function FilterButtons({
     <div className="mx-auto max-w-5xl px-6 py-3 lg:px-8">
       <div className="isolate grid grid-cols-2 overflow-hidden rounded-md shadow-sm sm:grid-cols-3 lg:grid-cols-7">
         {marketSegments.map((marketSegment, idx) => {
-          const Icon = marketSegment.icon
-            ? dynamic(() =>
-                import('react-icons/hi2')
-                  .then(
-                    (mod) =>
-                      (mod[
-                        marketSegment.icon as keyof typeof mod
-                      ] as IconType) ?? HiOutlineSparkles,
-                  )
-                  .catch(() => HiOutlineSparkles),
-              )
-            : HiOutlineSparkles;
+          const Icon =
+            marketSegmentIcons.find((icon) => icon.slug === marketSegment.slug)
+              ?.icon ?? HiOutlineSparkles;
 
           return (
             <button

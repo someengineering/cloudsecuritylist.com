@@ -21,7 +21,7 @@ import {
 } from '@headlessui/react';
 import dynamic from 'next/dynamic';
 import { usePathname, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { HiChevronDown, HiOutlineSparkles, HiXMark } from 'react-icons/hi2';
 import { IconType } from 'react-icons/lib';
 
@@ -39,6 +39,26 @@ export default function FilterPanel({
   const router = useRouter();
   const pathname = usePathname();
 
+  const marketSegmentIcons = useMemo(
+    () =>
+      marketSegments.map((marketSegment) => ({
+        slug: marketSegment.slug,
+        icon: marketSegment.icon
+          ? dynamic(() =>
+              import('react-icons/hi2')
+                .then(
+                  (mod) =>
+                    (mod[marketSegment.icon as keyof typeof mod] as IconType) ??
+                    HiOutlineSparkles,
+                )
+                .catch(() => HiOutlineSparkles),
+            )
+          : HiOutlineSparkles,
+      })),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
+
   useEffect(() => {
     const params = new URLSearchParams();
 
@@ -52,6 +72,8 @@ export default function FilterPanel({
 
     router.push(`${pathname}?${params.toString()}${window.location.hash}`, {
       scroll: false,
+      // @ts-expect-error 'shallow' does not exist in type 'NavigateOptions'
+      shallow: true,
     });
   }, [filters, pathname, router]);
 
@@ -185,18 +207,10 @@ export default function FilterPanel({
         <DisclosurePanel className="hidden border-y border-gray-200 py-10 sm:block">
           <div className="mx-auto grid max-w-7xl auto-rows-min grid-cols-3 gap-x-6 gap-y-8 px-4 text-sm sm:px-6 md:grid-cols-4 lg:grid-cols-5 lg:px-8 xl:grid-cols-7">
             {marketSegments.map((marketSegment) => {
-              const Icon = marketSegment.icon
-                ? dynamic(() =>
-                    import('react-icons/hi2')
-                      .then(
-                        (mod) =>
-                          (mod[
-                            marketSegment.icon as keyof typeof mod
-                          ] as IconType) ?? HiOutlineSparkles,
-                      )
-                      .catch(() => HiOutlineSparkles),
-                  )
-                : HiOutlineSparkles;
+              const Icon =
+                marketSegmentIcons.find(
+                  (icon) => icon.slug === marketSegment.slug,
+                )?.icon ?? HiOutlineSparkles;
 
               return (
                 <fieldset key={marketSegment._id}>
@@ -282,18 +296,10 @@ export default function FilterPanel({
 
             <form className="mt-4">
               {marketSegments.map((marketSegment) => {
-                const Icon = marketSegment.icon
-                  ? dynamic(() =>
-                      import('react-icons/hi2')
-                        .then(
-                          (mod) =>
-                            (mod[
-                              marketSegment.icon as keyof typeof mod
-                            ] as IconType) ?? HiOutlineSparkles,
-                        )
-                        .catch(() => HiOutlineSparkles),
-                    )
-                  : HiOutlineSparkles;
+                const Icon =
+                  marketSegmentIcons.find(
+                    (icon) => icon.slug === marketSegment.slug,
+                  )?.icon ?? HiOutlineSparkles;
 
                 return (
                   <Disclosure
