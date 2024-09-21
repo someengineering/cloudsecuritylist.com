@@ -32,6 +32,7 @@ import {
   RESEARCH_QUERY,
   RESEARCHES_QUERY,
 } from '@/lib/sanity/queries/research';
+import { SITEMAP_DATA_QUERY } from '@/lib/sanity/queries/sitemap';
 import { SITE_SETTINGS_QUERY } from '@/lib/sanity/queries/siteSettings';
 import {
   ORGANIZATION_TYPE,
@@ -55,9 +56,26 @@ import {
   RESEARCH_QUERYResult,
   RESEARCHES_QUERYResult,
   SITE_SETTINGS_QUERYResult,
+  SITEMAP_DATA_QUERYResult,
   VENDORS_COUNT_QUERYResult,
   VENDORS_QUERYResult,
 } from '@/lib/sanity/types';
+
+export const getSitemapData = async () => {
+  const data = await sanityFetch<SITEMAP_DATA_QUERYResult>({
+    query: SITEMAP_DATA_QUERY,
+    tags: [
+      'siteSettings',
+      'page',
+      'cloudProvider',
+      'productCategory',
+      'organization',
+    ],
+    respectDraftMode: false,
+  });
+
+  return data;
+};
 
 export const getSiteSettings = async () => {
   const data = await sanityFetch<SITE_SETTINGS_QUERYResult>({
@@ -224,10 +242,9 @@ export const getOrganizations = async ({
       organizationTypes: organizationTypes ?? [],
       prev: prev ?? '',
     },
-    tags:
-      (organizationTypes ?? []).length > 0
-        ? ['organization']
-        : (organizationTypes ?? []).map((slug) => `organizationType:${slug}`),
+    tags: organizationTypes?.length
+      ? ['organization']
+      : (organizationTypes ?? []).map((slug) => `organizationType:${slug}`),
   });
 
   return data;

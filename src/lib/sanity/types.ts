@@ -369,7 +369,7 @@ export declare const internalGroqTypeReferenceTo: unique symbol;
 // Query: *[    _type == "cloudProvider" &&    defined(slug.current)  ].slug.current
 export type CLOUD_PROVIDER_SLUGS_QUERYResult = Array<string>;
 // Variable: CLOUD_PROVIDERS_QUERY
-// Query: *[    _type == "cloudProvider" &&    lower(name) > lower($prev)  ] | order(lower(name) asc) {      _id,  "slug": slug.current,  name,  description,  "icon": icon.name,  mark,  logo,  website,  linkedin,  }
+// Query: *[    _type == "cloudProvider"  ] | order(lower(name) asc) {      _id,  "slug": slug.current,  name,  description,  "icon": icon.name,  mark,  logo,  website,  linkedin,  }
 export type CLOUD_PROVIDERS_QUERYResult = Array<{
   _id: string;
   slug: string;
@@ -1109,12 +1109,37 @@ export type SITE_SETTINGS_QUERYResult = {
   }>;
 } | null;
 
+// Source: ./src/lib/sanity/queries/sitemap.ts
+// Variable: SITEMAP_DATA_QUERY
+// Query: {    "baseUrl": *[_type == "siteSettings" && _id == "siteSettings"] [0].url,    "items":       (*[_type == "page" && defined(slug.current)] {        "url": "/" + slug.current,        "lastModified": array::compact([          _updatedAt,          *[_type == ^.slug.current] | order(_updatedAt desc) [0]._updatedAt,        ]),      }) +      (*[_type == "productCategory" && defined(slug.current)] {        "url": "/category/" + slug.current,        "lastModified": array::compact([          _updatedAt,          *[_type == "organization" && organizationType != "acquired" && ^._id in productCategories[]._ref] | order(_updatedAt desc) [0]._updatedAt,          *[_type == "marketSegment" && _id == ^.marketSegment._ref] | order(_updatedAt desc) [0]._updatedAt,        ]),      }) +      (*[_type == "organization" && defined(slug.current) && organizationType != "acquired"] {        "url": "/organization/" + slug.current,        "lastModified": array::compact([          _updatedAt,          *[_type == "cloudProvider" && _id in ^.supportedCloudProviders[]._ref] | order(_updatedAt desc) [0]._updatedAt,          *[_type == "productCategory" && _id in ^.productCategories[]._ref] | order(_updatedAt desc) [0]._updatedAt,          *[_type == "organization" && organizationType == "acquired" && parentOrganization._ref == ^._id] | order(_updatedAt desc) [0]._updatedAt,          *[_type == "research" && organization._ref == ^._id] | order(_updatedAt desc) [0]._updatedAt,        ]),      }) +      (*[_type == "cloudProvider" && defined(slug.current)] {        "url": "/provider/" + slug.current,        "lastModified": array::compact([          _updatedAt,          *[_type == "organization" && organizationType != "acquired" && ^._id in supportedCloudProviders[]._ref] | order(_updatedAt desc) [0]._updatedAt,        ]),      }),  }
+export type SITEMAP_DATA_QUERYResult = {
+  baseUrl: string | null;
+  items: Array<
+    | {
+        url: string;
+        lastModified: Array<string>;
+      }
+    | {
+        url: string;
+        lastModified: Array<string>;
+      }
+    | {
+        url: string;
+        lastModified: Array<string>;
+      }
+    | {
+        url: string;
+        lastModified: Array<string>;
+      }
+  >;
+};
+
 // Query TypeMap
 import '@sanity/client';
 declare module '@sanity/client' {
   interface SanityQueries {
     '\n  *[\n    _type == "cloudProvider" &&\n    defined(slug.current)\n  ].slug.current\n': CLOUD_PROVIDER_SLUGS_QUERYResult;
-    '\n  *[\n    _type == "cloudProvider" &&\n    lower(name) > lower($prev)\n  ] | order(lower(name) asc) {\n    \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n  mark,\n  logo,\n  website,\n  linkedin,\n\n  }\n': CLOUD_PROVIDERS_QUERYResult;
+    '\n  *[\n    _type == "cloudProvider"\n  ] | order(lower(name) asc) {\n    \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n  mark,\n  logo,\n  website,\n  linkedin,\n\n  }\n': CLOUD_PROVIDERS_QUERYResult;
     '\n  *[\n    _type == "cloudProvider" &&\n    slug.current == $slug\n  ] [0] {\n    \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n  mark,\n  logo,\n  website,\n  linkedin,\n\n    "vendors": *[\n      _type == "organization" && ^._id in supportedCloudProviders[]._ref\n    ] | order(lower(name) asc) {\n      \n  \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n\n  productCategories[] -> { \n  _id,\n  "slug": slug.current,\n  name,\n  expansion,\n  description,\n  marketSegment -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n },\n },\n  supportedCloudProviders[] -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n  mark,\n  logo,\n  website,\n  linkedin,\n },\n\n    }\n  }\n': CLOUD_PROVIDER_QUERYResult;
     '\n  *[\n    _type == "marketSegment"\n  ] | order(lower(name) asc) {\n    \n  \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n\n  "productCategories": *[\n    _type == "productCategory" &&\n    marketSegment._ref == ^._id &&\n    count(*[_type == "organization" && ^._id in productCategories[]._ref]) > 0\n  ] | order(lower(name) asc) {\n    _id,\n    name,\n    "slug": slug.current,\n    expansion,\n  },\n\n  }\n': MARKET_SEGMENTS_QUERYResult;
     '\n  *[\n    _type == "marketSegment" &&\n    slug.current == $slug\n  ] [0] {\n    \n  \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n\n  "productCategories": *[\n    _type == "productCategory" &&\n    marketSegment._ref == ^._id &&\n    count(*[_type == "organization" && ^._id in productCategories[]._ref]) > 0\n  ] | order(lower(name) asc) {\n    _id,\n    name,\n    "slug": slug.current,\n    expansion,\n  },\n\n  }\n': MARKET_SEGMENT_QUERYResult;
@@ -1133,5 +1158,6 @@ declare module '@sanity/client' {
     '\n  *[\n    _type == "research"\n  ] | order(lower(name) asc) {\n    \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  website,\n\n    organization -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n },\n  }\n': RESEARCHES_QUERYResult;
     '\n  *[\n    _type == "research" &&\n    slug.current == $slug\n  ] [0] {\n    \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  website,\n\n    organization -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n },\n  }\n': RESEARCH_QUERYResult;
     '\n  *[\n    _type == "siteSettings" &&\n    _id == "siteSettings"\n  ] [0] {\n    title,\n    description,\n    url,\n    copyright,\n    navigation[] {\n      name,\n      href,\n    },\n    headline,\n    subheadline,\n    featuredPages[] -> {\n      \n  "slug": slug.current,\n  title,\n  description,\n  "icon": icon.name,\n\n    }\n  }\n': SITE_SETTINGS_QUERYResult;
+    '\n  {\n    "baseUrl": *[_type == "siteSettings" && _id == "siteSettings"] [0].url,\n    "items": \n      (*[_type == "page" && defined(slug.current)] {\n        "url": "/" + slug.current,\n        "lastModified": array::compact([\n          _updatedAt,\n          *[_type == ^.slug.current] | order(_updatedAt desc) [0]._updatedAt,\n        ]),\n      }) +\n      (*[_type == "productCategory" && defined(slug.current)] {\n        "url": "/category/" + slug.current,\n        "lastModified": array::compact([\n          _updatedAt,\n          *[_type == "organization" && organizationType != "acquired" && ^._id in productCategories[]._ref] | order(_updatedAt desc) [0]._updatedAt,\n          *[_type == "marketSegment" && _id == ^.marketSegment._ref] | order(_updatedAt desc) [0]._updatedAt,\n        ]),\n      }) +\n      (*[_type == "organization" && defined(slug.current) && organizationType != "acquired"] {\n        "url": "/organization/" + slug.current,\n        "lastModified": array::compact([\n          _updatedAt,\n          *[_type == "cloudProvider" && _id in ^.supportedCloudProviders[]._ref] | order(_updatedAt desc) [0]._updatedAt,\n          *[_type == "productCategory" && _id in ^.productCategories[]._ref] | order(_updatedAt desc) [0]._updatedAt,\n          *[_type == "organization" && organizationType == "acquired" && parentOrganization._ref == ^._id] | order(_updatedAt desc) [0]._updatedAt,\n          *[_type == "research" && organization._ref == ^._id] | order(_updatedAt desc) [0]._updatedAt,\n        ]),\n      }) +\n      (*[_type == "cloudProvider" && defined(slug.current)] {\n        "url": "/provider/" + slug.current,\n        "lastModified": array::compact([\n          _updatedAt,\n          *[_type == "organization" && organizationType != "acquired" && ^._id in supportedCloudProviders[]._ref] | order(_updatedAt desc) [0]._updatedAt,\n        ]),\n      }),\n  }\n': SITEMAP_DATA_QUERYResult;
   }
 }

@@ -50,7 +50,7 @@ export default async function PageHeader({
             {description}
           </p>
         ) : null}
-        {(links ?? []).length > 0 ? (
+        {links?.length ? (
           <ul role="list" className="mt-8 flex justify-center gap-x-6">
             {links?.map((link) => (
               <li key={link.href}>

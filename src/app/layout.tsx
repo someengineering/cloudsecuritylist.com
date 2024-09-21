@@ -1,39 +1,14 @@
-import { getSiteSettings } from '@/lib/sanity';
-import '@/styles/globals.css';
-import { Metadata } from 'next';
-import PlausibleProvider from 'next-plausible';
-import { Plus_Jakarta_Sans } from 'next/font/google';
+import { Viewport } from 'next';
 
-const plusJakartaSans = Plus_Jakarta_Sans({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-plus-jakarta-sans',
-});
-
-export async function generateMetadata(): Promise<Metadata> {
-  const { title, description, url } = (await getSiteSettings()) ?? {};
-
-  return {
-    title: {
-      default: title ?? '',
-      template: `%s | ${title}`,
-    },
-    description,
-    metadataBase: url ? new URL(url) : undefined,
-  };
-}
+export const viewport: Viewport = {
+  themeColor: '#0891b2',
+  colorScheme: 'only light',
+};
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <html lang="en" className={`scroll-smooth ${plusJakartaSans.variable}`}>
-      <head>
-        <PlausibleProvider domain="cloudsecuritylist.com" trackOutboundLinks />
-      </head>
-      <body className="bg-white">{children}</body>
-    </html>
-  );
+  return children;
 }
