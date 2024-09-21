@@ -37,13 +37,10 @@ export default async function Vendors({
       ) : null}
       <List
         initialData={vendors}
-        getVendors={async (
-          activeFilters: Partial<Filters>,
-          lastItem?: string,
-        ) => {
+        getVendors={async (activeFilters: Partial<Filters>, prev?: string) => {
           'use server';
 
-          return await getVendors({ ...activeFilters, prev: lastItem });
+          return await getVendors({ ...activeFilters, prev });
         }}
       />
     </FiltersProvider>

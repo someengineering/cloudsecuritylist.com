@@ -40,7 +40,7 @@ export default function Header({
               className={clsx(
                 'text-sm leading-6',
                 pathname === item.href
-                  ? 'font-bold text-cyan-700 hover:text-cyan-800'
+                  ? 'font-bold text-cyan-600 hover:text-cyan-700'
                   : 'font-semibold text-gray-900 hover:text-gray-950',
               )}
             >

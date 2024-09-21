@@ -303,7 +303,7 @@ export default defineType({
       ],
       fieldset: 'product',
       hidden: ({ parent, value }) =>
-        (!value && (parent.productCategories ?? []).length === 0) ||
+        (!value && !parent.productCategories?.length) ||
         parent.organizationType === ORGANIZATION_TYPE.ACQUIRED,
       validation: (rule) => rule.unique(),
     }),

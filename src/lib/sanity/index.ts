@@ -11,6 +11,7 @@ import {
   MARKET_SEGMENTS_QUERY,
 } from '@/lib/sanity/queries/marketSegments';
 import {
+  ACQUISITIONS_QUERY,
   ORGANIZATION_QUERY,
   ORGANIZATION_SLUGS_QUERY,
   ORGANIZATIONS_COUNT_QUERY,
@@ -39,6 +40,7 @@ import {
   ORGANIZATION_TYPES,
 } from '@/lib/sanity/schemas/objects/organizationType';
 import {
+  ACQUISITIONS_QUERYResult,
   CLOUD_PROVIDER_QUERYResult,
   CLOUD_PROVIDER_SLUGS_QUERYResult,
   CLOUD_PROVIDERS_QUERYResult,
@@ -316,6 +318,25 @@ export const getVendors = async ({
               (slug) => `organizationType:${slug}`,
             ),
           ],
+  });
+
+  return data;
+};
+
+export const getAcquisitions = async ({
+  prevDate,
+  prevId,
+}: {
+  prevDate?: string;
+  prevId?: string;
+}) => {
+  const data = await sanityFetch<ACQUISITIONS_QUERYResult>({
+    query: ACQUISITIONS_QUERY,
+    params: {
+      prevDate: prevDate ?? '',
+      prevId: prevId ?? '',
+    },
+    tags: [`organizationType:${ORGANIZATION_TYPE.ACQUIRED}`],
   });
 
   return data;

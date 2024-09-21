@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
       return new Response(JSON.stringify({ message, isValidSignature, body }), {
         status: 401,
       });
-    } else if (!body?.tags || body.tags.length === 0) {
+    } else if (!body?.tags?.length) {
       const message = 'Bad request';
       return new Response(JSON.stringify({ message, body }), { status: 400 });
     }

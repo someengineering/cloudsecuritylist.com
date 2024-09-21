@@ -12,7 +12,7 @@ export default async function LogoGrid({
     imageAspectRatio: number;
   }[];
 }) {
-  if (items.length === 0) {
+  if (!items.length) {
     return null;
   }
 

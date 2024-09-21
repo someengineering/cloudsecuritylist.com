@@ -16,10 +16,7 @@ export default function List({
   getVendors,
 }: {
   initialData: VENDORS_QUERYResult;
-  getVendors: (
-    filters: Filters,
-    lastItem?: string,
-  ) => Promise<VENDORS_QUERYResult>;
+  getVendors: (filters: Filters, prev?: string) => Promise<VENDORS_QUERYResult>;
 }) {
   const { filters } = useFilters();
   const [vendors, setVendors] = useState<VENDORS_QUERYResult>(initialData);
@@ -43,7 +40,7 @@ export default function List({
           return;
         }
 
-        if (data.length > 0 && data[data.length - 1].name !== lastItem) {
+        if (data.length && data[data.length - 1].name !== lastItem) {
           setLastItem(data[data.length - 1].name);
           setVendors([...vendors, ...data]);
         } else {
@@ -213,6 +210,7 @@ export default function List({
         <li
           ref={sentryRef}
           className="relative rounded-lg border border-gray-300 bg-white px-5 py-4 shadow-sm"
+          aria-hidden="true"
         >
           <div className="flex h-full animate-pulse flex-col space-y-4">
             <div className="flex items-center space-x-3">

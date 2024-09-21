@@ -29,7 +29,7 @@ export default async function ProductCategories({
     productCategoriesData,
   ]);
 
-  if (productCategories.length === 0) {
+  if (!productCategories.length) {
     redirect('/categories');
   }
 

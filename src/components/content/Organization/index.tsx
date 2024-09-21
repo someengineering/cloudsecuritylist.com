@@ -162,7 +162,7 @@ export default async function Organization({
             {organization.research?.map((research) => {
               return (
                 <div key={research._id} className="group relative">
-                  <dt className="text-lg font-semibold leading-8 text-gray-900">
+                  <dt className="text-lg font-semibold leading-8">
                     <Link
                       href={research.website}
                       target="_blank"
@@ -205,12 +205,12 @@ export default async function Organization({
                         {acquiredEntity.name}
                       </Link>
                     ) : (
-                      <span className="text-lg font-semibold leading-8 text-cyan-700">
+                      <span className="text-lg font-semibold leading-8 text-cyan-600">
                         {acquiredEntity.name}
                       </span>
                     )}
-                    {!!acquiredEntity.acquisitionDate ||
-                    !!acquiredEntity.acquisitionPrice ? (
+                    {acquiredEntity.acquisitionDate ||
+                    acquiredEntity.acquisitionPrice ? (
                       <>
                         {' '}
                         (acquired
@@ -222,14 +222,14 @@ export default async function Organization({
                             }).format(
                               new Date(acquiredEntity.acquisitionDate),
                             )}`
-                          : ''}
+                          : null}
                         {acquiredEntity.acquisitionPrice
                           ? ` for ${new Intl.NumberFormat('en-US', {
                               style: 'currency',
                               currency: 'USD',
                               trailingZeroDisplay: 'stripIfInteger',
                             }).format(acquiredEntity.acquisitionPrice)}`
-                          : ''}
+                          : null}
                         )
                       </>
                     ) : null}

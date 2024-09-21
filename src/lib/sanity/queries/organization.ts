@@ -1,4 +1,5 @@
 import {
+  ACQUIRED_ENTITY,
   ORGANIZATION,
   ORGANIZATION_BASE,
   VENDOR,
@@ -65,5 +66,22 @@ export const VENDORS_QUERY = groq`
     lower(name) > lower($prev)
   ] | order(lower(name) asc) [0...20] {
     ${VENDOR}
+  }
+`;
+
+export const ACQUISITIONS_QUERY = groq`
+  *[
+    _type == "organization" &&
+    organizationType == "acquired" &&
+    (
+      ($prevDate == "" && $prevId == "") ||
+      acquisitionDate < $prevDate ||
+      (acquisitionDate == $prevDate && _id > $prevId)
+    )
+  ] | order(acquisitionDate desc) [0...20] {
+    ${ACQUIRED_ENTITY}
+    parentOrganization -> {
+      ${ORGANIZATION_BASE}
+    },
   }
 `;

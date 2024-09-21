@@ -143,7 +143,7 @@ export const structure: StructureResolver = (S, context) =>
               S.documentTypeList('organization')
                 .apiVersion(apiVersion)
                 .filter(
-                  `organizationType != ${ORGANIZATION_TYPE.ACQUIRED} && count(*[_type == "organization" && parentOrganization._ref == ^._id]) > 0`,
+                  `organizationType != "${ORGANIZATION_TYPE.ACQUIRED}" && count(*[_type == "organization" && parentOrganization._ref == ^._id]) > 0`,
                 )
                 .child((parentOrganizationId) =>
                   S.documentTypeList('organization')
