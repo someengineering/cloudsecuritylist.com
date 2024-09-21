@@ -19,8 +19,7 @@ export async function generateMetadata(): Promise<Metadata> {
     description,
     metadataBase: url ? new URL(url) : undefined,
     robots:
-      process.env.NEXT_PUBLIC_VERCEL_ENV === 'production' &&
-      url === `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
+      process.env.NEXT_PUBLIC_VERCEL_ENV === 'production'
         ? { index: true, follow: true }
         : { index: false, follow: false },
     openGraph: {

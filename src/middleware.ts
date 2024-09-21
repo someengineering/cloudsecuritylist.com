@@ -1,3 +1,4 @@
+import { projectId } from '@/lib/sanity/env';
 import { NextRequest, NextResponse } from 'next/server';
 
 export const config = {
@@ -27,13 +28,9 @@ export function middleware(request: NextRequest) {
   const cspHeader = `
     default-src 'self';
     connect-src 'self'${
-      request.nextUrl.pathname.startsWith('/studio') &&
-      process.env.NEXT_PUBLIC_SANITY_PROJECT_ID
+      request.nextUrl.pathname.startsWith('/studio')
         ? ['https', 'wss']
-            .map(
-              (protocol) =>
-                ` ${protocol}://${process.env.NEXT_PUBLIC_SANITY_PROJECT_ID}.api.sanity.io`,
-            )
+            .map((protocol) => ` ${protocol}://${projectId}.api.sanity.io`)
             .join('')
         : ''
     };
