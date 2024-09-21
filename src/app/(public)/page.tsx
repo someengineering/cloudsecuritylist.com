@@ -51,7 +51,7 @@ export default async function HomePage() {
                     <h3 className="text-balance text-lg font-semibold md:text-xl">
                       <Link
                         href={`/${page.slug}`}
-                        className="text-cyan-700 focus:outline-none group-hover:text-cyan-800"
+                        className="text-cyan-600 focus:outline-none group-hover:text-cyan-700"
                       >
                         <span aria-hidden="true" className="absolute inset-0" />
                         {page.title}

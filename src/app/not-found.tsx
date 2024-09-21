@@ -62,7 +62,7 @@ export default async function NotFoundPage() {
                         <h3 className="text-balance text-lg font-semibold">
                           <Link
                             href={`/${page.slug}`}
-                            className="text-cyan-700 focus:outline-none group-hover:text-cyan-800"
+                            className="text-cyan-600 focus:outline-none group-hover:text-cyan-700"
                           >
                             <span
                               aria-hidden="true"

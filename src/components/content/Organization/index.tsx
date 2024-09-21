@@ -205,7 +205,7 @@ export default async function Organization({
                         {acquiredEntity.name}
                       </Link>
                     ) : (
-                      <span className="text-lg font-semibold leading-8 text-cyan-600">
+                      <span className="text-lg font-semibold leading-8">
                         {acquiredEntity.name}
                       </span>
                     )}
