@@ -108,7 +108,9 @@ export default function FilterButtons({
               }
             >
               <span className="flex items-center gap-x-2 lg:flex-col lg:gap-y-1">
-                <Icon className="h-5 w-5" />
+                <span className="h-5 w-5" aria-hidden="true">
+                  <Icon className="h-full w-full" />
+                </span>
                 {marketSegment.name}
               </span>
               {filters.marketSegment === marketSegment.slug ? (

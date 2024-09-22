@@ -215,7 +215,9 @@ export default function FilterPanel({
               return (
                 <fieldset key={marketSegment._id}>
                   <legend className="flex items-center gap-x-1.5 font-medium">
-                    <Icon className="h-5 w-5" />
+                    <span className="h-5 w-5" aria-hidden="true">
+                      <Icon className="h-full w-full" />
+                    </span>
                     {toSentenceCase(marketSegment.name)}
                   </legend>
                   <div className="space-y-4 pt-4">
@@ -310,7 +312,9 @@ export default function FilterPanel({
                     <h3 className="-mx-2 -my-3 flow-root">
                       <DisclosureButton className="group flex w-full items-center justify-between bg-white px-2 py-3 text-sm text-gray-400">
                         <span className="flex items-center gap-x-1.5 font-medium text-gray-900">
-                          <Icon className="h-5 w-5" />
+                          <span className="h-5 w-5" aria-hidden="true">
+                            <Icon className="h-full w-full" />
+                          </span>
                           {toSentenceCase(marketSegment.name)}
                         </span>
                         <span className="ml-6 flex items-center">

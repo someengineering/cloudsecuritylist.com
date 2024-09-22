@@ -206,7 +206,7 @@ export default function List({
           </li>
         );
       })}
-      {!error && (loading || lastItem) && (
+      {!error && (loading || lastItem) ? (
         <li
           ref={sentryRef}
           className="relative rounded-lg border border-gray-300 bg-white px-5 py-4 shadow-sm"
@@ -261,7 +261,7 @@ export default function List({
             </div>
           </div>
         </li>
-      )}
+      ) : null}
     </ul>
   );
 }
