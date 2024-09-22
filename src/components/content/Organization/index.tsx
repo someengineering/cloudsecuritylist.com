@@ -227,7 +227,7 @@ export default async function Organization({
                           ? ` for ${new Intl.NumberFormat('en-US', {
                               style: 'currency',
                               currency: 'USD',
-                              trailingZeroDisplay: 'stripIfInteger',
+                              notation: 'compact',
                             }).format(acquiredEntity.acquisitionPrice)}`
                           : null}
                         )

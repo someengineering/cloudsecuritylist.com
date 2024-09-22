@@ -106,8 +106,8 @@ export default function List({
                     <div className="h-16 w-16 flex-shrink-0 rounded bg-slate-200 ring-8 ring-white" />
                   )}
                   <div className="mt-0.5">
-                    <div className="flex justify-between space-x-4 pt-3">
-                      <h3 className="text-lg leading-8 text-gray-700">
+                    <div className="flex justify-between space-x-6 pt-3">
+                      <h3 className="text-pretty text-lg leading-8 text-gray-700">
                         {acquisition.pressRelease ? (
                           <Link
                             href={acquisition.pressRelease}
@@ -133,6 +133,13 @@ export default function List({
                         >
                           {acquisition.parentOrganization?.name}
                         </Link>
+                        {acquisition.acquisitionPrice
+                          ? ` for ${new Intl.NumberFormat('en-US', {
+                              style: 'currency',
+                              currency: 'USD',
+                              notation: 'compact',
+                            }).format(acquisition.acquisitionPrice)}`
+                          : null}
                       </h3>
                       {acquisition.acquisitionDate ? (
                         <div className="whitespace-nowrap text-right leading-8 text-gray-500">
@@ -146,7 +153,7 @@ export default function List({
                         </div>
                       ) : null}
                     </div>
-                    <p className="mt-3 leading-7 text-gray-600">
+                    <p className="mt-3 text-pretty leading-7 text-gray-600">
                       {acquisition.description}
                     </p>
                   </div>
@@ -158,7 +165,7 @@ export default function List({
             <li ref={sentryRef} className="pb-14" aria-hidden="true">
               <div className="flex items-start space-x-4">
                 <div className="relative">
-                  <div className="absolute inset-0 h-16 w-16 flex-shrink-0 rounded-full bg-white ring-8 ring-white" />
+                  <div className="absolute inset-0 h-16 w-16 flex-shrink-0 bg-white ring-8 ring-white" />
                   <div className="h-16 w-16 flex-shrink-0 animate-pulse rounded-full bg-slate-200" />
                 </div>
                 <div className="mt-0.5 w-full animate-pulse pt-5">
