@@ -245,12 +245,9 @@ export default defineType({
       },
       fieldset: 'images',
       validation: (rule) =>
-        rule.custom((value, context): CustomValidatorResult => {
+        rule.custom((value): CustomValidatorResult => {
           if (!value?.asset?._ref) {
-            return context.document?.organizationType ===
-              ORGANIZATION_TYPE.ACQUIRED
-              ? true
-              : 'Logo image is required.';
+            return true;
           }
 
           const filetype = getExtension(value.asset._ref);
