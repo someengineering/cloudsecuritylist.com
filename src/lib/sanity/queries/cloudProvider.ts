@@ -23,10 +23,16 @@ export const CLOUD_PROVIDER_QUERY = groq`
     slug.current == $slug
   ] [0] {
     ${CLOUD_PROVIDER}
+    sharedResponsibilityModel,
     "vendors": *[
       _type == "organization" && ^._id in supportedCloudProviders[]._ref
     ] | order(lower(name) asc) {
       ${VENDOR}
-    }
+    },
+    nativeProducts[] {
+      name,
+      description,
+      link,
+    },
   }
 `;

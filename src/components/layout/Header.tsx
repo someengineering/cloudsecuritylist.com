@@ -41,7 +41,7 @@ export default function Header({
                 'text-sm leading-6',
                 pathname === item.href
                   ? 'font-bold text-cyan-600 hover:text-cyan-700'
-                  : 'font-semibold text-gray-700 hover:text-gray-900',
+                  : 'font-semibold text-gray-700 hover:text-gray-800',
               )}
             >
               {item.name}
@@ -94,8 +94,8 @@ export default function Header({
                     className={clsx(
                       '-mx-3 block rounded-lg px-3 py-2 text-base leading-7',
                       pathname === item.href
-                        ? 'bg-cyan-50 font-bold text-cyan-800 hover:text-cyan-900'
-                        : 'font-semibold text-gray-700 hover:bg-gray-50 hover:text-gray-800',
+                        ? 'bg-cyan-50 font-bold text-cyan-700 hover:text-cyan-900'
+                        : 'font-semibold text-gray-700 hover:bg-gray-50 hover:text-gray-900',
                     )}
                     onClick={() => setMobileMenuOpen(false)}
                   >

@@ -118,7 +118,7 @@ export type Research = {
     [internalGroqTypeReferenceTo]?: 'organization';
   };
   website: string;
-  description?: string;
+  description: string;
 };
 
 export type ProductCategory = {
@@ -232,7 +232,7 @@ export type Framework = {
   name: string;
   slug: Slug;
   website: string;
-  description?: string;
+  description: string;
 };
 
 export type CloudProvider = {
@@ -246,6 +246,7 @@ export type CloudProvider = {
   description: string;
   website: string;
   linkedin?: string;
+  sharedResponsibilityModel?: string;
   icon: IconPicker;
   mark: {
     asset: {
@@ -269,6 +270,13 @@ export type CloudProvider = {
     crop?: SanityImageCrop;
     _type: 'image';
   };
+  nativeProducts?: Array<{
+    name: string;
+    description: string;
+    link: string;
+    _type: 'inline';
+    _key: string;
+  }>;
 };
 
 export type SanityImageCrop = {
@@ -402,7 +410,7 @@ export type CLOUD_PROVIDERS_QUERYResult = Array<{
   linkedin: string | null;
 }>;
 // Variable: CLOUD_PROVIDER_QUERY
-// Query: *[    _type == "cloudProvider" &&    slug.current == $slug  ] [0] {      _id,  "slug": slug.current,  name,  description,  "icon": icon.name,  mark,  logo,  website,  linkedin,    "vendors": *[      _type == "organization" && ^._id in supportedCloudProviders[]._ref    ] | order(lower(name) asc) {          _id,  "slug": slug.current,  name,  description,  organizationType,  website,  linkedin,  crunchbase,  stockSymbol,  mark,  logo,  productCategories[] -> {   _id,  "slug": slug.current,  name,  expansion,  description,  marketSegment -> {   _id,  "slug": slug.current,  name,  description,  "icon": icon.name, }, },  supportedCloudProviders[] -> {   _id,  "slug": slug.current,  name,  description,  "icon": icon.name,  mark,  logo,  website,  linkedin, },    }  }
+// Query: *[    _type == "cloudProvider" &&    slug.current == $slug  ] [0] {      _id,  "slug": slug.current,  name,  description,  "icon": icon.name,  mark,  logo,  website,  linkedin,    sharedResponsibilityModel,    "vendors": *[      _type == "organization" && ^._id in supportedCloudProviders[]._ref    ] | order(lower(name) asc) {          _id,  "slug": slug.current,  name,  description,  organizationType,  website,  linkedin,  crunchbase,  stockSymbol,  mark,  logo,  productCategories[] -> {   _id,  "slug": slug.current,  name,  expansion,  description,  marketSegment -> {   _id,  "slug": slug.current,  name,  description,  "icon": icon.name, }, },  supportedCloudProviders[] -> {   _id,  "slug": slug.current,  name,  description,  "icon": icon.name,  mark,  logo,  website,  linkedin, },    },    nativeProducts[] {      name,      description,      link,    },  }
 export type CLOUD_PROVIDER_QUERYResult = {
   _id: string;
   slug: string;
@@ -433,6 +441,7 @@ export type CLOUD_PROVIDER_QUERYResult = {
   } | null;
   website: string;
   linkedin: string | null;
+  sharedResponsibilityModel: string | null;
   vendors: Array<{
     _id: string;
     slug: string;
@@ -511,6 +520,11 @@ export type CLOUD_PROVIDER_QUERYResult = {
       linkedin: string | null;
     }> | null;
   }>;
+  nativeProducts: Array<{
+    name: string;
+    description: string;
+    link: string;
+  }> | null;
 } | null;
 
 // Source: ./src/lib/sanity/queries/marketSegments.ts
@@ -671,7 +685,7 @@ export type ORGANIZATION_QUERYResult =
         _id: string;
         slug: string;
         name: string;
-        description: string | null;
+        description: string;
         website: string;
       }>;
       acquiredEntities: Array<{
@@ -1079,7 +1093,7 @@ export type RESEARCHES_QUERYResult = Array<{
   _id: string;
   slug: string;
   name: string;
-  description: string | null;
+  description: string;
   website: string;
   organization: {
     _id: string;
@@ -1121,7 +1135,7 @@ export type RESEARCH_QUERYResult = {
   _id: string;
   slug: string;
   name: string;
-  description: string | null;
+  description: string;
   website: string;
   organization: {
     _id: string;
@@ -1211,7 +1225,7 @@ declare module '@sanity/client' {
   interface SanityQueries {
     '\n  *[\n    _type == "cloudProvider" &&\n    defined(slug.current)\n  ].slug.current\n': CLOUD_PROVIDER_SLUGS_QUERYResult;
     '\n  *[\n    _type == "cloudProvider"\n  ] | order(lower(name) asc) {\n    \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n  mark,\n  logo,\n  website,\n  linkedin,\n\n  }\n': CLOUD_PROVIDERS_QUERYResult;
-    '\n  *[\n    _type == "cloudProvider" &&\n    slug.current == $slug\n  ] [0] {\n    \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n  mark,\n  logo,\n  website,\n  linkedin,\n\n    "vendors": *[\n      _type == "organization" && ^._id in supportedCloudProviders[]._ref\n    ] | order(lower(name) asc) {\n      \n  \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n\n  productCategories[] -> { \n  _id,\n  "slug": slug.current,\n  name,\n  expansion,\n  description,\n  marketSegment -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n },\n },\n  supportedCloudProviders[] -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n  mark,\n  logo,\n  website,\n  linkedin,\n },\n\n    }\n  }\n': CLOUD_PROVIDER_QUERYResult;
+    '\n  *[\n    _type == "cloudProvider" &&\n    slug.current == $slug\n  ] [0] {\n    \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n  mark,\n  logo,\n  website,\n  linkedin,\n\n    sharedResponsibilityModel,\n    "vendors": *[\n      _type == "organization" && ^._id in supportedCloudProviders[]._ref\n    ] | order(lower(name) asc) {\n      \n  \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n\n  productCategories[] -> { \n  _id,\n  "slug": slug.current,\n  name,\n  expansion,\n  description,\n  marketSegment -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n },\n },\n  supportedCloudProviders[] -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n  mark,\n  logo,\n  website,\n  linkedin,\n },\n\n    },\n    nativeProducts[] {\n      name,\n      description,\n      link,\n    },\n  }\n': CLOUD_PROVIDER_QUERYResult;
     '\n  *[\n    _type == "marketSegment"\n  ] | order(lower(name) asc) {\n    \n  \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n\n  "productCategories": *[\n    _type == "productCategory" &&\n    marketSegment._ref == ^._id &&\n    count(*[_type == "organization" && ^._id in productCategories[]._ref]) > 0\n  ] | order(lower(name) asc) {\n    _id,\n    name,\n    "slug": slug.current,\n    expansion,\n  },\n\n  }\n': MARKET_SEGMENTS_QUERYResult;
     '\n  *[\n    _type == "marketSegment" &&\n    slug.current == $slug\n  ] [0] {\n    \n  \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n\n  "productCategories": *[\n    _type == "productCategory" &&\n    marketSegment._ref == ^._id &&\n    count(*[_type == "organization" && ^._id in productCategories[]._ref]) > 0\n  ] | order(lower(name) asc) {\n    _id,\n    name,\n    "slug": slug.current,\n    expansion,\n  },\n\n  }\n': MARKET_SEGMENT_QUERYResult;
     '\n  count(\n    *[\n      _type == "organization" &&\n      organizationType != "acquired" &&\n      (count($organizationTypes) == 0 || organizationType in $organizationTypes)\n    ]\n  )\n': ORGANIZATIONS_COUNT_QUERYResult;

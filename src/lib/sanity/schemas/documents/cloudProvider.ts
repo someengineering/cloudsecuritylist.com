@@ -1,5 +1,5 @@
 import { getExtension, getImageDimensions } from '@sanity/asset-utils';
-import { DatabaseIcon } from '@sanity/icons';
+import { DatabaseIcon, LinkIcon } from '@sanity/icons';
 import { CustomValidatorResult, defineField, defineType } from 'sanity';
 
 export default defineType({
@@ -40,9 +40,10 @@ export default defineType({
     defineField({
       name: 'description',
       title: 'Description',
+      description: 'Description length must be between 50 and 160 characters.',
       type: 'text',
-      rows: 4,
-      validation: (rule) => rule.required().min(50),
+      rows: 3,
+      validation: (rule) => rule.required().min(50).max(160),
     }),
     defineField({
       name: 'website',
@@ -54,6 +55,13 @@ export default defineType({
     defineField({
       name: 'linkedin',
       title: 'LinkedIn URL',
+      type: 'url',
+      fieldset: 'links',
+      validation: (rule) => rule.uri({ scheme: 'https' }),
+    }),
+    defineField({
+      name: 'sharedResponsibilityModel',
+      title: 'Shared responsibility model URL',
       type: 'url',
       fieldset: 'links',
       validation: (rule) => rule.uri({ scheme: 'https' }),
@@ -136,6 +144,40 @@ export default defineType({
 
           return true;
         }),
+    }),
+    defineField({
+      name: 'nativeProducts',
+      title: 'Native security products',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          name: 'inline',
+          icon: LinkIcon,
+          fields: [
+            {
+              name: 'name',
+              title: 'Name',
+              type: 'string',
+              validation: (rule) => rule.required().min(1),
+            },
+            {
+              name: 'description',
+              title: 'Description',
+              type: 'text',
+              rows: 4,
+              validation: (rule) => rule.required().min(50),
+            },
+            {
+              name: 'link',
+              title: 'Link',
+              type: 'url',
+              validation: (rule) => rule.required().uri({ scheme: 'https' }),
+            },
+          ],
+        },
+      ],
+      validation: (rule) => rule.unique(),
     }),
   ],
   preview: {

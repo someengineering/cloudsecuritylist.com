@@ -67,7 +67,7 @@ export default function List({
   return (
     <ul
       role="list"
-      className="container mx-auto grid max-w-7xl auto-rows-fr grid-cols-1 gap-4 px-4 py-8 sm:px-6 md:grid-cols-2 lg:grid-cols-3 lg:px-8 xl:gap-6"
+      className="container mx-auto grid max-w-7xl auto-rows-fr grid-cols-1 gap-4 px-6 py-8 md:grid-cols-2 lg:grid-cols-3 lg:px-8 xl:gap-6"
     >
       {vendors?.map((vendor) => {
         const organizationType = ORGANIZATION_TYPES.find(

@@ -1,9 +1,11 @@
+import CTA from '@/components/page/CTA';
 import PageHeader from '@/components/page/Header';
 import LogoGrid from '@/components/page/LogoGrid';
 import OffsetSection from '@/components/page/OffsetSection';
 import { urlFor } from '@/lib/sanity/image';
 import { CLOUD_PROVIDER_QUERYResult } from '@/lib/sanity/types';
 import { getImageDimensions } from '@sanity/asset-utils';
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { HiOutlineGlobeAlt } from 'react-icons/hi2';
 import { SiLinkedin } from 'react-icons/si';
@@ -50,6 +52,19 @@ export default async function CloudProvider({
         links={links}
         image={urlFor(cloudProvider.mark).url()}
       />
+      <CTA
+        heading="Understand security responsibilities"
+        description={`See how security tasks are shared between you and ${cloudProvider.name} to ensure your cloud environment is protected.`}
+        secondaryButton={
+          cloudProvider.sharedResponsibilityModel
+            ? {
+                label: 'View shared responsibility model',
+                href: cloudProvider.sharedResponsibilityModel,
+                props: { target: '_blank', rel: 'noopener noreferrer' },
+              }
+            : undefined
+        }
+      />
       {cloudProvider.vendors.length > 0 ? (
         <OffsetSection title="Product vendors" slug="vendors">
           <LogoGrid
@@ -74,6 +89,32 @@ export default async function CloudProvider({
                 .filter((item) => item !== null) ?? []
             }
           />
+        </OffsetSection>
+      ) : null}
+      {cloudProvider.nativeProducts?.length ? (
+        <OffsetSection title="Native security products">
+          <dl className="space-y-16">
+            {cloudProvider.nativeProducts.map((product) => {
+              return (
+                <div key={product.name} className="group relative">
+                  <dt className="text-lg font-semibold leading-8">
+                    <Link
+                      href={product.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-cyan-600 focus:outline-none group-hover:text-cyan-700"
+                    >
+                      <span aria-hidden="true" className="absolute inset-0" />
+                      {product.name}
+                    </Link>
+                  </dt>
+                  <dd className="mt-1 text-base leading-7 text-gray-600">
+                    {product.description}
+                  </dd>
+                </div>
+              );
+            })}
+          </dl>
         </OffsetSection>
       ) : null}
     </>
