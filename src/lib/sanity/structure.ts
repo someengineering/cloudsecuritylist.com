@@ -178,7 +178,7 @@ export const structure: StructureResolver = (S, context) =>
         .title('Cloud security vendors')
         .apiVersion(apiVersion)
         .filter(
-          '_type == "organization" && organizationType in $organizationTypes && (_id in path("drafts.**") || !defined(supportedCloudProviders) || length(supportedCloudProviders) < 1 || !defined(productCategories) || length(productCategories) < 5)',
+          '_type == "organization" && organizationType in $organizationTypes',
         )
         .params({
           organizationTypes: [

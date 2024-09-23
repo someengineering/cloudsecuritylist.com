@@ -19,7 +19,11 @@ export default async function VendorsPage({
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
-  const { category: productCategories, type: organizationTypes } = searchParams;
+  const {
+    category: productCategories,
+    type: organizationTypes,
+    provider: supportedCloudProviders,
+  } = searchParams;
 
   const { title, description } = (await getPage('vendors')) ?? {};
 
@@ -44,6 +48,14 @@ export default async function VendorsPage({
               : ((organizationTypes ?? []).filter(
                   (type) => type in ORGANIZATION_TYPE,
                 ) as ORGANIZATION_TYPE[]),
+          supportedCloudProviders:
+            typeof supportedCloudProviders === 'string'
+              ? isValidSlug(supportedCloudProviders)
+                ? [supportedCloudProviders]
+                : []
+              : (supportedCloudProviders ?? []).filter((provider) =>
+                  isValidSlug(provider),
+                ),
         }}
       />
     </>

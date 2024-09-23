@@ -51,7 +51,8 @@ export const VENDORS_COUNT_QUERY = groq`
       organizationType != "acquired" &&
       count(productCategories) > 0 &&
       (count($productCategories) == 0 || references($productCategories)) &&
-      (count($organizationTypes) == 0 || organizationType in $organizationTypes)
+      (count($organizationTypes) == 0 || organizationType in $organizationTypes) &&
+      (count($supportedCloudProviders) == 0 || references($supportedCloudProviders))
     ]
   )
 `;
@@ -63,6 +64,7 @@ export const VENDORS_QUERY = groq`
     count(productCategories) > 0 &&
     (count($productCategories) == 0 || references($productCategories)) &&
     (count($organizationTypes) == 0 || organizationType in $organizationTypes) &&
+    (count($supportedCloudProviders) == 0 || references($supportedCloudProviders)) &&
     lower(name) > lower($prev)
   ] | order(lower(name) asc) [0...20] {
     ${VENDOR}

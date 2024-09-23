@@ -7,6 +7,7 @@ import { createContext, useContext, useReducer } from 'react';
 export type Filters = {
   productCategories: string[];
   organizationTypes: ORGANIZATION_TYPE[];
+  supportedCloudProviders: string[];
 };
 
 type FiltersAction =
@@ -17,6 +18,10 @@ type FiltersAction =
   | {
       type: 'organizationType';
       value: ORGANIZATION_TYPE;
+    }
+  | {
+      type: 'supportedCloudProvider';
+      slug: string;
     };
 
 const filtersReducer = (state: Filters, action: FiltersAction): Filters => {
@@ -49,6 +54,23 @@ const filtersReducer = (state: Filters, action: FiltersAction): Filters => {
       return { ...state, organizationTypes };
     }
 
+    case 'supportedCloudProvider': {
+      let supportedCloudProviders = state.supportedCloudProviders;
+
+      if (state.supportedCloudProviders.includes(action.slug)) {
+        supportedCloudProviders = supportedCloudProviders.filter(
+          (category) => category !== action.slug,
+        );
+      } else if (isValidSlug(action.slug)) {
+        supportedCloudProviders = [
+          ...state.supportedCloudProviders,
+          action.slug,
+        ];
+      }
+
+      return { ...state, supportedCloudProviders };
+    }
+
     default:
       return state;
   }
@@ -57,6 +79,7 @@ const filtersReducer = (state: Filters, action: FiltersAction): Filters => {
 const defaultValues: Filters = {
   productCategories: [],
   organizationTypes: [],
+  supportedCloudProviders: [],
 };
 
 const FiltersContext = createContext<{

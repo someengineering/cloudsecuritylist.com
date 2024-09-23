@@ -2,6 +2,7 @@ import { Filters, FiltersProvider } from '@/components/content/Vendors/Context';
 import FilterPanel from '@/components/content/Vendors/FilterPanel';
 import List from '@/components/content/Vendors/List';
 import {
+  getCloudProviders,
   getMarketSegments,
   getProductCategories,
   getVendors,
@@ -16,15 +17,22 @@ export default async function Vendors({
   const marketSegmentsData = getMarketSegments();
   const productCategoriesData = getProductCategories();
   const organizationTypesData = getVendorTypes();
+  const cloudProvidersData = getCloudProviders();
   const vendorsData = getVendors(filters ?? {});
 
-  const [marketSegments, productCategories, organizationTypes, vendors] =
-    await Promise.all([
-      marketSegmentsData,
-      productCategoriesData,
-      organizationTypesData,
-      vendorsData,
-    ]);
+  const [
+    marketSegments,
+    productCategories,
+    organizationTypes,
+    cloudProviders,
+    vendors,
+  ] = await Promise.all([
+    marketSegmentsData,
+    productCategoriesData,
+    organizationTypesData,
+    cloudProvidersData,
+    vendorsData,
+  ]);
 
   return (
     <FiltersProvider initialValues={filters}>
@@ -33,6 +41,7 @@ export default async function Vendors({
           marketSegments={marketSegments}
           productCategories={productCategories}
           organizationTypes={organizationTypes}
+          cloudProviders={cloudProviders}
         />
       ) : null}
       <List

@@ -273,6 +273,7 @@ export const getVendorTypes = async () => {
           params: {
             productCategories: [],
             organizationTypes: [type.value],
+            supportedCloudProviders: [],
           },
           tags: [`organizationType:${type.value}`],
         });
@@ -290,21 +291,32 @@ export const getVendorTypes = async () => {
 export const getVendors = async ({
   productCategories,
   organizationTypes,
+  supportedCloudProviders,
   prev,
 }: {
   productCategories?: string[];
   organizationTypes?: ORGANIZATION_TYPE[];
+  supportedCloudProviders?: string[];
   prev?: string;
 }) => {
   const data = await sanityFetch<VENDORS_QUERYResult>({
     query: VENDORS_QUERY,
     params: {
-      productCategories: await Promise.all(
-        (productCategories ?? []).map(
-          async (slug) => (await getProductCategory(slug))?._id,
-        ),
-      ),
+      productCategories: (
+        await Promise.all(
+          (productCategories ?? []).map(
+            async (slug) => (await getProductCategory(slug))?._id,
+          ),
+        )
+      ).filter((_id) => !!_id),
       organizationTypes: organizationTypes ?? [],
+      supportedCloudProviders: (
+        await Promise.all(
+          (supportedCloudProviders ?? []).map(
+            async (slug) => (await getCloudProvider(slug))?._id,
+          ),
+        )
+      ).filter((_id) => !!_id),
       prev: prev ?? '',
     },
     tags:
@@ -316,6 +328,9 @@ export const getVendors = async ({
             ),
             ...(organizationTypes ?? []).map(
               (slug) => `organizationType:${slug}`,
+            ),
+            ...(supportedCloudProviders ?? []).map(
+              (slug) => `cloudProvider:${slug}`,
             ),
           ],
   });

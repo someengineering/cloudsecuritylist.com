@@ -41,7 +41,7 @@ export default function Header({
                 'text-sm leading-6',
                 pathname === item.href
                   ? 'font-bold text-cyan-600 hover:text-cyan-700'
-                  : 'font-semibold text-gray-700 hover:text-gray-800',
+                  : 'font-semibold text-gray-700 hover:text-gray-900',
               )}
             >
               {item.name}
