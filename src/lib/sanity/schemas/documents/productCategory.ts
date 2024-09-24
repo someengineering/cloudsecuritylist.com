@@ -60,7 +60,7 @@ export default defineType({
       description: 'Short, single-line heading for the explanation section.',
       type: 'string',
       fieldset: 'content',
-      validation: (rule) => rule.required().min(1).max(65),
+      validation: (rule) => rule.required().min(1).max(70),
     }),
     defineField({
       name: 'explanation',
