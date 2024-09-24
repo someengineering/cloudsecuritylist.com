@@ -46,7 +46,7 @@ export default async function PageHeader({
           {title}
         </h1>
         {description ? (
-          <p className="mt-6 text-pretty leading-8 text-gray-600">
+          <p className="mt-6 text-pretty leading-8 text-gray-700">
             {description}
           </p>
         ) : null}

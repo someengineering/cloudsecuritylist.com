@@ -47,7 +47,7 @@ export default async function Content({
         >
           {heading}
         </h2>
-        <div className="mt-10 columns-xl gap-8 text-lg leading-8 text-gray-600">
+        <div className="mt-10 columns-xl gap-8 text-lg leading-8 text-gray-700">
           <PortableText value={portableTextBlocks} components={components} />
         </div>
       </div>

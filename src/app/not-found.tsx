@@ -71,7 +71,7 @@ export default async function NotFoundPage() {
                             {page.title}
                           </Link>
                         </h3>
-                        <p className="mt-2 text-pretty text-sm text-gray-500 group-hover:text-gray-600">
+                        <p className="mt-2 text-pretty text-sm text-gray-600 group-hover:text-gray-700">
                           {page.description}
                         </p>
                       </div>

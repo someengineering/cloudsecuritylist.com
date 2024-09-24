@@ -46,7 +46,7 @@ export default async function Research() {
                       {research.name}
                     </Link>
                   </dt>
-                  <dd className="mt-1 text-base leading-7 text-gray-600">
+                  <dd className="mt-2 text-base leading-7 text-gray-600">
                     {research.description}
                   </dd>
                 </div>

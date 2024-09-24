@@ -57,7 +57,7 @@ export default async function HomePage() {
                         {page.title}
                       </Link>
                     </h3>
-                    <p className="mt-2 text-pretty text-sm text-gray-500 group-hover:text-gray-600 md:mt-3 md:text-base">
+                    <p className="mt-2 text-pretty text-sm text-gray-600 group-hover:text-gray-700 md:mt-3 md:text-base">
                       {page.description}
                     </p>
                   </div>

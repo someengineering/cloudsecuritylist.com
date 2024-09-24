@@ -173,7 +173,7 @@ export default async function Organization({
                       {research.name}
                     </Link>
                   </dt>
-                  <dd className="mt-1 text-base leading-7 text-gray-600">
+                  <dd className="mt-2 text-base leading-7 text-gray-600">
                     {research.description}
                   </dd>
                 </div>
@@ -234,7 +234,7 @@ export default async function Organization({
                       </>
                     ) : null}
                   </dt>
-                  <dd className="mt-1 text-base leading-7 text-gray-600">
+                  <dd className="mt-2 text-base leading-7 text-gray-600">
                     {acquiredEntity.description}
                   </dd>
                 </div>
