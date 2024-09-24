@@ -66,7 +66,7 @@ export default async function CloudProvider({
         }
       />
       {cloudProvider.vendors.length > 0 ? (
-        <OffsetSection title="Product vendors" slug="vendors">
+        <OffsetSection heading="Product vendors" slug="vendors">
           <LogoGrid
             items={
               cloudProvider.vendors
@@ -92,7 +92,7 @@ export default async function CloudProvider({
         </OffsetSection>
       ) : null}
       {cloudProvider.nativeProducts?.length ? (
-        <OffsetSection title="Native security products">
+        <OffsetSection heading="Native security products">
           <dl className="space-y-16">
             {cloudProvider.nativeProducts.map((product) => {
               return (

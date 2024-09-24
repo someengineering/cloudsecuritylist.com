@@ -7,6 +7,15 @@ export default defineType({
   title: 'Product category',
   type: 'document',
   icon: TagIcon,
+  fieldsets: [
+    {
+      name: 'content',
+      title: 'Page content',
+      options: {
+        collapsible: true,
+      },
+    },
+  ],
   fields: [
     defineField({
       name: 'name',
@@ -44,6 +53,24 @@ export default defineType({
       type: 'text',
       rows: 3,
       validation: (rule) => rule.required().min(50).max(160),
+    }),
+    defineField({
+      name: 'explanationHeading',
+      title: 'Explanation heading',
+      description: 'Short, single-line heading for the explanation section.',
+      type: 'string',
+      fieldset: 'content',
+      validation: (rule) => rule.required().min(1).max(65),
+    }),
+    defineField({
+      name: 'explanation',
+      title: 'Explanation',
+      description:
+        'Longer, multi-paragraph explanation of the product category.',
+      type: 'array',
+      of: [{ type: 'block', styles: [] }],
+      fieldset: 'content',
+      validation: (rule) => rule.required().min(2),
     }),
   ],
   preview: {

@@ -85,7 +85,7 @@ export default async function Organization({
       />
       {'productCategories' in organization &&
       organization.productCategories?.length ? (
-        <OffsetSection title="Product categories">
+        <OffsetSection heading="Product categories">
           <dl className="grid grid-cols-1 gap-x-8 gap-y-16 lg:grid-cols-2">
             {organization.productCategories?.map((productCategory) => {
               const Icon = productCategory.marketSegment.icon
@@ -131,7 +131,7 @@ export default async function Organization({
       ) : null}
       {'supportedCloudProviders' in organization &&
       organization.supportedCloudProviders?.length ? (
-        <OffsetSection title="Supported cloud providers">
+        <OffsetSection heading="Supported cloud providers">
           <LogoGrid
             items={
               organization.supportedCloudProviders
@@ -157,7 +157,7 @@ export default async function Organization({
         </OffsetSection>
       ) : null}
       {'research' in organization && organization.research.length ? (
-        <OffsetSection title="Research">
+        <OffsetSection heading="Research">
           <dl className="space-y-16">
             {organization.research?.map((research) => {
               return (
@@ -184,7 +184,7 @@ export default async function Organization({
       ) : null}
       {'acquiredEntities' in organization &&
       organization.acquiredEntities.length ? (
-        <OffsetSection title="Acquisitions">
+        <OffsetSection heading="Acquisitions">
           <dl className="space-y-16">
             {organization.acquiredEntities?.map((acquiredEntity) => {
               return (

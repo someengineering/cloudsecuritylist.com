@@ -24,6 +24,8 @@ export const PRODUCT_CATEGORY_QUERY = groq`
     slug.current == $slug
   ] [0] {
     ${PRODUCT_CATEGORY}
+    explanationHeading,
+    explanation[],
     "vendors": *[
       _type == "organization" && ^._id in productCategories[]._ref
     ] | order(lower(name) asc) {

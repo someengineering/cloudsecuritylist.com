@@ -1,9 +1,11 @@
+import Content from '@/components/page/Content';
 import PageHeader from '@/components/page/Header';
 import LogoGrid from '@/components/page/LogoGrid';
 import OffsetSection from '@/components/page/OffsetSection';
 import { urlFor } from '@/lib/sanity/image';
 import { PRODUCT_CATEGORY_QUERYResult } from '@/lib/sanity/types';
 import { toSentenceCase } from '@/utils/string';
+import { PortableTextBlock } from '@portabletext/types';
 import { getImageDimensions } from '@sanity/asset-utils';
 import { notFound } from 'next/navigation';
 
@@ -29,8 +31,12 @@ export default async function ProductCategory({
         description={productCategory.description}
         eyebrow={`${toSentenceCase(productCategory.marketSegment.name)} security`}
       />
+      <Content
+        heading={productCategory.explanationHeading}
+        portableTextBlocks={productCategory.explanation as PortableTextBlock[]}
+      />
       {productCategory.vendors.length > 0 ? (
-        <OffsetSection title="Product vendors" slug="vendors">
+        <OffsetSection heading="Product vendors" slug="vendors">
           <LogoGrid
             items={
               productCategory.vendors
