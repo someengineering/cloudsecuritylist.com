@@ -1,6 +1,7 @@
 import ProductCategory from '@/components/content/ProductCategory';
 import { getProductCategory, getProductCategorySlugs } from '@/lib/sanity';
 import { isValidSlug } from '@/utils/slug';
+import { toSentenceCase } from '@/utils/string';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
@@ -28,7 +29,9 @@ export async function generateMetadata({
   }
 
   return {
-    title: productCategory.name,
+    title: productCategory.expansion
+      ? `${toSentenceCase(productCategory.expansion)} (${productCategory.name})`
+      : productCategory.name,
     description: productCategory.description,
   };
 }
