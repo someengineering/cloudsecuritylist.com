@@ -26,8 +26,18 @@ const nextConfig = withPlausibleProxy()(
     async redirects() {
       return [
         {
-          source: '/vendor/:slug',
+          source: '/categories/:slug',
+          destination: '/category/:slug',
+          permanent: true,
+        },
+        {
+          source: '/(organizations|vendors?)/:slug',
           destination: '/organization/:slug',
+          permanent: true,
+        },
+        {
+          source: '/providers/:slug',
+          destination: '/provider/:slug',
           permanent: true,
         },
       ];
