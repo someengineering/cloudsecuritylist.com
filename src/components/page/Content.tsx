@@ -42,12 +42,12 @@ export default async function Content({
     >
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <h2
-          className="max-w-3xl text-pretty text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl"
+          className="max-w-3xl text-pretty text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl"
           id="slug"
         >
           {heading}
         </h2>
-        <div className="mt-10 columns-xl gap-8 text-lg leading-8 text-gray-700">
+        <div className="mt-10 columns-md gap-8 leading-7 text-gray-700 sm:text-lg sm:leading-8">
           <PortableText value={portableTextBlocks} components={components} />
         </div>
       </div>

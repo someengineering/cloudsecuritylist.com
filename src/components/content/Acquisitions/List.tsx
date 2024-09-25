@@ -153,7 +153,7 @@ export default function List({
                         </div>
                       ) : null}
                     </div>
-                    <p className="mt-3 text-pretty leading-7 text-gray-600">
+                    <p className="mt-2 max-w-prose text-pretty leading-7 text-gray-600">
                       {acquisition.description}
                     </p>
                   </div>

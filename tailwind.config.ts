@@ -10,6 +10,9 @@ const config: Config = {
   plugins: [forms],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['var(--font-noto-sans)'],
+      },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic':

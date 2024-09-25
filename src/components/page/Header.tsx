@@ -26,7 +26,7 @@ export default async function PageHeader({
 
   return (
     <section className="px-6 py-12 text-center sm:py-16 lg:px-8">
-      <div className="mx-auto max-w-3xl text-lg">
+      <div className="mx-auto max-w-3xl">
         {image ? (
           <div className="relative mb-6 h-20">
             <Image
@@ -42,11 +42,11 @@ export default async function PageHeader({
             {eyebrow}
           </p>
         ) : null}
-        <h1 className="text-balance text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+        <h1 className="text-balance text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
           {title}
         </h1>
         {description ? (
-          <p className="mx-auto mt-6 max-w-prose text-pretty leading-8 text-gray-700">
+          <p className="mx-auto mt-6 max-w-prose text-pretty leading-7 text-gray-700">
             {description}
           </p>
         ) : null}

@@ -1,7 +1,7 @@
-import { Plus_Jakarta_Sans } from 'next/font/google';
+import { Noto_Sans } from 'next/font/google';
 
-export const plusJakartaSans = Plus_Jakarta_Sans({
+export const notoSans = Noto_Sans({
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-plus-jakarta-sans',
+  variable: '--font-noto-sans',
 });

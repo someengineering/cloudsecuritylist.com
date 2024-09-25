@@ -63,7 +63,7 @@ export default function List({
                 {toSentenceCase(productCategory.name)}
               </Link>
               {productCategory.expansion ? (
-                <span className="ml-2 text-base text-cyan-900 md:ml-0 md:mt-1 md:block">
+                <span className="ml-2 text-cyan-900 md:ml-0 md:mt-1 md:block">
                   {' '}
                   ({productCategory.expansion})
                 </span>

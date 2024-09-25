@@ -1,6 +1,6 @@
 import '@/styles/globals.css';
 
-import { plusJakartaSans } from '@/app/font';
+import { notoSans } from '@/app/font';
 import Footer from '@/components/layout/Footer';
 import Header from '@/components/layout/Header';
 import { getSiteSettings } from '@/lib/sanity';
@@ -38,10 +38,7 @@ export default async function PublicLayout({
   const { title, navigation, copyright } = (await getSiteSettings()) ?? {};
 
   return (
-    <html
-      lang="en"
-      className={clsx('h-full scroll-smooth', plusJakartaSans.variable)}
-    >
+    <html lang="en" className={clsx('h-full scroll-smooth', notoSans.variable)}>
       <head>
         <PlausibleProvider domain="cloudsecuritylist.com" trackOutboundLinks />
       </head>

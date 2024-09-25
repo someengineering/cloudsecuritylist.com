@@ -11,10 +11,7 @@ export default async function CloudProviders() {
   }
 
   return (
-    <section
-      className="mx-auto max-w-7xl px-6 py-12 sm:py-16 lg:px-8"
-      aria-labelledby="product-categories"
-    >
+    <section className="mx-auto max-w-7xl px-6 py-12 sm:py-16 lg:px-8">
       {cloudProviders.length > 0 ? (
         <dl className="mx-auto max-w-2xl space-y-16">
           {cloudProviders?.map((cloudProvider) => {
@@ -47,7 +44,7 @@ export default async function CloudProviders() {
                       {cloudProvider.name}
                     </Link>
                   </dt>
-                  <dd className="mt-2 text-base leading-7 text-gray-600">
+                  <dd className="mt-2 max-w-prose leading-7 text-gray-600">
                     {cloudProvider.description}
                   </dd>
                 </div>

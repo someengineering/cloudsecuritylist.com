@@ -22,10 +22,10 @@ export default async function PageHeader({
   return (
     <section className="mx-auto max-w-7xl py-12 sm:py-16">
       <div className="relative isolate overflow-hidden bg-cyan-50/75 px-6 py-12 text-center text-gray-900 sm:rounded-3xl sm:py-16 lg:px-8">
-        <h2 className="mx-auto max-w-prose text-pretty text-3xl font-bold tracking-tight sm:text-4xl">
+        <h2 className="mx-auto max-w-prose text-pretty text-2xl font-bold tracking-tight sm:text-3xl">
           {heading}
         </h2>
-        <p className="mx-auto mt-6 max-w-prose text-pretty text-lg leading-8">
+        <p className="mx-auto mt-6 max-w-prose text-pretty leading-7">
           {description}
         </p>
         <div className="mt-10 flex items-center justify-center gap-x-6">

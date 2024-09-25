@@ -120,7 +120,7 @@ export default async function Organization({
                         : toSentenceCase(productCategory.name)}
                     </Link>
                   </dt>
-                  <dd className="mt-2 text-base leading-7 text-gray-600">
+                  <dd className="mt-2 leading-7 text-gray-600 max-w-prose">
                     {productCategory.description}
                   </dd>
                 </div>
@@ -173,7 +173,7 @@ export default async function Organization({
                       {research.name}
                     </Link>
                   </dt>
-                  <dd className="mt-2 text-base leading-7 text-gray-600">
+                  <dd className="mt-2 leading-7 text-gray-600 max-w-prose">
                     {research.description}
                   </dd>
                 </div>
@@ -234,7 +234,7 @@ export default async function Organization({
                       </>
                     ) : null}
                   </dt>
-                  <dd className="mt-2 text-base leading-7 text-gray-600">
+                  <dd className="mt-2 leading-7 text-gray-600 max-w-prose">
                     {acquiredEntity.description}
                   </dd>
                 </div>

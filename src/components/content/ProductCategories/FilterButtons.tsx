@@ -64,7 +64,7 @@ export default function FilterButtons({
             <button
               type="button"
               className={clsx(
-                'group relative flex items-center justify-center text-ellipsis px-3 py-2 text-base font-semibold ring-1 ring-inset ring-gray-300 focus:z-10 lg:px-1.5 lg:text-sm',
+                'group relative flex items-center justify-center text-ellipsis px-3 py-2.5 text-base font-semibold ring-1 ring-inset ring-gray-300 focus:z-10 lg:px-1.5 lg:py-2 lg:text-sm',
                 filters.marketSegment !== marketSegment.slug &&
                   'bg-white text-gray-900 hover:bg-cyan-100',
                 filters.marketSegment === marketSegment.slug &&
