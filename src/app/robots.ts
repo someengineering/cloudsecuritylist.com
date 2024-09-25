@@ -3,7 +3,7 @@ import type { MetadataRoute } from 'next';
 
 export default async function robots(): Promise<MetadataRoute.Robots> {
   const { url } = (await getSiteSettings()) ?? {};
-  
+
   return {
     rules:
       process.env.NEXT_PUBLIC_VERCEL_ENV === 'production'

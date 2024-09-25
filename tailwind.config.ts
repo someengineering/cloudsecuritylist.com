@@ -1,5 +1,6 @@
 import forms from '@tailwindcss/forms';
 import type { Config } from 'tailwindcss';
+import defaultTheme from 'tailwindcss/defaultTheme';
 
 const config: Config = {
   content: [
@@ -9,6 +10,10 @@ const config: Config = {
   ],
   plugins: [forms],
   theme: {
+    screens: {
+      xs: '480px',
+      ...defaultTheme.screens,
+    },
     extend: {
       fontFamily: {
         sans: ['var(--font-noto-sans)'],

@@ -67,7 +67,7 @@ export default function List({
   return (
     <ul
       role="list"
-      className="container mx-auto grid max-w-7xl auto-rows-fr grid-cols-1 gap-4 px-6 py-8 md:grid-cols-2 lg:grid-cols-3 lg:px-8 xl:gap-6"
+      className="container mx-auto grid max-w-7xl auto-rows-fr grid-cols-1 gap-4 px-6 py-9 md:grid-cols-2 lg:grid-cols-3 lg:px-8 lg:py-12"
     >
       {vendors?.map((vendor) => {
         const organizationType = ORGANIZATION_TYPES.find(
@@ -77,7 +77,7 @@ export default function List({
         return (
           <li
             key={vendor._id}
-            className="relative flex flex-col space-y-4 rounded-lg border border-gray-300 bg-white px-5 py-4 shadow-sm focus-within:ring-2 focus-within:ring-cyan-500 focus-within:ring-offset-2 hover:border-gray-400"
+            className="relative flex flex-col space-y-4 rounded-lg border border-gray-300 bg-white p-4 shadow-sm focus-within:ring-2 focus-within:ring-cyan-500 focus-within:ring-offset-2 hover:border-gray-400 lg:px-5"
           >
             <div className="flex items-center space-x-3">
               {vendor.mark ? (
@@ -88,24 +88,24 @@ export default function List({
                     height={56}
                     alt=""
                     aria-hidden="true"
-                    className="h-14 w-14 object-cover"
+                    className="xs:h-14 xs:w-14 h-12 w-12 object-cover"
                   />
                 </div>
               ) : (
-                <div className="h-14 w-14 flex-shrink-0 rounded bg-slate-200" />
+                <div className="xs:h-14 xs:w-14 h-12 w-12 flex-shrink-0 rounded bg-slate-200" />
               )}
               <div className="min-w-0 flex-1">
                 <div className="flex items-center justify-between">
                   <div className="flex flex-col items-start">
                     <Link
                       href={`/organization/${vendor.slug}`}
-                      className="text-ellipsis text-lg font-semibold text-gray-900 focus:outline-none"
+                      className="line-clamp-1 font-semibold text-gray-900 focus:outline-none"
                     >
                       <span aria-hidden="true" className="absolute inset-0" />
                       {vendor.name}
                     </Link>
                     {organizationType ? (
-                      <span className="inline-flex items-center gap-x-1.5 rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
+                      <span className="mt-0.5 inline-flex items-center gap-x-1 rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
                         <organizationType.icon
                           className="h-4 w-4"
                           title={organizationType.title}
@@ -114,7 +114,10 @@ export default function List({
                       </span>
                     ) : null}
                   </div>
-                  <ul role="list" className="z-10 flex items-end gap-x-3">
+                  <ul
+                    role="list"
+                    className="xs:flex z-10 hidden items-end gap-x-2.5"
+                  >
                     {vendor.website ? (
                       <li>
                         <Link
@@ -179,14 +182,13 @@ export default function List({
                 </div>
               </div>
             </div>
-            <div className="line-clamp-5 text-sm text-gray-500">
-              {vendor.description}
-            </div>
+            <div className="text-sm text-gray-500">{vendor.description}</div>
             {vendor.productCategories?.length ? (
-              <div className="flex grow flex-wrap content-end items-end gap-x-3 gap-y-1.5">
+              <div className="flex grow flex-wrap content-end items-end gap-x-2 gap-y-1.5">
                 {vendor.productCategories.map((productCategory) => (
-                  <span
-                    className="inline-flex items-center rounded-md bg-cyan-50 px-2 py-1 text-xs font-medium text-cyan-600 ring-1 ring-inset ring-cyan-500/10"
+                  <Link
+                    href={`/category/${productCategory.slug}`}
+                    className="z-10 inline-flex items-center rounded-md bg-cyan-50 px-2 py-1 text-xs font-medium text-cyan-600 ring-1 ring-inset ring-cyan-500/10 hover:text-cyan-700 hover:ring-cyan-500/20"
                     key={productCategory._id}
                   >
                     {productCategory.expansion ? (
@@ -199,7 +201,7 @@ export default function List({
                     ) : (
                       productCategory.name
                     )}
-                  </span>
+                  </Link>
                 ))}
               </div>
             ) : null}
@@ -209,19 +211,19 @@ export default function List({
       {!error && (loading || lastItem) ? (
         <li
           ref={sentryRef}
-          className="relative rounded-lg border border-gray-300 bg-white px-5 py-4 shadow-sm"
+          className="relative rounded-lg border border-gray-300 bg-white p-4 shadow-sm lg:px-5"
           aria-hidden="true"
         >
           <div className="flex h-full animate-pulse flex-col space-y-4">
             <div className="flex items-center space-x-3">
-              <div className="h-14 w-14 flex-shrink-0 rounded bg-slate-200" />
+              <div className="h-12 w-12 flex-shrink-0 rounded bg-slate-200 sm:h-14 sm:w-14" />
               <div className="min-w-0 flex-1">
                 <div className="flex items-center justify-between">
                   <div className="flex flex-grow flex-col items-start">
-                    <div className="mb-2 h-5 w-3/4 rounded bg-slate-200" />
+                    <div className="mb-2.5 h-5 w-3/4 rounded bg-slate-200" />
                     <div className="h-3 w-1/2 rounded bg-slate-200" />
                   </div>
-                  <ul role="list" className="flex items-end gap-x-3">
+                  <ul role="list" className="flex items-end gap-x-2.5">
                     {[...Array(3)].map((_val, idx) => (
                       <li key={`skeleton-icon-${idx}`}>
                         <div className="h-5 w-5 rounded bg-slate-200" />
@@ -245,13 +247,9 @@ export default function List({
                 <div className="col-span-2 h-2 rounded bg-slate-200" />
                 <div className="col-span-2 h-2 rounded bg-slate-200" />
               </div>
-              <div className="grid grid-cols-3 gap-4">
-                <div className="col-span-1 h-2 rounded bg-slate-200" />
-                <div className="col-span-2 h-2 rounded bg-slate-200" />
-              </div>
               <div className="h-2 w-1/2 rounded bg-slate-200" />
             </div>
-            <div className="flex grow flex-wrap items-end gap-x-3 gap-y-2 pb-1">
+            <div className="flex grow flex-wrap items-end gap-x-2 gap-y-1.5 pb-1">
               {[...Array(5)].map((_val, idx) => (
                 <div
                   className="flex h-4 w-10 rounded bg-slate-200"
