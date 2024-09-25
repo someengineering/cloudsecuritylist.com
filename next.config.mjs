@@ -56,11 +56,18 @@ const nextConfig = withPlausibleProxy()(
           test: /\.svg$/i,
           resourceQuery: /url/, // *.svg?url
         },
+        {
+          ...fileLoaderRule,
+          test: /\.svg$/i,
+          resourceQuery: /icon/, // icon.svg
+        },
         // Convert all other *.svg imports to React components
         {
           test: /\.svg$/i,
-          issuer: { not: /\.(css|scss|sass)$/ },
-          resourceQuery: { not: /url/ }, // exclude if *.svg?url
+          issuer: fileLoaderRule.issuer,
+          resourceQuery: {
+            not: [...fileLoaderRule.resourceQuery.not, /url/, /icon/],
+          }, // exclude if *.svg?url or icon.svg
           loader: '@svgr/webpack',
           options: {
             dimensions: false,

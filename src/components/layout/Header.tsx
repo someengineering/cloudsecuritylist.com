@@ -1,6 +1,6 @@
 'use client';
 
-import Icon from '@/assets/icon.svg';
+import Logo from '@/assets/logo-horizontal.svg';
 import { Dialog, DialogPanel } from '@headlessui/react';
 import { clsx } from 'clsx';
 import Link from 'next/link';
@@ -28,8 +28,11 @@ export default function Header({
           href="/"
           className="-m-1.5 flex items-center p-1.5 text-xl font-bold"
         >
-          <Icon className="mr-1.5 h-12 w-12 text-cyan-600 hover:text-cyan-700 focus:outline-none" />
-          {title}
+          <span className="sr-only">{title}</span>
+          <Logo
+            className="mr-1.5 h-12 w-auto text-cyan-600 hover:text-cyan-700 focus:outline-none"
+            aria-hidden="true"
+          />
         </Link>
 
         <div className="hidden gap-x-12 lg:flex">
