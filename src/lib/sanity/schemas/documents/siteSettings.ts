@@ -24,8 +24,9 @@ export default defineType({
     }),
     defineField({
       name: 'description',
-      title: 'Site description',
-      description: 'Description length must be between 50 and 160 characters.',
+      title: 'SEO description',
+      description:
+        'SEO description length must be between 50 and 160 characters. (Note: The homepage headline text is configured below.)',
       type: 'text',
       rows: 3,
       validation: (rule) => rule.required().min(50).max(160),
@@ -77,10 +78,11 @@ export default defineType({
     defineField({
       name: 'headline',
       title: 'Homepage headline',
+      description: 'Headline length must be between 25 and 75 characters.',
       type: 'text',
       rows: 2,
       fieldset: 'homepage',
-      validation: (rule) => rule.required().min(1),
+      validation: (rule) => rule.required().min(25).max(75),
     }),
     defineField({
       name: 'subheadline',
@@ -88,7 +90,8 @@ export default defineType({
       type: 'text',
       rows: 3,
       fieldset: 'homepage',
-      validation: (rule) => rule.required().min(1),
+      description: 'Subheadline length must be at least 50 characters.',
+      validation: (rule) => rule.required().min(50),
     }),
     defineField({
       name: 'featuredPages',
