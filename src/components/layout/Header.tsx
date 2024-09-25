@@ -24,17 +24,13 @@ export default function Header({
         aria-label="Global"
         className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
       >
-        <Link
-          href="/"
-          className="-m-1.5 flex items-center p-1.5 text-xl font-bold"
-        >
+        <Link href="/" className="-m-1.5 flex flex-shrink-0 items-center p-1.5">
           <span className="sr-only">{title}</span>
           <Logo
-            className="mr-1.5 h-12 w-auto text-cyan-600 hover:text-cyan-700 focus:outline-none"
+            className="h-9 w-auto text-cyan-600 hover:text-cyan-700 focus:outline-none sm:h-10"
             aria-hidden="true"
           />
         </Link>
-
         <div className="hidden gap-x-12 lg:flex">
           {navigation?.map((item) => (
             <Link
@@ -51,7 +47,6 @@ export default function Header({
             </Link>
           ))}
         </div>
-
         <div className="flex lg:hidden">
           <button
             type="button"
