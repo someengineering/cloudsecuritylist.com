@@ -1,14 +1,11 @@
 import Logo from '@/assets/logo-horizontal.svg';
-import { getProductCategory } from '@/lib/sanity';
+import { sanityFetch } from '@/lib/sanity/client';
+import { PRODUCT_CATEGORY_QUERY } from '@/lib/sanity/queries/productCategories';
+import { PRODUCT_CATEGORY_QUERYResult } from '@/lib/sanity/types';
 import { toSentenceCase } from '@/utils/string';
 import { ImageResponse } from 'next/og';
 
-import { readFile } from 'node:fs/promises';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+export const runtime = 'edge';
 
 export const size = {
   width: 1200,
@@ -23,7 +20,11 @@ export default async function OpenGraphImage({
   params: { slug: string };
 }) {
   const { name, expansion, description } =
-    (await getProductCategory(params.slug)) ?? {};
+    (await sanityFetch<PRODUCT_CATEGORY_QUERYResult>({
+      query: PRODUCT_CATEGORY_QUERY,
+      params: { slug: params.slug },
+      tags: [`productCategory:${params.slug}`],
+    })) ?? {};
 
   return new ImageResponse(
     (
@@ -57,17 +58,23 @@ export default async function OpenGraphImage({
           name: 'Noto Sans',
           style: 'normal',
           weight: 500,
-          data: await readFile(
-            join(__dirname, '../../../../assets/fonts/NotoSans-Medium.ttf'),
-          ),
+          data: await fetch(
+            new URL(
+              '../../../../assets/fonts/NotoSans-Medium.ttf',
+              import.meta.url,
+            ),
+          ).then((res) => res.arrayBuffer()),
         },
         {
           name: 'Noto Sans',
           style: 'normal',
           weight: 700,
-          data: await readFile(
-            join(__dirname, '../../../../assets/fonts/NotoSans-Bold.ttf'),
-          ),
+          data: await fetch(
+            new URL(
+              '../../../../assets/fonts/NotoSans-Bold.ttf',
+              import.meta.url,
+            ),
+          ).then((res) => res.arrayBuffer()),
         },
       ],
     },

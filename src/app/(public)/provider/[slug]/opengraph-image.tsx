@@ -1,14 +1,11 @@
 import Logo from '@/assets/logo-horizontal.svg';
-import { getCloudProvider } from '@/lib/sanity';
+import { sanityFetch } from '@/lib/sanity/client';
 import { urlFor } from '@/lib/sanity/image';
+import { CLOUD_PROVIDER_QUERY } from '@/lib/sanity/queries/cloudProvider';
+import { CLOUD_PROVIDER_QUERYResult } from '@/lib/sanity/types';
 import { ImageResponse } from 'next/og';
 
-import { readFile } from 'node:fs/promises';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+export const runtime = 'edge';
 
 export const size = {
   width: 1200,
@@ -23,7 +20,11 @@ export default async function OpenGraphImage({
   params: { slug: string };
 }) {
   const { name, description, mark } =
-    (await getCloudProvider(params.slug)) ?? {};
+    (await sanityFetch<CLOUD_PROVIDER_QUERYResult>({
+      query: CLOUD_PROVIDER_QUERY,
+      params: { slug: params.slug },
+      tags: [`cloudProvider:${params.slug}`],
+    })) ?? {};
 
   return new ImageResponse(
     (
@@ -62,17 +63,23 @@ export default async function OpenGraphImage({
           name: 'Noto Sans',
           style: 'normal',
           weight: 500,
-          data: await readFile(
-            join(__dirname, '../../../../assets/fonts/NotoSans-Medium.ttf'),
-          ),
+          data: await fetch(
+            new URL(
+              '../../../../assets/fonts/NotoSans-Medium.ttf',
+              import.meta.url,
+            ),
+          ).then((res) => res.arrayBuffer()),
         },
         {
           name: 'Noto Sans',
           style: 'normal',
           weight: 700,
-          data: await readFile(
-            join(__dirname, '../../../../assets/fonts/NotoSans-Bold.ttf'),
-          ),
+          data: await fetch(
+            new URL(
+              '../../../../assets/fonts/NotoSans-Bold.ttf',
+              import.meta.url,
+            ),
+          ).then((res) => res.arrayBuffer()),
         },
       ],
     },

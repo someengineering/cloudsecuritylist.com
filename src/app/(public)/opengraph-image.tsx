@@ -1,13 +1,10 @@
 import Logo from '@/assets/logo-horizontal.svg';
-import { getSiteSettings } from '@/lib/sanity';
+import { sanityFetch } from '@/lib/sanity/client';
+import { SITE_SETTINGS_QUERY } from '@/lib/sanity/queries/siteSettings';
+import { SITE_SETTINGS_QUERYResult } from '@/lib/sanity/types';
 import { ImageResponse } from 'next/og';
 
-import { readFile } from 'node:fs/promises';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+export const runtime = 'edge';
 
 export const size = {
   width: 1200,
@@ -17,7 +14,11 @@ export const size = {
 export const contentType = 'image/png';
 
 export default async function OpenGraphImage() {
-  const { headline } = (await getSiteSettings()) ?? {};
+  const { headline } =
+    (await sanityFetch<SITE_SETTINGS_QUERYResult>({
+      query: SITE_SETTINGS_QUERY,
+      tags: ['siteSettings'],
+    })) ?? {};
 
   return new ImageResponse(
     (
@@ -42,9 +43,9 @@ export default async function OpenGraphImage() {
           name: 'Noto Sans',
           style: 'normal',
           weight: 500,
-          data: await readFile(
-            join(__dirname, '../../assets/fonts/NotoSans-Medium.ttf'),
-          ),
+          data: await fetch(
+            new URL('../../assets/fonts/NotoSans-Medium.ttf', import.meta.url),
+          ).then((res) => res.arrayBuffer()),
         },
       ],
     },
