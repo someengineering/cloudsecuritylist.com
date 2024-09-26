@@ -52,7 +52,7 @@ export default async function NotFoundPage() {
                       key={page.slug}
                       className="group relative flex gap-x-6 py-6"
                     >
-                      <div className="mx-auto flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full bg-cyan-50/50 group-hover:bg-cyan-50/75">
+                      <div className="mx-auto flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full bg-cyan-50">
                         <Icon className="h-7 w-7 text-cyan-700 group-hover:text-cyan-800" />
                       </div>
                       <div className="flex-auto">

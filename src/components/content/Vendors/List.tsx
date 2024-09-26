@@ -88,11 +88,11 @@ export default function List({
                     height={56}
                     alt=""
                     aria-hidden="true"
-                    className="xs:h-14 xs:w-14 h-12 w-12 object-cover"
+                    className="h-12 w-12 object-cover xs:h-14 xs:w-14"
                   />
                 </div>
               ) : (
-                <div className="xs:h-14 xs:w-14 h-12 w-12 flex-shrink-0 rounded bg-slate-200" />
+                <div className="h-12 w-12 flex-shrink-0 rounded bg-slate-200 xs:h-14 xs:w-14" />
               )}
               <div className="min-w-0 flex-1">
                 <div className="flex items-center justify-between">
@@ -116,7 +116,7 @@ export default function List({
                   </div>
                   <ul
                     role="list"
-                    className="xs:flex z-10 hidden items-end gap-x-2.5"
+                    className="z-10 hidden items-end gap-x-2.5 xs:flex"
                   >
                     {vendor.website ? (
                       <li>

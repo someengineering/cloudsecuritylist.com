@@ -37,7 +37,7 @@ export default async function Content({
 
   return (
     <section
-      className="my-12 bg-cyan-50/50 py-12 sm:my-16 sm:py-16"
+      className="my-12 bg-cyan-50/50 py-12 shadow-sm sm:my-16 sm:py-16"
       aria-labelledby={slug}
     >
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
