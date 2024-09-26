@@ -31,13 +31,6 @@ export async function generateMetadata(): Promise<Metadata> {
       type: 'website',
       locale: 'en_US',
     },
-    twitter: {
-      card: 'summary_large_image',
-      title: {
-        default: title ?? '',
-        template: `%s | ${title}`,
-      },
-    },
   };
 }
 
