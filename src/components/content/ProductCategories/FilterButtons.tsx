@@ -53,7 +53,7 @@ export default function FilterButtons({
   }, [filters, pathname, router]);
 
   return (
-    <div className="mx-auto max-w-5xl px-6 py-3 lg:px-8">
+    <div className="mx-auto mb-10 max-w-5xl">
       <div className="isolate grid grid-cols-2 overflow-hidden rounded-md shadow-sm sm:grid-cols-3 lg:grid-cols-7">
         {marketSegments.map((marketSegment, idx) => {
           const Icon =

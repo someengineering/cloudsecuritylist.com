@@ -11,7 +11,7 @@ export default async function Research() {
   }
 
   return (
-    <section className="mx-auto max-w-7xl px-6 py-12 sm:py-16 lg:px-8">
+    <section className="mx-auto max-w-7xl px-6 pb-12 sm:pb-16 lg:px-8">
       {researches.length > 0 ? (
         <dl className="mx-auto max-w-2xl space-y-16">
           {researches?.map((research) => {

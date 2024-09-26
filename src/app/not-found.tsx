@@ -6,11 +6,22 @@ import Header from '@/components/layout/Header';
 import PageHeader from '@/components/page/Header';
 import { getSiteSettings } from '@/lib/sanity';
 import { clsx } from 'clsx';
+import { Metadata } from 'next';
 import PlausibleProvider from 'next-plausible';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { HiChevronRight, HiOutlineSparkles } from 'react-icons/hi2';
 import { IconType } from 'react-icons/lib';
+
+const title = 'Page not found';
+const description =
+  'Oh no! This page seems to have evaporated into the cloud. Even our most advanced threat detection can’t locate it.';
+
+export const metadata: Metadata = {
+  title,
+  description,
+  robots: { index: false, follow: false },
+};
 
 export default async function NotFoundPage() {
   const { title, navigation, copyright, featuredPages } =
@@ -30,8 +41,13 @@ export default async function NotFoundPage() {
             description="Oh no! This page seems to have evaporated into the cloud. Even our most advanced threat detection can’t locate it."
           />
           {featuredPages?.length ? (
-            <div className="mx-auto flow-root max-w-lg">
-              <h2 className="sr-only">Popular pages</h2>
+            <section
+              aria-labelledby="pages-heading"
+              className="mx-auto flow-root max-w-xl px-6 pb-12 sm:pb-16 lg:px-8"
+            >
+              <h2 id="pages-heading" className="sr-only">
+                Popular pages
+              </h2>
               <ul role="list" className="-mt-6 divide-y divide-gray-900/5">
                 {featuredPages.map((page) => {
                   const Icon = page.icon
@@ -53,7 +69,7 @@ export default async function NotFoundPage() {
                       className="group relative flex gap-x-6 py-6"
                     >
                       <div className="mx-auto flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full bg-cyan-50">
-                        <Icon className="h-7 w-7 text-cyan-700 group-hover:text-cyan-800" />
+                        <Icon className="h-7 w-7 text-cyan-600 group-hover:text-cyan-700" />
                       </div>
                       <div className="flex-auto">
                         <h3 className="text-balance text-lg font-semibold">
@@ -90,7 +106,7 @@ export default async function NotFoundPage() {
                   Back to home
                 </Link>
               </div>
-            </div>
+            </section>
           ) : null}
         </main>
         <Footer copyright={copyright} navigation={navigation} />

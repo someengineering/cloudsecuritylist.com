@@ -28,24 +28,24 @@ export default async function OpenGraphImage({
   return new ImageResponse(
     (
       <div
-        tw="flex h-full w-full flex-col justify-between bg-cyan-600"
+        tw="flex h-full w-full flex-col justify-between"
         style={{
           backgroundImage: 'linear-gradient(to bottom, #0891b2, #0e7490)',
         }}
       >
-        <div tw="flex grow items-center p-8 text-white">
-          <div tw="w-8/10 flex flex-col">
+        <div tw="flex grow items-center p-14 text-white">
+          <div tw="flex flex-col">
             <div tw="text-7xl font-bold">
               {expansion
                 ? `${toSentenceCase(expansion ?? '')} (${name})`
                 : toSentenceCase(name ?? '')}
             </div>
-            <div tw="mt-7 text-4xl font-medium leading-none tracking-tight">
+            <div tw="mt-7 w-4/5 text-4xl font-medium leading-none tracking-tight">
               {description}
             </div>
           </div>
         </div>
-        <div tw="flex bg-white p-8">
+        <div tw="flex bg-white p-6">
           <Logo tw="text-cyan-600" width={336} height={49} />
         </div>
       </div>

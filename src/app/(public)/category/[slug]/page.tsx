@@ -2,37 +2,43 @@ import ProductCategory from '@/components/content/ProductCategory';
 import { getProductCategory, getProductCategorySlugs } from '@/lib/sanity';
 import { isValidSlug } from '@/utils/slug';
 import { toSentenceCase } from '@/utils/string';
-import { Metadata } from 'next';
+import { Metadata, ResolvingMetadata } from 'next';
 import { notFound } from 'next/navigation';
 
 export async function generateStaticParams() {
   const slugs = await getProductCategorySlugs();
 
-  return slugs.map((slug) => ({
-    slug,
-  }));
+  return slugs.map((slug) => ({ slug }));
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { slug: string };
-}): Promise<Metadata> {
+export async function generateMetadata(
+  {
+    params,
+  }: {
+    params: { slug: string };
+  },
+  parent: ResolvingMetadata,
+): Promise<Metadata> {
+  const parentMetadata = await parent;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { images, ...parentOpenGraph } = parentMetadata.openGraph ?? {};
+
   if (!isValidSlug(params.slug)) {
     return {};
   }
 
-  const productCategory = await getProductCategory(params.slug);
-
-  if (productCategory === null) {
-    return {};
-  }
+  const { name, expansion, description } =
+    (await getProductCategory(params.slug)) ?? {};
+  const title = expansion ? `${toSentenceCase(expansion)} (${name})` : name;
 
   return {
-    title: productCategory.expansion
-      ? `${toSentenceCase(productCategory.expansion)} (${productCategory.name})`
-      : productCategory.name,
-    description: productCategory.description,
+    title,
+    description,
+    openGraph: {
+      ...parentOpenGraph,
+      url: `/category/${params.slug}`,
+      title,
+    },
   };
 }
 

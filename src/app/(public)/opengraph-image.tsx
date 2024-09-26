@@ -22,15 +22,15 @@ export default async function OpenGraphImage() {
   return new ImageResponse(
     (
       <div
-        tw="flex h-full w-full flex-col justify-between bg-cyan-600"
+        tw="flex h-full w-full flex-col justify-between"
         style={{
           backgroundImage: 'linear-gradient(to bottom, #0891b2, #0e7490)',
         }}
       >
-        <div tw="w-8/10 flex grow items-center p-8 text-7xl font-semibold leading-none tracking-tight text-white">
+        <div tw="w-7/8 flex grow items-center p-14 text-7xl font-medium leading-none tracking-tight text-white">
           {headline}
         </div>
-        <div tw="flex bg-white p-8">
+        <div tw="flex bg-white p-6">
           <Logo tw="text-cyan-600" width={336} height={49} />
         </div>
       </div>
@@ -41,9 +41,9 @@ export default async function OpenGraphImage() {
         {
           name: 'Noto Sans',
           style: 'normal',
-          weight: 600,
+          weight: 500,
           data: await readFile(
-            join(__dirname, '../../assets/fonts/NotoSans-SemiBold.ttf'),
+            join(__dirname, '../../assets/fonts/NotoSans-Medium.ttf'),
           ),
         },
       ],

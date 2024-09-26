@@ -35,23 +35,28 @@ export default async function Vendors({
   ]);
 
   return (
-    <FiltersProvider initialValues={filters}>
-      {marketSegments.length > 0 && productCategories.length > 0 ? (
-        <FilterPanel
-          marketSegments={marketSegments}
-          productCategories={productCategories}
-          organizationTypes={organizationTypes}
-          cloudProviders={cloudProviders}
-        />
-      ) : null}
-      <List
-        initialData={vendors}
-        getVendors={async (activeFilters: Partial<Filters>, prev?: string) => {
-          'use server';
+    <section className="mx-auto max-w-7xl px-6 pb-12 sm:pb-16 lg:px-8">
+      <FiltersProvider initialValues={filters}>
+        {marketSegments.length > 0 && productCategories.length > 0 ? (
+          <FilterPanel
+            marketSegments={marketSegments}
+            productCategories={productCategories}
+            organizationTypes={organizationTypes}
+            cloudProviders={cloudProviders}
+          />
+        ) : null}
+        <List
+          initialData={vendors}
+          getVendors={async (
+            activeFilters: Partial<Filters>,
+            prev?: string,
+          ) => {
+            'use server';
 
-          return await getVendors({ ...activeFilters, prev });
-        }}
-      />
-    </FiltersProvider>
+            return await getVendors({ ...activeFilters, prev });
+          }}
+        />
+      </FiltersProvider>
+    </section>
   );
 }

@@ -17,7 +17,7 @@ export default async function LogoGrid({
   }
 
   return (
-    <div className="grid grid-cols-2 gap-1 overflow-hidden rounded-2xl md:grid-cols-3">
+    <div className="grid grid-cols-2 gap-1 overflow-hidden rounded-2xl lg:grid-cols-3">
       {items.map((item) => (
         <Link
           href={item.href}

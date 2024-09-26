@@ -99,7 +99,7 @@ export default function FilterPanel({
           Filters
         </h2>
         <div className="border-b border-gray-200 bg-white pb-4">
-          <div className="mx-auto flex max-w-7xl items-center justify-end px-6 lg:px-8">
+          <div className="flex items-center justify-end">
             <button
               className="ml-auto inline-block text-sm font-medium text-gray-700 hover:text-gray-900 sm:hidden"
               onClick={() => setFiltersMobileMenuOpen(true)}
@@ -201,7 +201,7 @@ export default function FilterPanel({
           Product categories
         </h2>
         <div className="border-y border-gray-200 bg-gray-100">
-          <div className="mx-auto max-w-7xl px-6 py-3 sm:flex sm:items-center lg:px-8">
+          <div className="flex items-center px-4 py-3">
             <DisclosureButton
               className="group flex items-center py-2 text-sm font-medium text-gray-700 hover:text-gray-900"
               onClick={() => setProductCategoriesMobileMenuOpen(true)}

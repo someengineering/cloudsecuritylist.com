@@ -3,14 +3,24 @@ import PageHeader from '@/components/page/Header';
 import { getPage } from '@/lib/sanity';
 import { ORGANIZATION_TYPE } from '@/lib/sanity/schemas/objects/organizationType';
 import { isValidSlug } from '@/utils/slug';
-import { Metadata } from 'next';
+import { Metadata, ResolvingMetadata } from 'next';
 
-export async function generateMetadata(): Promise<Metadata> {
-  const { title, description } = (await getPage('vendors')) ?? {};
+export async function generateMetadata(
+  _props: object,
+  parent: ResolvingMetadata,
+): Promise<Metadata> {
+  const parentMetadata = await parent;
+
+  const { title, description, slug } = (await getPage('vendors')) ?? {};
 
   return {
     title,
     description,
+    openGraph: {
+      ...parentMetadata.openGraph,
+      url: `/${slug}`,
+      title,
+    },
   };
 }
 

@@ -105,7 +105,7 @@ export default async function Organization({
               return (
                 <div key={productCategory._id} className="group relative">
                   <dt>
-                    <div className="mb-6 flex h-10 w-10 items-center justify-center rounded-lg bg-cyan-600 group-hover:bg-cyan-700">
+                    <div className="mb-6 flex h-10 w-10 items-center justify-center rounded-lg bg-cyan-600">
                       <Icon className="h-6 w-6 text-white" />
                     </div>
                     <Link

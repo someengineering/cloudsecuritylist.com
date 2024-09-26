@@ -34,24 +34,26 @@ export default async function ProductCategories({
   }
 
   return (
-    <FiltersProvider initialValues={filters}>
-      {marketSegments.length > 0 ? (
-        <FilterButtons marketSegments={marketSegments} />
-      ) : null}
-      <List
-        initialData={productCategories}
-        getProductCategories={async (activeFilters: Filters) => {
-          'use server';
+    <section className="mx-auto max-w-7xl px-6 pb-12 sm:pb-16 lg:px-8">
+      <FiltersProvider initialValues={filters}>
+        {marketSegments.length > 0 ? (
+          <FilterButtons marketSegments={marketSegments} />
+        ) : null}
+        <List
+          initialData={productCategories}
+          getProductCategories={async (activeFilters: Filters) => {
+            'use server';
 
-          const marketSegment =
-            activeFilters.marketSegment &&
-            isValidSlug(activeFilters.marketSegment)
-              ? (await getMarketSegment(activeFilters.marketSegment))?._id
-              : undefined;
+            const marketSegment =
+              activeFilters.marketSegment &&
+              isValidSlug(activeFilters.marketSegment)
+                ? (await getMarketSegment(activeFilters.marketSegment))?._id
+                : undefined;
 
-          return await getProductCategories(marketSegment);
-        }}
-      />
-    </FiltersProvider>
+            return await getProductCategories(marketSegment);
+          }}
+        />
+      </FiltersProvider>
+    </section>
   );
 }

@@ -17,7 +17,11 @@ export async function generateMetadata(): Promise<Metadata> {
       template: `%s | ${title}`,
     },
     description,
-    metadataBase: url ? new URL(url) : undefined,
+    applicationName: title,
+    metadataBase:
+      process.env.NEXT_PUBLIC_VERCEL_ENV === 'production' && url
+        ? new URL(url)
+        : undefined,
     robots:
       process.env.NEXT_PUBLIC_VERCEL_ENV === 'production'
         ? { index: true, follow: true }
@@ -26,6 +30,13 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: title,
       type: 'website',
       locale: 'en_US',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: {
+        default: title ?? '',
+        template: `%s | ${title}`,
+      },
     },
   };
 }

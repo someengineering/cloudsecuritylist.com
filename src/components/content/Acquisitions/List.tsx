@@ -74,7 +74,7 @@ export default function List({
   }
 
   return (
-    <section className="mx-auto max-w-3xl px-6 py-12 sm:py-16 lg:px-8">
+    <section className="mx-auto max-w-3xl px-6 pb-12 sm:pb-16 lg:px-8">
       {acquisitions.length > 0 ? (
         <ul role="list" className="-mb-14">
           {acquisitions?.map((acquisition, idx) => {
