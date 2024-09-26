@@ -1,4 +1,5 @@
-import Logo from '@/assets/logo-horizontal.svg';
+import Layout from '@/components/opengraph/Layout';
+import Summary from '@/components/opengraph/Summary';
 import { sanityFetch } from '@/lib/sanity/client';
 import { PRODUCT_CATEGORY_QUERY } from '@/lib/sanity/queries/productCategories';
 import { PRODUCT_CATEGORY_QUERYResult } from '@/lib/sanity/types';
@@ -28,28 +29,16 @@ export default async function OpenGraphImage({
 
   return new ImageResponse(
     (
-      <div
-        tw="flex h-full w-full flex-col justify-between"
-        style={{
-          backgroundImage: 'linear-gradient(to bottom, #0891b2, #0e7490)',
-        }}
-      >
-        <div tw="flex grow items-center p-14 text-white">
-          <div tw="flex flex-col">
-            <div tw="text-7xl font-bold">
-              {expansion
-                ? `${toSentenceCase(expansion ?? '')} (${name})`
-                : toSentenceCase(name ?? '')}
-            </div>
-            <div tw="mt-7 w-4/5 text-4xl font-medium leading-none tracking-tight">
-              {description}
-            </div>
-          </div>
-        </div>
-        <div tw="flex bg-white p-6">
-          <Logo tw="text-cyan-600" width={336} height={49} />
-        </div>
-      </div>
+      <Layout>
+        <Summary
+          title={
+            expansion
+              ? `${toSentenceCase(expansion ?? '')} (${name})`
+              : toSentenceCase(name ?? '')
+          }
+          description={description ?? ''}
+        />
+      </Layout>
     ),
     {
       ...size,

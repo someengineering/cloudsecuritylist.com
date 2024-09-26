@@ -1,4 +1,5 @@
-import Logo from '@/assets/logo-horizontal.svg';
+import Layout from '@/components/opengraph/Layout';
+import Summary from '@/components/opengraph/Summary';
 import { sanityFetch } from '@/lib/sanity/client';
 import { urlFor } from '@/lib/sanity/image';
 import { CLOUD_PROVIDER_QUERY } from '@/lib/sanity/queries/cloudProvider';
@@ -28,33 +29,13 @@ export default async function OpenGraphImage({
 
   return new ImageResponse(
     (
-      <div
-        tw="flex h-full w-full flex-col justify-between"
-        style={{
-          backgroundImage: 'linear-gradient(to bottom, #0891b2, #0e7490)',
-        }}
-      >
-        <div tw="flex grow items-center p-14 text-white">
-          <div tw="flex">
-            {mark ? (
-              // eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text
-              <img
-                src={urlFor(mark).url()}
-                tw="mr-8 h-32 w-32 rounded-3xl bg-white p-6"
-              />
-            ) : null}
-            <div tw="flex flex-col">
-              <div tw="mt-7 text-7xl font-bold">{name}</div>
-              <div tw="w-7/8 mt-7 text-4xl font-medium leading-none tracking-tight">
-                {description}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div tw="flex bg-white p-6">
-          <Logo tw="text-cyan-600" width={336} height={49} />
-        </div>
-      </div>
+      <Layout>
+        <Summary
+          title={name ?? ''}
+          description={description ?? ''}
+          logo={urlFor(mark ?? '').url()}
+        />
+      </Layout>
     ),
     {
       ...size,

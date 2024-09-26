@@ -1,4 +1,5 @@
-import Logo from '@/assets/logo-horizontal.svg';
+import Headline from '@/components/opengraph/Headline';
+import Layout from '@/components/opengraph/Layout';
 import { sanityFetch } from '@/lib/sanity/client';
 import { SITE_SETTINGS_QUERY } from '@/lib/sanity/queries/siteSettings';
 import { SITE_SETTINGS_QUERYResult } from '@/lib/sanity/types';
@@ -22,19 +23,9 @@ export default async function OpenGraphImage() {
 
   return new ImageResponse(
     (
-      <div
-        tw="flex h-full w-full flex-col justify-between"
-        style={{
-          backgroundImage: 'linear-gradient(to bottom, #0891b2, #0e7490)',
-        }}
-      >
-        <div tw="w-7/8 flex grow items-center p-14 text-7xl font-medium leading-none tracking-tight text-white">
-          {headline}
-        </div>
-        <div tw="flex bg-white p-6">
-          <Logo tw="text-cyan-600" width={336} height={49} />
-        </div>
-      </div>
+      <Layout>
+        <Headline text={headline ?? ''} />
+      </Layout>
     ),
     {
       ...size,
