@@ -1,7 +1,9 @@
 import { metadata as notFoundMetadata } from '@/app/not-found';
 import Organization from '@/components/content/Organization';
+import JsonLd from '@/components/page/JsonLd';
 import { getOrganization, getOrganizationSlugs } from '@/lib/sanity';
 import { ORGANIZATION_TYPE } from '@/lib/sanity/schemas/objects/organizationType';
+import { getOrganizationProfilePage } from '@/utils/jsonLd';
 import { isValidSlug } from '@/utils/slug';
 import { Metadata, ResolvingMetadata } from 'next';
 import { notFound, redirect } from 'next/navigation';
@@ -78,5 +80,10 @@ export default async function OrganizationPage({
     notFound();
   }
 
-  return <Organization organization={organization} />;
+  return (
+    <>
+      <JsonLd schema={await getOrganizationProfilePage(organization)} />
+      <Organization organization={organization} />
+    </>
+  );
 }

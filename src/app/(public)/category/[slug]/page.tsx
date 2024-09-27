@@ -1,6 +1,8 @@
 import { metadata as notFoundMetadata } from '@/app/not-found';
 import ProductCategory from '@/components/content/ProductCategory';
+import JsonLd from '@/components/page/JsonLd';
 import { getProductCategory, getProductCategorySlugs } from '@/lib/sanity';
+import { getWebPage } from '@/utils/jsonLd';
 import { isValidSlug } from '@/utils/slug';
 import { toSentenceCase } from '@/utils/string';
 import { Metadata, ResolvingMetadata } from 'next';
@@ -59,5 +61,16 @@ export default async function OrganizationPage({
     notFound();
   }
 
-  return <ProductCategory productCategory={productCategory} />;
+  return (
+    <>
+      <JsonLd
+        schema={await getWebPage({
+          title: productCategory.name,
+          path: `/category/${params.slug}`,
+          parentPageSlug: 'categories',
+        })}
+      />
+      <ProductCategory productCategory={productCategory} />
+    </>
+  );
 }

@@ -1,17 +1,26 @@
+import { metadata as notFoundMetadata } from '@/app/not-found';
 import Vendors from '@/components/content/Vendors';
 import PageHeader from '@/components/page/Header';
+import JsonLd from '@/components/page/JsonLd';
 import { getPage } from '@/lib/sanity';
 import { ORGANIZATION_TYPE } from '@/lib/sanity/schemas/objects/organizationType';
+import { getWebPage } from '@/utils/jsonLd';
 import { isValidSlug } from '@/utils/slug';
 import { Metadata, ResolvingMetadata } from 'next';
+import { notFound } from 'next/navigation';
+
+const slug = 'vendors';
 
 export async function generateMetadata(
   _props: object,
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
   const parentMetadata = await parent;
+  const { title, description } = (await getPage(slug)) ?? {};
 
-  const { title, description, slug } = (await getPage('vendors')) ?? {};
+  if (!title) {
+    return notFoundMetadata;
+  }
 
   return {
     title,
@@ -35,10 +44,20 @@ export default async function VendorsPage({
     provider: supportedCloudProviders,
   } = searchParams;
 
-  const { title, description } = (await getPage('vendors')) ?? {};
+  const { title, description } = (await getPage(slug)) ?? {};
+
+  if (!title) {
+    notFound();
+  }
 
   return (
     <>
+      <JsonLd
+        schema={await getWebPage({
+          title,
+          path: `/${slug}`,
+        })}
+      />
       <PageHeader title={title} description={description} />
       <Vendors
         filters={{

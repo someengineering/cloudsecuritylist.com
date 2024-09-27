@@ -1,6 +1,8 @@
 import { metadata as notFoundMetadata } from '@/app/not-found';
 import CloudProvider from '@/components/content/CloudProvider';
+import JsonLd from '@/components/page/JsonLd';
 import { getCloudProvider, getCloudProviderSlugs } from '@/lib/sanity';
+import { getCloudProviderProfilePage } from '@/utils/jsonLd';
 import { isValidSlug } from '@/utils/slug';
 import { Metadata, ResolvingMetadata } from 'next';
 import { notFound } from 'next/navigation';
@@ -58,5 +60,10 @@ export default async function OrganizationPage({
     notFound();
   }
 
-  return <CloudProvider cloudProvider={cloudProvider} />;
+  return (
+    <>
+      <JsonLd schema={await getCloudProviderProfilePage(cloudProvider)} />
+      <CloudProvider cloudProvider={cloudProvider} />
+    </>
+  );
 }

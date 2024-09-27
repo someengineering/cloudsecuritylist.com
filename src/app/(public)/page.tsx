@@ -1,16 +1,19 @@
 import PageHeader from '@/components/page/Header';
+import JsonLd from '@/components/page/JsonLd';
 import { getSiteSettings } from '@/lib/sanity';
+import { getWebPage } from '@/utils/jsonLd';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { HiChevronRight, HiOutlineSparkles } from 'react-icons/hi2';
 import { IconType } from 'react-icons/lib';
 
 export default async function HomePage() {
-  const { headline, subheadline, featuredPages } =
+  const { name, headline, subheadline, featuredPages } =
     (await getSiteSettings()) ?? {};
 
   return (
     <>
+      <JsonLd schema={await getWebPage({ title: name ?? '', path: '/' })} />
       <PageHeader title={headline} description={subheadline} />
       {featuredPages?.length ? (
         <section
