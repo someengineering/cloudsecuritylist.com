@@ -21,14 +21,16 @@ export default async function PageHeader({
 }) {
   return (
     <section className="mx-auto mb-12 max-w-7xl sm:mb-16">
-      <div className="relative isolate mx-auto max-w-7xl overflow-hidden bg-cyan-50 px-6 py-12 text-center text-gray-900 shadow-sm sm:py-16 lg:mx-8 lg:rounded-3xl lg:px-8">
-        <h2 className="mx-auto max-w-prose text-pretty text-2xl font-bold tracking-tight sm:text-3xl">
-          {heading}
-        </h2>
-        <p className="mx-auto mt-6 max-w-prose text-pretty leading-7">
-          {description}
-        </p>
-        <div className="mt-10 flex items-center justify-center gap-x-6">
+      <div className="relative isolate mx-8 max-w-7xl overflow-hidden rounded-3xl bg-cyan-50 p-8 text-center text-gray-900 shadow-sm lg:flex lg:items-center lg:justify-between lg:p-12 lg:text-left">
+        <div>
+          <h2 className="mx-auto max-w-prose text-pretty text-2xl font-bold tracking-tight sm:text-3xl">
+            {heading}
+          </h2>
+          <p className="mx-auto mt-4 max-w-prose text-pretty leading-7 lg:mt-2">
+            {description}
+          </p>
+        </div>
+        <div className="mt-6 flex items-center justify-center gap-x-6 lg:mt-0 lg:flex-shrink-0">
           {primaryButton ? (
             <Link
               href={primaryButton.href}
