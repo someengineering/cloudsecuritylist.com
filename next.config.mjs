@@ -1,4 +1,20 @@
 import { withPlausibleProxy } from 'next-plausible';
+import { createClient, groq } from 'next-sanity';
+import speakingurl from 'speakingurl';
+
+const sanityClient = createClient({
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
+  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET,
+  apiVersion:
+    process.env.NEXT_PUBLIC_SANITY_API_VERSION ||
+    new Date().toISOString().split('T')[0],
+  useCdn: false,
+});
+
+const slugify = (value) => {
+  const slugifyOpts = { truncate: 200, symbols: true };
+  return value ? speakingurl(value, slugifyOpts) : '';
+};
 
 const nextConfig = withPlausibleProxy()(
   /** @type {import('next').NextConfig} */
@@ -40,6 +56,32 @@ const nextConfig = withPlausibleProxy()(
           destination: '/provider/:slug',
           permanent: true,
         },
+        ...(
+          await sanityClient.fetch(
+            groq`*[ _type == "cloudProvider" && defined(abbreviation) ] {
+              "slug": slug.current,
+              name,
+              abbreviation,
+            }`,
+          )
+        ).map(({ slug, name, abbreviation }) => ({
+          source: `/provider/(${slugify(name)}-)?${slugify(abbreviation)}`,
+          destination: `/provider/${slug}`,
+          permanent: true,
+        })),
+        ...(
+          await sanityClient.fetch(
+            groq`*[ _type == "productCategory" && defined(expansion) ] {
+              "slug": slug.current,
+              name,
+              expansion
+            }`,
+          )
+        ).map(({ slug, name, expansion }) => ({
+          source: `/category/${slugify(expansion)}(-${slugify(name)})?`,
+          destination: `/category/${slug}`,
+          permanent: true,
+        })),
       ];
     },
 
