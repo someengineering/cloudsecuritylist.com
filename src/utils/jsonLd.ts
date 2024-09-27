@@ -103,8 +103,8 @@ export const getWebPage = async ({
     speakable: {
       '@type': 'SpeakableSpecification',
       xpath: [
-        '/html/head/title',
-        "/html/head/meta[@name='description']/@content",
+        "/html/head/meta[@property='og:title']/@content",
+        "/html/head/meta[@property='og:description']/@content",
       ],
     },
   };
