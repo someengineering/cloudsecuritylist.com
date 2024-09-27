@@ -1,3 +1,4 @@
+import { metadata as notFoundMetadata } from '@/app/not-found';
 import Organization from '@/components/content/Organization';
 import { getOrganization, getOrganizationSlugs } from '@/lib/sanity';
 import { ORGANIZATION_TYPE } from '@/lib/sanity/schemas/objects/organizationType';
@@ -23,19 +24,29 @@ export async function generateMetadata(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { images, ...parentOpenGraph } = parentMetadata.openGraph ?? {};
 
-  if (!isValidSlug(params.slug)) {
-    return {};
+  const organization = isValidSlug(params.slug)
+    ? await getOrganization(params.slug)
+    : null;
+
+  if (
+    !organization ||
+    (organization.organizationType === ORGANIZATION_TYPE.ACQUIRED &&
+      !(
+        'parentOrganization' in organization &&
+        organization.parentOrganization?.slug
+      ))
+  ) {
+    return notFoundMetadata;
   }
 
-  const { name: title, description } =
-    (await getOrganization(params.slug)) ?? {};
+  const { name: title, description } = organization;
 
   return {
     title,
     description,
     openGraph: {
       ...parentOpenGraph,
-      url: `/category/${params.slug}`,
+      url: `/organization/${params.slug}`,
       title,
     },
   };
@@ -46,13 +57,11 @@ export default async function OrganizationPage({
 }: {
   params: { slug: string };
 }) {
-  if (!isValidSlug(params.slug)) {
-    notFound();
-  }
+  const organization = isValidSlug(params.slug)
+    ? await getOrganization(params.slug)
+    : null;
 
-  const organization = await getOrganization(params.slug);
-
-  if (organization === null) {
+  if (!organization) {
     notFound();
   }
 

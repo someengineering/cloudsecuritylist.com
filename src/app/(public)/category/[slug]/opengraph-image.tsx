@@ -25,6 +25,7 @@ export default async function OpenGraphImage({
       query: PRODUCT_CATEGORY_QUERY,
       params: { slug: params.slug },
       tags: [`productCategory:${params.slug}`],
+      allowDraftMode: false,
     })) ?? {};
 
   return new ImageResponse(

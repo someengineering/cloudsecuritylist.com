@@ -2,10 +2,15 @@ import { getSiteSettings } from '@/lib/sanity';
 import type { MetadataRoute } from 'next';
 
 export default async function manifest(): Promise<MetadataRoute.Manifest> {
-  const { title: name, description } = (await getSiteSettings()) ?? {};
+  const {
+    name,
+    shortName: short_name,
+    description,
+  } = (await getSiteSettings()) ?? {};
 
   return {
     name,
+    short_name,
     description,
     start_url: '/',
     display: 'standalone',

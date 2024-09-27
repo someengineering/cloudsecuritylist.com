@@ -1,3 +1,4 @@
+import { metadata as notFoundMetadata } from '@/app/not-found';
 import ProductCategory from '@/components/content/ProductCategory';
 import { getProductCategory, getProductCategorySlugs } from '@/lib/sanity';
 import { isValidSlug } from '@/utils/slug';
@@ -23,12 +24,15 @@ export async function generateMetadata(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { images, ...parentOpenGraph } = parentMetadata.openGraph ?? {};
 
-  if (!isValidSlug(params.slug)) {
-    return {};
+  const productCategory = isValidSlug(params.slug)
+    ? await getProductCategory(params.slug)
+    : null;
+
+  if (!productCategory) {
+    return notFoundMetadata;
   }
 
-  const { name, expansion, description } =
-    (await getProductCategory(params.slug)) ?? {};
+  const { name, expansion, description } = productCategory;
   const title = expansion ? `${toSentenceCase(expansion)} (${name})` : name;
 
   return {
@@ -47,14 +51,13 @@ export default async function OrganizationPage({
 }: {
   params: { slug: string };
 }) {
-  if (!isValidSlug(params.slug)) {
+  const productCategory = isValidSlug(params.slug)
+    ? await getProductCategory(params.slug)
+    : null;
+
+  if (!productCategory) {
     notFound();
   }
 
-  const productCategory = await getProductCategory(params.slug);
-
-  if (productCategory === null) {
-    notFound();
-  }
   return <ProductCategory productCategory={productCategory} />;
 }

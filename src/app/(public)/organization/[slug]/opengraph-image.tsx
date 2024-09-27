@@ -25,6 +25,7 @@ export default async function OpenGraphImage({
       query: ORGANIZATION_QUERY,
       params: { slug: params.slug },
       tags: [`organization:${params.slug}`],
+      allowDraftMode: false,
     })) ?? {};
 
   return new ImageResponse(

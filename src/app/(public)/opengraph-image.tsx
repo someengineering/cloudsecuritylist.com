@@ -19,6 +19,7 @@ export default async function OpenGraphImage() {
     (await sanityFetch<SITE_SETTINGS_QUERYResult>({
       query: SITE_SETTINGS_QUERY,
       tags: ['siteSettings'],
+      allowDraftMode: false,
     })) ?? {};
 
   return new ImageResponse(

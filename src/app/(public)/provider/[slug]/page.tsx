@@ -1,3 +1,4 @@
+import { metadata as notFoundMetadata } from '@/app/not-found';
 import CloudProvider from '@/components/content/CloudProvider';
 import { getCloudProvider, getCloudProviderSlugs } from '@/lib/sanity';
 import { isValidSlug } from '@/utils/slug';
@@ -22,19 +23,23 @@ export async function generateMetadata(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { images, ...parentOpenGraph } = parentMetadata.openGraph ?? {};
 
-  if (!isValidSlug(params.slug)) {
-    return {};
+  const cloudProvider = isValidSlug(params.slug)
+    ? await getCloudProvider(params.slug)
+    : null;
+
+  if (!cloudProvider) {
+    return notFoundMetadata;
   }
 
-  const { name: title, description } =
-    (await getCloudProvider(params.slug)) ?? {};
+  const { name, abbreviation, description } = cloudProvider;
+  const title = `${name}${abbreviation ? ` (${abbreviation})` : ''}`;
 
   return {
     title,
     description,
     openGraph: {
       ...parentOpenGraph,
-      url: `/category/${params.slug}`,
+      url: `/provider/${params.slug}`,
       title,
     },
   };
@@ -45,14 +50,13 @@ export default async function OrganizationPage({
 }: {
   params: { slug: string };
 }) {
-  if (!isValidSlug(params.slug)) {
+  const cloudProvider = isValidSlug(params.slug)
+    ? await getCloudProvider(params.slug)
+    : null;
+
+  if (!cloudProvider) {
     notFound();
   }
 
-  const cloudProvider = await getCloudProvider(params.slug);
-
-  if (cloudProvider === null) {
-    notFound();
-  }
   return <CloudProvider cloudProvider={cloudProvider} />;
 }

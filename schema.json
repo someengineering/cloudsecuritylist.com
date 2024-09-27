@@ -393,7 +393,21 @@
           "type": "string"
         }
       },
-      "title": {
+      "name": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        },
+        "optional": false
+      },
+      "shortName": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        },
+        "optional": false
+      },
+      "tagline": {
         "type": "objectAttribute",
         "value": {
           "type": "string"
@@ -1467,6 +1481,13 @@
           "type": "string"
         },
         "optional": false
+      },
+      "abbreviation": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        },
+        "optional": true
       },
       "slug": {
         "type": "objectAttribute",

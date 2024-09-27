@@ -17,8 +17,22 @@ export default defineType({
   ],
   fields: [
     defineField({
-      name: 'title',
-      title: 'Site title',
+      name: 'name',
+      title: 'Site name',
+      type: 'string',
+      validation: (rule) => rule.required().min(1),
+    }),
+    defineField({
+      name: 'shortName',
+      title: 'Short site name',
+      description:
+        "Used when there isn't enough space to display the full sitename. Maximum of 15 characters (ideally 12 characters or less).",
+      type: 'string',
+      validation: (rule) => rule.required().min(1).max(15),
+    }),
+    defineField({
+      name: 'tagline',
+      title: 'Site tagline',
       type: 'string',
       validation: (rule) => rule.required().min(1),
     }),

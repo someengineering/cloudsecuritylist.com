@@ -9,15 +9,15 @@ import { Metadata } from 'next';
 import PlausibleProvider from 'next-plausible';
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { title, description, url } = (await getSiteSettings()) ?? {};
+  const { name, tagline, description, url } = (await getSiteSettings()) ?? {};
 
   return {
     title: {
-      default: title ?? '',
-      template: `%s | ${title}`,
+      default: `${name}: ${tagline}`,
+      template: `%s | ${name}`,
     },
     description,
-    applicationName: title,
+    applicationName: name,
     metadataBase:
       process.env.NEXT_PUBLIC_VERCEL_ENV === 'production' && url
         ? new URL(url)
@@ -27,7 +27,7 @@ export async function generateMetadata(): Promise<Metadata> {
         ? { index: true, follow: true }
         : { index: false, follow: false },
     openGraph: {
-      siteName: title,
+      siteName: name,
       type: 'website',
       locale: 'en_US',
     },
@@ -39,7 +39,7 @@ export default async function PublicLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { title, navigation, copyright } = (await getSiteSettings()) ?? {};
+  const { name, navigation, copyright } = (await getSiteSettings()) ?? {};
 
   return (
     <html lang="en" className={clsx('h-full scroll-smooth', notoSans.variable)}>
@@ -47,7 +47,7 @@ export default async function PublicLayout({
         <PlausibleProvider domain="cloudsecuritylist.com" trackOutboundLinks />
       </head>
       <body className="bg-white">
-        <Header title={title} navigation={navigation} />
+        <Header title={name} navigation={navigation} />
         <main>{children}</main>
         <Footer copyright={copyright} navigation={navigation} />
       </body>

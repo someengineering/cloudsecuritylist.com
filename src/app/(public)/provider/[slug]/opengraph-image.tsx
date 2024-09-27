@@ -20,18 +20,19 @@ export default async function OpenGraphImage({
 }: {
   params: { slug: string };
 }) {
-  const { name, description, mark } =
+  const { name, abbreviation, description, mark } =
     (await sanityFetch<CLOUD_PROVIDER_QUERYResult>({
       query: CLOUD_PROVIDER_QUERY,
       params: { slug: params.slug },
       tags: [`cloudProvider:${params.slug}`],
+      allowDraftMode: false,
     })) ?? {};
 
   return new ImageResponse(
     (
       <Layout>
         <Summary
-          title={name ?? ''}
+          title={`${name}${abbreviation ? ` (${abbreviation})` : ''}`}
           description={description ?? ''}
           logo={urlFor(mark ?? '').url()}
         />

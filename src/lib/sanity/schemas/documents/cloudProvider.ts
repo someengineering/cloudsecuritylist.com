@@ -31,6 +31,12 @@ export default defineType({
       validation: (rule) => rule.required().min(1),
     }),
     defineField({
+      name: 'abbreviation',
+      title: 'Abbreviation/acronym',
+      type: 'string',
+      validation: (rule) => rule.min(1),
+    }),
+    defineField({
       name: 'slug',
       title: 'Slug',
       type: 'slug',

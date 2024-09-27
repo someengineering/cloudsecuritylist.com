@@ -6,7 +6,9 @@ export const SITE_SETTINGS_QUERY = groq`
     _type == "siteSettings" &&
     _id == "siteSettings"
   ] [0] {
-    title,
+    name,
+    shortName,
+    tagline,
     description,
     url,
     copyright,

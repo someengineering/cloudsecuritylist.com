@@ -21,15 +21,15 @@ export async function sanityFetch<QueryResponse>({
   params = {},
   revalidate = 60,
   tags = [],
-  respectDraftMode = true,
+  allowDraftMode = true,
 }: {
   query: string;
   params?: QueryParams;
   revalidate?: number | false;
   tags?: string[];
-  respectDraftMode?: boolean;
+  allowDraftMode?: boolean;
 }) {
-  const isDraftMode = respectDraftMode && draftMode().isEnabled;
+  const isDraftMode = allowDraftMode && draftMode().isEnabled;
   if (isDraftMode && !token) {
     throw new Error('Missing environment variable SANITY_API_READ_TOKEN');
   }

@@ -73,7 +73,7 @@ export const getSitemapData = async () => {
       'productCategory',
       'organization',
     ],
-    respectDraftMode: false,
+    allowDraftMode: false,
   });
 
   return data;
@@ -92,7 +92,7 @@ export const getPageSlugs = async () => {
   const data = await sanityFetch<PAGE_SLUGS_QUERYResult>({
     query: PAGE_SLUGS_QUERY,
     tags: ['page'],
-    respectDraftMode: false,
+    allowDraftMode: false,
   });
 
   return data;
@@ -140,7 +140,7 @@ export const getProductCategorySlugs = async () => {
   const data = await sanityFetch<PRODUCT_CATEGORY_SLUGS_QUERYResult>({
     query: PRODUCT_CATEGORY_SLUGS_QUERY,
     tags: ['productCategory'],
-    respectDraftMode: false,
+    allowDraftMode: false,
   });
 
   return data;
@@ -172,7 +172,7 @@ export const getCloudProviderSlugs = async () => {
   const data = await sanityFetch<CLOUD_PROVIDER_SLUGS_QUERYResult>({
     query: CLOUD_PROVIDER_SLUGS_QUERY,
     tags: ['cloudProvider'],
-    respectDraftMode: false,
+    allowDraftMode: false,
   });
 
   return data;
@@ -225,7 +225,7 @@ export const getOrganizationSlugs = async () => {
   const data = await sanityFetch<ORGANIZATION_SLUGS_QUERYResult>({
     query: ORGANIZATION_SLUGS_QUERY,
     tags: ['organization'],
-    respectDraftMode: false,
+    allowDraftMode: false,
   });
 
   return data;

@@ -7,7 +7,6 @@ import { PRODUCT_CATEGORY_QUERYResult } from '@/lib/sanity/types';
 import { toSentenceCase } from '@/utils/string';
 import { PortableTextBlock } from '@portabletext/types';
 import { getImageDimensions } from '@sanity/asset-utils';
-import { notFound } from 'next/navigation';
 
 export default async function ProductCategory({
   productCategory,
@@ -15,7 +14,7 @@ export default async function ProductCategory({
   productCategory: PRODUCT_CATEGORY_QUERYResult;
 }) {
   if (!productCategory) {
-    notFound();
+    return null;
   }
 
   return (

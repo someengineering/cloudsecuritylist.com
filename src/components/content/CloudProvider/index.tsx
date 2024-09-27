@@ -6,7 +6,6 @@ import { urlFor } from '@/lib/sanity/image';
 import { CLOUD_PROVIDER_QUERYResult } from '@/lib/sanity/types';
 import { getImageDimensions } from '@sanity/asset-utils';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
 import { HiOutlineGlobeAlt } from 'react-icons/hi2';
 import { SiLinkedin } from 'react-icons/si';
 
@@ -16,7 +15,7 @@ export default async function CloudProvider({
   cloudProvider: CLOUD_PROVIDER_QUERYResult;
 }) {
   if (!cloudProvider) {
-    notFound();
+    return null;
   }
 
   const links: {
@@ -47,7 +46,7 @@ export default async function CloudProvider({
   return (
     <>
       <PageHeader
-        title={cloudProvider.name}
+        title={`${cloudProvider.name}${cloudProvider.abbreviation ? ` (${cloudProvider.abbreviation})` : ''}`}
         description={cloudProvider.description}
         links={links}
         image={urlFor(cloudProvider.mark).url()}

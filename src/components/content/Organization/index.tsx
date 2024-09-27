@@ -7,7 +7,6 @@ import { toSentenceCase } from '@/utils/string';
 import { getImageDimensions } from '@sanity/asset-utils';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
 import React from 'react';
 import {
   HiArrowTrendingUp,
@@ -23,7 +22,7 @@ export default async function Organization({
   organization: ORGANIZATION_QUERYResult;
 }) {
   if (!organization) {
-    notFound();
+    return null;
   }
 
   const links: {

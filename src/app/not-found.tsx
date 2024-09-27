@@ -24,7 +24,7 @@ export const metadata: Metadata = {
 };
 
 export default async function NotFoundPage() {
-  const { title, navigation, copyright, featuredPages } =
+  const { name, navigation, copyright, featuredPages } =
     (await getSiteSettings()) ?? {};
 
   return (
@@ -33,7 +33,7 @@ export default async function NotFoundPage() {
         <PlausibleProvider domain="cloudsecuritylist.com" trackOutboundLinks />
       </head>
       <body className="bg-white">
-        <Header title={title} navigation={navigation} />
+        <Header title={name} navigation={navigation} />
         <main>
           <PageHeader
             title="Page not found"
