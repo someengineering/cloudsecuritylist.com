@@ -12,16 +12,14 @@ export default function Summary({
   return (
     <div tw="flex">
       {logo ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={logo}
-          alt=""
-          tw="-mt-5 mr-6 h-28 w-28 rounded-full bg-white p-1"
-        />
+        <div tw="-mt-5 mr-6 flex h-28 w-28 overflow-hidden rounded-full bg-white p-4">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={logo} alt="" tw="h-full w-full" />
+        </div>
       ) : null}
       <div tw="flex flex-col">
         <div tw="text-7xl font-bold leading-none tracking-tight">{title}</div>
-        <div tw={clsx('mt-7 text-4xl font-medium', logo ? 'w-7/8' : 'w-4/5')}>
+        <div tw={clsx('mt-5 text-4xl font-medium', logo ? 'w-7/8' : 'w-4/5')}>
           {description}
         </div>
       </div>
