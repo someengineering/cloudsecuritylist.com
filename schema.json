@@ -946,6 +946,39 @@
         },
         "optional": false
       },
+      "listType": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "union",
+          "of": [
+            {
+              "type": "string",
+              "value": "cloudProvider"
+            },
+            {
+              "type": "string",
+              "value": "framework"
+            },
+            {
+              "type": "string",
+              "value": "marketSegment"
+            },
+            {
+              "type": "string",
+              "value": "organization"
+            },
+            {
+              "type": "string",
+              "value": "productCategory"
+            },
+            {
+              "type": "string",
+              "value": "research"
+            }
+          ]
+        },
+        "optional": true
+      },
       "icon": {
         "type": "objectAttribute",
         "value": {

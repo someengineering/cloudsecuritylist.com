@@ -22,6 +22,19 @@ export const PAGE_QUERY = groq`
     _type == "page" &&
     slug.current == $slug
   ] [0] {
+    _createdAt,
+    _updatedAt,
+    "_listItemsUpdatedAt": select(
+      defined(listType) => *[_type == ^.listType] | order(_updatedAt desc) [0]._updatedAt,
+      null
+    ),
     ${PAGE}
+  } {
+    ...,
+    "_updatedAt": select(
+      defined(_listItemsUpdatedAt) && _listItemsUpdatedAt >= _updatedAt => _listItemsUpdatedAt,
+      _updatedAt
+    ),
+    "_listItemsUpdatedAt": null,
   }
 `;

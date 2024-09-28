@@ -40,6 +40,8 @@ export const ORGANIZATION_QUERY = groq`
     _type == "organization" &&
     slug.current == $slug
   ] [0] {
+    _createdAt,
+    _updatedAt,
     ${ORGANIZATION}
   }
 `;

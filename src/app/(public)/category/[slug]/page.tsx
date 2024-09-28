@@ -67,6 +67,8 @@ export default async function OrganizationPage({
         schema={await getWebPage({
           title: productCategory.name,
           path: `/category/${params.slug}`,
+          datePublished: productCategory._createdAt,
+          dateModified: productCategory._updatedAt,
           parentPageSlug: 'categories',
         })}
       />

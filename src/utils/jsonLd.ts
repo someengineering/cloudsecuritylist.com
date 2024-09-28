@@ -16,7 +16,7 @@ import {
   WithContext,
 } from 'schema-dts';
 
-export const getBreadcrumbList = async ({
+const getBreadcrumbList = async ({
   siteName,
   siteUrl,
   currentPage,
@@ -66,10 +66,14 @@ export const getBreadcrumbList = async ({
 export const getWebPage = async ({
   title,
   path,
+  datePublished,
+  dateModified,
   parentPageSlug,
 }: {
   title: string;
   path: string;
+  datePublished?: string;
+  dateModified?: string;
   parentPageSlug?: string;
 }): Promise<
   WithContext<WebSite | WebPage>[] | WithContext<WebPage> | undefined
@@ -88,6 +92,8 @@ export const getWebPage = async ({
     name: title,
     identifier: url,
     url,
+    datePublished,
+    dateModified,
     breadcrumb:
       path !== '/'
         ? await getBreadcrumbList({
@@ -134,6 +140,8 @@ export const getOrganizationProfilePage = async (
   const webPage = await getWebPage({
     title: organization.name,
     path: `/organization/${organization.slug}`,
+    datePublished: organization._createdAt,
+    dateModified: organization._updatedAt,
     parentPageSlug:
       'productCategories' in organization &&
       organization.productCategories?.length
@@ -183,6 +191,8 @@ export const getCloudProviderProfilePage = async (
   const webPage = await getWebPage({
     title: cloudProvider.name,
     path: `/provider/${cloudProvider.slug}`,
+    datePublished: cloudProvider._createdAt,
+    dateModified: cloudProvider._updatedAt,
     parentPageSlug: 'providers',
   });
 

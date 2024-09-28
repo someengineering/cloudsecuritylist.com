@@ -8,7 +8,10 @@ export const SITEMAP_DATA_QUERY = groq`
         "url": "/" + slug.current,
         "lastModified": array::compact([
           _updatedAt,
-          *[_type == ^.slug.current] | order(_updatedAt desc) [0]._updatedAt,
+          select(
+            defined(listType) => *[_type == ^.listType] | order(_updatedAt desc) [0]._updatedAt,
+            null
+          ),
         ]),
       }) +
       (*[_type == "productCategory" && defined(slug.current)] {

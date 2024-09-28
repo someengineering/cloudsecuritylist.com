@@ -30,6 +30,23 @@ export default defineType({
       validation: (rule) => rule.required().min(50).max(160),
     }),
     defineField({
+      name: 'listType',
+      title: 'List type',
+      description:
+        'If this page is primarily a list of items, select the schema type of the items in the list.',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Cloud provider', value: 'cloudProvider' },
+          { title: 'Framework', value: 'framework' },
+          { title: 'Market segment', value: 'marketSegment' },
+          { title: 'Organization', value: 'organization' },
+          { title: 'Product category', value: 'productCategory' },
+          { title: 'Research', value: 'research' },
+        ],
+      },
+    }),
+    defineField({
       name: 'icon',
       title: 'Icon',
       type: 'iconPicker',

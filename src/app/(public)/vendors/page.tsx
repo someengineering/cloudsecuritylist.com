@@ -44,7 +44,12 @@ export default async function VendorsPage({
     provider: supportedCloudProviders,
   } = searchParams;
 
-  const { title, description } = (await getPage(slug)) ?? {};
+  const {
+    title,
+    description,
+    _createdAt: datePublished,
+    _updatedAt: dateModified,
+  } = (await getPage(slug)) ?? {};
 
   if (!title) {
     notFound();
@@ -56,6 +61,8 @@ export default async function VendorsPage({
         schema={await getWebPage({
           title,
           path: `/${slug}`,
+          datePublished,
+          dateModified,
         })}
       />
       <PageHeader title={title} description={description} />
