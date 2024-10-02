@@ -8,14 +8,15 @@ export const config = {
      * - api (API routes)
      * - _next/static (static files)
      * - _next/image (image optimization files)
-     * - favicon (favicon files)
+     * - favicon.ico (favicon file)
      * - apple-touch-icon (Apple touch icon files)
-     * - android-chrome- (Android Chrome files)
+     * - icon- (icon files)
+     * - icon.svg (SVG icon file)
      * - site.webmanifest (web manifest file)
      */
     {
       source:
-        '/((?!api|_next/static|_next/image|favicon|apple-touch-icon|android-chrome-|site.webmanifest).*)',
+        '/((?!api|_next/static|_next/image|favicon.ico|apple-touch-icon|icon-|icon.svg|site.webmanifest).*)',
       missing: [
         { type: 'header', key: 'next-router-prefetch' },
         { type: 'header', key: 'purpose', value: 'prefetch' },
@@ -50,7 +51,7 @@ export function middleware(request: NextRequest) {
     base-uri 'self';
     form-action 'self';
     frame-ancestors 'none';
-    upgrade-insecure-requests;
+    ${process.env.NEXT_PUBLIC_VERCEL_ENV === 'production' ? 'upgrade-insecure-requests;' : ''}
 `
     .replace(/\s{2,}/g, ' ')
     .trim();
