@@ -21,7 +21,7 @@ export const CLOUD_PROVIDER_QUERY = groq`
   *[
     _type == "cloudProvider" &&
     slug.current == $slug
-  ] [0] {
+  ][0] {
     _createdAt,
     _updatedAt,
     ${CLOUD_PROVIDER}

@@ -2,7 +2,7 @@ import { groq } from 'next-sanity';
 
 export const SITEMAP_DATA_QUERY = groq`
   {
-    "baseUrl": *[_type == "siteSettings" && _id == "siteSettings"] [0].url,
+    "baseUrl": *[_type == "siteSettings" && _id == "siteSettings"][0].url,
     "items": 
       (*[_type == "page" && defined(slug.current)] {
         "url": "/" + slug.current,

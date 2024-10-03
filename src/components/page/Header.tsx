@@ -1,3 +1,6 @@
+import { transformUrl } from '@/utils/link';
+import { PortableText } from '@portabletext/react';
+import { PortableTextBlock } from '@portabletext/types';
 import Image from 'next/image';
 import Link from 'next/link';
 import { IconType } from 'react-icons/lib';
@@ -9,8 +12,8 @@ export default async function PageHeader({
   links,
   image,
 }: {
-  title?: string;
-  description?: string;
+  title: string | PortableTextBlock;
+  description?: string | PortableTextBlock[];
   eyebrow?: string;
   links?: {
     label: string;
@@ -26,7 +29,7 @@ export default async function PageHeader({
 
   return (
     <section className="px-6 py-12 text-center sm:py-16 lg:px-8">
-      <div className="mx-auto max-w-3xl">
+      <div className="mx-auto max-w-4xl">
         {image ? (
           <div className="relative mb-6 h-20">
             <Image
@@ -38,17 +41,68 @@ export default async function PageHeader({
             />
           </div>
         ) : eyebrow ? (
-          <p className="mb-2 font-semibold text-cyan-600 sm:text-2xl">
+          <p className="mb-2 text-xl font-semibold text-cyan-600 sm:text-2xl">
             {eyebrow}
           </p>
         ) : null}
-        <h1 className="text-balance text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
-          {title}
+        <h1 className="text-balance text-5xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+          {typeof title === 'string' ? (
+            title
+          ) : (
+            <PortableText
+              value={title}
+              components={{
+                block: {
+                  normal: ({ children }) => children,
+                },
+                marks: {
+                  strong: ({ children }) => (
+                    <span className="bg-gradient-to-br from-cyan-600 to-cyan-700 bg-clip-text font-extrabold text-transparent">
+                      {children}
+                    </span>
+                  ),
+                },
+              }}
+            />
+          )}
         </h1>
-        {description ? (
-          <p className="mx-auto mt-6 max-w-prose text-pretty leading-7 text-gray-700">
+        {typeof description === 'string' ? (
+          <p className="mx-auto mt-6 max-w-prose text-balance leading-7 text-gray-700 sm:text-lg">
             {description}
           </p>
+        ) : Array.isArray(description) ? (
+          <div className="mx-auto mt-6 max-w-prose space-y-1.5 leading-7 text-gray-700 sm:text-lg">
+            <PortableText
+              value={description}
+              components={{
+                block: {
+                  normal: ({ children }) => (
+                    <p className="text-balance">{children}</p>
+                  ),
+                },
+                marks: {
+                  link: async ({ children, value }) => {
+                    const href = await transformUrl(value.href);
+
+                    return (
+                      <Link
+                        href={href}
+                        target={href.startsWith('/') ? undefined : '_blank'}
+                        rel={
+                          href.startsWith('/')
+                            ? undefined
+                            : 'noopener noreferrer'
+                        }
+                        className="font-semibold text-cyan-600 hover:text-cyan-700"
+                      >
+                        {children}
+                      </Link>
+                    );
+                  },
+                },
+              }}
+            />
+          </div>
         ) : null}
       </div>
       {links?.length ? (

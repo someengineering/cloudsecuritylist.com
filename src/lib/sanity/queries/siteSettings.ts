@@ -5,7 +5,7 @@ export const SITE_SETTINGS_QUERY = groq`
   *[
     _type == "siteSettings" &&
     _id == "siteSettings"
-  ] [0] {
+  ][0] {
     name,
     shortName,
     tagline,
@@ -16,8 +16,8 @@ export const SITE_SETTINGS_QUERY = groq`
       name,
       href,
     },
-    headline,
-    subheadline,
+    heroTitle[0],
+    heroDescription[],
     featuredPages[] -> {
       ${PAGE}
     }

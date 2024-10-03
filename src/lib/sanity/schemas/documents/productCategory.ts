@@ -1,5 +1,10 @@
+import {
+  noNewlines,
+  noStartingOrTerminatingWhitespace,
+  notEmpty,
+} from '@/lib/sanity/schemas/validation/block';
 import { TagIcon } from '@sanity/icons';
-import { defineField, defineType } from 'sanity';
+import { defineField, defineType, PortableTextTextBlock } from 'sanity';
 import { preview } from 'sanity-plugin-icon-picker';
 
 export default defineType({
@@ -68,7 +73,20 @@ export default defineType({
       description:
         'Longer, multi-paragraph explanation of the product category.',
       type: 'array',
-      of: [{ type: 'block', styles: [] }],
+      of: [
+        {
+          type: 'block',
+          styles: [],
+          lists: [],
+          validation: (rule) =>
+            rule
+              .custom((value: PortableTextTextBlock) => notEmpty(value))
+              .custom((value: PortableTextTextBlock) =>
+                noStartingOrTerminatingWhitespace(value),
+              )
+              .custom((value: PortableTextTextBlock) => noNewlines(value)),
+        },
+      ],
       fieldset: 'content',
       validation: (rule) => rule.required().min(2),
     }),

@@ -114,7 +114,7 @@ export const getPage = async (slug: string) => {
     tags: [`page:${slug}`],
   });
 
-  return data;
+  return { ...data, _updatedAt: data?._updatedAt ?? undefined };
 };
 
 export const getMarketSegments = async () => {

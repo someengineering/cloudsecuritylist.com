@@ -15,7 +15,7 @@ export const RESEARCH_QUERY = groq`
   *[
     _type == "research" &&
     slug.current == $slug
-  ] [0] {
+  ][0] {
     ${RESEARCH}
     organization -> { ${ORGANIZATION_BASE} },
   }

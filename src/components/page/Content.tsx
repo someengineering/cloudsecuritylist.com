@@ -1,3 +1,4 @@
+import { transformUrl } from '@/utils/link';
 import { slugify } from '@/utils/slug';
 import { PortableText, PortableTextReactComponents } from '@portabletext/react';
 import { PortableTextBlock } from '@portabletext/types';
@@ -9,14 +10,14 @@ const components: Partial<PortableTextReactComponents> = {
   },
 
   marks: {
-    link: ({ children, value }) => {
-      const isInternal = value.href.startsWith('/');
+    link: async ({ children, value }) => {
+      const href = await transformUrl(value.href);
 
       return (
         <Link
-          href={value.href}
-          target={isInternal ? undefined : '_blank'}
-          rel={isInternal ? undefined : 'noopener noreferrer'}
+          href={href}
+          target={href.startsWith('/') ? undefined : '_blank'}
+          rel={href.startsWith('/') ? undefined : 'noopener noreferrer'}
           className="font-semibold text-cyan-600 hover:text-cyan-700"
         >
           {children}

@@ -22,7 +22,7 @@ export const PRODUCT_CATEGORY_QUERY = groq`
   *[
     _type == "productCategory" &&
     slug.current == $slug
-  ] [0] {
+  ][0] {
     _createdAt,
     _updatedAt,
     ${PRODUCT_CATEGORY}

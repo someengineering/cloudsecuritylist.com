@@ -13,7 +13,7 @@ export const MARKET_SEGMENT_QUERY = groq`
   *[
     _type == "marketSegment" &&
     slug.current == $slug
-  ] [0] {
+  ][0] {
     ${MARKET_SEGMENT}
   }
 `;

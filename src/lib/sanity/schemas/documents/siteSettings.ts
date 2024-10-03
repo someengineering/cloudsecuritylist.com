@@ -1,5 +1,10 @@
+import {
+  noNewlines,
+  noStartingOrTerminatingWhitespace,
+  notEmpty,
+} from '@/lib/sanity/schemas/validation/block';
 import { LinkIcon, SearchIcon } from '@sanity/icons';
-import { defineField, defineType } from 'sanity';
+import { defineField, defineType, PortableTextTextBlock } from 'sanity';
 
 export default defineType({
   name: 'siteSettings',
@@ -33,6 +38,7 @@ export default defineType({
     defineField({
       name: 'tagline',
       title: 'Site tagline',
+      description: 'Displayed in the browser title bar after the site name.',
       type: 'string',
       validation: (rule) => rule.required().min(1),
     }),
@@ -40,7 +46,7 @@ export default defineType({
       name: 'description',
       title: 'SEO description',
       description:
-        'SEO description length must be between 50 and 160 characters. (Note: The homepage headline text is configured below.)',
+        'SEO description length must be between 50 and 160 characters. (Note: The homepage hero text is configured below.)',
       type: 'text',
       rows: 3,
       validation: (rule) => rule.required().min(50).max(160),
@@ -56,7 +62,7 @@ export default defineType({
       title: 'Copyright text',
       type: 'text',
       rows: 1,
-      validation: (rule) => rule.required().min(1),
+      validation: (rule) => rule.required().min(10),
     }),
     defineField({
       name: 'navigation',
@@ -90,22 +96,52 @@ export default defineType({
       validation: (rule) => rule.required().min(1),
     }),
     defineField({
-      name: 'headline',
-      title: 'Homepage headline',
-      description: 'Headline length must be between 25 and 75 characters.',
-      type: 'text',
-      rows: 2,
+      name: 'heroTitle',
+      title: 'Homepage hero title',
+      type: 'array',
+      of: [
+        {
+          type: 'block',
+          styles: [],
+          lists: [],
+          marks: {
+            decorators: [{ title: 'Strong', value: 'strong' }],
+            annotations: [],
+          },
+          validation: (rule) =>
+            rule
+              .required()
+              .custom((value: PortableTextTextBlock) => notEmpty(value))
+              .custom((value: PortableTextTextBlock) =>
+                noStartingOrTerminatingWhitespace(value),
+              )
+              .custom((value: PortableTextTextBlock) => noNewlines(value)),
+        },
+      ],
       fieldset: 'homepage',
-      validation: (rule) => rule.required().min(25).max(75),
+      validation: (rule) => rule.required().min(1).max(1),
     }),
     defineField({
-      name: 'subheadline',
-      title: 'Homepage subheadline',
-      type: 'text',
-      rows: 3,
+      name: 'heroDescription',
+      title: 'Homepage hero description',
+      type: 'array',
+      of: [
+        {
+          type: 'block',
+          styles: [],
+          lists: [],
+          validation: (rule) =>
+            rule
+              .required()
+              .custom((value: PortableTextTextBlock) => notEmpty(value))
+              .custom((value: PortableTextTextBlock) =>
+                noStartingOrTerminatingWhitespace(value),
+              )
+              .custom((value: PortableTextTextBlock) => noNewlines(value)),
+        },
+      ],
       fieldset: 'homepage',
-      description: 'Subheadline length must be at least 50 characters.',
-      validation: (rule) => rule.required().min(50),
+      validation: (rule) => rule.required().min(1),
     }),
     defineField({
       name: 'featuredPages',

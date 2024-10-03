@@ -1,8 +1,7 @@
 import Headline from '@/components/opengraph/Headline';
 import Layout from '@/components/opengraph/Layout';
 import { sanityFetch } from '@/lib/sanity/client';
-import { SITE_SETTINGS_QUERY } from '@/lib/sanity/queries/siteSettings';
-import { SITE_SETTINGS_QUERYResult } from '@/lib/sanity/types';
+import { groq } from 'next-sanity';
 import { ImageResponse } from 'next/og';
 
 export const runtime = 'edge';
@@ -15,9 +14,9 @@ export const size = {
 export const contentType = 'image/png';
 
 export default async function OpenGraphImage() {
-  const { headline } =
-    (await sanityFetch<SITE_SETTINGS_QUERYResult>({
-      query: SITE_SETTINGS_QUERY,
+  const headline =
+    (await sanityFetch<string>({
+      query: groq`pt::text(*[_type == "siteSettings"][0].heroTitle)`,
       tags: ['siteSettings'],
       allowDraftMode: false,
     })) ?? {};
