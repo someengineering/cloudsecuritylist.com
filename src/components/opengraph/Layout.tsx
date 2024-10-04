@@ -17,10 +17,10 @@ export default function Layout({ children }: { children: ReactElement }) {
             'linear-gradient(100deg, transparent, transparent 90%, #fff 90%, #fff)',
         }}
       />
-      <div tw="flex p-8">
+      <div tw="flex p-12">
         <Logo tw="text-cyan-600" width={336} height={49} />
       </div>
-      <div tw="w-7/8 flex grow px-8 py-12 text-white">{children}</div>
+      <div tw="w-7/8 -mt-12 flex grow p-12 text-white">{children}</div>
     </div>
   );
 }
