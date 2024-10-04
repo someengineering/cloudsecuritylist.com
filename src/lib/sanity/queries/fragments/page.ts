@@ -3,4 +3,5 @@ export const PAGE = `
   title,
   description,
   "icon": icon.name,
+  ...select(!defined(listType) => { longTitle, textContent[] }),
 `;

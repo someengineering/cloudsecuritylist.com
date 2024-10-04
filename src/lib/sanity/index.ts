@@ -22,7 +22,7 @@ import {
 import {
   PAGE_QUERY,
   PAGE_SLUGS_QUERY,
-  PAGES_QUERY,
+  TEXT_PAGE_SLUGS_QUERY,
 } from '@/lib/sanity/queries/page';
 import {
   PRODUCT_CATEGORIES_QUERY,
@@ -59,6 +59,7 @@ import {
   RESEARCHES_QUERYResult,
   SITE_SETTINGS_QUERYResult,
   SITEMAP_DATA_QUERYResult,
+  TEXT_PAGE_SLUGS_QUERYResult,
   VENDORS_COUNT_QUERYResult,
   VENDORS_QUERYResult,
 } from '@/lib/sanity/types';
@@ -98,10 +99,11 @@ export const getPageSlugs = async () => {
   return data;
 };
 
-export const getPages = async () => {
-  const data = await sanityFetch<PAGE_QUERYResult>({
-    query: PAGES_QUERY,
+export const getTextPageSlugs = async () => {
+  const data = await sanityFetch<TEXT_PAGE_SLUGS_QUERYResult>({
+    query: TEXT_PAGE_SLUGS_QUERY,
     tags: ['page'],
+    allowDraftMode: false,
   });
 
   return data;

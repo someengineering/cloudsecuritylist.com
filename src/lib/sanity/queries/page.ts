@@ -8,13 +8,13 @@ export const PAGE_SLUGS_QUERY = groq`
   ].slug.current
 `;
 
-export const PAGES_QUERY = groq`
-  *[
-    _type == "page" &&
-    defined(slug.current)
-  ] {
-    ${PAGE}
-  }
+export const TEXT_PAGE_SLUGS_QUERY = groq`
+*[
+  _type == "page" &&
+  defined(slug.current) &&
+  !defined(listType) &&
+  defined(textContent)
+].slug.current
 `;
 
 export const PAGE_QUERY = groq`

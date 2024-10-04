@@ -6,7 +6,16 @@ import Link from 'next/link';
 
 const components: Partial<PortableTextReactComponents> = {
   block: {
-    normal: ({ children }) => <p className="mb-6">{children}</p>,
+    normal: ({ children }) => (
+      <p className="mb-8 max-w-2xl last:mb-0 first-of-type:mb-10 first-of-type:mt-6 first-of-type:text-xl first-of-type:leading-8">
+        {children}
+      </p>
+    ),
+    h1: ({ children }) => (
+      <h1 className="text-pretty text-3xl font-bold tracking-tight text-gray-900 xs:text-4xl sm:text-5xl">
+        {children}
+      </h1>
+    ),
   },
 
   marks: {
@@ -27,31 +36,27 @@ const components: Partial<PortableTextReactComponents> = {
   },
 };
 
-export default async function Content({
-  heading,
-  portableTextBlocks,
+export default async function MainText({
+  title,
+  blocks,
 }: {
-  heading: string;
-  portableTextBlocks: PortableTextBlock[];
+  title: string;
+  blocks: PortableTextBlock[];
 }) {
-  const slug = slugify(heading);
+  const slug = slugify(title);
 
   return (
     <section
-      className="mb-12 bg-cyan-50/75 py-12 shadow-sm sm:mb-16 sm:py-16"
+      className="mx-auto max-w-3xl px-6 py-12 leading-7 text-gray-700 sm:py-16 lg:px-8"
       aria-labelledby={slug}
     >
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <h2
-          className="max-w-3xl text-pretty text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl"
-          id="slug"
-        >
-          {heading}
-        </h2>
-        <div className="mt-10 columns-md gap-8 leading-7 text-gray-700">
-          <PortableText value={portableTextBlocks} components={components} />
-        </div>
-      </div>
+      <h1
+        className="mb-2 text-lg font-semibold text-cyan-600 sm:text-xl"
+        id={slug}
+      >
+        {title}
+      </h1>
+      <PortableText value={blocks} components={components} />
     </section>
   );
 }

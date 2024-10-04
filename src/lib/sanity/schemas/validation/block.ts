@@ -8,6 +8,9 @@ export const notEmpty = (block: PortableTextTextBlock) =>
       !!span.text.trim(),
   ) || 'Block must not be empty.';
 
+export const notHeading = (block: PortableTextTextBlock) =>
+  !/^h\d$/.test(block.style ?? '') || 'Block must not be a heading.';
+
 export const noStartingOrTerminatingWhitespace = (
   block: PortableTextTextBlock,
 ) => {

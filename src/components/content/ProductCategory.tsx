@@ -1,4 +1,4 @@
-import Content from '@/components/page/Content';
+import FeaturedText from '@/components/page/FeaturedText';
 import PageHeader from '@/components/page/Header';
 import LogoGrid from '@/components/page/LogoGrid';
 import OffsetSection from '@/components/page/OffsetSection';
@@ -30,9 +30,9 @@ export default async function ProductCategory({
         description={productCategory.description}
         eyebrow={`${toSentenceCase(productCategory.marketSegment.name)} security`}
       />
-      <Content
+      <FeaturedText
         heading={productCategory.explanationHeading}
-        portableTextBlocks={productCategory.explanation as PortableTextBlock[]}
+        blocks={productCategory.explanation as PortableTextBlock[]}
       />
       {productCategory.vendors.length > 0 ? (
         <OffsetSection heading="Product vendors" slug="vendors">

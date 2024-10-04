@@ -31,7 +31,7 @@ export default defineType({
       name: 'shortName',
       title: 'Short site name',
       description:
-        "Used when there isn't enough space to display the full sitename. Maximum of 15 characters (ideally 12 characters or less).",
+        "Used when there isn't enough space to display the full site name. Maximum of 15 characters (ideally 12 characters or less).",
       type: 'string',
       validation: (rule) => rule.required().min(1).max(15),
     }),

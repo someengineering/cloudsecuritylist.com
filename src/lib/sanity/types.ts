@@ -197,6 +197,7 @@ export type Page = {
   _updatedAt: string;
   _rev: string;
   title: string;
+  longTitle?: string;
   slug: Slug;
   description: string;
   listType?:
@@ -206,6 +207,24 @@ export type Page = {
     | 'organization'
     | 'productCategory'
     | 'research';
+  textContent?: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: 'span';
+      _key: string;
+    }>;
+    style?: 'normal' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'blockquote';
+    listItem?: 'bullet' | 'number';
+    markDefs?: Array<{
+      href?: string;
+      _type: 'link';
+      _key: string;
+    }>;
+    level?: number;
+    _type: 'block';
+    _key: string;
+  }>;
   icon: IconPicker;
 };
 
@@ -1024,16 +1043,11 @@ export type ACQUISITIONS_QUERYResult = Array<{
 // Variable: PAGE_SLUGS_QUERY
 // Query: *[    _type == "page" &&    defined(slug.current)  ].slug.current
 export type PAGE_SLUGS_QUERYResult = Array<string>;
-// Variable: PAGES_QUERY
-// Query: *[    _type == "page" &&    defined(slug.current)  ] {      "slug": slug.current,  title,  description,  "icon": icon.name,  }
-export type PAGES_QUERYResult = Array<{
-  slug: string;
-  title: string;
-  description: string;
-  icon: string | null;
-}>;
+// Variable: TEXT_PAGE_SLUGS_QUERY
+// Query: *[  _type == "page" &&  defined(slug.current) &&  !defined(listType) &&  defined(textContent)].slug.current
+export type TEXT_PAGE_SLUGS_QUERYResult = Array<string>;
 // Variable: PAGE_QUERY
-// Query: *[    _type == "page" &&    slug.current == $slug  ][0] {    _createdAt,    _updatedAt,    "_listItemsUpdatedAt": select(      defined(listType) => *[_type == ^.listType] | order(_updatedAt desc) [0]._updatedAt,      null    ),      "slug": slug.current,  title,  description,  "icon": icon.name,  } {    ...,    "_updatedAt": select(      defined(_listItemsUpdatedAt) && _listItemsUpdatedAt >= _updatedAt => _listItemsUpdatedAt,      _updatedAt    ),    "_listItemsUpdatedAt": null,  }
+// Query: *[    _type == "page" &&    slug.current == $slug  ][0] {    _createdAt,    _updatedAt,    "_listItemsUpdatedAt": select(      defined(listType) => *[_type == ^.listType] | order(_updatedAt desc) [0]._updatedAt,      null    ),      "slug": slug.current,  title,  description,  "icon": icon.name,  ...select(!defined(listType) => { longTitle, textContent[] }),  } {    ...,    "_updatedAt": select(      defined(_listItemsUpdatedAt) && _listItemsUpdatedAt >= _updatedAt => _listItemsUpdatedAt,      _updatedAt    ),    "_listItemsUpdatedAt": null,  }
 export type PAGE_QUERYResult = {
   _createdAt: string;
   _updatedAt: string | null;
@@ -1042,6 +1056,25 @@ export type PAGE_QUERYResult = {
   title: string;
   description: string;
   icon: string | null;
+  longTitle: string | null;
+  textContent: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: 'span';
+      _key: string;
+    }>;
+    style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'normal';
+    listItem?: 'bullet' | 'number';
+    markDefs?: Array<{
+      href?: string;
+      _type: 'link';
+      _key: string;
+    }>;
+    level?: number;
+    _type: 'block';
+    _key: string;
+  }> | null;
 } | null;
 
 // Source: ./src/lib/sanity/queries/productCategories.ts
@@ -1269,7 +1302,7 @@ export type RESEARCH_QUERYResult = {
 
 // Source: ./src/lib/sanity/queries/siteSettings.ts
 // Variable: SITE_SETTINGS_QUERY
-// Query: *[    _type == "siteSettings" &&    _id == "siteSettings"  ][0] {    name,    shortName,    tagline,    description,    url,    copyright,    navigation[] {      name,      href,    },    heroTitle[0],    heroDescription[],    featuredPages[] -> {        "slug": slug.current,  title,  description,  "icon": icon.name,    }  }
+// Query: *[    _type == "siteSettings" &&    _id == "siteSettings"  ][0] {    name,    shortName,    tagline,    description,    url,    copyright,    navigation[] {      name,      href,    },    heroTitle[0],    heroDescription[],    featuredPages[] -> {        "slug": slug.current,  title,  description,  "icon": icon.name,  ...select(!defined(listType) => { longTitle, textContent[] }),    }  }
 export type SITE_SETTINGS_QUERYResult = {
   name: string;
   shortName: string;
@@ -1318,12 +1351,31 @@ export type SITE_SETTINGS_QUERYResult = {
     title: string;
     description: string;
     icon: string | null;
+    longTitle: string | null;
+    textContent: Array<{
+      children?: Array<{
+        marks?: Array<string>;
+        text?: string;
+        _type: 'span';
+        _key: string;
+      }>;
+      style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'normal';
+      listItem?: 'bullet' | 'number';
+      markDefs?: Array<{
+        href?: string;
+        _type: 'link';
+        _key: string;
+      }>;
+      level?: number;
+      _type: 'block';
+      _key: string;
+    }> | null;
   }>;
 } | null;
 
 // Source: ./src/lib/sanity/queries/sitemap.ts
 // Variable: SITEMAP_DATA_QUERY
-// Query: {    "baseUrl": *[_type == "siteSettings" && _id == "siteSettings"][0].url,    "items":       (*[_type == "page" && defined(slug.current)] {        "url": "/" + slug.current,        "lastModified": array::compact([          _updatedAt,          select(            defined(listType) => *[_type == ^.listType] | order(_updatedAt desc) [0]._updatedAt,            null          ),        ]),      }) +      (*[_type == "productCategory" && defined(slug.current)] {        "url": "/category/" + slug.current,        "lastModified": array::compact([          _updatedAt,          *[_type == "organization" && organizationType != "acquired" && ^._id in productCategories[]._ref] | order(_updatedAt desc) [0]._updatedAt,          *[_type == "marketSegment" && _id == ^.marketSegment._ref] | order(_updatedAt desc) [0]._updatedAt,        ]),      }) +      (*[_type == "organization" && defined(slug.current) && organizationType != "acquired"] {        "url": "/organization/" + slug.current,        "lastModified": array::compact([          _updatedAt,          *[_type == "cloudProvider" && _id in ^.supportedCloudProviders[]._ref] | order(_updatedAt desc) [0]._updatedAt,          *[_type == "productCategory" && _id in ^.productCategories[]._ref] | order(_updatedAt desc) [0]._updatedAt,          *[_type == "organization" && organizationType == "acquired" && parentOrganization._ref == ^._id] | order(_updatedAt desc) [0]._updatedAt,          *[_type == "research" && organization._ref == ^._id] | order(_updatedAt desc) [0]._updatedAt,        ]),      }) +      (*[_type == "cloudProvider" && defined(slug.current)] {        "url": "/provider/" + slug.current,        "lastModified": array::compact([          _updatedAt,          *[_type == "organization" && organizationType != "acquired" && ^._id in supportedCloudProviders[]._ref] | order(_updatedAt desc) [0]._updatedAt,        ]),      }),  }
+// Query: {    "baseUrl": *[_type == "siteSettings" && _id == "siteSettings"][0].url,    "items":       (*[_type == "page" && defined(slug.current)] {        "url": "/" + slug.current,        "lastModified": array::compact([          _updatedAt,          select(defined(listType) => *[_type == ^.listType] | order(_updatedAt desc) [0]._updatedAt),        ]),      }) +      (*[_type == "productCategory" && defined(slug.current)] {        "url": "/category/" + slug.current,        "lastModified": array::compact([          _updatedAt,          *[_type == "organization" && organizationType != "acquired" && ^._id in productCategories[]._ref] | order(_updatedAt desc) [0]._updatedAt,          *[_type == "marketSegment" && _id == ^.marketSegment._ref] | order(_updatedAt desc) [0]._updatedAt,        ]),      }) +      (*[_type == "organization" && defined(slug.current) && organizationType != "acquired"] {        "url": "/organization/" + slug.current,        "lastModified": array::compact([          _updatedAt,          *[_type == "cloudProvider" && _id in ^.supportedCloudProviders[]._ref] | order(_updatedAt desc) [0]._updatedAt,          *[_type == "productCategory" && _id in ^.productCategories[]._ref] | order(_updatedAt desc) [0]._updatedAt,          *[_type == "organization" && organizationType == "acquired" && parentOrganization._ref == ^._id] | order(_updatedAt desc) [0]._updatedAt,          *[_type == "research" && organization._ref == ^._id] | order(_updatedAt desc) [0]._updatedAt,        ]),      }) +      (*[_type == "cloudProvider" && defined(slug.current)] {        "url": "/provider/" + slug.current,        "lastModified": array::compact([          _updatedAt,          *[_type == "organization" && organizationType != "acquired" && ^._id in supportedCloudProviders[]._ref] | order(_updatedAt desc) [0]._updatedAt,        ]),      }),  }
 export type SITEMAP_DATA_QUERYResult = {
   baseUrl: string | null;
   items: Array<
@@ -1363,14 +1415,14 @@ declare module '@sanity/client' {
     '\n  *[\n    _type == "organization" &&\n    organizationType != "acquired" &&\n    count(productCategories) > 0 &&\n    (count($productCategories) == 0 || references($productCategories)) &&\n    (count($organizationTypes) == 0 || organizationType in $organizationTypes) &&\n    (count($supportedCloudProviders) == 0 || references($supportedCloudProviders)) &&\n    lower(name) > lower($prev)\n  ] | order(lower(name) asc) [0...20] {\n    \n  \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n\n  productCategories[] -> { \n  _id,\n  "slug": slug.current,\n  name,\n  expansion,\n  description,\n  marketSegment -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n },\n },\n  supportedCloudProviders[] -> { \n  _id,\n  "slug": slug.current,\n  name,\n  abbreviation,\n  description,\n  "icon": icon.name,\n  mark,\n  logo,\n  website,\n  linkedin,\n },\n\n  }\n': VENDORS_QUERYResult;
     '\n  *[\n    _type == "organization" &&\n    organizationType == "acquired" &&\n    (\n      ($prevDate == "" && $prevId == "") ||\n      acquisitionDate < $prevDate ||\n      (acquisitionDate == $prevDate && _id > $prevId)\n    )\n  ] | order(acquisitionDate desc) [0...20] {\n    \n  \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n\n  acquisitionDate,\n  acquisitionPrice,\n  pressRelease,\n\n    parentOrganization -> {\n      \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n\n    },\n  }\n': ACQUISITIONS_QUERYResult;
     '\n  *[\n    _type == "page" &&\n    defined(slug.current)\n  ].slug.current\n': PAGE_SLUGS_QUERYResult;
-    '\n  *[\n    _type == "page" &&\n    defined(slug.current)\n  ] {\n    \n  "slug": slug.current,\n  title,\n  description,\n  "icon": icon.name,\n\n  }\n': PAGES_QUERYResult;
-    '\n  *[\n    _type == "page" &&\n    slug.current == $slug\n  ][0] {\n    _createdAt,\n    _updatedAt,\n    "_listItemsUpdatedAt": select(\n      defined(listType) => *[_type == ^.listType] | order(_updatedAt desc) [0]._updatedAt,\n      null\n    ),\n    \n  "slug": slug.current,\n  title,\n  description,\n  "icon": icon.name,\n\n  } {\n    ...,\n    "_updatedAt": select(\n      defined(_listItemsUpdatedAt) && _listItemsUpdatedAt >= _updatedAt => _listItemsUpdatedAt,\n      _updatedAt\n    ),\n    "_listItemsUpdatedAt": null,\n  }\n': PAGE_QUERYResult;
+    '\n*[\n  _type == "page" &&\n  defined(slug.current) &&\n  !defined(listType) &&\n  defined(textContent)\n].slug.current\n': TEXT_PAGE_SLUGS_QUERYResult;
+    '\n  *[\n    _type == "page" &&\n    slug.current == $slug\n  ][0] {\n    _createdAt,\n    _updatedAt,\n    "_listItemsUpdatedAt": select(\n      defined(listType) => *[_type == ^.listType] | order(_updatedAt desc) [0]._updatedAt,\n      null\n    ),\n    \n  "slug": slug.current,\n  title,\n  description,\n  "icon": icon.name,\n  ...select(!defined(listType) => { longTitle, textContent[] }),\n\n  } {\n    ...,\n    "_updatedAt": select(\n      defined(_listItemsUpdatedAt) && _listItemsUpdatedAt >= _updatedAt => _listItemsUpdatedAt,\n      _updatedAt\n    ),\n    "_listItemsUpdatedAt": null,\n  }\n': PAGE_QUERYResult;
     '\n  *[\n    _type == "productCategory" &&\n    defined(slug.current)\n  ].slug.current\n': PRODUCT_CATEGORY_SLUGS_QUERYResult;
     '\n  *[\n    _type == "productCategory" &&\n    ($marketSegment == "" || $marketSegment == marketSegment._ref)\n  ] | order(lower(name) asc) {\n    \n  _id,\n  "slug": slug.current,\n  name,\n  expansion,\n  description,\n  marketSegment -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n },\n\n  }\n': PRODUCT_CATEGORIES_QUERYResult;
     '\n  *[\n    _type == "productCategory" &&\n    slug.current == $slug\n  ][0] {\n    _createdAt,\n    _updatedAt,\n    \n  _id,\n  "slug": slug.current,\n  name,\n  expansion,\n  description,\n  marketSegment -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n },\n\n    explanationHeading,\n    explanation[],\n    "vendors": *[\n      _type == "organization" && ^._id in productCategories[]._ref\n    ] | order(lower(name) asc) {\n      \n  \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n\n  productCategories[] -> { \n  _id,\n  "slug": slug.current,\n  name,\n  expansion,\n  description,\n  marketSegment -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n },\n },\n  supportedCloudProviders[] -> { \n  _id,\n  "slug": slug.current,\n  name,\n  abbreviation,\n  description,\n  "icon": icon.name,\n  mark,\n  logo,\n  website,\n  linkedin,\n },\n\n    }\n  }\n': PRODUCT_CATEGORY_QUERYResult;
     '\n  *[\n    _type == "research"\n  ] | order(lower(name) asc) {\n    \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  website,\n\n    organization -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n },\n  }\n': RESEARCHES_QUERYResult;
     '\n  *[\n    _type == "research" &&\n    slug.current == $slug\n  ][0] {\n    \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  website,\n\n    organization -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n },\n  }\n': RESEARCH_QUERYResult;
-    '\n  *[\n    _type == "siteSettings" &&\n    _id == "siteSettings"\n  ][0] {\n    name,\n    shortName,\n    tagline,\n    description,\n    url,\n    copyright,\n    navigation[] {\n      name,\n      href,\n    },\n    heroTitle[0],\n    heroDescription[],\n    featuredPages[] -> {\n      \n  "slug": slug.current,\n  title,\n  description,\n  "icon": icon.name,\n\n    }\n  }\n': SITE_SETTINGS_QUERYResult;
-    '\n  {\n    "baseUrl": *[_type == "siteSettings" && _id == "siteSettings"][0].url,\n    "items": \n      (*[_type == "page" && defined(slug.current)] {\n        "url": "/" + slug.current,\n        "lastModified": array::compact([\n          _updatedAt,\n          select(\n            defined(listType) => *[_type == ^.listType] | order(_updatedAt desc) [0]._updatedAt,\n            null\n          ),\n        ]),\n      }) +\n      (*[_type == "productCategory" && defined(slug.current)] {\n        "url": "/category/" + slug.current,\n        "lastModified": array::compact([\n          _updatedAt,\n          *[_type == "organization" && organizationType != "acquired" && ^._id in productCategories[]._ref] | order(_updatedAt desc) [0]._updatedAt,\n          *[_type == "marketSegment" && _id == ^.marketSegment._ref] | order(_updatedAt desc) [0]._updatedAt,\n        ]),\n      }) +\n      (*[_type == "organization" && defined(slug.current) && organizationType != "acquired"] {\n        "url": "/organization/" + slug.current,\n        "lastModified": array::compact([\n          _updatedAt,\n          *[_type == "cloudProvider" && _id in ^.supportedCloudProviders[]._ref] | order(_updatedAt desc) [0]._updatedAt,\n          *[_type == "productCategory" && _id in ^.productCategories[]._ref] | order(_updatedAt desc) [0]._updatedAt,\n          *[_type == "organization" && organizationType == "acquired" && parentOrganization._ref == ^._id] | order(_updatedAt desc) [0]._updatedAt,\n          *[_type == "research" && organization._ref == ^._id] | order(_updatedAt desc) [0]._updatedAt,\n        ]),\n      }) +\n      (*[_type == "cloudProvider" && defined(slug.current)] {\n        "url": "/provider/" + slug.current,\n        "lastModified": array::compact([\n          _updatedAt,\n          *[_type == "organization" && organizationType != "acquired" && ^._id in supportedCloudProviders[]._ref] | order(_updatedAt desc) [0]._updatedAt,\n        ]),\n      }),\n  }\n': SITEMAP_DATA_QUERYResult;
+    '\n  *[\n    _type == "siteSettings" &&\n    _id == "siteSettings"\n  ][0] {\n    name,\n    shortName,\n    tagline,\n    description,\n    url,\n    copyright,\n    navigation[] {\n      name,\n      href,\n    },\n    heroTitle[0],\n    heroDescription[],\n    featuredPages[] -> {\n      \n  "slug": slug.current,\n  title,\n  description,\n  "icon": icon.name,\n  ...select(!defined(listType) => { longTitle, textContent[] }),\n\n    }\n  }\n': SITE_SETTINGS_QUERYResult;
+    '\n  {\n    "baseUrl": *[_type == "siteSettings" && _id == "siteSettings"][0].url,\n    "items": \n      (*[_type == "page" && defined(slug.current)] {\n        "url": "/" + slug.current,\n        "lastModified": array::compact([\n          _updatedAt,\n          select(defined(listType) => *[_type == ^.listType] | order(_updatedAt desc) [0]._updatedAt),\n        ]),\n      }) +\n      (*[_type == "productCategory" && defined(slug.current)] {\n        "url": "/category/" + slug.current,\n        "lastModified": array::compact([\n          _updatedAt,\n          *[_type == "organization" && organizationType != "acquired" && ^._id in productCategories[]._ref] | order(_updatedAt desc) [0]._updatedAt,\n          *[_type == "marketSegment" && _id == ^.marketSegment._ref] | order(_updatedAt desc) [0]._updatedAt,\n        ]),\n      }) +\n      (*[_type == "organization" && defined(slug.current) && organizationType != "acquired"] {\n        "url": "/organization/" + slug.current,\n        "lastModified": array::compact([\n          _updatedAt,\n          *[_type == "cloudProvider" && _id in ^.supportedCloudProviders[]._ref] | order(_updatedAt desc) [0]._updatedAt,\n          *[_type == "productCategory" && _id in ^.productCategories[]._ref] | order(_updatedAt desc) [0]._updatedAt,\n          *[_type == "organization" && organizationType == "acquired" && parentOrganization._ref == ^._id] | order(_updatedAt desc) [0]._updatedAt,\n          *[_type == "research" && organization._ref == ^._id] | order(_updatedAt desc) [0]._updatedAt,\n        ]),\n      }) +\n      (*[_type == "cloudProvider" && defined(slug.current)] {\n        "url": "/provider/" + slug.current,\n        "lastModified": array::compact([\n          _updatedAt,\n          *[_type == "organization" && organizationType != "acquired" && ^._id in supportedCloudProviders[]._ref] | order(_updatedAt desc) [0]._updatedAt,\n        ]),\n      }),\n  }\n': SITEMAP_DATA_QUERYResult;
   }
 }
