@@ -45,7 +45,7 @@ export default async function PageHeader({
             {eyebrow}
           </p>
         ) : null}
-        <h1 className="text-balance text-5xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+        <h1 className="text-balance text-4xl font-bold tracking-tight text-gray-900 xs:text-5xl sm:text-6xl">
           {typeof title === 'string' ? (
             title
           ) : (
