@@ -90,6 +90,22 @@ export default defineType({
       fieldset: 'content',
       validation: (rule) => rule.required().min(2),
     }),
+    defineField({
+      name: 'similarCategories',
+      title: 'Similar categories',
+      type: 'array',
+      of: [
+        {
+          type: 'reference',
+          weak: true,
+          to: [{ type: 'productCategory' }],
+          options: {
+            disableNew: true,
+          },
+        },
+      ],
+      validation: (rule) => rule.unique(),
+    }),
   ],
   preview: {
     select: {

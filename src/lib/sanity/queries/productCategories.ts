@@ -32,6 +32,7 @@ export const PRODUCT_CATEGORY_QUERY = groq`
       _type == "organization" && ^._id in productCategories[]._ref
     ] | order(lower(name) asc) {
       ${VENDOR}
-    }
+    },
+    similarCategories[] -> { ${PRODUCT_CATEGORY} },
   }
 `;

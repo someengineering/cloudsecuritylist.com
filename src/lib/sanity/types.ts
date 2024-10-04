@@ -188,6 +188,13 @@ export type ProductCategory = {
     _type: 'block';
     _key: string;
   }>;
+  similarCategories?: Array<{
+    _ref: string;
+    _type: 'reference';
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: 'productCategory';
+  }>;
 };
 
 export type Page = {
@@ -1098,7 +1105,7 @@ export type PRODUCT_CATEGORIES_QUERYResult = Array<{
   };
 }>;
 // Variable: PRODUCT_CATEGORY_QUERY
-// Query: *[    _type == "productCategory" &&    slug.current == $slug  ][0] {    _createdAt,    _updatedAt,      _id,  "slug": slug.current,  name,  expansion,  description,  marketSegment -> {   _id,  "slug": slug.current,  name,  description,  "icon": icon.name, },    explanationHeading,    explanation[],    "vendors": *[      _type == "organization" && ^._id in productCategories[]._ref    ] | order(lower(name) asc) {          _id,  "slug": slug.current,  name,  description,  organizationType,  website,  linkedin,  crunchbase,  stockSymbol,  mark,  logo,  productCategories[] -> {   _id,  "slug": slug.current,  name,  expansion,  description,  marketSegment -> {   _id,  "slug": slug.current,  name,  description,  "icon": icon.name, }, },  supportedCloudProviders[] -> {   _id,  "slug": slug.current,  name,  abbreviation,  description,  "icon": icon.name,  mark,  logo,  website,  linkedin, },    }  }
+// Query: *[    _type == "productCategory" &&    slug.current == $slug  ][0] {    _createdAt,    _updatedAt,      _id,  "slug": slug.current,  name,  expansion,  description,  marketSegment -> {   _id,  "slug": slug.current,  name,  description,  "icon": icon.name, },    explanationHeading,    explanation[],    "vendors": *[      _type == "organization" && ^._id in productCategories[]._ref    ] | order(lower(name) asc) {          _id,  "slug": slug.current,  name,  description,  organizationType,  website,  linkedin,  crunchbase,  stockSymbol,  mark,  logo,  productCategories[] -> {   _id,  "slug": slug.current,  name,  expansion,  description,  marketSegment -> {   _id,  "slug": slug.current,  name,  description,  "icon": icon.name, }, },  supportedCloudProviders[] -> {   _id,  "slug": slug.current,  name,  abbreviation,  description,  "icon": icon.name,  mark,  logo,  website,  linkedin, },    },    similarCategories[] -> {   _id,  "slug": slug.current,  name,  expansion,  description,  marketSegment -> {   _id,  "slug": slug.current,  name,  description,  "icon": icon.name, }, },  }
 export type PRODUCT_CATEGORY_QUERYResult = {
   _createdAt: string;
   _updatedAt: string;
@@ -1212,6 +1219,20 @@ export type PRODUCT_CATEGORY_QUERYResult = {
       linkedin: string | null;
     }> | null;
   }>;
+  similarCategories: Array<{
+    _id: string;
+    slug: string;
+    name: string;
+    expansion: string | null;
+    description: string;
+    marketSegment: {
+      _id: string;
+      slug: string;
+      name: string;
+      description: null;
+      icon: string | null;
+    };
+  }> | null;
 } | null;
 
 // Source: ./src/lib/sanity/queries/research.ts
@@ -1419,7 +1440,7 @@ declare module '@sanity/client' {
     '\n  *[\n    _type == "page" &&\n    slug.current == $slug\n  ][0] {\n    _createdAt,\n    _updatedAt,\n    "_listItemsUpdatedAt": select(\n      defined(listType) => *[_type == ^.listType] | order(_updatedAt desc) [0]._updatedAt,\n      null\n    ),\n    \n  "slug": slug.current,\n  title,\n  description,\n  "icon": icon.name,\n  ...select(!defined(listType) => { longTitle, textContent[] }),\n\n  } {\n    ...,\n    "_updatedAt": select(\n      defined(_listItemsUpdatedAt) && _listItemsUpdatedAt >= _updatedAt => _listItemsUpdatedAt,\n      _updatedAt\n    ),\n    "_listItemsUpdatedAt": null,\n  }\n': PAGE_QUERYResult;
     '\n  *[\n    _type == "productCategory" &&\n    defined(slug.current)\n  ].slug.current\n': PRODUCT_CATEGORY_SLUGS_QUERYResult;
     '\n  *[\n    _type == "productCategory" &&\n    ($marketSegment == "" || $marketSegment == marketSegment._ref)\n  ] | order(lower(name) asc) {\n    \n  _id,\n  "slug": slug.current,\n  name,\n  expansion,\n  description,\n  marketSegment -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n },\n\n  }\n': PRODUCT_CATEGORIES_QUERYResult;
-    '\n  *[\n    _type == "productCategory" &&\n    slug.current == $slug\n  ][0] {\n    _createdAt,\n    _updatedAt,\n    \n  _id,\n  "slug": slug.current,\n  name,\n  expansion,\n  description,\n  marketSegment -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n },\n\n    explanationHeading,\n    explanation[],\n    "vendors": *[\n      _type == "organization" && ^._id in productCategories[]._ref\n    ] | order(lower(name) asc) {\n      \n  \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n\n  productCategories[] -> { \n  _id,\n  "slug": slug.current,\n  name,\n  expansion,\n  description,\n  marketSegment -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n },\n },\n  supportedCloudProviders[] -> { \n  _id,\n  "slug": slug.current,\n  name,\n  abbreviation,\n  description,\n  "icon": icon.name,\n  mark,\n  logo,\n  website,\n  linkedin,\n },\n\n    }\n  }\n': PRODUCT_CATEGORY_QUERYResult;
+    '\n  *[\n    _type == "productCategory" &&\n    slug.current == $slug\n  ][0] {\n    _createdAt,\n    _updatedAt,\n    \n  _id,\n  "slug": slug.current,\n  name,\n  expansion,\n  description,\n  marketSegment -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n },\n\n    explanationHeading,\n    explanation[],\n    "vendors": *[\n      _type == "organization" && ^._id in productCategories[]._ref\n    ] | order(lower(name) asc) {\n      \n  \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n\n  productCategories[] -> { \n  _id,\n  "slug": slug.current,\n  name,\n  expansion,\n  description,\n  marketSegment -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n },\n },\n  supportedCloudProviders[] -> { \n  _id,\n  "slug": slug.current,\n  name,\n  abbreviation,\n  description,\n  "icon": icon.name,\n  mark,\n  logo,\n  website,\n  linkedin,\n },\n\n    },\n    similarCategories[] -> { \n  _id,\n  "slug": slug.current,\n  name,\n  expansion,\n  description,\n  marketSegment -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n },\n },\n  }\n': PRODUCT_CATEGORY_QUERYResult;
     '\n  *[\n    _type == "research"\n  ] | order(lower(name) asc) {\n    \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  website,\n\n    organization -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n },\n  }\n': RESEARCHES_QUERYResult;
     '\n  *[\n    _type == "research" &&\n    slug.current == $slug\n  ][0] {\n    \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  website,\n\n    organization -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n },\n  }\n': RESEARCH_QUERYResult;
     '\n  *[\n    _type == "siteSettings" &&\n    _id == "siteSettings"\n  ][0] {\n    name,\n    shortName,\n    tagline,\n    description,\n    url,\n    copyright,\n    navigation[] {\n      name,\n      href,\n    },\n    heroTitle[0],\n    heroDescription[],\n    featuredPages[] -> {\n      \n  "slug": slug.current,\n  title,\n  description,\n  "icon": icon.name,\n  ...select(!defined(listType) => { longTitle, textContent[] }),\n\n    }\n  }\n': SITE_SETTINGS_QUERYResult;

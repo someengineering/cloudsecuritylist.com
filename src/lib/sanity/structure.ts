@@ -100,7 +100,7 @@ export const structure: StructureResolver = (S, context) =>
                         .title('Vendors')
                         .apiVersion(apiVersion)
                         .filter(
-                          '$productCategoryId in productCategories[]._ref',
+                          `organizationType != "${ORGANIZATION_TYPE.ACQUIRED}" && $productCategoryId in productCategories[]._ref`,
                         )
                         .params({ productCategoryId })
                         .initialValueTemplates([
@@ -123,7 +123,7 @@ export const structure: StructureResolver = (S, context) =>
                     .title('Vendors')
                     .apiVersion(apiVersion)
                     .filter(
-                      '$cloudProviderId in supportedCloudProviders[]._ref',
+                      `organizationType != "${ORGANIZATION_TYPE.ACQUIRED}" && $cloudProviderId in supportedCloudProviders[]._ref`,
                     )
                     .params({ cloudProviderId })
                     .initialValueTemplates([
