@@ -1,4 +1,7 @@
-export const CLOUD_PROVIDER = `
+import { groq } from 'next-sanity';
+
+// @sanity-typegen-ignore
+export const CLOUD_PROVIDER = groq`
   _id,
   "slug": slug.current,
   name,

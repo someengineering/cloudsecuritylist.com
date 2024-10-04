@@ -1,4 +1,7 @@
-export const PAGE = `
+import { groq } from 'next-sanity';
+
+// @sanity-typegen-ignore
+export const PAGE = groq`
   "slug": slug.current,
   title,
   description,

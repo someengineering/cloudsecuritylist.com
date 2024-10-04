@@ -1,6 +1,8 @@
 import { MARKET_SEGMENT_BASE } from '@/lib/sanity/queries/fragments/marketSegment';
+import { groq } from 'next-sanity';
 
-export const PRODUCT_CATEGORY = `
+// @sanity-typegen-ignore
+export const PRODUCT_CATEGORY = groq`
   _id,
   "slug": slug.current,
   name,

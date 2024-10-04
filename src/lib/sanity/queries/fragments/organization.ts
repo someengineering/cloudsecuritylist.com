@@ -1,8 +1,10 @@
 import { CLOUD_PROVIDER } from '@/lib/sanity/queries/fragments/cloudProvider';
 import { PRODUCT_CATEGORY } from '@/lib/sanity/queries/fragments/productCategory';
 import { RESEARCH } from '@/lib/sanity/queries/fragments/research';
+import { groq } from 'next-sanity';
 
-export const ORGANIZATION_BASE = `
+// @sanity-typegen-ignore
+export const ORGANIZATION_BASE = groq`
   _id,
   "slug": slug.current,
   name,
@@ -16,20 +18,23 @@ export const ORGANIZATION_BASE = `
   logo,
 `;
 
-export const VENDOR = `
+// @sanity-typegen-ignore
+export const VENDOR = groq`
   ${ORGANIZATION_BASE}
   productCategories[] -> { ${PRODUCT_CATEGORY} },
   supportedCloudProviders[] -> { ${CLOUD_PROVIDER} },
 `;
 
-export const ACQUIRED_ENTITY = `
+// @sanity-typegen-ignore
+export const ACQUIRED_ENTITY = groq`
   ${ORGANIZATION_BASE}
   acquisitionDate,
   acquisitionPrice,
   pressRelease,
 `;
 
-export const NON_ACQUIRED_ENTITY = `
+// @sanity-typegen-ignore
+export const NON_ACQUIRED_ENTITY = groq`
   ${ORGANIZATION_BASE}
   productCategories[] -> { ${PRODUCT_CATEGORY} },
   supportedCloudProviders[] -> { ${CLOUD_PROVIDER} },
@@ -45,7 +50,8 @@ export const NON_ACQUIRED_ENTITY = `
   },
 `;
 
-export const ORGANIZATION = `
+// @sanity-typegen-ignore
+export const ORGANIZATION = groq`
   ...select(
     organizationType == "acquired" => {
       ${ACQUIRED_ENTITY}

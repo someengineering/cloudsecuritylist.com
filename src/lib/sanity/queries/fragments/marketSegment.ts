@@ -1,4 +1,7 @@
-export const MARKET_SEGMENT_BASE = `
+import { groq } from 'next-sanity';
+
+// @sanity-typegen-ignore
+export const MARKET_SEGMENT_BASE = groq`
   _id,
   "slug": slug.current,
   name,
@@ -6,7 +9,8 @@ export const MARKET_SEGMENT_BASE = `
   "icon": icon.name,
 `;
 
-export const MARKET_SEGMENT = `
+// @sanity-typegen-ignore
+export const MARKET_SEGMENT = groq`
   ${MARKET_SEGMENT_BASE}
   "productCategories": *[
     _type == "productCategory" &&
