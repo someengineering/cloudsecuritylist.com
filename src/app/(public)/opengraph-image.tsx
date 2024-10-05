@@ -16,7 +16,7 @@ export const contentType = 'image/png';
 export default async function OpenGraphImage() {
   const headline =
     (await sanityFetch<string>({
-      query: groq`pt::text(*[_type == "siteSettings"][0].heroTitle)`,
+      query: groq`pt::text(*[_type == "siteSettings" && _id == "siteSettings"][0].heroTitle)`,
       tags: ['siteSettings'],
       allowDraftMode: false,
     })) ?? {};

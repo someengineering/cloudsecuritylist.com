@@ -33,7 +33,7 @@ import {
   RESEARCH_QUERY,
   RESEARCHES_QUERY,
 } from '@/lib/sanity/queries/research';
-import { SITEMAP_DATA_QUERY } from '@/lib/sanity/queries/sitemap';
+import { SITEMAP_QUERY } from '@/lib/sanity/queries/sitemap';
 import { SITE_SETTINGS_QUERY } from '@/lib/sanity/queries/siteSettings';
 import {
   ORGANIZATION_TYPE,
@@ -58,15 +58,15 @@ import {
   RESEARCH_QUERYResult,
   RESEARCHES_QUERYResult,
   SITE_SETTINGS_QUERYResult,
-  SITEMAP_DATA_QUERYResult,
+  SITEMAP_QUERYResult,
   TEXT_PAGE_SLUGS_QUERYResult,
   VENDORS_COUNT_QUERYResult,
   VENDORS_QUERYResult,
 } from '@/lib/sanity/types';
 
-export const getSitemapData = async () => {
-  const data = await sanityFetch<SITEMAP_DATA_QUERYResult>({
-    query: SITEMAP_DATA_QUERY,
+export const getSitemap = async () => {
+  const data = await sanityFetch<SITEMAP_QUERYResult>({
+    query: SITEMAP_QUERY,
     tags: [
       'siteSettings',
       'page',

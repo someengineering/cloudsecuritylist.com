@@ -1,22 +1,15 @@
-import { getSitemapData } from '@/lib/sanity';
+import { getSitemap } from '@/lib/sanity';
 import { MetadataRoute } from 'next';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const sitemapData = await getSitemapData();
+  const sitemap = await getSitemap();
 
-  if (!sitemapData) {
+  if (!sitemap) {
     return [];
   }
 
-  return [
-    {
-      url: `${sitemapData.baseUrl}`,
-    },
-    ...sitemapData.items.map((item) => ({
-      url: `${sitemapData.baseUrl}${item.url}`,
-      lastModified: new Date(
-        Math.max(...item.lastModified.map((date) => new Date(date).getTime())),
-      ),
-    })),
-  ];
+  return sitemap.map((loc) => ({
+    url: loc.url,
+    lastModified: loc.lastModified ? new Date(loc.lastModified) : undefined,
+  }));
 }

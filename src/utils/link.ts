@@ -1,5 +1,6 @@
-import { getSiteSettings } from '@/lib/sanity';
 import 'server-only';
+
+import { getSiteSettings } from '@/lib/sanity';
 
 export const transformUrl = async (href: string) => {
   const siteSettings = await getSiteSettings();
