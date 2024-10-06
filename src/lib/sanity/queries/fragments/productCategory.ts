@@ -10,3 +10,13 @@ export const PRODUCT_CATEGORY = groq`
   description,
   marketSegment -> { ${MARKET_SEGMENT_BASE} },
 `;
+
+// @sanity-typegen-ignore
+export const PRODUCT_CATEGORY_UPDATED_AT = groq`
+  [
+    { "timestamp": _updatedAt },
+    { "timestamp": *[_type == "marketSegment" && _id == ^.marketSegment._ref] | order(_updatedAt desc) [0]._updatedAt },
+    { "timestamp": *[_type == "organization" && organizationType != "acquired" && ^._id in productCategories[]._ref] | order(_updatedAt desc) [0]._updatedAt },
+    { "timestamp": *[_type == "productCategory" && _id in ^.similarCategories[]._ref] | order(_updatedAt desc) [0]._updatedAt },
+  ]
+`;

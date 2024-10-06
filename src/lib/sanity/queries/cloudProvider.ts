@@ -1,4 +1,7 @@
-import { CLOUD_PROVIDER } from '@/lib/sanity/queries/fragments/cloudProvider';
+import {
+  CLOUD_PROVIDER,
+  CLOUD_PROVIDER_UPDATED_AT,
+} from '@/lib/sanity/queries/fragments/cloudProvider';
 import { VENDOR } from '@/lib/sanity/queries/fragments/organization';
 import { groq } from 'next-sanity';
 
@@ -23,7 +26,7 @@ export const CLOUD_PROVIDER_QUERY = groq`
     slug.current == $slug
   ][0] {
     _createdAt,
-    _updatedAt,
+    "_updatedAt": ${CLOUD_PROVIDER_UPDATED_AT},
     ${CLOUD_PROVIDER}
     sharedResponsibilityModel,
     "vendors": *[
@@ -36,5 +39,5 @@ export const CLOUD_PROVIDER_QUERY = groq`
       description,
       link,
     },
-  }
+  } { ..., "_updatedAt": _updatedAt | order(coalesce(timestamp, "") desc) [0].timestamp }
 `;

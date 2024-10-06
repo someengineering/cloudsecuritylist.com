@@ -1,4 +1,4 @@
-import { PAGE } from '@/lib/sanity/queries/fragments/page';
+import { PAGE, PAGE_UPDATED_AT } from '@/lib/sanity/queries/fragments/page';
 import { groq } from 'next-sanity';
 
 export const PAGE_SLUGS_QUERY = groq`
@@ -23,18 +23,7 @@ export const PAGE_QUERY = groq`
     slug.current == $slug
   ][0] {
     _createdAt,
-    _updatedAt,
-    "_listItemsUpdatedAt": select(
-      defined(listType) => *[_type == ^.listType] | order(_updatedAt desc) [0]._updatedAt,
-      null
-    ),
+    "_updatedAt": ${PAGE_UPDATED_AT},
     ${PAGE}
-  } {
-    ...,
-    "_updatedAt": select(
-      defined(_listItemsUpdatedAt) && _listItemsUpdatedAt >= _updatedAt => _listItemsUpdatedAt,
-      _updatedAt
-    ),
-    "_listItemsUpdatedAt": null,
-  }
+  } { ..., "_updatedAt": _updatedAt | order(coalesce(timestamp, "") desc) [0].timestamp }
 `;

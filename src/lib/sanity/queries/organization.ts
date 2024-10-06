@@ -2,6 +2,7 @@ import {
   ACQUIRED_ENTITY,
   ORGANIZATION,
   ORGANIZATION_BASE,
+  ORGANIZATION_UPDATED_AT,
   VENDOR,
 } from '@/lib/sanity/queries/fragments/organization';
 import { groq } from 'next-sanity';
@@ -41,9 +42,9 @@ export const ORGANIZATION_QUERY = groq`
     slug.current == $slug
   ][0] {
     _createdAt,
-    _updatedAt,
+    "_updatedAt": ${ORGANIZATION_UPDATED_AT},
     ${ORGANIZATION}
-  }
+  } { ..., "_updatedAt": _updatedAt | order(coalesce(timestamp, "") desc) [0].timestamp }
 `;
 
 export const VENDORS_COUNT_QUERY = groq`

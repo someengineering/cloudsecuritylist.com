@@ -73,7 +73,7 @@ export const getWebPage = async ({
   title: string;
   path: string;
   datePublished?: string;
-  dateModified?: string;
+  dateModified?: string | null;
   parentPageSlug?: string;
 }): Promise<
   WithContext<WebSite | WebPage>[] | WithContext<WebPage> | undefined
@@ -93,7 +93,7 @@ export const getWebPage = async ({
     identifier: url,
     url,
     datePublished,
-    dateModified,
+    dateModified: dateModified ?? undefined,
     breadcrumb:
       path !== '/'
         ? await getBreadcrumbList({
@@ -141,7 +141,7 @@ export const getOrganizationProfilePage = async (
     title: organization.name,
     path: `/organization/${organization.slug}`,
     datePublished: organization._createdAt,
-    dateModified: organization._updatedAt,
+    dateModified: organization._updatedAt ?? undefined,
     parentPageSlug:
       'productCategories' in organization &&
       organization.productCategories?.length
@@ -192,7 +192,7 @@ export const getCloudProviderProfilePage = async (
     title: cloudProvider.name,
     path: `/provider/${cloudProvider.slug}`,
     datePublished: cloudProvider._createdAt,
-    dateModified: cloudProvider._updatedAt,
+    dateModified: cloudProvider._updatedAt ?? undefined,
     parentPageSlug: 'providers',
   });
 

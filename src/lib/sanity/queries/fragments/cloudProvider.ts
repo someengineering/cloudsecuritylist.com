@@ -13,3 +13,11 @@ export const CLOUD_PROVIDER = groq`
   website,
   linkedin,
 `;
+
+// @sanity-typegen-ignore
+export const CLOUD_PROVIDER_UPDATED_AT = groq`
+  [
+    { "timestamp": _updatedAt },
+    { "timestamp": *[_type == "organization" && organizationType != "acquired" && ^._id in supportedCloudProviders[]._ref] | order(_updatedAt desc) [0]._updatedAt },
+  ]
+`;

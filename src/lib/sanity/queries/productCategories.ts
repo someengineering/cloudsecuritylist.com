@@ -1,5 +1,8 @@
 import { VENDOR } from '@/lib/sanity/queries/fragments/organization';
-import { PRODUCT_CATEGORY } from '@/lib/sanity/queries/fragments/productCategory';
+import {
+  PRODUCT_CATEGORY,
+  PRODUCT_CATEGORY_UPDATED_AT,
+} from '@/lib/sanity/queries/fragments/productCategory';
 import { groq } from 'next-sanity';
 
 export const PRODUCT_CATEGORY_SLUGS_QUERY = groq`
@@ -24,7 +27,7 @@ export const PRODUCT_CATEGORY_QUERY = groq`
     slug.current == $slug
   ][0] {
     _createdAt,
-    _updatedAt,
+    "_updatedAt": ${PRODUCT_CATEGORY_UPDATED_AT},
     ${PRODUCT_CATEGORY}
     explanationHeading,
     explanation[],
@@ -34,5 +37,5 @@ export const PRODUCT_CATEGORY_QUERY = groq`
       ${VENDOR}
     },
     similarCategories[] -> { ${PRODUCT_CATEGORY} },
-  }
+  } { ..., "_updatedAt": _updatedAt | order(coalesce(timestamp, "") desc) [0].timestamp }
 `;

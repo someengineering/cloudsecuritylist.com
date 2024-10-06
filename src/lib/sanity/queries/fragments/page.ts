@@ -8,3 +8,11 @@ export const PAGE = groq`
   "icon": icon.name,
   ...select(!defined(listType) => { longTitle, textContent[] }),
 `;
+
+// @sanity-typegen-ignore
+export const PAGE_UPDATED_AT = groq`
+  [
+    { "timestamp": _updatedAt },
+    select(defined(listType) => { "timestamp": *[_type == ^.listType] | order(_updatedAt desc) [0]._updatedAt }),
+  ]
+`;

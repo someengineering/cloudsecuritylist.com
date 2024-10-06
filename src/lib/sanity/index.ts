@@ -67,13 +67,7 @@ import {
 export const getSitemap = async () => {
   const data = await sanityFetch<SITEMAP_QUERYResult>({
     query: SITEMAP_QUERY,
-    tags: [
-      'siteSettings',
-      'page',
-      'cloudProvider',
-      'productCategory',
-      'organization',
-    ],
+    tags: ['sitemap'],
     allowDraftMode: false,
   });
 
@@ -116,7 +110,7 @@ export const getPage = async (slug: string) => {
     tags: [`page:${slug}`],
   });
 
-  return { ...data, _updatedAt: data?._updatedAt ?? undefined };
+  return data;
 };
 
 export const getMarketSegments = async () => {
