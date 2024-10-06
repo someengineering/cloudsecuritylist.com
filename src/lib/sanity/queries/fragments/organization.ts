@@ -1,4 +1,5 @@
 import { CLOUD_PROVIDER } from '@/lib/sanity/queries/fragments/cloudProvider';
+import { OPEN_SOURCE_PROJECT } from '@/lib/sanity/queries/fragments/openSourceProject';
 import { PRODUCT_CATEGORY } from '@/lib/sanity/queries/fragments/productCategory';
 import { RESEARCH } from '@/lib/sanity/queries/fragments/research';
 import { groq } from 'next-sanity';
@@ -38,6 +39,14 @@ export const NON_ACQUIRED_ENTITY = groq`
   ${ORGANIZATION_BASE}
   productCategories[] -> { ${PRODUCT_CATEGORY} },
   supportedCloudProviders[] -> { ${CLOUD_PROVIDER} },
+  ...(*[_type == "openSourceProject" && organization.ref == ^.id && name == ^.name] [0] {
+    ...select(repository match "*github.com" => { "github": repository })
+  }),
+  "openSourceProjects": *[
+    _type == "openSourceProject" && organization._ref == ^._id && name != ^.name
+  ] {
+    ${OPEN_SOURCE_PROJECT}
+  },
   "research": *[
     _type == "research" && organization._ref == ^._id
   ] {

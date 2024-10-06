@@ -69,7 +69,7 @@ export default function List({
       role="list"
       className="container mt-10 grid auto-rows-fr grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3"
     >
-      {vendors?.map((vendor) => {
+      {vendors.map((vendor) => {
         const organizationType = ORGANIZATION_TYPES.find(
           (type) => type.value === vendor.organizationType,
         );

@@ -38,12 +38,12 @@ export default async function ProductCategory({
         heading={productCategory.explanationHeading}
         blocks={productCategory.explanation as PortableTextBlock[]}
       />
-      {productCategory.vendors.length > 0 ? (
+      {productCategory.vendors.length ? (
         <OffsetSection heading="Product vendors" slug="vendors">
           <LogoGrid
             items={
               productCategory.vendors
-                ?.map((vendor) => {
+                .map((vendor) => {
                   const image = vendor.logo ?? vendor.mark;
 
                   if (!image?.asset?._ref) {

@@ -36,7 +36,7 @@ export default async function ProductCategories({
   return (
     <section className="mx-auto max-w-7xl px-6 pb-12 sm:pb-16 lg:px-8">
       <FiltersProvider initialValues={filters}>
-        {marketSegments.length > 0 ? (
+        {marketSegments.length ? (
           <FilterButtons marketSegments={marketSegments} />
         ) : null}
         <List

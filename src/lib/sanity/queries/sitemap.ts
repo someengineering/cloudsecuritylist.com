@@ -30,6 +30,7 @@ export const SITEMAP_QUERY = groq`
           { "timestamp": *[_type == "cloudProvider" && _id in ^.supportedCloudProviders[]._ref] | order(_updatedAt desc) [0]._updatedAt },
           { "timestamp": *[_type == "productCategory" && _id in ^.productCategories[]._ref] | order(_updatedAt desc) [0]._updatedAt },
           { "timestamp": *[_type == "organization" && organizationType == "acquired" && parentOrganization._ref == ^._id] | order(_updatedAt desc) [0]._updatedAt },
+          { "timestamp": *[_type == "openSourceProject" && organization._ref == ^._id] | order(_updatedAt desc) [0]._updatedAt },
           { "timestamp": *[_type == "research" && organization._ref == ^._id] | order(_updatedAt desc) [0]._updatedAt },
         ],
       } { url, "lastModified": lastModified | order(coalesce(timestamp, "") desc) [0].timestamp }) +

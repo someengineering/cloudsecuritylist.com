@@ -248,7 +248,7 @@ export const getOrganizations = async ({
     },
     tags: organizationTypes?.length
       ? ['organization']
-      : (organizationTypes ?? []).map((slug) => `organizationType:${slug}`),
+      : organizationTypes?.map((slug) => `organizationType:${slug}`),
   });
 
   return data;
@@ -322,9 +322,10 @@ export const getVendors = async ({
       prev: prev ?? '',
     },
     tags:
-      (productCategories ?? []).length + (organizationTypes ?? []).length > 0
-        ? ['organization']
-        : [
+      productCategories?.length ||
+      organizationTypes?.length ||
+      supportedCloudProviders?.length
+        ? [
             ...(productCategories ?? []).map(
               (slug) => `productCategory:${slug}`,
             ),
@@ -334,7 +335,8 @@ export const getVendors = async ({
             ...(supportedCloudProviders ?? []).map(
               (slug) => `cloudProvider:${slug}`,
             ),
-          ],
+          ]
+        : ['organization'],
   });
 
   return data;

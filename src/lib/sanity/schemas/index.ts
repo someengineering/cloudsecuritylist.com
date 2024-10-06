@@ -1,6 +1,7 @@
 import cloudProvider from '@/lib/sanity/schemas/documents/cloudProvider';
 import framework from '@/lib/sanity/schemas/documents/framework';
 import marketSegment from '@/lib/sanity/schemas/documents/marketSegment';
+import openSourceProject from '@/lib/sanity/schemas/documents/openSourceProject';
 import organization from '@/lib/sanity/schemas/documents/organization';
 import page from '@/lib/sanity/schemas/documents/page';
 import productCategory from '@/lib/sanity/schemas/documents/productCategory';
@@ -18,6 +19,7 @@ export const schema: { types: SchemaTypeDefinition[]; templates: Template[] } =
       cloudProvider,
       framework,
       marketSegment,
+      openSourceProject,
       organization,
       page,
       productCategory,

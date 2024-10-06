@@ -107,7 +107,7 @@ export default async function PageHeader({
       </div>
       {links?.length ? (
         <ul role="list" className="mt-8 flex justify-center gap-x-6">
-          {links?.map((link) => (
+          {links.map((link) => (
             <li key={link.href}>
               <Link
                 href={link.href}

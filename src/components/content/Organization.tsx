@@ -14,7 +14,7 @@ import {
   HiOutlineSparkles,
 } from 'react-icons/hi2';
 import { IconType } from 'react-icons/lib';
-import { SiCrunchbase, SiLinkedin } from 'react-icons/si';
+import { SiCrunchbase, SiGithub, SiLinkedin } from 'react-icons/si';
 
 export default async function Organization({
   organization,
@@ -40,6 +40,15 @@ export default async function Organization({
       href: organization.website,
       props: { target: '_blank', rel: 'noopener noreferrer' },
       icon: HiOutlineGlobeAlt,
+    });
+  }
+
+  if ('github' in organization && organization.github) {
+    links.push({
+      label: 'GitHub',
+      href: organization.github,
+      props: { target: '_blank', rel: 'noopener noreferrer' },
+      icon: SiGithub,
     });
   }
 
@@ -86,7 +95,7 @@ export default async function Organization({
       organization.productCategories?.length ? (
         <OffsetSection heading="Product categories">
           <dl className="grid grid-cols-1 gap-x-8 gap-y-16 lg:grid-cols-2">
-            {organization.productCategories?.map((productCategory) => {
+            {organization.productCategories.map((productCategory) => {
               const Icon = productCategory.marketSegment.icon
                 ? dynamic(() =>
                     import('react-icons/hi2')
@@ -134,7 +143,7 @@ export default async function Organization({
           <LogoGrid
             items={
               organization.supportedCloudProviders
-                ?.map((cloudProvider) => {
+                .map((cloudProvider) => {
                   const image = cloudProvider.logo ?? cloudProvider.mark;
 
                   if (!image?.asset?._ref) {
@@ -155,10 +164,37 @@ export default async function Organization({
           />
         </OffsetSection>
       ) : null}
+      {'openSourceProjects' in organization &&
+      organization.openSourceProjects.length ? (
+        <OffsetSection heading="Open-source projects">
+          <dl className="space-y-16">
+            {organization.openSourceProjects.map((project) => {
+              return (
+                <div key={project._id} className="group relative">
+                  <dt className="text-lg font-semibold leading-8">
+                    <Link
+                      href={project.repository}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-cyan-600 focus:outline-none group-hover:text-cyan-700"
+                    >
+                      <span aria-hidden="true" className="absolute inset-0" />
+                      {project.name}
+                    </Link>
+                  </dt>
+                  <dd className="mt-2 max-w-prose leading-7 text-gray-600">
+                    {project.description}
+                  </dd>
+                </div>
+              );
+            })}
+          </dl>
+        </OffsetSection>
+      ) : null}
       {'research' in organization && organization.research.length ? (
         <OffsetSection heading="Research">
           <dl className="space-y-16">
-            {organization.research?.map((research) => {
+            {organization.research.map((research) => {
               return (
                 <div key={research._id} className="group relative">
                   <dt className="text-lg font-semibold leading-8">
@@ -185,7 +221,7 @@ export default async function Organization({
       organization.acquiredEntities.length ? (
         <OffsetSection heading="Acquisitions">
           <dl className="space-y-16">
-            {organization.acquiredEntities?.map((acquiredEntity) => {
+            {organization.acquiredEntities.map((acquiredEntity) => {
               return (
                 <div
                   key={acquiredEntity._id}

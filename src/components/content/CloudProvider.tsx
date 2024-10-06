@@ -64,12 +64,12 @@ export default async function CloudProvider({
             : undefined
         }
       />
-      {cloudProvider.vendors.length > 0 ? (
+      {cloudProvider.vendors.length ? (
         <OffsetSection heading="Product vendors" slug="vendors">
           <LogoGrid
             items={
               cloudProvider.vendors
-                ?.map((vendor) => {
+                .map((vendor) => {
                   const image = vendor.logo ?? vendor.mark;
 
                   if (!image?.asset?._ref) {

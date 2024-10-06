@@ -79,13 +79,10 @@ export default defineType({
           .max(5)
           .error('Stock symbols must consist of 1 to 5 uppercase characters.')
           .custom((value, context) =>
-            value
-              ? context.document?.organizationType === ORGANIZATION_TYPE.PUBLIC
-                ? true
-                : 'Stock symbol can only be specified for public companies.'
-              : context.document?.organizationType === ORGANIZATION_TYPE.PUBLIC
-                ? 'Stock symbol is required.'
-                : true,
+            !value ||
+            context.document?.organizationType === ORGANIZATION_TYPE.PUBLIC
+              ? true
+              : 'Stock symbol can only be specified for public companies.',
           ),
     }),
     defineField({
