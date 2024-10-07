@@ -10,12 +10,14 @@ import useInfiniteScroll from 'react-infinite-scroll-hook';
 export default function List({
   initialData,
   getAcquisitions,
+  paginated = true,
 }: {
   initialData: ACQUISITIONS_QUERYResult;
   getAcquisitions: (
     prevDate?: string,
     prevId?: string,
   ) => Promise<ACQUISITIONS_QUERYResult>;
+  paginated?: boolean;
 }) {
   const [acquisitions, setAcquisitions] =
     useState<ACQUISITIONS_QUERYResult>(initialData);
@@ -30,7 +32,7 @@ export default function List({
 
   const [sentryRef] = useInfiniteScroll({
     loading: loading,
-    hasNextPage: !!lastDate && !!lastId,
+    hasNextPage: paginated && !!lastDate && !!lastId,
     onLoadMore: async () => {
       setLoading(true);
 
@@ -54,7 +56,7 @@ export default function List({
 
       setLoading(false);
     },
-    disabled: error,
+    disabled: !paginated || error,
   });
 
   useEffect(() => {
@@ -82,7 +84,7 @@ export default function List({
           return (
             <li key={acquisition._id} className="group relative pb-14">
               {idx !== acquisitions.length - 1 ||
-              (!error && (loading || (lastDate && lastId))) ? (
+              (paginated && !error && (loading || (lastDate && lastId))) ? (
                 <span
                   aria-hidden="true"
                   className="absolute left-8 top-8 -ml-px h-full w-1 bg-gray-200"
@@ -159,7 +161,7 @@ export default function List({
             </li>
           );
         })}
-        {!error && (loading || (lastDate && lastId)) ? (
+        {paginated && !error && (loading || (lastDate && lastId)) ? (
           <li ref={sentryRef} className="pb-14" aria-hidden="true">
             <div className="flex items-start space-x-4">
               <div className="relative">

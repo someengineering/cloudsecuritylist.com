@@ -73,23 +73,25 @@ export default function FilterPanel({
   );
 
   useEffect(() => {
-    const params = new URLSearchParams();
+    if (filters.paginated) {
+      const params = new URLSearchParams();
 
-    filters.productCategories.forEach((slug) => {
-      params.append('category', slug);
-    });
-    filters.organizationTypes.forEach((type) => {
-      params.append('type', type);
-    });
-    filters.supportedCloudProviders.forEach((slug) => {
-      params.append('provider', slug);
-    });
+      filters.productCategories.forEach((slug) => {
+        params.append('category', slug);
+      });
+      filters.organizationTypes.forEach((type) => {
+        params.append('type', type);
+      });
+      filters.supportedCloudProviders.forEach((slug) => {
+        params.append('provider', slug);
+      });
 
-    router.push(`${pathname}?${params.toString()}${window.location.hash}`, {
-      scroll: false,
-      // @ts-expect-error 'shallow' does not exist in type 'NavigateOptions'
-      shallow: true,
-    });
+      router.push(`${pathname}?${params.toString()}${window.location.hash}`, {
+        scroll: false,
+        // @ts-expect-error 'shallow' does not exist in type 'NavigateOptions'
+        shallow: true,
+      });
+    }
   }, [filters, pathname, router]);
 
   return (

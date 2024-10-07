@@ -25,17 +25,6 @@ export const ORGANIZATION_SLUGS_QUERY = groq`
   ].slug.current
 `;
 
-export const ORGANIZATIONS_QUERY = groq`
-  *[
-    _type == "organization" &&
-    organizationType != "acquired" &&
-    (count($organizationTypes) == 0 || organizationType in $organizationTypes) &&
-    lower(name) > lower($prev)
-  ] | order(lower(name) asc) [0...20] {
-    ${ORGANIZATION_BASE}
-  }
-`;
-
 export const ORGANIZATION_QUERY = groq`
   *[
     _type == "organization" &&
@@ -74,6 +63,19 @@ export const VENDORS_QUERY = groq`
   }
 `;
 
+export const UNPAGINATED_VENDORS_QUERY = groq`
+  *[
+    _type == "organization" &&
+    organizationType != "acquired" &&
+    count(productCategories) > 0 &&
+    (count($productCategories) == 0 || references($productCategories)) &&
+    (count($organizationTypes) == 0 || organizationType in $organizationTypes) &&
+    (count($supportedCloudProviders) == 0 || references($supportedCloudProviders))
+  ] | order(lower(name) asc) {
+    ${VENDOR}
+  }
+`;
+
 export const ACQUISITIONS_QUERY = groq`
   *[
     _type == "organization" &&
@@ -84,6 +86,18 @@ export const ACQUISITIONS_QUERY = groq`
       (acquisitionDate == $prevDate && _id > $prevId)
     )
   ] | order(acquisitionDate desc) [0...20] {
+    ${ACQUIRED_ENTITY}
+    parentOrganization -> {
+      ${ORGANIZATION_BASE}
+    },
+  }
+`;
+
+export const UNPAGINATED_ACQUISITIONS_QUERY = groq`
+  *[
+    _type == "organization" &&
+    organizationType == "acquired"
+  ] | order(acquisitionDate desc) {
     ${ACQUIRED_ENTITY}
     parentOrganization -> {
       ${ORGANIZATION_BASE}

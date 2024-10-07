@@ -1,8 +1,12 @@
 import List from '@/components/content/Acquisitions/List';
 import { getAcquisitions } from '@/lib/sanity';
 
-export default async function Acquisitions() {
-  const acquisitions = await getAcquisitions({});
+export default async function Acquisitions({
+  paginated = true,
+}: {
+  paginated?: boolean;
+}) {
+  const acquisitions = await getAcquisitions({ paginated });
 
   if (!acquisitions?.length) {
     return null;
@@ -16,6 +20,7 @@ export default async function Acquisitions() {
 
         return await getAcquisitions({ prevDate, prevId });
       }}
+      paginated={paginated}
     />
   );
 }

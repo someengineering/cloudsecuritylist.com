@@ -28,7 +28,7 @@ export default function List({
 
   const [sentryRef] = useInfiniteScroll({
     loading: loading,
-    hasNextPage: !!lastItem,
+    hasNextPage: filters.paginated && !!lastItem,
     onLoadMore: async () => {
       setLoading(true);
 
@@ -50,7 +50,7 @@ export default function List({
 
       setLoading(false);
     },
-    disabled: error,
+    disabled: !filters.paginated || error,
   });
 
   useEffect(() => {
@@ -208,7 +208,7 @@ export default function List({
           </li>
         );
       })}
-      {!error && (loading || lastItem) ? (
+      {filters.paginated && !error && (loading || lastItem) ? (
         <li
           ref={sentryRef}
           className="relative rounded-lg border border-gray-300 bg-white p-4 shadow-sm lg:px-5"

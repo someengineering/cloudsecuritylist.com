@@ -42,6 +42,7 @@ export default async function VendorsPage({
     category: productCategories,
     type: organizationTypes,
     provider: supportedCloudProviders,
+    isBot,
   } = searchParams;
 
   const {
@@ -92,6 +93,7 @@ export default async function VendorsPage({
               : (supportedCloudProviders ?? []).filter((provider) =>
                   isValidSlug(provider),
                 ),
+          paginated: !isBot,
         }}
       />
     </>

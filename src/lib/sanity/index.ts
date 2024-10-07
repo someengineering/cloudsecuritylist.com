@@ -15,7 +15,8 @@ import {
   ORGANIZATION_QUERY,
   ORGANIZATION_SLUGS_QUERY,
   ORGANIZATIONS_COUNT_QUERY,
-  ORGANIZATIONS_QUERY,
+  UNPAGINATED_ACQUISITIONS_QUERY,
+  UNPAGINATED_VENDORS_QUERY,
   VENDORS_COUNT_QUERY,
   VENDORS_QUERY,
 } from '@/lib/sanity/queries/organization';
@@ -49,7 +50,6 @@ import {
   ORGANIZATION_QUERYResult,
   ORGANIZATION_SLUGS_QUERYResult,
   ORGANIZATIONS_COUNT_QUERYResult,
-  ORGANIZATIONS_QUERYResult,
   PAGE_QUERYResult,
   PAGE_SLUGS_QUERYResult,
   PRODUCT_CATEGORIES_QUERYResult,
@@ -227,27 +227,6 @@ export const getOrganizationSlugs = async () => {
   return data;
 };
 
-export const getOrganizations = async ({
-  organizationTypes,
-  prev,
-}: {
-  organizationTypes?: ORGANIZATION_TYPE[];
-  prev?: string;
-}) => {
-  const data = await sanityFetch<ORGANIZATIONS_QUERYResult>({
-    query: ORGANIZATIONS_QUERY,
-    params: {
-      organizationTypes: organizationTypes ?? [],
-      prev: prev ?? '',
-    },
-    tags: organizationTypes?.length
-      ? ['organization']
-      : organizationTypes?.map((slug) => `organizationType:${slug}`),
-  });
-
-  return data;
-};
-
 export const getOrganization = async (slug: string) => {
   const data = await sanityFetch<ORGANIZATION_QUERYResult>({
     query: ORGANIZATION_QUERY,
@@ -289,14 +268,16 @@ export const getVendors = async ({
   organizationTypes,
   supportedCloudProviders,
   prev,
+  paginated = true,
 }: {
   productCategories?: string[];
   organizationTypes?: ORGANIZATION_TYPE[];
   supportedCloudProviders?: string[];
   prev?: string;
+  paginated?: boolean;
 }) => {
   const data = await sanityFetch<VENDORS_QUERYResult>({
-    query: VENDORS_QUERY,
+    query: paginated ? VENDORS_QUERY : UNPAGINATED_VENDORS_QUERY,
     params: {
       productCategories: (
         await Promise.all(
@@ -337,14 +318,16 @@ export const getVendors = async ({
 };
 
 export const getAcquisitions = async ({
+  paginated = true,
   prevDate,
   prevId,
 }: {
+  paginated?: boolean;
   prevDate?: string;
   prevId?: string;
 }) => {
   const data = await sanityFetch<ACQUISITIONS_QUERYResult>({
-    query: ACQUISITIONS_QUERY,
+    query: paginated ? ACQUISITIONS_QUERY : UNPAGINATED_ACQUISITIONS_QUERY,
     params: {
       prevDate: prevDate ?? '',
       prevId: prevId ?? '',

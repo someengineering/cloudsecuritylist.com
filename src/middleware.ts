@@ -1,5 +1,5 @@
 import { projectId } from '@/lib/sanity/env';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse, userAgent } from 'next/server';
 
 export const config = {
   matcher: [
@@ -26,6 +26,18 @@ export const config = {
 };
 
 export function middleware(request: NextRequest) {
+  const { isBot } = userAgent(request);
+
+  if (isBot) {
+    request.nextUrl.searchParams.set('isBot', '1');
+
+    return NextResponse.rewrite(request.nextUrl);
+  } else if (request.nextUrl.searchParams.has('isBot')) {
+    request.nextUrl.searchParams.delete('isBot');
+
+    return NextResponse.redirect(request.nextUrl);
+  }
+
   const cspHeader = `
     default-src 'self';
     connect-src 'self'${

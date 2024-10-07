@@ -8,6 +8,7 @@ export type Filters = {
   productCategories: string[];
   organizationTypes: ORGANIZATION_TYPE[];
   supportedCloudProviders: string[];
+  paginated: boolean;
 };
 
 type FiltersAction =
@@ -80,6 +81,7 @@ const defaultValues: Filters = {
   productCategories: [],
   organizationTypes: [],
   supportedCloudProviders: [],
+  paginated: true,
 };
 
 const FiltersContext = createContext<{

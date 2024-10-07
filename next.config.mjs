@@ -146,6 +146,12 @@ const nextConfig = withPlausibleProxy()(
       return config;
     },
 
+    compiler: {
+      reactRemoveProperties:
+        process.env.NEXT_PUBLIC_VERCEL_ENV === 'production',
+      removeConsole: process.env.NEXT_PUBLIC_VERCEL_ENV === 'production',
+    },
+
     experimental: {
       taint: true,
       webpackBuildWorker: true,

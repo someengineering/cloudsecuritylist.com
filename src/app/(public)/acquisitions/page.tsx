@@ -31,7 +31,12 @@ export async function generateMetadata(
   };
 }
 
-export default async function AcquisitionsPage() {
+export default async function AcquisitionsPage({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
+  const { isBot } = searchParams;
   const {
     title,
     description,
@@ -54,7 +59,7 @@ export default async function AcquisitionsPage() {
         })}
       />
       <PageHeader title={title} description={description} />
-      <Acquisitions />
+      <Acquisitions paginated={!isBot} />
     </>
   );
 }
