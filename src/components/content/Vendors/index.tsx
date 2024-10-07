@@ -35,7 +35,7 @@ export default async function Vendors({
   ]);
 
   return (
-    <section className="mx-auto max-w-7xl px-6 pb-12 sm:pb-16 lg:px-8">
+    <section className="pb-12 sm:pb-16">
       <FiltersProvider initialValues={filters}>
         {marketSegments.length && productCategories.length ? (
           <FilterPanel

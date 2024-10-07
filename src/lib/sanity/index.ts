@@ -14,7 +14,6 @@ import {
   ACQUISITIONS_QUERY,
   ORGANIZATION_QUERY,
   ORGANIZATION_SLUGS_QUERY,
-  ORGANIZATIONS_COUNT_QUERY,
   UNPAGINATED_ACQUISITIONS_QUERY,
   UNPAGINATED_VENDORS_QUERY,
   VENDORS_COUNT_QUERY,
@@ -49,7 +48,6 @@ import {
   MARKET_SEGMENTS_QUERYResult,
   ORGANIZATION_QUERYResult,
   ORGANIZATION_SLUGS_QUERYResult,
-  ORGANIZATIONS_COUNT_QUERYResult,
   PAGE_QUERYResult,
   PAGE_SLUGS_QUERYResult,
   PRODUCT_CATEGORIES_QUERYResult,
@@ -193,30 +191,6 @@ export const getCloudProvider = async (slug: string) => {
   return data;
 };
 
-export const getOrganizationTypes = async () => {
-  const data = (
-    await Promise.all(
-      ORGANIZATION_TYPES.filter(
-        (type) => type.value !== ORGANIZATION_TYPE.ACQUIRED,
-      ).map(async (type) => {
-        const count = await sanityFetch<ORGANIZATIONS_COUNT_QUERYResult>({
-          query: ORGANIZATIONS_COUNT_QUERY,
-          params: {
-            organizationTypes: [type.value],
-          },
-          tags: [`organizationType:${type.value}`],
-        });
-
-        return { value: type.value, count };
-      }),
-    )
-  )
-    .filter((type) => type.count > 0)
-    .map((type) => type.value);
-
-  return data;
-};
-
 export const getOrganizationSlugs = async () => {
   const data = await sanityFetch<ORGANIZATION_SLUGS_QUERYResult>({
     query: ORGANIZATION_SLUGS_QUERY,
@@ -257,7 +231,7 @@ export const getVendorTypes = async () => {
       }),
     )
   )
-    .filter((type) => type.count > 0)
+    .filter((type) => type.count)
     .map((type) => type.value);
 
   return data;
@@ -267,12 +241,14 @@ export const getVendors = async ({
   productCategories,
   organizationTypes,
   supportedCloudProviders,
+  searchQuery,
   prev,
   paginated = true,
 }: {
   productCategories?: string[];
   organizationTypes?: ORGANIZATION_TYPE[];
   supportedCloudProviders?: string[];
+  searchQuery?: string;
   prev?: string;
   paginated?: boolean;
 }) => {
@@ -285,7 +261,7 @@ export const getVendors = async ({
             async (slug) => (await getProductCategory(slug))?._id,
           ),
         )
-      ).filter((_id) => !!_id),
+      ).filter(Boolean) as string[],
       organizationTypes: organizationTypes ?? [],
       supportedCloudProviders: (
         await Promise.all(
@@ -293,8 +269,9 @@ export const getVendors = async ({
             async (slug) => (await getCloudProvider(slug))?._id,
           ),
         )
-      ).filter((_id) => !!_id),
-      prev: prev ?? '',
+      ).filter(Boolean) as string[],
+      searchQuery: searchQuery ?? '',
+      ...(paginated ? { prev: prev ?? '' } : null),
     },
     tags:
       productCategories?.length ||

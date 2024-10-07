@@ -20,10 +20,16 @@ import {
   PopoverGroup,
   PopoverPanel,
 } from '@headlessui/react';
+import { debounce } from 'lodash';
 import dynamic from 'next/dynamic';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
-import { HiChevronDown, HiOutlineSparkles, HiXMark } from 'react-icons/hi2';
+import {
+  HiChevronDown,
+  HiMagnifyingGlass,
+  HiOutlineSparkles,
+  HiXMark,
+} from 'react-icons/hi2';
 import { IconType } from 'react-icons/lib';
 
 export default function FilterPanel({
@@ -43,6 +49,12 @@ export default function FilterPanel({
   const { filters, setFilters } = useFilters();
   const router = useRouter();
   const pathname = usePathname();
+
+  const debouncedRouterPush = useMemo(
+    () => debounce(router.push, 300),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
 
   const marketSegmentIcons = useMemo(
     () =>
@@ -86,24 +98,58 @@ export default function FilterPanel({
         params.append('provider', slug);
       });
 
-      router.push(`${pathname}?${params.toString()}${window.location.hash}`, {
-        scroll: false,
-        // @ts-expect-error 'shallow' does not exist in type 'NavigateOptions'
-        shallow: true,
-      });
+      if (filters.searchQuery) {
+        params.append('q', filters.searchQuery);
+      }
+
+      debouncedRouterPush(
+        `${pathname}?${params.toString()}${window.location.hash}`,
+        {
+          scroll: false,
+          // @ts-expect-error 'shallow' does not exist in type 'NavigateOptions'
+          shallow: true,
+        },
+      );
     }
-  }, [filters, pathname, router]);
+  }, [debouncedRouterPush, filters, pathname, router]);
 
   return (
     <>
-      <section aria-labelledby="filter-heading">
+      <section
+        aria-labelledby="filter-heading"
+        className="mx-auto max-w-7xl px-6 lg:px-8"
+      >
         <h2 id="filter-heading" className="sr-only">
           Filters
         </h2>
         <div className="border-b border-gray-200 bg-white pb-4">
-          <div className="flex items-center justify-end">
+          <div className="flex items-center justify-between space-x-4">
+            <div className="grow">
+              <label htmlFor="search" className="sr-only">
+                Search
+              </label>
+              <div className="relative">
+                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                  <HiMagnifyingGlass
+                    aria-hidden="true"
+                    className="h-5 w-5 text-gray-400"
+                  />
+                </div>
+                <input
+                  id="search"
+                  name="search"
+                  type="search"
+                  placeholder="Search"
+                  value={filters.searchQuery}
+                  className="block w-full rounded-md border-0 bg-white py-1.5 pl-10 pr-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
+                  onChange={(e) =>
+                    setFilters({ type: 'searchQuery', value: e.target.value })
+                  }
+                />
+              </div>
+            </div>
             <button
-              className="ml-auto inline-block text-sm font-medium text-gray-700 hover:text-gray-900 sm:hidden"
+              className="ml-auto inline-block font-medium text-gray-700 hover:text-gray-900 sm:hidden"
               onClick={() => setFiltersMobileMenuOpen(true)}
             >
               Filters
@@ -132,12 +178,12 @@ export default function FilterPanel({
                           name="organizationTypes[]"
                           type="checkbox"
                           className="h-4 w-4 rounded border-gray-300 text-cyan-600 focus:ring-cyan-500"
-                          onChange={() => {
+                          onChange={() =>
                             setFilters({
                               type: 'organizationType',
                               value: type.value,
-                            });
-                          }}
+                            })
+                          }
                         />
                         <label
                           htmlFor={`filter-type-${type.value}`}
@@ -176,12 +222,12 @@ export default function FilterPanel({
                           name="supportedCloudProviders[]"
                           type="checkbox"
                           className="h-4 w-4 rounded border-gray-300 text-cyan-600 focus:ring-cyan-500"
-                          onChange={() => {
+                          onChange={() =>
                             setFilters({
                               type: 'supportedCloudProvider',
                               slug: cloudProvider.slug,
-                            });
-                          }}
+                            })
+                          }
                         />
                         <label
                           htmlFor={`filter-provider-${cloudProvider.slug}`}
@@ -203,9 +249,9 @@ export default function FilterPanel({
           Product categories
         </h2>
         <div className="border-y border-gray-200 bg-gray-100">
-          <div className="flex items-center px-4 py-3">
+          <div className="mx-auto flex max-w-7xl items-center px-6 py-3 lg:px-8">
             <DisclosureButton
-              className="group flex items-center py-2 text-sm font-medium text-gray-700 hover:text-gray-900"
+              className="group flex items-center py-2 font-medium text-gray-700 hover:text-gray-900 sm:text-sm"
               onClick={() => setProductCategoriesMobileMenuOpen(true)}
             >
               Product categories
@@ -245,9 +291,9 @@ export default function FilterPanel({
                       <button
                         type="button"
                         className="ml-1 inline-flex h-4 w-4 flex-shrink-0 rounded-full p-0.5 text-cyan-600 hover:bg-cyan-100 hover:text-cyan-700"
-                        onClick={() => {
-                          setFilters({ type: 'productCategory', slug });
-                        }}
+                        onClick={() =>
+                          setFilters({ type: 'productCategory', slug })
+                        }
                       >
                         <span className="sr-only">
                           Remove filter for {selectedCategory.name}
@@ -292,12 +338,12 @@ export default function FilterPanel({
                           name="productCategories[]"
                           type="checkbox"
                           className="mx-0.5 h-4 w-4 flex-shrink-0 rounded border-gray-300 text-cyan-600 focus:ring-cyan-500"
-                          onChange={() => {
+                          onChange={() =>
                             setFilters({
                               type: 'productCategory',
                               slug: category.slug ?? '',
-                            });
-                          }}
+                            })
+                          }
                         />
                         <label
                           htmlFor={`category-${category.slug}`}
@@ -392,12 +438,12 @@ export default function FilterPanel({
                               name="productCategories[]"
                               type="checkbox"
                               className="mx-0.5 h-4 w-4 rounded border-gray-300 text-cyan-600 focus:ring-cyan-500"
-                              onChange={() => {
+                              onChange={() =>
                                 setFilters({
                                   type: 'productCategory',
                                   slug: category.slug ?? '',
-                                });
-                              }}
+                                })
+                              }
                             />
                             <label
                               htmlFor={`category-${category.slug}`}
@@ -486,12 +532,12 @@ export default function FilterPanel({
                           name="organizationTypes[]"
                           type="checkbox"
                           className="mx-0.5 h-4 w-4 rounded border-gray-300 text-cyan-600 focus:ring-cyan-500"
-                          onChange={() => {
+                          onChange={() =>
                             setFilters({
                               type: 'organizationType',
                               value: type.value,
-                            });
-                          }}
+                            })
+                          }
                         />
                         <label
                           htmlFor={`type-${type.value}`}
@@ -539,12 +585,12 @@ export default function FilterPanel({
                           name="supportedCloudProviders[]"
                           type="checkbox"
                           className="mx-0.5 h-4 w-4 rounded border-gray-300 text-cyan-600 focus:ring-cyan-500"
-                          onChange={() => {
+                          onChange={() =>
                             setFilters({
                               type: 'supportedCloudProvider',
                               slug: cloudProvider.slug,
-                            });
-                          }}
+                            })
+                          }
                         />
                         <label
                           htmlFor={`type-${cloudProvider.slug}`}

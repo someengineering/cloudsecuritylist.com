@@ -7,16 +7,6 @@ import {
 } from '@/lib/sanity/queries/fragments/organization';
 import { groq } from 'next-sanity';
 
-export const ORGANIZATIONS_COUNT_QUERY = groq`
-  count(
-    *[
-      _type == "organization" &&
-      organizationType != "acquired" &&
-      (count($organizationTypes) == 0 || organizationType in $organizationTypes)
-    ]
-  )
-`;
-
 export const ORGANIZATION_SLUGS_QUERY = groq`
   *[
     _type == "organization" &&
@@ -57,7 +47,8 @@ export const VENDORS_QUERY = groq`
     (count($productCategories) == 0 || references($productCategories)) &&
     (count($organizationTypes) == 0 || organizationType in $organizationTypes) &&
     (count($supportedCloudProviders) == 0 || references($supportedCloudProviders)) &&
-    lower(name) > lower($prev)
+    lower(name) > lower($prev) &&
+    (length($searchQuery) == 0 || name match $searchQuery + "*" || description match $searchQuery + "*" || website match $searchQuery + "*")
   ] | order(lower(name) asc) [0...20] {
     ${VENDOR}
   }
@@ -70,7 +61,8 @@ export const UNPAGINATED_VENDORS_QUERY = groq`
     count(productCategories) > 0 &&
     (count($productCategories) == 0 || references($productCategories)) &&
     (count($organizationTypes) == 0 || organizationType in $organizationTypes) &&
-    (count($supportedCloudProviders) == 0 || references($supportedCloudProviders))
+    (count($supportedCloudProviders) == 0 || references($supportedCloudProviders)) &&
+    (length($searchQuery) == 0 || name match $searchQuery + "*" || description match $searchQuery + "*" || website match $searchQuery + "*")
   ] | order(lower(name) asc) {
     ${VENDOR}
   }

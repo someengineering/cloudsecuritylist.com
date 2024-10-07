@@ -8,6 +8,7 @@ export type Filters = {
   productCategories: string[];
   organizationTypes: ORGANIZATION_TYPE[];
   supportedCloudProviders: string[];
+  searchQuery: string;
   paginated: boolean;
 };
 
@@ -23,6 +24,10 @@ type FiltersAction =
   | {
       type: 'supportedCloudProvider';
       slug: string;
+    }
+  | {
+      type: 'searchQuery';
+      value: string;
     };
 
 const filtersReducer = (state: Filters, action: FiltersAction): Filters => {
@@ -72,6 +77,10 @@ const filtersReducer = (state: Filters, action: FiltersAction): Filters => {
       return { ...state, supportedCloudProviders };
     }
 
+    case 'searchQuery': {
+      return { ...state, searchQuery: action.value };
+    }
+
     default:
       return state;
   }
@@ -81,6 +90,7 @@ const defaultValues: Filters = {
   productCategories: [],
   organizationTypes: [],
   supportedCloudProviders: [],
+  searchQuery: '',
   paginated: true,
 };
 
