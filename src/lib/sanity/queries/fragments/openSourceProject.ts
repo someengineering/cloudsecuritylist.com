@@ -7,4 +7,6 @@ export const OPEN_SOURCE_PROJECT = groq`
   name,
   description,
   repository,
+  mark,
+  logo,
 `;
