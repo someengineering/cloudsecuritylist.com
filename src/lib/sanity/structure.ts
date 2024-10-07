@@ -17,7 +17,7 @@ import type { StructureResolver } from 'sanity/structure';
 export const structure: StructureResolver = (S, context) =>
   context.currentUser?.email?.includes('@some.engineering')
     ? S.list()
-        .title('Cloud Security List')
+        .title('Sanity Studio: Cloud Security List')
         .items([
           S.documentTypeListItem('cloudProvider').title('Cloud providers'),
           S.divider(),
