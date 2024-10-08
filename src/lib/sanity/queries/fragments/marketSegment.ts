@@ -14,8 +14,7 @@ export const MARKET_SEGMENT = groq`
   ${MARKET_SEGMENT_BASE}
   "productCategories": *[
     _type == "productCategory" &&
-    marketSegment._ref == ^._id &&
-    count(*[_type == "organization" && ^._id in productCategories[]._ref]) > 0
+    marketSegment._ref == ^._id
   ] | order(lower(name) asc) {
     _id,
     name,

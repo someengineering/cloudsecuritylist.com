@@ -47,8 +47,8 @@ export const VENDORS_QUERY = groq`
     (count($productCategories) == 0 || references($productCategories)) &&
     (count($organizationTypes) == 0 || organizationType in $organizationTypes) &&
     (count($supportedCloudProviders) == 0 || references($supportedCloudProviders)) &&
-    lower(name) > lower($prev) &&
-    (length($searchQuery) == 0 || name match $searchQuery + "*" || description match $searchQuery + "*" || website match $searchQuery + "*")
+    (length($searchQuery) == 0 || name match $searchQuery + "*" || description match $searchQuery + "*" || website match $searchQuery + "*") &&
+    lower(name) > lower($prev)
   ] | order(lower(name) asc) [0...20] {
     ${VENDOR}
   }

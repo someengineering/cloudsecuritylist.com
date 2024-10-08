@@ -6,7 +6,6 @@ import {
   CLOUD_PROVIDER_QUERYResult,
   ORGANIZATION_QUERYResult,
 } from '@/lib/sanity/types';
-import { isValidSlug } from '@/utils/slug';
 import {
   BreadcrumbList,
   ListItem,
@@ -36,10 +35,7 @@ const getBreadcrumbList = async ({
     },
   ];
 
-  const parentPage =
-    parentPageSlug && isValidSlug(parentPageSlug)
-      ? await getPage(parentPageSlug)
-      : null;
+  const parentPage = parentPageSlug ? await getPage(parentPageSlug) : null;
 
   if (parentPage) {
     itemListElement.push({

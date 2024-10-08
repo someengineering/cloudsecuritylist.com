@@ -9,7 +9,11 @@ import {
 import {
   MARKET_SEGMENT_QUERY,
   MARKET_SEGMENTS_QUERY,
-} from '@/lib/sanity/queries/marketSegments';
+} from '@/lib/sanity/queries/marketSegment';
+import {
+  OPEN_SOURCE_PROJECTS_QUERY,
+  UNPAGINATED_OPEN_SOURCE_PROJECTS_QUERY,
+} from '@/lib/sanity/queries/openSourceProject';
 import {
   ACQUISITIONS_QUERY,
   ORGANIZATION_QUERY,
@@ -19,16 +23,12 @@ import {
   VENDORS_COUNT_QUERY,
   VENDORS_QUERY,
 } from '@/lib/sanity/queries/organization';
-import {
-  PAGE_QUERY,
-  PAGE_SLUGS_QUERY,
-  TEXT_PAGE_SLUGS_QUERY,
-} from '@/lib/sanity/queries/page';
+import { PAGE_QUERY, PAGE_SLUGS_QUERY } from '@/lib/sanity/queries/page';
 import {
   PRODUCT_CATEGORIES_QUERY,
   PRODUCT_CATEGORY_QUERY,
   PRODUCT_CATEGORY_SLUGS_QUERY,
-} from '@/lib/sanity/queries/productCategories';
+} from '@/lib/sanity/queries/productCategory';
 import {
   RESEARCH_QUERY,
   RESEARCHES_QUERY,
@@ -46,6 +46,7 @@ import {
   CLOUD_PROVIDERS_QUERYResult,
   MARKET_SEGMENT_QUERYResult,
   MARKET_SEGMENTS_QUERYResult,
+  OPEN_SOURCE_PROJECTS_QUERYResult,
   ORGANIZATION_QUERYResult,
   ORGANIZATION_SLUGS_QUERYResult,
   PAGE_QUERYResult,
@@ -57,7 +58,6 @@ import {
   RESEARCHES_QUERYResult,
   SITE_SETTINGS_QUERYResult,
   SITEMAP_QUERYResult,
-  TEXT_PAGE_SLUGS_QUERYResult,
   VENDORS_COUNT_QUERYResult,
   VENDORS_QUERYResult,
 } from '@/lib/sanity/types';
@@ -84,16 +84,6 @@ export const getSiteSettings = async () => {
 export const getPageSlugs = async () => {
   const data = await sanityFetch<PAGE_SLUGS_QUERYResult>({
     query: PAGE_SLUGS_QUERY,
-    tags: ['page'],
-    allowDraftMode: false,
-  });
-
-  return data;
-};
-
-export const getTextPageSlugs = async () => {
-  const data = await sanityFetch<TEXT_PAGE_SLUGS_QUERYResult>({
-    query: TEXT_PAGE_SLUGS_QUERY,
     tags: ['page'],
     allowDraftMode: false,
   });
@@ -140,10 +130,23 @@ export const getProductCategorySlugs = async () => {
   return data;
 };
 
-export const getProductCategories = async (marketSegment?: string) => {
+export const getProductCategories = async ({
+  marketSegment,
+  referenceType,
+}: {
+  marketSegment?: string;
+  referenceType?: 'organization' | 'openSourceProject';
+}) => {
+  const marketSegmentId = marketSegment
+    ? (await getMarketSegment(marketSegment))?._id
+    : undefined;
+
   const data = await sanityFetch<PRODUCT_CATEGORIES_QUERYResult>({
     query: PRODUCT_CATEGORIES_QUERY,
-    params: { marketSegment: marketSegment ?? '' },
+    params: {
+      marketSegment: marketSegmentId ?? '',
+      referenceType: referenceType ?? '',
+    },
     tags: [
       marketSegment ? `marketSegment:${marketSegment}` : 'productCategory',
     ],
@@ -289,6 +292,57 @@ export const getVendors = async ({
             ),
           ]
         : ['organization'],
+  });
+
+  return data;
+};
+
+export const getOpenSourceProjects = async ({
+  productCategories,
+  supportedCloudProviders,
+  searchQuery,
+  prev,
+  paginated = true,
+}: {
+  productCategories?: string[];
+  supportedCloudProviders?: string[];
+  searchQuery?: string;
+  prev?: string;
+  paginated?: boolean;
+}) => {
+  const data = await sanityFetch<OPEN_SOURCE_PROJECTS_QUERYResult>({
+    query: paginated
+      ? OPEN_SOURCE_PROJECTS_QUERY
+      : UNPAGINATED_OPEN_SOURCE_PROJECTS_QUERY,
+    params: {
+      productCategories: (
+        await Promise.all(
+          (productCategories ?? []).map(
+            async (slug) => (await getProductCategory(slug))?._id,
+          ),
+        )
+      ).filter(Boolean) as string[],
+      supportedCloudProviders: (
+        await Promise.all(
+          (supportedCloudProviders ?? []).map(
+            async (slug) => (await getCloudProvider(slug))?._id,
+          ),
+        )
+      ).filter(Boolean) as string[],
+      searchQuery: searchQuery ?? '',
+      ...(paginated ? { prev: prev ?? '' } : null),
+    },
+    tags:
+      productCategories?.length || supportedCloudProviders?.length
+        ? [
+            ...(productCategories ?? []).map(
+              (slug) => `productCategory:${slug}`,
+            ),
+            ...(supportedCloudProviders ?? []).map(
+              (slug) => `cloudProvider:${slug}`,
+            ),
+          ]
+        : ['openSourceProject'],
   });
 
   return data;

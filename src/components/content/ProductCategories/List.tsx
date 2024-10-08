@@ -24,8 +24,8 @@ export default function List({
 
   useEffect(() => {
     const fetchGlossary = async () => {
-      const vendors = await getProductCategories(filters);
-      setProductCategories(vendors);
+      const data = await getProductCategories(filters);
+      setProductCategories(data);
     };
 
     fetchGlossary();
@@ -47,29 +47,29 @@ export default function List({
 
   return (
     <dl className="mx-auto max-w-5xl space-y-8 divide-y divide-gray-900/10">
-      {productCategories.map((productCategory) => (
+      {productCategories.map((category) => (
         <div
-          key={productCategory._id}
-          id={productCategory.slug}
+          key={category._id}
+          id={category.slug}
           className="relative pt-8 leading-7 md:grid md:grid-cols-4 md:gap-8"
         >
           <dt className="col-span-1">
             <Link
-              href={`/category/${productCategory.slug}`}
+              href={`/category/${category.slug}`}
               className="text-xl font-semibold text-cyan-600 hover:text-cyan-700 focus:outline-none md:block"
             >
               <span aria-hidden="true" className="absolute inset-0" />
-              {toSentenceCase(productCategory.name)}
+              {toSentenceCase(category.name)}
             </Link>
-            {productCategory.expansion ? (
+            {category.expansion ? (
               <span className="ml-2 text-cyan-900 md:ml-0 md:mt-1 md:block">
                 {' '}
-                ({productCategory.expansion})
+                ({category.expansion})
               </span>
             ) : null}
           </dt>
           <dd className="mt-4 text-gray-600 md:col-span-3 md:mt-0.5">
-            <p>{productCategory.description}</p>
+            <p>{category.description}</p>
           </dd>
         </div>
       ))}

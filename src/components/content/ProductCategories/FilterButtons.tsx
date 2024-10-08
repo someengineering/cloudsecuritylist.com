@@ -20,14 +20,14 @@ export default function FilterButtons({
 
   const marketSegmentIcons = useMemo(
     () =>
-      marketSegments.map((marketSegment) => ({
-        slug: marketSegment.slug,
-        icon: marketSegment.icon
+      marketSegments.map((segment) => ({
+        slug: segment.slug,
+        icon: segment.icon
           ? dynamic(() =>
               import('react-icons/hi2')
                 .then(
                   (mod) =>
-                    (mod[marketSegment.icon as keyof typeof mod] as IconType) ??
+                    (mod[segment.icon as keyof typeof mod] as IconType) ??
                     HiOutlineSparkles,
                 )
                 .catch(() => HiOutlineSparkles),
@@ -55,9 +55,9 @@ export default function FilterButtons({
   return (
     <div className="mx-auto mb-10 max-w-5xl">
       <div className="isolate grid grid-cols-2 overflow-hidden rounded-md shadow-sm sm:grid-cols-3 lg:grid-cols-7">
-        {marketSegments.map((marketSegment, idx) => {
+        {marketSegments.map((segment, idx) => {
           const Icon =
-            marketSegmentIcons.find((icon) => icon.slug === marketSegment.slug)
+            marketSegmentIcons.find((icon) => icon.slug === segment.slug)
               ?.icon ?? HiOutlineSparkles;
 
           return (
@@ -65,9 +65,9 @@ export default function FilterButtons({
               type="button"
               className={clsx(
                 'group relative flex items-center justify-center text-ellipsis px-3 py-2.5 text-base font-semibold ring-1 ring-inset ring-gray-300 focus:z-10 lg:px-1.5 lg:py-2 lg:text-sm',
-                filters.marketSegment !== marketSegment.slug &&
+                filters.marketSegment !== segment.slug &&
                   'bg-white text-gray-900 hover:bg-cyan-100',
-                filters.marketSegment === marketSegment.slug &&
+                filters.marketSegment === segment.slug &&
                   'bg-cyan-50 text-cyan-900',
                 idx === 0 && 'rounded-tl-md lg:rounded-l-md',
                 idx === 1 && 'rounded-tr-md sm:rounded-none',
@@ -97,23 +97,23 @@ export default function FilterButtons({
                   (idx % 2 === 0 || idx % 3 < 2) &&
                   'lg:col-span-1',
               )}
-              key={marketSegment._id}
+              key={segment._id}
               title={
-                filters.marketSegment === marketSegment.slug
-                  ? `Remove filter for ${marketSegment.name} security product categories`
-                  : `View only ${marketSegment.name} security product categories`
+                filters.marketSegment === segment.slug
+                  ? `Remove filter for ${segment.name} security product categories`
+                  : `View only ${segment.name} security product categories`
               }
               onClick={() =>
-                setFilters({ type: 'marketSegment', slug: marketSegment.slug })
+                setFilters({ type: 'marketSegment', slug: segment.slug })
               }
             >
               <span className="flex items-center gap-x-2 lg:flex-col lg:gap-y-1">
                 <span className="h-5 w-5" aria-hidden="true">
                   <Icon className="h-full w-full" />
                 </span>
-                {marketSegment.name}
+                {segment.name}
               </span>
-              {filters.marketSegment === marketSegment.slug ? (
+              {filters.marketSegment === segment.slug ? (
                 <span className="absolute inset-y-auto right-3 h-4 w-4 rounded-full p-0.5 text-cyan-600 group-hover:bg-cyan-100 group-hover:text-cyan-700 lg:right-1.5 lg:top-1.5">
                   <HiXMark className="h-3 w-3" />
                 </span>

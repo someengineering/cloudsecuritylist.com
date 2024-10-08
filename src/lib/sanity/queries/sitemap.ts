@@ -8,7 +8,7 @@ export const SITEMAP_QUERY = groq`
   *[ _type == "siteSettings" && _id == "siteSettings" ][0] {
     "items":
       [{ url, "lastModified": _updatedAt }] +
-      (*[_type == "page" && defined(slug.current)] | order(slug.current asc) {
+      (*[_type == "page" && defined(slug.current) && (!defined(unlisted) || unlisted == false)] | order(slug.current asc) {
         "url": ^.url + "/" + slug.current,
         "lastModified": ${PAGE_UPDATED_AT},
       } { url, "lastModified": lastModified | order(coalesce(timestamp, "") desc) [0].timestamp }) +

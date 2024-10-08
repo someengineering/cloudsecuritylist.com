@@ -1,7 +1,7 @@
 import Layout from '@/components/opengraph/Layout';
 import Summary from '@/components/opengraph/Summary';
 import { sanityFetch } from '@/lib/sanity/client';
-import { PRODUCT_CATEGORY_QUERY } from '@/lib/sanity/queries/productCategories';
+import { PRODUCT_CATEGORY_QUERY } from '@/lib/sanity/queries/productCategory';
 import { PRODUCT_CATEGORY_QUERYResult } from '@/lib/sanity/types';
 import { toSentenceCase } from '@/utils/string';
 import { ImageResponse } from 'next/og';

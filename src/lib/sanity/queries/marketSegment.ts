@@ -1,11 +1,14 @@
-import { MARKET_SEGMENT } from '@/lib/sanity/queries/fragments/marketSegment';
+import {
+  MARKET_SEGMENT,
+  MARKET_SEGMENT_BASE,
+} from '@/lib/sanity/queries/fragments/marketSegment';
 import { groq } from 'next-sanity';
 
 export const MARKET_SEGMENTS_QUERY = groq`
   *[
     _type == "marketSegment"
   ] | order(lower(name) asc) {
-    ${MARKET_SEGMENT}
+    ${MARKET_SEGMENT_BASE}
   }
 `;
 

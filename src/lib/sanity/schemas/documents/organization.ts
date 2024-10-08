@@ -248,8 +248,7 @@ export default defineType({
     defineField({
       name: 'logo',
       title: 'Logo',
-      description:
-        'Horizontal (landscape) logo image in SVG format. Leave empty if same as the square icon image.',
+      description: 'Horizontal (landscape) logo image in SVG format.',
       type: 'image',
       options: {
         accept: 'image/svg+xml',

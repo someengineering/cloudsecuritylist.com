@@ -102,15 +102,14 @@ export default async function Organization({
       organization.productCategories?.length ? (
         <OffsetSection heading="Product categories">
           <dl className="grid grid-cols-1 gap-x-8 gap-y-16 lg:grid-cols-2">
-            {organization.productCategories.map((productCategory) => {
-              const Icon = productCategory.marketSegment.icon
+            {organization.productCategories.map((category) => {
+              const Icon = category.marketSegment.icon
                 ? dynamic(() =>
                     import('react-icons/hi2')
                       .then(
                         (mod) =>
                           (mod[
-                            productCategory.marketSegment
-                              .icon as keyof typeof mod
+                            category.marketSegment.icon as keyof typeof mod
                           ] as IconType) ?? HiOutlineSparkles,
                       )
                       .catch(() => HiOutlineSparkles),
@@ -118,25 +117,25 @@ export default async function Organization({
                 : HiOutlineSparkles;
 
               return (
-                <div key={productCategory._id} className="group relative">
+                <div key={category._id} className="group relative">
                   <dt>
                     <div className="mb-6 flex h-10 w-10 items-center justify-center rounded-lg bg-cyan-600">
                       <Icon className="h-6 w-6 text-white" />
                     </div>
                     <Link
-                      href={`/category/${productCategory.slug}`}
+                      href={`/category/${category.slug}`}
                       className="text-lg font-semibold leading-8 text-cyan-600 focus:outline-none group-hover:text-cyan-700"
                     >
                       <span aria-hidden="true" className="absolute inset-0" />
-                      {productCategory.expansion
+                      {category.expansion
                         ? `${toSentenceCase(
-                            productCategory.expansion,
-                          )} (${productCategory.name})`
-                        : toSentenceCase(productCategory.name)}
+                            category.expansion,
+                          )} (${category.name})`
+                        : toSentenceCase(category.name)}
                     </Link>
                   </dt>
                   <dd className="mt-2 max-w-prose leading-7 text-gray-600">
-                    {productCategory.description}
+                    {category.description}
                   </dd>
                 </div>
               );
@@ -150,8 +149,8 @@ export default async function Organization({
           <LogoGrid
             items={
               organization.supportedCloudProviders
-                .map((cloudProvider) => {
-                  const image = cloudProvider.logo ?? cloudProvider.mark;
+                .map((provider) => {
+                  const image = provider.logo ?? provider.mark;
 
                   if (!image?.asset?._ref) {
                     return null;
@@ -160,8 +159,8 @@ export default async function Organization({
                   const { aspectRatio } = getImageDimensions(image.asset._ref);
 
                   return {
-                    title: cloudProvider.name,
-                    href: `/provider/${cloudProvider.slug}`,
+                    title: provider.name,
+                    href: `/provider/${provider.slug}`,
                     imageSrc: urlFor(image).url(),
                     imageAspectRatio: aspectRatio,
                   };

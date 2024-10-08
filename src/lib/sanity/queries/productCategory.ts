@@ -1,4 +1,5 @@
-import { VENDOR } from '@/lib/sanity/queries/fragments/organization';
+import { OPEN_SOURCE_PROJECT_BASE } from '@/lib/sanity/queries/fragments/openSourceProject';
+import { ORGANIZATION_BASE } from '@/lib/sanity/queries/fragments/organization';
 import {
   PRODUCT_CATEGORY,
   PRODUCT_CATEGORY_UPDATED_AT,
@@ -15,7 +16,8 @@ export const PRODUCT_CATEGORY_SLUGS_QUERY = groq`
 export const PRODUCT_CATEGORIES_QUERY = groq`
   *[
     _type == "productCategory" &&
-    ($marketSegment == "" || $marketSegment == marketSegment._ref)
+    ($marketSegment == "" || $marketSegment == marketSegment._ref) &&
+    (length($referenceType) == 0 || count(*[_type == $referenceType && references(^._id)]) > 0)
   ] | order(lower(name) asc) {
     ${PRODUCT_CATEGORY}
   }
@@ -32,9 +34,17 @@ export const PRODUCT_CATEGORY_QUERY = groq`
     explanationHeading,
     explanation[],
     "vendors": *[
-      _type == "organization" && ^._id in productCategories[]._ref
+      _type == "organization" &&
+      organizationType != "acquired" &&
+      ^._id in productCategories[]._ref
     ] | order(lower(name) asc) {
-      ${VENDOR}
+      ${ORGANIZATION_BASE}
+    },
+    "openSourceProjects": *[
+      _type == "openSourceProject" &&
+      ^._id in productCategories[]._ref
+    ] | order(lower(name) asc) {
+      ${OPEN_SOURCE_PROJECT_BASE}
     },
     similarCategories[] -> { ${PRODUCT_CATEGORY} },
   } { ..., "_updatedAt": _updatedAt | order(coalesce(timestamp, "") desc) [0].timestamp }

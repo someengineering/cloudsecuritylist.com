@@ -1,5 +1,5 @@
 import { CLOUD_PROVIDER } from '@/lib/sanity/queries/fragments/cloudProvider';
-import { OPEN_SOURCE_PROJECT } from '@/lib/sanity/queries/fragments/openSourceProject';
+import { OPEN_SOURCE_PROJECT_BASE } from '@/lib/sanity/queries/fragments/openSourceProject';
 import { PRODUCT_CATEGORY } from '@/lib/sanity/queries/fragments/productCategory';
 import { RESEARCH } from '@/lib/sanity/queries/fragments/research';
 import { groq } from 'next-sanity';
@@ -48,7 +48,7 @@ export const NON_ACQUIRED_ENTITY = groq`
   "openSourceProjects": *[
     _type == "openSourceProject" && organization._ref == ^._id && name != ^.name
   ] {
-    ${OPEN_SOURCE_PROJECT}
+    ${OPEN_SOURCE_PROJECT_BASE}
   },
   "research": *[
     _type == "research" && organization._ref == ^._id
@@ -81,9 +81,9 @@ export const ORGANIZATION = groq`
 export const ORGANIZATION_UPDATED_AT = groq`
   [
     { "timestamp": _updatedAt },
-    { "timestamp": *[_type == "cloudProvider" && _id in ^.supportedCloudProviders[]._ref] | order(_updatedAt desc) [0]._updatedAt },
-    { "timestamp": *[_type == "productCategory" && _id in ^.productCategories[]._ref] | order(_updatedAt desc) [0]._updatedAt },
     { "timestamp": *[_type == "organization" && organizationType == "acquired" && parentOrganization._ref == ^._id] | order(_updatedAt desc) [0]._updatedAt },
+    { "timestamp": *[_type == "productCategory" && _id in ^.productCategories[]._ref] | order(_updatedAt desc) [0]._updatedAt },
+    { "timestamp": *[_type == "cloudProvider" && _id in ^.supportedCloudProviders[]._ref] | order(_updatedAt desc) [0]._updatedAt },
     { "timestamp": *[_type == "openSourceProject" && organization._ref == ^._id] | order(_updatedAt desc) [0]._updatedAt },
     { "timestamp": *[_type == "research" && organization._ref == ^._id] | order(_updatedAt desc) [0]._updatedAt },
   ]

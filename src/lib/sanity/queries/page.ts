@@ -2,18 +2,12 @@ import { PAGE, PAGE_UPDATED_AT } from '@/lib/sanity/queries/fragments/page';
 import { groq } from 'next-sanity';
 
 export const PAGE_SLUGS_QUERY = groq`
-  *[
-    _type == "page" &&
-    defined(slug.current)
-  ].slug.current
-`;
-
-export const TEXT_PAGE_SLUGS_QUERY = groq`
 *[
   _type == "page" &&
   defined(slug.current) &&
   !defined(listType) &&
-  defined(textContent)
+  defined(textContent) &&
+  (!defined(unlisted) || unlisted == false)
 ].slug.current
 `;
 

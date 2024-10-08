@@ -64,6 +64,32 @@ export default async function CloudProvider({
             : undefined
         }
       />
+      {cloudProvider.nativeProducts?.length ? (
+        <OffsetSection heading="Native security products">
+          <dl className="space-y-16">
+            {cloudProvider.nativeProducts.map((product) => {
+              return (
+                <div key={product.name} className="group relative">
+                  <dt className="text-lg font-semibold leading-8">
+                    <Link
+                      href={product.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-cyan-600 focus:outline-none group-hover:text-cyan-700"
+                    >
+                      <span aria-hidden="true" className="absolute inset-0" />
+                      {product.name}
+                    </Link>
+                  </dt>
+                  <dd className="mt-2 max-w-prose leading-7 text-gray-600">
+                    {product.description}
+                  </dd>
+                </div>
+              );
+            })}
+          </dl>
+        </OffsetSection>
+      ) : null}
       {cloudProvider.vendors.length ? (
         <OffsetSection heading="Product vendors" slug="vendors">
           <LogoGrid
@@ -90,25 +116,25 @@ export default async function CloudProvider({
           />
         </OffsetSection>
       ) : null}
-      {cloudProvider.nativeProducts?.length ? (
-        <OffsetSection heading="Native security products">
+      {cloudProvider.openSourceProjects.length ? (
+        <OffsetSection heading="Open-source projects" slug="open-source">
           <dl className="space-y-16">
-            {cloudProvider.nativeProducts.map((product) => {
+            {cloudProvider.openSourceProjects.map((project) => {
               return (
-                <div key={product.name} className="group relative">
+                <div key={project.name} className="group relative">
                   <dt className="text-lg font-semibold leading-8">
                     <Link
-                      href={product.link}
+                      href={project.repository}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-cyan-600 focus:outline-none group-hover:text-cyan-700"
                     >
                       <span aria-hidden="true" className="absolute inset-0" />
-                      {product.name}
+                      {project.name}
                     </Link>
                   </dt>
                   <dd className="mt-2 max-w-prose leading-7 text-gray-600">
-                    {product.description}
+                    {project.description}
                   </dd>
                 </div>
               );

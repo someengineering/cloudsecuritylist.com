@@ -63,6 +63,7 @@ export default defineType({
           { title: 'Cloud provider', value: 'cloudProvider' },
           { title: 'Framework', value: 'framework' },
           { title: 'Market segment', value: 'marketSegment' },
+          { title: 'Open-source project', value: 'openSourceProject' },
           { title: 'Organization', value: 'organization' },
           { title: 'Product category', value: 'productCategory' },
           { title: 'Research', value: 'research' },
@@ -117,6 +118,11 @@ export default defineType({
               }
             );
           }),
+    }),
+    defineField({
+      name: 'unlisted',
+      title: 'Unlisted',
+      type: 'boolean',
     }),
     defineField({
       name: 'icon',

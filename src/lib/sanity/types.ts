@@ -211,6 +211,7 @@ export type Page = {
     | 'cloudProvider'
     | 'framework'
     | 'marketSegment'
+    | 'openSourceProject'
     | 'organization'
     | 'productCategory'
     | 'research';
@@ -232,6 +233,7 @@ export type Page = {
     _type: 'block';
     _key: string;
   }>;
+  unlisted?: boolean;
   icon: IconPicker;
 };
 
@@ -273,6 +275,20 @@ export type OpenSourceProject = {
     crop?: SanityImageCrop;
     _type: 'image';
   };
+  productCategories?: Array<{
+    _ref: string;
+    _type: 'reference';
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: 'productCategory';
+  }>;
+  supportedCloudProviders?: Array<{
+    _ref: string;
+    _type: 'reference';
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: 'cloudProvider';
+  }>;
 };
 
 export type Organization = {
@@ -537,7 +553,7 @@ export type CLOUD_PROVIDERS_QUERYResult = Array<{
   linkedin: string | null;
 }>;
 // Variable: CLOUD_PROVIDER_QUERY
-// Query: *[    _type == "cloudProvider" &&    slug.current == $slug  ][0] {    _createdAt,    "_updatedAt":   [    { "timestamp": _updatedAt },    { "timestamp": *[_type == "organization" && organizationType != "acquired" && ^._id in supportedCloudProviders[]._ref] | order(_updatedAt desc) [0]._updatedAt },  ],      _id,  "slug": slug.current,  name,  abbreviation,  description,  "icon": icon.name,  mark,  logo,  website,  linkedin,    sharedResponsibilityModel,    "vendors": *[      _type == "organization" && ^._id in supportedCloudProviders[]._ref    ] | order(lower(name) asc) {          _id,  "slug": slug.current,  name,  description,  organizationType,  website,  linkedin,  crunchbase,  stockSymbol,  mark,  logo,  productCategories[] -> {   _id,  "slug": slug.current,  name,  expansion,  description,  marketSegment -> {   _id,  "slug": slug.current,  name,  description,  "icon": icon.name, }, },  supportedCloudProviders[] -> {   _id,  "slug": slug.current,  name,  abbreviation,  description,  "icon": icon.name,  mark,  logo,  website,  linkedin, },    },    nativeProducts[] {      name,      description,      link,    },  } { ..., "_updatedAt": _updatedAt | order(coalesce(timestamp, "") desc) [0].timestamp }
+// Query: *[    _type == "cloudProvider" &&    slug.current == $slug  ][0] {    _createdAt,    "_updatedAt":   [    { "timestamp": _updatedAt },    { "timestamp": *[_type == "organization" && organizationType != "acquired" && ^._id in supportedCloudProviders[]._ref] | order(_updatedAt desc) [0]._updatedAt },    { "timestamp": *[_type == "openSourceProject" && ^._id in supportedCloudProviders[]._ref] | order(_updatedAt desc) [0]._updatedAt },  ],      _id,  "slug": slug.current,  name,  abbreviation,  description,  "icon": icon.name,  mark,  logo,  website,  linkedin,    sharedResponsibilityModel,    nativeProducts[] {      name,      description,      link,    },    "vendors": *[      _type == "organization" &&      organizationType != "acquired" &&      ^._id in supportedCloudProviders[]._ref    ] | order(lower(name) asc) {        _id,  "slug": slug.current,  name,  description,  organizationType,  website,  linkedin,  crunchbase,  stockSymbol,  mark,  logo,    },    "openSourceProjects": *[      _type == "openSourceProject" &&      ^._id in supportedCloudProviders[]._ref    ] | order(lower(name) asc) {        _id,  "slug": slug.current,  name,  description,  repository,  mark,  logo,    },  } { ..., "_updatedAt": _updatedAt | order(coalesce(timestamp, "") desc) [0].timestamp }
 export type CLOUD_PROVIDER_QUERYResult = {
   _createdAt: string;
   _updatedAt: string | null;
@@ -572,6 +588,11 @@ export type CLOUD_PROVIDER_QUERYResult = {
   website: string;
   linkedin: string | null;
   sharedResponsibilityModel: string | null;
+  nativeProducts: Array<{
+    name: string;
+    description: string;
+    link: string;
+  }> | null;
   vendors: Array<{
     _id: string;
     slug: string;
@@ -604,78 +625,50 @@ export type CLOUD_PROVIDER_QUERYResult = {
       crop?: SanityImageCrop;
       _type: 'image';
     } | null;
-    productCategories: Array<{
-      _id: string;
-      slug: string;
-      name: string;
-      expansion: string | null;
-      description: string;
-      marketSegment: {
-        _id: string;
-        slug: string;
-        name: string;
-        description: null;
-        icon: string | null;
-      };
-    }> | null;
-    supportedCloudProviders: Array<{
-      _id: string;
-      slug: string;
-      name: string;
-      abbreviation: string | null;
-      description: string;
-      icon: string | null;
-      mark: {
-        asset: {
-          _ref: string;
-          _type: 'reference';
-          _weak?: boolean;
-          [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
-        };
-        hotspot?: SanityImageHotspot;
-        crop?: SanityImageCrop;
-        _type: 'image';
-      };
-      logo: {
-        asset?: {
-          _ref: string;
-          _type: 'reference';
-          _weak?: boolean;
-          [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
-        };
-        hotspot?: SanityImageHotspot;
-        crop?: SanityImageCrop;
-        _type: 'image';
-      } | null;
-      website: string;
-      linkedin: string | null;
-    }> | null;
   }>;
-  nativeProducts: Array<{
+  openSourceProjects: Array<{
+    _id: string;
+    slug: string;
     name: string;
     description: string;
-    link: string;
-  }> | null;
+    repository: string;
+    mark: {
+      asset?: {
+        _ref: string;
+        _type: 'reference';
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: 'image';
+    } | null;
+    logo: {
+      asset?: {
+        _ref: string;
+        _type: 'reference';
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: 'image';
+    } | null;
+  }>;
 } | null;
 
-// Source: ./src/lib/sanity/queries/marketSegments.ts
+// Source: ./src/lib/sanity/queries/marketSegment.ts
 // Variable: MARKET_SEGMENTS_QUERY
-// Query: *[    _type == "marketSegment"  ] | order(lower(name) asc) {        _id,  "slug": slug.current,  name,  description,  "icon": icon.name,  "productCategories": *[    _type == "productCategory" &&    marketSegment._ref == ^._id &&    count(*[_type == "organization" && ^._id in productCategories[]._ref]) > 0  ] | order(lower(name) asc) {    _id,    name,    "slug": slug.current,    expansion,  },  }
+// Query: *[    _type == "marketSegment"  ] | order(lower(name) asc) {      _id,  "slug": slug.current,  name,  description,  "icon": icon.name,  }
 export type MARKET_SEGMENTS_QUERYResult = Array<{
   _id: string;
   slug: string;
   name: string;
   description: null;
   icon: string | null;
-  productCategories: Array<{
-    _id: string;
-    name: string;
-    slug: string;
-    expansion: string | null;
-  }>;
 }>;
 // Variable: MARKET_SEGMENT_QUERY
-// Query: *[    _type == "marketSegment" &&    slug.current == $slug  ][0] {        _id,  "slug": slug.current,  name,  description,  "icon": icon.name,  "productCategories": *[    _type == "productCategory" &&    marketSegment._ref == ^._id &&    count(*[_type == "organization" && ^._id in productCategories[]._ref]) > 0  ] | order(lower(name) asc) {    _id,    name,    "slug": slug.current,    expansion,  },  }
+// Query: *[    _type == "marketSegment" &&    slug.current == $slug  ][0] {        _id,  "slug": slug.current,  name,  description,  "icon": icon.name,  "productCategories": *[    _type == "productCategory" &&    marketSegment._ref == ^._id  ] | order(lower(name) asc) {    _id,    name,    "slug": slug.current,    expansion,  },  }
 export type MARKET_SEGMENT_QUERYResult = {
   _id: string;
   slug: string;
@@ -690,9 +683,9 @@ export type MARKET_SEGMENT_QUERYResult = {
   }>;
 } | null;
 
-// Source: ./src/lib/sanity/queries/openSourceProjects.ts
+// Source: ./src/lib/sanity/queries/openSourceProject.ts
 // Variable: OPEN_SOURCE_PROJECTS_QUERY
-// Query: *[    _type == "openSourceProject"  ] | order(lower(name) asc) {      _id,  "slug": slug.current,  name,  description,  repository,  mark,  logo,    organization -> {   _id,  "slug": slug.current,  name,  description,  organizationType,  website,  linkedin,  crunchbase,  stockSymbol,  mark,  logo, },  }
+// Query: *[    _type == "openSourceProject" &&    (count($productCategories) == 0 || references($productCategories)) &&    (count($supportedCloudProviders) == 0 || references($supportedCloudProviders)) &&    (length($searchQuery) == 0 || name match $searchQuery + "*" || description match $searchQuery + "*" || repository match $searchQuery + "*" || organization.name match $searchQuery + "*") &&    lower(name) > lower($prev)  ] | order(lower(name) asc) [0...20] {        _id,  "slug": slug.current,  name,  description,  repository,  mark,  logo,  productCategories[] -> {   _id,  "slug": slug.current,  name,  expansion,  description,  marketSegment -> {   _id,  "slug": slug.current,  name,  description,  "icon": icon.name, }, },  supportedCloudProviders[] -> {   _id,  "slug": slug.current,  name,  abbreviation,  description,  "icon": icon.name,  mark,  logo,  website,  linkedin, },    organization -> {   _id,  "slug": slug.current,  name,  description,  organizationType,  website,  linkedin,  crunchbase,  stockSymbol,  mark,  logo, },  }
 export type OPEN_SOURCE_PROJECTS_QUERYResult = Array<{
   _id: string;
   slug: string;
@@ -721,6 +714,162 @@ export type OPEN_SOURCE_PROJECTS_QUERYResult = Array<{
     crop?: SanityImageCrop;
     _type: 'image';
   } | null;
+  productCategories: Array<{
+    _id: string;
+    slug: string;
+    name: string;
+    expansion: string | null;
+    description: string;
+    marketSegment: {
+      _id: string;
+      slug: string;
+      name: string;
+      description: null;
+      icon: string | null;
+    };
+  }> | null;
+  supportedCloudProviders: Array<{
+    _id: string;
+    slug: string;
+    name: string;
+    abbreviation: string | null;
+    description: string;
+    icon: string | null;
+    mark: {
+      asset: {
+        _ref: string;
+        _type: 'reference';
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: 'image';
+    };
+    logo: {
+      asset?: {
+        _ref: string;
+        _type: 'reference';
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: 'image';
+    } | null;
+    website: string;
+    linkedin: string | null;
+  }> | null;
+  organization: {
+    _id: string;
+    slug: string;
+    name: string;
+    description: string;
+    organizationType: OrganizationType;
+    website: string | null;
+    linkedin: string | null;
+    crunchbase: string | null;
+    stockSymbol: string | null;
+    mark: {
+      asset?: {
+        _ref: string;
+        _type: 'reference';
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: 'image';
+    } | null;
+    logo: {
+      asset?: {
+        _ref: string;
+        _type: 'reference';
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: 'image';
+    } | null;
+  } | null;
+}>;
+// Variable: UNPAGINATED_OPEN_SOURCE_PROJECTS_QUERY
+// Query: *[    _type == "openSourceProject" &&    (count($productCategories) == 0 || references($productCategories)) &&    (count($supportedCloudProviders) == 0 || references($supportedCloudProviders)) &&    (length($searchQuery) == 0 || name match $searchQuery + "*" || description match $searchQuery + "*" || repository match $searchQuery + "*" || organization.name match $searchQuery + "*")  ] | order(lower(name) asc) {        _id,  "slug": slug.current,  name,  description,  repository,  mark,  logo,  productCategories[] -> {   _id,  "slug": slug.current,  name,  expansion,  description,  marketSegment -> {   _id,  "slug": slug.current,  name,  description,  "icon": icon.name, }, },  supportedCloudProviders[] -> {   _id,  "slug": slug.current,  name,  abbreviation,  description,  "icon": icon.name,  mark,  logo,  website,  linkedin, },    organization -> {   _id,  "slug": slug.current,  name,  description,  organizationType,  website,  linkedin,  crunchbase,  stockSymbol,  mark,  logo, },  }
+export type UNPAGINATED_OPEN_SOURCE_PROJECTS_QUERYResult = Array<{
+  _id: string;
+  slug: string;
+  name: string;
+  description: string;
+  repository: string;
+  mark: {
+    asset?: {
+      _ref: string;
+      _type: 'reference';
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: 'image';
+  } | null;
+  logo: {
+    asset?: {
+      _ref: string;
+      _type: 'reference';
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: 'image';
+  } | null;
+  productCategories: Array<{
+    _id: string;
+    slug: string;
+    name: string;
+    expansion: string | null;
+    description: string;
+    marketSegment: {
+      _id: string;
+      slug: string;
+      name: string;
+      description: null;
+      icon: string | null;
+    };
+  }> | null;
+  supportedCloudProviders: Array<{
+    _id: string;
+    slug: string;
+    name: string;
+    abbreviation: string | null;
+    description: string;
+    icon: string | null;
+    mark: {
+      asset: {
+        _ref: string;
+        _type: 'reference';
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: 'image';
+    };
+    logo: {
+      asset?: {
+        _ref: string;
+        _type: 'reference';
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: 'image';
+    } | null;
+    website: string;
+    linkedin: string | null;
+  }> | null;
   organization: {
     _id: string;
     slug: string;
@@ -756,7 +905,7 @@ export type OPEN_SOURCE_PROJECTS_QUERYResult = Array<{
   } | null;
 }>;
 // Variable: OPEN_SOURCE_PROJECT_QUERY
-// Query: *[    _type == "openSourceProject" &&    slug.current == $slug  ][0] {      _id,  "slug": slug.current,  name,  description,  repository,  mark,  logo,    organization -> {   _id,  "slug": slug.current,  name,  description,  organizationType,  website,  linkedin,  crunchbase,  stockSymbol,  mark,  logo, },  }
+// Query: *[    _type == "openSourceProject" &&    slug.current == $slug  ][0] {        _id,  "slug": slug.current,  name,  description,  repository,  mark,  logo,  productCategories[] -> {   _id,  "slug": slug.current,  name,  expansion,  description,  marketSegment -> {   _id,  "slug": slug.current,  name,  description,  "icon": icon.name, }, },  supportedCloudProviders[] -> {   _id,  "slug": slug.current,  name,  abbreviation,  description,  "icon": icon.name,  mark,  logo,  website,  linkedin, },    organization -> {   _id,  "slug": slug.current,  name,  description,  organizationType,  website,  linkedin,  crunchbase,  stockSymbol,  mark,  logo, },  }
 export type OPEN_SOURCE_PROJECT_QUERYResult = {
   _id: string;
   slug: string;
@@ -785,6 +934,52 @@ export type OPEN_SOURCE_PROJECT_QUERYResult = {
     crop?: SanityImageCrop;
     _type: 'image';
   } | null;
+  productCategories: Array<{
+    _id: string;
+    slug: string;
+    name: string;
+    expansion: string | null;
+    description: string;
+    marketSegment: {
+      _id: string;
+      slug: string;
+      name: string;
+      description: null;
+      icon: string | null;
+    };
+  }> | null;
+  supportedCloudProviders: Array<{
+    _id: string;
+    slug: string;
+    name: string;
+    abbreviation: string | null;
+    description: string;
+    icon: string | null;
+    mark: {
+      asset: {
+        _ref: string;
+        _type: 'reference';
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: 'image';
+    };
+    logo: {
+      asset?: {
+        _ref: string;
+        _type: 'reference';
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: 'image';
+    } | null;
+    website: string;
+    linkedin: string | null;
+  }> | null;
   organization: {
     _id: string;
     slug: string;
@@ -825,7 +1020,7 @@ export type OPEN_SOURCE_PROJECT_QUERYResult = {
 // Query: *[    _type == "organization" &&    defined(slug.current) &&    organizationType != "acquired"  ].slug.current
 export type ORGANIZATION_SLUGS_QUERYResult = Array<string>;
 // Variable: ORGANIZATION_QUERY
-// Query: *[    _type == "organization" &&    slug.current == $slug  ][0] {    _createdAt,    "_updatedAt":   [    { "timestamp": _updatedAt },    { "timestamp": *[_type == "cloudProvider" && _id in ^.supportedCloudProviders[]._ref] | order(_updatedAt desc) [0]._updatedAt },    { "timestamp": *[_type == "productCategory" && _id in ^.productCategories[]._ref] | order(_updatedAt desc) [0]._updatedAt },    { "timestamp": *[_type == "organization" && organizationType == "acquired" && parentOrganization._ref == ^._id] | order(_updatedAt desc) [0]._updatedAt },    { "timestamp": *[_type == "openSourceProject" && organization._ref == ^._id] | order(_updatedAt desc) [0]._updatedAt },    { "timestamp": *[_type == "research" && organization._ref == ^._id] | order(_updatedAt desc) [0]._updatedAt },  ],      ...select(    organizationType == "acquired" => {          _id,  "slug": slug.current,  name,  description,  organizationType,  website,  linkedin,  crunchbase,  stockSymbol,  mark,  logo,  acquisitionDate,  acquisitionPrice,  pressRelease,      parentOrganization -> {          _id,  "slug": slug.current,  name,  description,  organizationType,  website,  linkedin,  crunchbase,  stockSymbol,  mark,  logo,      },    },    organizationType != "acquired" => {          _id,  "slug": slug.current,  name,  description,  organizationType,  website,  linkedin,  crunchbase,  stockSymbol,  mark,  logo,  productCategories[] -> {   _id,  "slug": slug.current,  name,  expansion,  description,  marketSegment -> {   _id,  "slug": slug.current,  name,  description,  "icon": icon.name, }, },  supportedCloudProviders[] -> {   _id,  "slug": slug.current,  name,  abbreviation,  description,  "icon": icon.name,  mark,  logo,  website,  linkedin, },  ...(*[_type == "openSourceProject" && organization.ref == ^.id && name == ^.name] [0] {    ...select(      repository match "*github.com" => { "github": repository },      repository match "*gitlab.com" => { "gitlab": repository },    )  }),  "openSourceProjects": *[    _type == "openSourceProject" && organization._ref == ^._id && name != ^.name  ] {      _id,  "slug": slug.current,  name,  description,  repository,  mark,  logo,  },  "research": *[    _type == "research" && organization._ref == ^._id  ] {      _id,  "slug": slug.current,  name,  description,  website,  },  "acquiredEntities": *[    _type == "organization" && parentOrganization._ref == ^._id  ] | order(acquisitionDate desc) {        _id,  "slug": slug.current,  name,  description,  organizationType,  website,  linkedin,  crunchbase,  stockSymbol,  mark,  logo,  acquisitionDate,  acquisitionPrice,  pressRelease,  },    },  ),  } { ..., "_updatedAt": _updatedAt | order(coalesce(timestamp, "") desc) [0].timestamp }
+// Query: *[    _type == "organization" &&    slug.current == $slug  ][0] {    _createdAt,    "_updatedAt":   [    { "timestamp": _updatedAt },    { "timestamp": *[_type == "organization" && organizationType == "acquired" && parentOrganization._ref == ^._id] | order(_updatedAt desc) [0]._updatedAt },    { "timestamp": *[_type == "productCategory" && _id in ^.productCategories[]._ref] | order(_updatedAt desc) [0]._updatedAt },    { "timestamp": *[_type == "cloudProvider" && _id in ^.supportedCloudProviders[]._ref] | order(_updatedAt desc) [0]._updatedAt },    { "timestamp": *[_type == "openSourceProject" && organization._ref == ^._id] | order(_updatedAt desc) [0]._updatedAt },    { "timestamp": *[_type == "research" && organization._ref == ^._id] | order(_updatedAt desc) [0]._updatedAt },  ],      ...select(    organizationType == "acquired" => {          _id,  "slug": slug.current,  name,  description,  organizationType,  website,  linkedin,  crunchbase,  stockSymbol,  mark,  logo,  acquisitionDate,  acquisitionPrice,  pressRelease,      parentOrganization -> {          _id,  "slug": slug.current,  name,  description,  organizationType,  website,  linkedin,  crunchbase,  stockSymbol,  mark,  logo,      },    },    organizationType != "acquired" => {          _id,  "slug": slug.current,  name,  description,  organizationType,  website,  linkedin,  crunchbase,  stockSymbol,  mark,  logo,  productCategories[] -> {   _id,  "slug": slug.current,  name,  expansion,  description,  marketSegment -> {   _id,  "slug": slug.current,  name,  description,  "icon": icon.name, }, },  supportedCloudProviders[] -> {   _id,  "slug": slug.current,  name,  abbreviation,  description,  "icon": icon.name,  mark,  logo,  website,  linkedin, },  ...(*[_type == "openSourceProject" && organization.ref == ^.id && name == ^.name] [0] {    ...select(      repository match "*github.com" => { "github": repository },      repository match "*gitlab.com" => { "gitlab": repository },    )  }),  "openSourceProjects": *[    _type == "openSourceProject" && organization._ref == ^._id && name != ^.name  ] {      _id,  "slug": slug.current,  name,  description,  repository,  mark,  logo,  },  "research": *[    _type == "research" && organization._ref == ^._id  ] {      _id,  "slug": slug.current,  name,  description,  website,  },  "acquiredEntities": *[    _type == "organization" && parentOrganization._ref == ^._id  ] | order(acquisitionDate desc) {        _id,  "slug": slug.current,  name,  description,  organizationType,  website,  linkedin,  crunchbase,  stockSymbol,  mark,  logo,  acquisitionDate,  acquisitionPrice,  pressRelease,  },    },  ),  } { ..., "_updatedAt": _updatedAt | order(coalesce(timestamp, "") desc) [0].timestamp }
 export type ORGANIZATION_QUERYResult =
   | {
       _createdAt: string;
@@ -1364,7 +1559,7 @@ export type ORGANIZATION_QUERYResult =
 // Query: count(    *[      _type == "organization" &&      organizationType != "acquired" &&      count(productCategories) > 0 &&      (count($productCategories) == 0 || references($productCategories)) &&      (count($organizationTypes) == 0 || organizationType in $organizationTypes) &&      (count($supportedCloudProviders) == 0 || references($supportedCloudProviders))    ]  )
 export type VENDORS_COUNT_QUERYResult = number;
 // Variable: VENDORS_QUERY
-// Query: *[    _type == "organization" &&    organizationType != "acquired" &&    count(productCategories) > 0 &&    (count($productCategories) == 0 || references($productCategories)) &&    (count($organizationTypes) == 0 || organizationType in $organizationTypes) &&    (count($supportedCloudProviders) == 0 || references($supportedCloudProviders)) &&    lower(name) > lower($prev) &&    (length($searchQuery) == 0 || name match $searchQuery + "*" || description match $searchQuery + "*" || website match $searchQuery + "*")  ] | order(lower(name) asc) [0...20] {        _id,  "slug": slug.current,  name,  description,  organizationType,  website,  linkedin,  crunchbase,  stockSymbol,  mark,  logo,  productCategories[] -> {   _id,  "slug": slug.current,  name,  expansion,  description,  marketSegment -> {   _id,  "slug": slug.current,  name,  description,  "icon": icon.name, }, },  supportedCloudProviders[] -> {   _id,  "slug": slug.current,  name,  abbreviation,  description,  "icon": icon.name,  mark,  logo,  website,  linkedin, },  }
+// Query: *[    _type == "organization" &&    organizationType != "acquired" &&    count(productCategories) > 0 &&    (count($productCategories) == 0 || references($productCategories)) &&    (count($organizationTypes) == 0 || organizationType in $organizationTypes) &&    (count($supportedCloudProviders) == 0 || references($supportedCloudProviders)) &&    (length($searchQuery) == 0 || name match $searchQuery + "*" || description match $searchQuery + "*" || website match $searchQuery + "*") &&    lower(name) > lower($prev)  ] | order(lower(name) asc) [0...20] {        _id,  "slug": slug.current,  name,  description,  organizationType,  website,  linkedin,  crunchbase,  stockSymbol,  mark,  logo,  productCategories[] -> {   _id,  "slug": slug.current,  name,  expansion,  description,  marketSegment -> {   _id,  "slug": slug.current,  name,  description,  "icon": icon.name, }, },  supportedCloudProviders[] -> {   _id,  "slug": slug.current,  name,  abbreviation,  description,  "icon": icon.name,  mark,  logo,  website,  linkedin, },  }
 export type VENDORS_QUERYResult = Array<{
   _id: string;
   slug: string;
@@ -1670,11 +1865,8 @@ export type UNPAGINATED_ACQUISITIONS_QUERYResult = Array<{
 
 // Source: ./src/lib/sanity/queries/page.ts
 // Variable: PAGE_SLUGS_QUERY
-// Query: *[    _type == "page" &&    defined(slug.current)  ].slug.current
+// Query: *[  _type == "page" &&  defined(slug.current) &&  !defined(listType) &&  defined(textContent) &&  (!defined(unlisted) || unlisted == false)].slug.current
 export type PAGE_SLUGS_QUERYResult = Array<string>;
-// Variable: TEXT_PAGE_SLUGS_QUERY
-// Query: *[  _type == "page" &&  defined(slug.current) &&  !defined(listType) &&  defined(textContent)].slug.current
-export type TEXT_PAGE_SLUGS_QUERYResult = Array<string>;
 // Variable: PAGE_QUERY
 // Query: *[    _type == "page" &&    slug.current == $slug  ][0] {    _createdAt,    "_updatedAt":   [    { "timestamp": _updatedAt },    select(defined(listType) => { "timestamp": *[_type == ^.listType] | order(_updatedAt desc) [0]._updatedAt }),  ],      "slug": slug.current,  title,  description,  "icon": icon.name,  ...select(!defined(listType) => { longTitle, textContent[] }),  } { ..., "_updatedAt": _updatedAt | order(coalesce(timestamp, "") desc) [0].timestamp }
 export type PAGE_QUERYResult = {
@@ -1705,12 +1897,12 @@ export type PAGE_QUERYResult = {
   }> | null;
 } | null;
 
-// Source: ./src/lib/sanity/queries/productCategories.ts
+// Source: ./src/lib/sanity/queries/productCategory.ts
 // Variable: PRODUCT_CATEGORY_SLUGS_QUERY
 // Query: *[    _type == "productCategory" &&    defined(slug.current)  ].slug.current
 export type PRODUCT_CATEGORY_SLUGS_QUERYResult = Array<string>;
 // Variable: PRODUCT_CATEGORIES_QUERY
-// Query: *[    _type == "productCategory" &&    ($marketSegment == "" || $marketSegment == marketSegment._ref)  ] | order(lower(name) asc) {      _id,  "slug": slug.current,  name,  expansion,  description,  marketSegment -> {   _id,  "slug": slug.current,  name,  description,  "icon": icon.name, },  }
+// Query: *[    _type == "productCategory" &&    ($marketSegment == "" || $marketSegment == marketSegment._ref) &&    (length($referenceType) == 0 || count(*[_type == $referenceType && references(^._id)]) > 0)  ] | order(lower(name) asc) {      _id,  "slug": slug.current,  name,  expansion,  description,  marketSegment -> {   _id,  "slug": slug.current,  name,  description,  "icon": icon.name, },  }
 export type PRODUCT_CATEGORIES_QUERYResult = Array<{
   _id: string;
   slug: string;
@@ -1726,7 +1918,7 @@ export type PRODUCT_CATEGORIES_QUERYResult = Array<{
   };
 }>;
 // Variable: PRODUCT_CATEGORY_QUERY
-// Query: *[    _type == "productCategory" &&    slug.current == $slug  ][0] {    _createdAt,    "_updatedAt":   [    { "timestamp": _updatedAt },    { "timestamp": *[_type == "marketSegment" && _id == ^.marketSegment._ref] | order(_updatedAt desc) [0]._updatedAt },    { "timestamp": *[_type == "organization" && organizationType != "acquired" && ^._id in productCategories[]._ref] | order(_updatedAt desc) [0]._updatedAt },    { "timestamp": *[_type == "productCategory" && _id in ^.similarCategories[]._ref] | order(_updatedAt desc) [0]._updatedAt },  ],      _id,  "slug": slug.current,  name,  expansion,  description,  marketSegment -> {   _id,  "slug": slug.current,  name,  description,  "icon": icon.name, },    explanationHeading,    explanation[],    "vendors": *[      _type == "organization" && ^._id in productCategories[]._ref    ] | order(lower(name) asc) {          _id,  "slug": slug.current,  name,  description,  organizationType,  website,  linkedin,  crunchbase,  stockSymbol,  mark,  logo,  productCategories[] -> {   _id,  "slug": slug.current,  name,  expansion,  description,  marketSegment -> {   _id,  "slug": slug.current,  name,  description,  "icon": icon.name, }, },  supportedCloudProviders[] -> {   _id,  "slug": slug.current,  name,  abbreviation,  description,  "icon": icon.name,  mark,  logo,  website,  linkedin, },    },    similarCategories[] -> {   _id,  "slug": slug.current,  name,  expansion,  description,  marketSegment -> {   _id,  "slug": slug.current,  name,  description,  "icon": icon.name, }, },  } { ..., "_updatedAt": _updatedAt | order(coalesce(timestamp, "") desc) [0].timestamp }
+// Query: *[    _type == "productCategory" &&    slug.current == $slug  ][0] {    _createdAt,    "_updatedAt":   [    { "timestamp": _updatedAt },    { "timestamp": *[_type == "marketSegment" && _id == ^.marketSegment._ref] | order(_updatedAt desc) [0]._updatedAt },    { "timestamp": *[_type == "organization" && organizationType != "acquired" && ^._id in productCategories[]._ref] | order(_updatedAt desc) [0]._updatedAt },    { "timestamp": *[_type == "openSourceProject" && ^._id in productCategories[]._ref] | order(_updatedAt desc) [0]._updatedAt },    { "timestamp": *[_type == "productCategory" && _id in ^.similarCategories[]._ref] | order(_updatedAt desc) [0]._updatedAt },  ],      _id,  "slug": slug.current,  name,  expansion,  description,  marketSegment -> {   _id,  "slug": slug.current,  name,  description,  "icon": icon.name, },    explanationHeading,    explanation[],    "vendors": *[      _type == "organization" &&      organizationType != "acquired" &&      ^._id in productCategories[]._ref    ] | order(lower(name) asc) {        _id,  "slug": slug.current,  name,  description,  organizationType,  website,  linkedin,  crunchbase,  stockSymbol,  mark,  logo,    },    "openSourceProjects": *[      _type == "openSourceProject" &&      ^._id in productCategories[]._ref    ] | order(lower(name) asc) {        _id,  "slug": slug.current,  name,  description,  repository,  mark,  logo,    },    similarCategories[] -> {   _id,  "slug": slug.current,  name,  expansion,  description,  marketSegment -> {   _id,  "slug": slug.current,  name,  description,  "icon": icon.name, }, },  } { ..., "_updatedAt": _updatedAt | order(coalesce(timestamp, "") desc) [0].timestamp }
 export type PRODUCT_CATEGORY_QUERYResult = {
   _createdAt: string;
   _updatedAt: string | null;
@@ -1793,52 +1985,35 @@ export type PRODUCT_CATEGORY_QUERYResult = {
       crop?: SanityImageCrop;
       _type: 'image';
     } | null;
-    productCategories: Array<{
-      _id: string;
-      slug: string;
-      name: string;
-      expansion: string | null;
-      description: string;
-      marketSegment: {
-        _id: string;
-        slug: string;
-        name: string;
-        description: null;
-        icon: string | null;
+  }>;
+  openSourceProjects: Array<{
+    _id: string;
+    slug: string;
+    name: string;
+    description: string;
+    repository: string;
+    mark: {
+      asset?: {
+        _ref: string;
+        _type: 'reference';
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
       };
-    }> | null;
-    supportedCloudProviders: Array<{
-      _id: string;
-      slug: string;
-      name: string;
-      abbreviation: string | null;
-      description: string;
-      icon: string | null;
-      mark: {
-        asset: {
-          _ref: string;
-          _type: 'reference';
-          _weak?: boolean;
-          [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
-        };
-        hotspot?: SanityImageHotspot;
-        crop?: SanityImageCrop;
-        _type: 'image';
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: 'image';
+    } | null;
+    logo: {
+      asset?: {
+        _ref: string;
+        _type: 'reference';
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
       };
-      logo: {
-        asset?: {
-          _ref: string;
-          _type: 'reference';
-          _weak?: boolean;
-          [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
-        };
-        hotspot?: SanityImageHotspot;
-        crop?: SanityImageCrop;
-        _type: 'image';
-      } | null;
-      website: string;
-      linkedin: string | null;
-    }> | null;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: 'image';
+    } | null;
   }>;
   similarCategories: Array<{
     _id: string;
@@ -2017,7 +2192,7 @@ export type SITE_SETTINGS_QUERYResult = {
 
 // Source: ./src/lib/sanity/queries/sitemap.ts
 // Variable: SITEMAP_QUERY
-// Query: *[ _type == "siteSettings" && _id == "siteSettings" ][0] {    "items":      [{ url, "lastModified": _updatedAt }] +      (*[_type == "page" && defined(slug.current)] | order(slug.current asc) {        "url": ^.url + "/" + slug.current,        "lastModified":   [    { "timestamp": _updatedAt },    select(defined(listType) => { "timestamp": *[_type == ^.listType] | order(_updatedAt desc) [0]._updatedAt }),  ],      } { url, "lastModified": lastModified | order(coalesce(timestamp, "") desc) [0].timestamp }) +      (*[_type == "productCategory" && defined(slug.current)] | order(slug.current asc) {        "url": ^.url + "/category/" + slug.current,        "lastModified":   [    { "timestamp": _updatedAt },    { "timestamp": *[_type == "marketSegment" && _id == ^.marketSegment._ref] | order(_updatedAt desc) [0]._updatedAt },    { "timestamp": *[_type == "organization" && organizationType != "acquired" && ^._id in productCategories[]._ref] | order(_updatedAt desc) [0]._updatedAt },    { "timestamp": *[_type == "productCategory" && _id in ^.similarCategories[]._ref] | order(_updatedAt desc) [0]._updatedAt },  ],      } { url, "lastModified": lastModified | order(coalesce(timestamp, "") desc) [0].timestamp }) +      (*[_type == "organization" && defined(slug.current) && organizationType != "acquired"] | order(slug.current asc) {        "url": ^.url + "/organization/" + slug.current,        "lastModified":   [    { "timestamp": _updatedAt },    { "timestamp": *[_type == "cloudProvider" && _id in ^.supportedCloudProviders[]._ref] | order(_updatedAt desc) [0]._updatedAt },    { "timestamp": *[_type == "productCategory" && _id in ^.productCategories[]._ref] | order(_updatedAt desc) [0]._updatedAt },    { "timestamp": *[_type == "organization" && organizationType == "acquired" && parentOrganization._ref == ^._id] | order(_updatedAt desc) [0]._updatedAt },    { "timestamp": *[_type == "openSourceProject" && organization._ref == ^._id] | order(_updatedAt desc) [0]._updatedAt },    { "timestamp": *[_type == "research" && organization._ref == ^._id] | order(_updatedAt desc) [0]._updatedAt },  ],      } { url, "lastModified": lastModified | order(coalesce(timestamp, "") desc) [0].timestamp }) +      (*[_type == "cloudProvider" && defined(slug.current)] | order(slug.current asc) {        "url": ^.url + "/provider/" + slug.current,        "lastModified":   [    { "timestamp": _updatedAt },    { "timestamp": *[_type == "organization" && organizationType != "acquired" && ^._id in supportedCloudProviders[]._ref] | order(_updatedAt desc) [0]._updatedAt },  ],      } { url, "lastModified": lastModified | order(coalesce(timestamp, "") desc) [0].timestamp })  }.items
+// Query: *[ _type == "siteSettings" && _id == "siteSettings" ][0] {    "items":      [{ url, "lastModified": _updatedAt }] +      (*[_type == "page" && defined(slug.current) && (!defined(unlisted) || unlisted == false)] | order(slug.current asc) {        "url": ^.url + "/" + slug.current,        "lastModified":   [    { "timestamp": _updatedAt },    select(defined(listType) => { "timestamp": *[_type == ^.listType] | order(_updatedAt desc) [0]._updatedAt }),  ],      } { url, "lastModified": lastModified | order(coalesce(timestamp, "") desc) [0].timestamp }) +      (*[_type == "productCategory" && defined(slug.current)] | order(slug.current asc) {        "url": ^.url + "/category/" + slug.current,        "lastModified":   [    { "timestamp": _updatedAt },    { "timestamp": *[_type == "marketSegment" && _id == ^.marketSegment._ref] | order(_updatedAt desc) [0]._updatedAt },    { "timestamp": *[_type == "organization" && organizationType != "acquired" && ^._id in productCategories[]._ref] | order(_updatedAt desc) [0]._updatedAt },    { "timestamp": *[_type == "openSourceProject" && ^._id in productCategories[]._ref] | order(_updatedAt desc) [0]._updatedAt },    { "timestamp": *[_type == "productCategory" && _id in ^.similarCategories[]._ref] | order(_updatedAt desc) [0]._updatedAt },  ],      } { url, "lastModified": lastModified | order(coalesce(timestamp, "") desc) [0].timestamp }) +      (*[_type == "organization" && defined(slug.current) && organizationType != "acquired"] | order(slug.current asc) {        "url": ^.url + "/organization/" + slug.current,        "lastModified":   [    { "timestamp": _updatedAt },    { "timestamp": *[_type == "organization" && organizationType == "acquired" && parentOrganization._ref == ^._id] | order(_updatedAt desc) [0]._updatedAt },    { "timestamp": *[_type == "productCategory" && _id in ^.productCategories[]._ref] | order(_updatedAt desc) [0]._updatedAt },    { "timestamp": *[_type == "cloudProvider" && _id in ^.supportedCloudProviders[]._ref] | order(_updatedAt desc) [0]._updatedAt },    { "timestamp": *[_type == "openSourceProject" && organization._ref == ^._id] | order(_updatedAt desc) [0]._updatedAt },    { "timestamp": *[_type == "research" && organization._ref == ^._id] | order(_updatedAt desc) [0]._updatedAt },  ],      } { url, "lastModified": lastModified | order(coalesce(timestamp, "") desc) [0].timestamp }) +      (*[_type == "cloudProvider" && defined(slug.current)] | order(slug.current asc) {        "url": ^.url + "/provider/" + slug.current,        "lastModified":   [    { "timestamp": _updatedAt },    { "timestamp": *[_type == "organization" && organizationType != "acquired" && ^._id in supportedCloudProviders[]._ref] | order(_updatedAt desc) [0]._updatedAt },    { "timestamp": *[_type == "openSourceProject" && ^._id in supportedCloudProviders[]._ref] | order(_updatedAt desc) [0]._updatedAt },  ],      } { url, "lastModified": lastModified | order(coalesce(timestamp, "") desc) [0].timestamp })  }.items
 export type SITEMAP_QUERYResult = Array<
   | {
       url: string;
@@ -2035,27 +2210,27 @@ declare module '@sanity/client' {
   interface SanityQueries {
     '\n  *[\n    _type == "cloudProvider" &&\n    defined(slug.current)\n  ].slug.current\n': CLOUD_PROVIDER_SLUGS_QUERYResult;
     '\n  *[\n    _type == "cloudProvider"\n  ] | order(lower(name) asc) {\n    \n  _id,\n  "slug": slug.current,\n  name,\n  abbreviation,\n  description,\n  "icon": icon.name,\n  mark,\n  logo,\n  website,\n  linkedin,\n\n  }\n': CLOUD_PROVIDERS_QUERYResult;
-    '\n  *[\n    _type == "cloudProvider" &&\n    slug.current == $slug\n  ][0] {\n    _createdAt,\n    "_updatedAt": \n  [\n    { "timestamp": _updatedAt },\n    { "timestamp": *[_type == "organization" && organizationType != "acquired" && ^._id in supportedCloudProviders[]._ref] | order(_updatedAt desc) [0]._updatedAt },\n  ]\n,\n    \n  _id,\n  "slug": slug.current,\n  name,\n  abbreviation,\n  description,\n  "icon": icon.name,\n  mark,\n  logo,\n  website,\n  linkedin,\n\n    sharedResponsibilityModel,\n    "vendors": *[\n      _type == "organization" && ^._id in supportedCloudProviders[]._ref\n    ] | order(lower(name) asc) {\n      \n  \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n\n  productCategories[] -> { \n  _id,\n  "slug": slug.current,\n  name,\n  expansion,\n  description,\n  marketSegment -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n },\n },\n  supportedCloudProviders[] -> { \n  _id,\n  "slug": slug.current,\n  name,\n  abbreviation,\n  description,\n  "icon": icon.name,\n  mark,\n  logo,\n  website,\n  linkedin,\n },\n\n    },\n    nativeProducts[] {\n      name,\n      description,\n      link,\n    },\n  } { ..., "_updatedAt": _updatedAt | order(coalesce(timestamp, "") desc) [0].timestamp }\n': CLOUD_PROVIDER_QUERYResult;
-    '\n  *[\n    _type == "marketSegment"\n  ] | order(lower(name) asc) {\n    \n  \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n\n  "productCategories": *[\n    _type == "productCategory" &&\n    marketSegment._ref == ^._id &&\n    count(*[_type == "organization" && ^._id in productCategories[]._ref]) > 0\n  ] | order(lower(name) asc) {\n    _id,\n    name,\n    "slug": slug.current,\n    expansion,\n  },\n\n  }\n': MARKET_SEGMENTS_QUERYResult;
-    '\n  *[\n    _type == "marketSegment" &&\n    slug.current == $slug\n  ][0] {\n    \n  \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n\n  "productCategories": *[\n    _type == "productCategory" &&\n    marketSegment._ref == ^._id &&\n    count(*[_type == "organization" && ^._id in productCategories[]._ref]) > 0\n  ] | order(lower(name) asc) {\n    _id,\n    name,\n    "slug": slug.current,\n    expansion,\n  },\n\n  }\n': MARKET_SEGMENT_QUERYResult;
-    '\n  *[\n    _type == "openSourceProject"\n  ] | order(lower(name) asc) {\n    \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  repository,\n  mark,\n  logo,\n\n    organization -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n },\n  }\n': OPEN_SOURCE_PROJECTS_QUERYResult;
-    '\n  *[\n    _type == "openSourceProject" &&\n    slug.current == $slug\n  ][0] {\n    \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  repository,\n  mark,\n  logo,\n\n    organization -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n },\n  }\n': OPEN_SOURCE_PROJECT_QUERYResult;
+    '\n  *[\n    _type == "cloudProvider" &&\n    slug.current == $slug\n  ][0] {\n    _createdAt,\n    "_updatedAt": \n  [\n    { "timestamp": _updatedAt },\n    { "timestamp": *[_type == "organization" && organizationType != "acquired" && ^._id in supportedCloudProviders[]._ref] | order(_updatedAt desc) [0]._updatedAt },\n    { "timestamp": *[_type == "openSourceProject" && ^._id in supportedCloudProviders[]._ref] | order(_updatedAt desc) [0]._updatedAt },\n  ]\n,\n    \n  _id,\n  "slug": slug.current,\n  name,\n  abbreviation,\n  description,\n  "icon": icon.name,\n  mark,\n  logo,\n  website,\n  linkedin,\n\n    sharedResponsibilityModel,\n    nativeProducts[] {\n      name,\n      description,\n      link,\n    },\n    "vendors": *[\n      _type == "organization" &&\n      organizationType != "acquired" &&\n      ^._id in supportedCloudProviders[]._ref\n    ] | order(lower(name) asc) {\n      \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n\n    },\n    "openSourceProjects": *[\n      _type == "openSourceProject" &&\n      ^._id in supportedCloudProviders[]._ref\n    ] | order(lower(name) asc) {\n      \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  repository,\n  mark,\n  logo,\n\n    },\n  } { ..., "_updatedAt": _updatedAt | order(coalesce(timestamp, "") desc) [0].timestamp }\n': CLOUD_PROVIDER_QUERYResult;
+    '\n  *[\n    _type == "marketSegment"\n  ] | order(lower(name) asc) {\n    \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n\n  }\n': MARKET_SEGMENTS_QUERYResult;
+    '\n  *[\n    _type == "marketSegment" &&\n    slug.current == $slug\n  ][0] {\n    \n  \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n\n  "productCategories": *[\n    _type == "productCategory" &&\n    marketSegment._ref == ^._id\n  ] | order(lower(name) asc) {\n    _id,\n    name,\n    "slug": slug.current,\n    expansion,\n  },\n\n  }\n': MARKET_SEGMENT_QUERYResult;
+    '\n  *[\n    _type == "openSourceProject" &&\n    (count($productCategories) == 0 || references($productCategories)) &&\n    (count($supportedCloudProviders) == 0 || references($supportedCloudProviders)) &&\n    (length($searchQuery) == 0 || name match $searchQuery + "*" || description match $searchQuery + "*" || repository match $searchQuery + "*" || organization.name match $searchQuery + "*") &&\n    lower(name) > lower($prev)\n  ] | order(lower(name) asc) [0...20] {\n    \n  \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  repository,\n  mark,\n  logo,\n\n  productCategories[] -> { \n  _id,\n  "slug": slug.current,\n  name,\n  expansion,\n  description,\n  marketSegment -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n },\n },\n  supportedCloudProviders[] -> { \n  _id,\n  "slug": slug.current,\n  name,\n  abbreviation,\n  description,\n  "icon": icon.name,\n  mark,\n  logo,\n  website,\n  linkedin,\n },\n\n    organization -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n },\n  }\n': OPEN_SOURCE_PROJECTS_QUERYResult;
+    '\n  *[\n    _type == "openSourceProject" &&\n    (count($productCategories) == 0 || references($productCategories)) &&\n    (count($supportedCloudProviders) == 0 || references($supportedCloudProviders)) &&\n    (length($searchQuery) == 0 || name match $searchQuery + "*" || description match $searchQuery + "*" || repository match $searchQuery + "*" || organization.name match $searchQuery + "*")\n  ] | order(lower(name) asc) {\n    \n  \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  repository,\n  mark,\n  logo,\n\n  productCategories[] -> { \n  _id,\n  "slug": slug.current,\n  name,\n  expansion,\n  description,\n  marketSegment -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n },\n },\n  supportedCloudProviders[] -> { \n  _id,\n  "slug": slug.current,\n  name,\n  abbreviation,\n  description,\n  "icon": icon.name,\n  mark,\n  logo,\n  website,\n  linkedin,\n },\n\n    organization -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n },\n  }\n': UNPAGINATED_OPEN_SOURCE_PROJECTS_QUERYResult;
+    '\n  *[\n    _type == "openSourceProject" &&\n    slug.current == $slug\n  ][0] {\n    \n  \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  repository,\n  mark,\n  logo,\n\n  productCategories[] -> { \n  _id,\n  "slug": slug.current,\n  name,\n  expansion,\n  description,\n  marketSegment -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n },\n },\n  supportedCloudProviders[] -> { \n  _id,\n  "slug": slug.current,\n  name,\n  abbreviation,\n  description,\n  "icon": icon.name,\n  mark,\n  logo,\n  website,\n  linkedin,\n },\n\n    organization -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n },\n  }\n': OPEN_SOURCE_PROJECT_QUERYResult;
     '\n  *[\n    _type == "organization" &&\n    defined(slug.current) &&\n    organizationType != "acquired"\n  ].slug.current\n': ORGANIZATION_SLUGS_QUERYResult;
-    '\n  *[\n    _type == "organization" &&\n    slug.current == $slug\n  ][0] {\n    _createdAt,\n    "_updatedAt": \n  [\n    { "timestamp": _updatedAt },\n    { "timestamp": *[_type == "cloudProvider" && _id in ^.supportedCloudProviders[]._ref] | order(_updatedAt desc) [0]._updatedAt },\n    { "timestamp": *[_type == "productCategory" && _id in ^.productCategories[]._ref] | order(_updatedAt desc) [0]._updatedAt },\n    { "timestamp": *[_type == "organization" && organizationType == "acquired" && parentOrganization._ref == ^._id] | order(_updatedAt desc) [0]._updatedAt },\n    { "timestamp": *[_type == "openSourceProject" && organization._ref == ^._id] | order(_updatedAt desc) [0]._updatedAt },\n    { "timestamp": *[_type == "research" && organization._ref == ^._id] | order(_updatedAt desc) [0]._updatedAt },\n  ]\n,\n    \n  ...select(\n    organizationType == "acquired" => {\n      \n  \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n\n  acquisitionDate,\n  acquisitionPrice,\n  pressRelease,\n\n      parentOrganization -> {\n        \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n\n      },\n    },\n    organizationType != "acquired" => {\n      \n  \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n\n  productCategories[] -> { \n  _id,\n  "slug": slug.current,\n  name,\n  expansion,\n  description,\n  marketSegment -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n },\n },\n  supportedCloudProviders[] -> { \n  _id,\n  "slug": slug.current,\n  name,\n  abbreviation,\n  description,\n  "icon": icon.name,\n  mark,\n  logo,\n  website,\n  linkedin,\n },\n  ...(*[_type == "openSourceProject" && organization.ref == ^.id && name == ^.name] [0] {\n    ...select(\n      repository match "*github.com" => { "github": repository },\n      repository match "*gitlab.com" => { "gitlab": repository },\n    )\n  }),\n  "openSourceProjects": *[\n    _type == "openSourceProject" && organization._ref == ^._id && name != ^.name\n  ] {\n    \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  repository,\n  mark,\n  logo,\n\n  },\n  "research": *[\n    _type == "research" && organization._ref == ^._id\n  ] {\n    \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  website,\n\n  },\n  "acquiredEntities": *[\n    _type == "organization" && parentOrganization._ref == ^._id\n  ] | order(acquisitionDate desc) {\n    \n  \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n\n  acquisitionDate,\n  acquisitionPrice,\n  pressRelease,\n\n  },\n\n    },\n  ),\n\n  } { ..., "_updatedAt": _updatedAt | order(coalesce(timestamp, "") desc) [0].timestamp }\n': ORGANIZATION_QUERYResult;
+    '\n  *[\n    _type == "organization" &&\n    slug.current == $slug\n  ][0] {\n    _createdAt,\n    "_updatedAt": \n  [\n    { "timestamp": _updatedAt },\n    { "timestamp": *[_type == "organization" && organizationType == "acquired" && parentOrganization._ref == ^._id] | order(_updatedAt desc) [0]._updatedAt },\n    { "timestamp": *[_type == "productCategory" && _id in ^.productCategories[]._ref] | order(_updatedAt desc) [0]._updatedAt },\n    { "timestamp": *[_type == "cloudProvider" && _id in ^.supportedCloudProviders[]._ref] | order(_updatedAt desc) [0]._updatedAt },\n    { "timestamp": *[_type == "openSourceProject" && organization._ref == ^._id] | order(_updatedAt desc) [0]._updatedAt },\n    { "timestamp": *[_type == "research" && organization._ref == ^._id] | order(_updatedAt desc) [0]._updatedAt },\n  ]\n,\n    \n  ...select(\n    organizationType == "acquired" => {\n      \n  \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n\n  acquisitionDate,\n  acquisitionPrice,\n  pressRelease,\n\n      parentOrganization -> {\n        \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n\n      },\n    },\n    organizationType != "acquired" => {\n      \n  \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n\n  productCategories[] -> { \n  _id,\n  "slug": slug.current,\n  name,\n  expansion,\n  description,\n  marketSegment -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n },\n },\n  supportedCloudProviders[] -> { \n  _id,\n  "slug": slug.current,\n  name,\n  abbreviation,\n  description,\n  "icon": icon.name,\n  mark,\n  logo,\n  website,\n  linkedin,\n },\n  ...(*[_type == "openSourceProject" && organization.ref == ^.id && name == ^.name] [0] {\n    ...select(\n      repository match "*github.com" => { "github": repository },\n      repository match "*gitlab.com" => { "gitlab": repository },\n    )\n  }),\n  "openSourceProjects": *[\n    _type == "openSourceProject" && organization._ref == ^._id && name != ^.name\n  ] {\n    \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  repository,\n  mark,\n  logo,\n\n  },\n  "research": *[\n    _type == "research" && organization._ref == ^._id\n  ] {\n    \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  website,\n\n  },\n  "acquiredEntities": *[\n    _type == "organization" && parentOrganization._ref == ^._id\n  ] | order(acquisitionDate desc) {\n    \n  \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n\n  acquisitionDate,\n  acquisitionPrice,\n  pressRelease,\n\n  },\n\n    },\n  ),\n\n  } { ..., "_updatedAt": _updatedAt | order(coalesce(timestamp, "") desc) [0].timestamp }\n': ORGANIZATION_QUERYResult;
     '\n  count(\n    *[\n      _type == "organization" &&\n      organizationType != "acquired" &&\n      count(productCategories) > 0 &&\n      (count($productCategories) == 0 || references($productCategories)) &&\n      (count($organizationTypes) == 0 || organizationType in $organizationTypes) &&\n      (count($supportedCloudProviders) == 0 || references($supportedCloudProviders))\n    ]\n  )\n': VENDORS_COUNT_QUERYResult;
-    '\n  *[\n    _type == "organization" &&\n    organizationType != "acquired" &&\n    count(productCategories) > 0 &&\n    (count($productCategories) == 0 || references($productCategories)) &&\n    (count($organizationTypes) == 0 || organizationType in $organizationTypes) &&\n    (count($supportedCloudProviders) == 0 || references($supportedCloudProviders)) &&\n    lower(name) > lower($prev) &&\n    (length($searchQuery) == 0 || name match $searchQuery + "*" || description match $searchQuery + "*" || website match $searchQuery + "*")\n  ] | order(lower(name) asc) [0...20] {\n    \n  \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n\n  productCategories[] -> { \n  _id,\n  "slug": slug.current,\n  name,\n  expansion,\n  description,\n  marketSegment -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n },\n },\n  supportedCloudProviders[] -> { \n  _id,\n  "slug": slug.current,\n  name,\n  abbreviation,\n  description,\n  "icon": icon.name,\n  mark,\n  logo,\n  website,\n  linkedin,\n },\n\n  }\n': VENDORS_QUERYResult;
+    '\n  *[\n    _type == "organization" &&\n    organizationType != "acquired" &&\n    count(productCategories) > 0 &&\n    (count($productCategories) == 0 || references($productCategories)) &&\n    (count($organizationTypes) == 0 || organizationType in $organizationTypes) &&\n    (count($supportedCloudProviders) == 0 || references($supportedCloudProviders)) &&\n    (length($searchQuery) == 0 || name match $searchQuery + "*" || description match $searchQuery + "*" || website match $searchQuery + "*") &&\n    lower(name) > lower($prev)\n  ] | order(lower(name) asc) [0...20] {\n    \n  \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n\n  productCategories[] -> { \n  _id,\n  "slug": slug.current,\n  name,\n  expansion,\n  description,\n  marketSegment -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n },\n },\n  supportedCloudProviders[] -> { \n  _id,\n  "slug": slug.current,\n  name,\n  abbreviation,\n  description,\n  "icon": icon.name,\n  mark,\n  logo,\n  website,\n  linkedin,\n },\n\n  }\n': VENDORS_QUERYResult;
     '\n  *[\n    _type == "organization" &&\n    organizationType != "acquired" &&\n    count(productCategories) > 0 &&\n    (count($productCategories) == 0 || references($productCategories)) &&\n    (count($organizationTypes) == 0 || organizationType in $organizationTypes) &&\n    (count($supportedCloudProviders) == 0 || references($supportedCloudProviders)) &&\n    (length($searchQuery) == 0 || name match $searchQuery + "*" || description match $searchQuery + "*" || website match $searchQuery + "*")\n  ] | order(lower(name) asc) {\n    \n  \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n\n  productCategories[] -> { \n  _id,\n  "slug": slug.current,\n  name,\n  expansion,\n  description,\n  marketSegment -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n },\n },\n  supportedCloudProviders[] -> { \n  _id,\n  "slug": slug.current,\n  name,\n  abbreviation,\n  description,\n  "icon": icon.name,\n  mark,\n  logo,\n  website,\n  linkedin,\n },\n\n  }\n': UNPAGINATED_VENDORS_QUERYResult;
     '\n  *[\n    _type == "organization" &&\n    organizationType == "acquired" &&\n    (\n      ($prevDate == "" && $prevId == "") ||\n      acquisitionDate < $prevDate ||\n      (acquisitionDate == $prevDate && _id > $prevId)\n    )\n  ] | order(acquisitionDate desc) [0...20] {\n    \n  \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n\n  acquisitionDate,\n  acquisitionPrice,\n  pressRelease,\n\n    parentOrganization -> {\n      \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n\n    },\n  }\n': ACQUISITIONS_QUERYResult;
     '\n  *[\n    _type == "organization" &&\n    organizationType == "acquired"\n  ] | order(acquisitionDate desc) {\n    \n  \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n\n  acquisitionDate,\n  acquisitionPrice,\n  pressRelease,\n\n    parentOrganization -> {\n      \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n\n    },\n  }\n': UNPAGINATED_ACQUISITIONS_QUERYResult;
-    '\n  *[\n    _type == "page" &&\n    defined(slug.current)\n  ].slug.current\n': PAGE_SLUGS_QUERYResult;
-    '\n*[\n  _type == "page" &&\n  defined(slug.current) &&\n  !defined(listType) &&\n  defined(textContent)\n].slug.current\n': TEXT_PAGE_SLUGS_QUERYResult;
+    '\n*[\n  _type == "page" &&\n  defined(slug.current) &&\n  !defined(listType) &&\n  defined(textContent) &&\n  (!defined(unlisted) || unlisted == false)\n].slug.current\n': PAGE_SLUGS_QUERYResult;
     '\n  *[\n    _type == "page" &&\n    slug.current == $slug\n  ][0] {\n    _createdAt,\n    "_updatedAt": \n  [\n    { "timestamp": _updatedAt },\n    select(defined(listType) => { "timestamp": *[_type == ^.listType] | order(_updatedAt desc) [0]._updatedAt }),\n  ]\n,\n    \n  "slug": slug.current,\n  title,\n  description,\n  "icon": icon.name,\n  ...select(!defined(listType) => { longTitle, textContent[] }),\n\n  } { ..., "_updatedAt": _updatedAt | order(coalesce(timestamp, "") desc) [0].timestamp }\n': PAGE_QUERYResult;
     '\n  *[\n    _type == "productCategory" &&\n    defined(slug.current)\n  ].slug.current\n': PRODUCT_CATEGORY_SLUGS_QUERYResult;
-    '\n  *[\n    _type == "productCategory" &&\n    ($marketSegment == "" || $marketSegment == marketSegment._ref)\n  ] | order(lower(name) asc) {\n    \n  _id,\n  "slug": slug.current,\n  name,\n  expansion,\n  description,\n  marketSegment -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n },\n\n  }\n': PRODUCT_CATEGORIES_QUERYResult;
-    '\n  *[\n    _type == "productCategory" &&\n    slug.current == $slug\n  ][0] {\n    _createdAt,\n    "_updatedAt": \n  [\n    { "timestamp": _updatedAt },\n    { "timestamp": *[_type == "marketSegment" && _id == ^.marketSegment._ref] | order(_updatedAt desc) [0]._updatedAt },\n    { "timestamp": *[_type == "organization" && organizationType != "acquired" && ^._id in productCategories[]._ref] | order(_updatedAt desc) [0]._updatedAt },\n    { "timestamp": *[_type == "productCategory" && _id in ^.similarCategories[]._ref] | order(_updatedAt desc) [0]._updatedAt },\n  ]\n,\n    \n  _id,\n  "slug": slug.current,\n  name,\n  expansion,\n  description,\n  marketSegment -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n },\n\n    explanationHeading,\n    explanation[],\n    "vendors": *[\n      _type == "organization" && ^._id in productCategories[]._ref\n    ] | order(lower(name) asc) {\n      \n  \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n\n  productCategories[] -> { \n  _id,\n  "slug": slug.current,\n  name,\n  expansion,\n  description,\n  marketSegment -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n },\n },\n  supportedCloudProviders[] -> { \n  _id,\n  "slug": slug.current,\n  name,\n  abbreviation,\n  description,\n  "icon": icon.name,\n  mark,\n  logo,\n  website,\n  linkedin,\n },\n\n    },\n    similarCategories[] -> { \n  _id,\n  "slug": slug.current,\n  name,\n  expansion,\n  description,\n  marketSegment -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n },\n },\n  } { ..., "_updatedAt": _updatedAt | order(coalesce(timestamp, "") desc) [0].timestamp }\n': PRODUCT_CATEGORY_QUERYResult;
+    '\n  *[\n    _type == "productCategory" &&\n    ($marketSegment == "" || $marketSegment == marketSegment._ref) &&\n    (length($referenceType) == 0 || count(*[_type == $referenceType && references(^._id)]) > 0)\n  ] | order(lower(name) asc) {\n    \n  _id,\n  "slug": slug.current,\n  name,\n  expansion,\n  description,\n  marketSegment -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n },\n\n  }\n': PRODUCT_CATEGORIES_QUERYResult;
+    '\n  *[\n    _type == "productCategory" &&\n    slug.current == $slug\n  ][0] {\n    _createdAt,\n    "_updatedAt": \n  [\n    { "timestamp": _updatedAt },\n    { "timestamp": *[_type == "marketSegment" && _id == ^.marketSegment._ref] | order(_updatedAt desc) [0]._updatedAt },\n    { "timestamp": *[_type == "organization" && organizationType != "acquired" && ^._id in productCategories[]._ref] | order(_updatedAt desc) [0]._updatedAt },\n    { "timestamp": *[_type == "openSourceProject" && ^._id in productCategories[]._ref] | order(_updatedAt desc) [0]._updatedAt },\n    { "timestamp": *[_type == "productCategory" && _id in ^.similarCategories[]._ref] | order(_updatedAt desc) [0]._updatedAt },\n  ]\n,\n    \n  _id,\n  "slug": slug.current,\n  name,\n  expansion,\n  description,\n  marketSegment -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n },\n\n    explanationHeading,\n    explanation[],\n    "vendors": *[\n      _type == "organization" &&\n      organizationType != "acquired" &&\n      ^._id in productCategories[]._ref\n    ] | order(lower(name) asc) {\n      \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n\n    },\n    "openSourceProjects": *[\n      _type == "openSourceProject" &&\n      ^._id in productCategories[]._ref\n    ] | order(lower(name) asc) {\n      \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  repository,\n  mark,\n  logo,\n\n    },\n    similarCategories[] -> { \n  _id,\n  "slug": slug.current,\n  name,\n  expansion,\n  description,\n  marketSegment -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name,\n },\n },\n  } { ..., "_updatedAt": _updatedAt | order(coalesce(timestamp, "") desc) [0].timestamp }\n': PRODUCT_CATEGORY_QUERYResult;
     '\n  *[\n    _type == "research"\n  ] | order(lower(name) asc) {\n    \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  website,\n\n    organization -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n },\n  }\n': RESEARCHES_QUERYResult;
     '\n  *[\n    _type == "research" &&\n    slug.current == $slug\n  ][0] {\n    \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  website,\n\n    organization -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo,\n },\n  }\n': RESEARCH_QUERYResult;
     '\n  *[\n    _type == "siteSettings" &&\n    _id == "siteSettings"\n  ][0] {\n    name,\n    shortName,\n    tagline,\n    description,\n    url,\n    copyright,\n    navigation[] {\n      name,\n      href,\n    },\n    heroTitle[0],\n    heroDescription[],\n    featuredPages[] -> {\n      \n  "slug": slug.current,\n  title,\n  description,\n  "icon": icon.name,\n  ...select(!defined(listType) => { longTitle, textContent[] }),\n\n    }\n  }\n': SITE_SETTINGS_QUERYResult;
-    '\n  *[ _type == "siteSettings" && _id == "siteSettings" ][0] {\n    "items":\n      [{ url, "lastModified": _updatedAt }] +\n      (*[_type == "page" && defined(slug.current)] | order(slug.current asc) {\n        "url": ^.url + "/" + slug.current,\n        "lastModified": \n  [\n    { "timestamp": _updatedAt },\n    select(defined(listType) => { "timestamp": *[_type == ^.listType] | order(_updatedAt desc) [0]._updatedAt }),\n  ]\n,\n      } { url, "lastModified": lastModified | order(coalesce(timestamp, "") desc) [0].timestamp }) +\n      (*[_type == "productCategory" && defined(slug.current)] | order(slug.current asc) {\n        "url": ^.url + "/category/" + slug.current,\n        "lastModified": \n  [\n    { "timestamp": _updatedAt },\n    { "timestamp": *[_type == "marketSegment" && _id == ^.marketSegment._ref] | order(_updatedAt desc) [0]._updatedAt },\n    { "timestamp": *[_type == "organization" && organizationType != "acquired" && ^._id in productCategories[]._ref] | order(_updatedAt desc) [0]._updatedAt },\n    { "timestamp": *[_type == "productCategory" && _id in ^.similarCategories[]._ref] | order(_updatedAt desc) [0]._updatedAt },\n  ]\n,\n      } { url, "lastModified": lastModified | order(coalesce(timestamp, "") desc) [0].timestamp }) +\n      (*[_type == "organization" && defined(slug.current) && organizationType != "acquired"] | order(slug.current asc) {\n        "url": ^.url + "/organization/" + slug.current,\n        "lastModified": \n  [\n    { "timestamp": _updatedAt },\n    { "timestamp": *[_type == "cloudProvider" && _id in ^.supportedCloudProviders[]._ref] | order(_updatedAt desc) [0]._updatedAt },\n    { "timestamp": *[_type == "productCategory" && _id in ^.productCategories[]._ref] | order(_updatedAt desc) [0]._updatedAt },\n    { "timestamp": *[_type == "organization" && organizationType == "acquired" && parentOrganization._ref == ^._id] | order(_updatedAt desc) [0]._updatedAt },\n    { "timestamp": *[_type == "openSourceProject" && organization._ref == ^._id] | order(_updatedAt desc) [0]._updatedAt },\n    { "timestamp": *[_type == "research" && organization._ref == ^._id] | order(_updatedAt desc) [0]._updatedAt },\n  ]\n,\n      } { url, "lastModified": lastModified | order(coalesce(timestamp, "") desc) [0].timestamp }) +\n      (*[_type == "cloudProvider" && defined(slug.current)] | order(slug.current asc) {\n        "url": ^.url + "/provider/" + slug.current,\n        "lastModified": \n  [\n    { "timestamp": _updatedAt },\n    { "timestamp": *[_type == "organization" && organizationType != "acquired" && ^._id in supportedCloudProviders[]._ref] | order(_updatedAt desc) [0]._updatedAt },\n  ]\n,\n      } { url, "lastModified": lastModified | order(coalesce(timestamp, "") desc) [0].timestamp })\n  }.items\n': SITEMAP_QUERYResult;
+    '\n  *[ _type == "siteSettings" && _id == "siteSettings" ][0] {\n    "items":\n      [{ url, "lastModified": _updatedAt }] +\n      (*[_type == "page" && defined(slug.current) && (!defined(unlisted) || unlisted == false)] | order(slug.current asc) {\n        "url": ^.url + "/" + slug.current,\n        "lastModified": \n  [\n    { "timestamp": _updatedAt },\n    select(defined(listType) => { "timestamp": *[_type == ^.listType] | order(_updatedAt desc) [0]._updatedAt }),\n  ]\n,\n      } { url, "lastModified": lastModified | order(coalesce(timestamp, "") desc) [0].timestamp }) +\n      (*[_type == "productCategory" && defined(slug.current)] | order(slug.current asc) {\n        "url": ^.url + "/category/" + slug.current,\n        "lastModified": \n  [\n    { "timestamp": _updatedAt },\n    { "timestamp": *[_type == "marketSegment" && _id == ^.marketSegment._ref] | order(_updatedAt desc) [0]._updatedAt },\n    { "timestamp": *[_type == "organization" && organizationType != "acquired" && ^._id in productCategories[]._ref] | order(_updatedAt desc) [0]._updatedAt },\n    { "timestamp": *[_type == "openSourceProject" && ^._id in productCategories[]._ref] | order(_updatedAt desc) [0]._updatedAt },\n    { "timestamp": *[_type == "productCategory" && _id in ^.similarCategories[]._ref] | order(_updatedAt desc) [0]._updatedAt },\n  ]\n,\n      } { url, "lastModified": lastModified | order(coalesce(timestamp, "") desc) [0].timestamp }) +\n      (*[_type == "organization" && defined(slug.current) && organizationType != "acquired"] | order(slug.current asc) {\n        "url": ^.url + "/organization/" + slug.current,\n        "lastModified": \n  [\n    { "timestamp": _updatedAt },\n    { "timestamp": *[_type == "organization" && organizationType == "acquired" && parentOrganization._ref == ^._id] | order(_updatedAt desc) [0]._updatedAt },\n    { "timestamp": *[_type == "productCategory" && _id in ^.productCategories[]._ref] | order(_updatedAt desc) [0]._updatedAt },\n    { "timestamp": *[_type == "cloudProvider" && _id in ^.supportedCloudProviders[]._ref] | order(_updatedAt desc) [0]._updatedAt },\n    { "timestamp": *[_type == "openSourceProject" && organization._ref == ^._id] | order(_updatedAt desc) [0]._updatedAt },\n    { "timestamp": *[_type == "research" && organization._ref == ^._id] | order(_updatedAt desc) [0]._updatedAt },\n  ]\n,\n      } { url, "lastModified": lastModified | order(coalesce(timestamp, "") desc) [0].timestamp }) +\n      (*[_type == "cloudProvider" && defined(slug.current)] | order(slug.current asc) {\n        "url": ^.url + "/provider/" + slug.current,\n        "lastModified": \n  [\n    { "timestamp": _updatedAt },\n    { "timestamp": *[_type == "organization" && organizationType != "acquired" && ^._id in supportedCloudProviders[]._ref] | order(_updatedAt desc) [0]._updatedAt },\n    { "timestamp": *[_type == "openSourceProject" && ^._id in supportedCloudProviders[]._ref] | order(_updatedAt desc) [0]._updatedAt },\n  ]\n,\n      } { url, "lastModified": lastModified | order(coalesce(timestamp, "") desc) [0].timestamp })\n  }.items\n': SITEMAP_QUERYResult;
   }
 }

@@ -1,7 +1,9 @@
+import { CLOUD_PROVIDER } from '@/lib/sanity/queries/fragments/cloudProvider';
+import { PRODUCT_CATEGORY } from '@/lib/sanity/queries/fragments/productCategory';
 import { groq } from 'next-sanity';
 
 // @sanity-typegen-ignore
-export const OPEN_SOURCE_PROJECT = groq`
+export const OPEN_SOURCE_PROJECT_BASE = groq`
   _id,
   "slug": slug.current,
   name,
@@ -9,4 +11,21 @@ export const OPEN_SOURCE_PROJECT = groq`
   repository,
   mark,
   logo,
+`;
+
+// @sanity-typegen-ignore
+export const OPEN_SOURCE_PROJECT = groq`
+  ${OPEN_SOURCE_PROJECT_BASE}
+  productCategories[] -> { ${PRODUCT_CATEGORY} },
+  supportedCloudProviders[] -> { ${CLOUD_PROVIDER} },
+`;
+
+// @sanity-typegen-ignore
+export const OPEN_SOURCE_PROJECT_UPDATED_AT = groq`
+  [
+    { "timestamp": _updatedAt },
+    { "timestamp": *[_type == "organization" && organizationType == "acquired" && _id == ^.organization._ref] | order(_updatedAt desc) [0]._updatedAt },
+    { "timestamp": *[_type == "productCategory" && _id in ^.productCategories[]._ref] | order(_updatedAt desc) [0]._updatedAt },
+    { "timestamp": *[_type == "cloudProvider" && _id in ^.supportedCloudProviders[]._ref] | order(_updatedAt desc) [0]._updatedAt },
+  ]
 `;

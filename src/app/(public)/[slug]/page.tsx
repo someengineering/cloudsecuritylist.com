@@ -1,7 +1,7 @@
 import { metadata as notFoundMetadata } from '@/app/not-found';
 import JsonLd from '@/components/page/JsonLd';
 import MainText from '@/components/page/MainText';
-import { getPage, getTextPageSlugs } from '@/lib/sanity';
+import { getPage, getPageSlugs } from '@/lib/sanity';
 import { getWebPage } from '@/utils/jsonLd';
 import { isValidSlug } from '@/utils/slug';
 import { PortableTextBlock } from '@portabletext/types';
@@ -9,7 +9,7 @@ import { Metadata, ResolvingMetadata } from 'next';
 import { notFound } from 'next/navigation';
 
 export async function generateStaticParams() {
-  const slugs = await getTextPageSlugs();
+  const slugs = await getPageSlugs();
 
   return slugs.map((slug) => ({ slug }));
 }

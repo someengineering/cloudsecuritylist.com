@@ -172,7 +172,16 @@ export default defineType({
       title: 'Featured pages',
       description: 'Pages to feature on the homepage.',
       type: 'array',
-      of: [{ type: 'reference', to: [{ type: 'page' }] }],
+      of: [
+        {
+          type: 'reference',
+          to: [{ type: 'page' }],
+          options: {
+            disableNew: true,
+            filter: '!defined(unlisted) || unlisted == false',
+          },
+        },
+      ],
       fieldset: 'homepage',
       validation: (rule) => rule.required().min(1),
     }),

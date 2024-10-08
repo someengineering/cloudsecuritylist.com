@@ -1,31 +1,31 @@
-import { Filters, FiltersProvider } from '@/components/content/Vendors/Context';
-import FilterPanel from '@/components/content/Vendors/FilterPanel';
-import List from '@/components/content/Vendors/List';
+import {
+  Filters,
+  FiltersProvider,
+} from '@/components/content/OpenSourceProjects/Context';
+import FilterPanel from '@/components/content/OpenSourceProjects/FilterPanel';
+import List from '@/components/content/OpenSourceProjects/List';
 import {
   getCloudProviders,
+  getOpenSourceProjects,
   getProductCategories,
-  getVendors,
-  getVendorTypes,
 } from '@/lib/sanity';
 
-export default async function Vendors({
+export default async function OpenSourceProjects({
   filters,
 }: {
   filters: Partial<Filters>;
 }) {
   const productCategoriesData = getProductCategories({
-    referenceType: 'organization',
+    referenceType: 'openSourceProject',
   });
-  const organizationTypesData = getVendorTypes();
   const cloudProvidersData = getCloudProviders();
-  const vendorsData = getVendors(filters ?? {});
+  const openSourceProjectsData = getOpenSourceProjects(filters ?? {});
 
-  const [productCategories, organizationTypes, cloudProviders, vendors] =
+  const [productCategories, cloudProviders, openSourceProjects] =
     await Promise.all([
       productCategoriesData,
-      organizationTypesData,
       cloudProvidersData,
-      vendorsData,
+      openSourceProjectsData,
     ]);
 
   return (
@@ -33,18 +33,17 @@ export default async function Vendors({
       <FiltersProvider initialValues={filters}>
         <FilterPanel
           productCategories={productCategories}
-          organizationTypes={organizationTypes}
           cloudProviders={cloudProviders}
         />
         <List
-          initialData={vendors}
-          getVendors={async (
+          initialData={openSourceProjects}
+          getOpenSourceProjects={async (
             activeFilters: Partial<Filters>,
             prev?: string,
           ) => {
             'use server';
 
-            return await getVendors({ ...activeFilters, prev });
+            return await getOpenSourceProjects({ ...activeFilters, prev });
           }}
         />
       </FiltersProvider>

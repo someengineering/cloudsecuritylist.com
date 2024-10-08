@@ -16,6 +16,13 @@ export default defineType({
         collapsible: true,
       },
     },
+    {
+      name: 'product',
+      title: 'Product',
+      options: {
+        collapsible: true,
+      },
+    },
   ],
   fields: [
     defineField({
@@ -67,12 +74,9 @@ export default defineType({
       },
       fieldset: 'images',
       validation: (rule) =>
-        rule.custom((value, context): CustomValidatorResult => {
+        rule.custom((value): CustomValidatorResult => {
           if (!value?.asset?._ref) {
-            return context.document?.organizationType ===
-              ORGANIZATION_TYPE.ACQUIRED
-              ? true
-              : 'Brand mark image is required.';
+            return true;
           }
 
           const filetype = getExtension(value.asset._ref);
@@ -93,8 +97,7 @@ export default defineType({
     defineField({
       name: 'logo',
       title: 'Logo',
-      description:
-        'Horizontal (landscape) logo image in SVG format. Leave empty if same as the square icon image.',
+      description: 'Horizontal (landscape) logo image in SVG format.',
       type: 'image',
       options: {
         accept: 'image/svg+xml',
@@ -122,6 +125,40 @@ export default defineType({
 
           return true;
         }),
+    }),
+    defineField({
+      name: 'productCategories',
+      title: 'Product categories',
+      type: 'array',
+      of: [
+        {
+          type: 'reference',
+          weak: true,
+          to: [{ type: 'productCategory' }],
+          options: {
+            disableNew: true,
+          },
+        },
+      ],
+      fieldset: 'product',
+      validation: (rule) => rule.unique(),
+    }),
+    defineField({
+      name: 'supportedCloudProviders',
+      title: 'Supported cloud providers',
+      type: 'array',
+      of: [
+        {
+          type: 'reference',
+          weak: true,
+          to: [{ type: 'cloudProvider' }],
+          options: {
+            disableNew: true,
+          },
+        },
+      ],
+      fieldset: 'product',
+      validation: (rule) => rule.unique(),
     }),
   ],
   preview: {

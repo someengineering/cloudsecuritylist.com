@@ -2,7 +2,8 @@ import {
   CLOUD_PROVIDER,
   CLOUD_PROVIDER_UPDATED_AT,
 } from '@/lib/sanity/queries/fragments/cloudProvider';
-import { VENDOR } from '@/lib/sanity/queries/fragments/organization';
+import { OPEN_SOURCE_PROJECT_BASE } from '@/lib/sanity/queries/fragments/openSourceProject';
+import { ORGANIZATION_BASE } from '@/lib/sanity/queries/fragments/organization';
 import { groq } from 'next-sanity';
 
 export const CLOUD_PROVIDER_SLUGS_QUERY = groq`
@@ -29,15 +30,23 @@ export const CLOUD_PROVIDER_QUERY = groq`
     "_updatedAt": ${CLOUD_PROVIDER_UPDATED_AT},
     ${CLOUD_PROVIDER}
     sharedResponsibilityModel,
-    "vendors": *[
-      _type == "organization" && ^._id in supportedCloudProviders[]._ref
-    ] | order(lower(name) asc) {
-      ${VENDOR}
-    },
     nativeProducts[] {
       name,
       description,
       link,
+    },
+    "vendors": *[
+      _type == "organization" &&
+      organizationType != "acquired" &&
+      ^._id in supportedCloudProviders[]._ref
+    ] | order(lower(name) asc) {
+      ${ORGANIZATION_BASE}
+    },
+    "openSourceProjects": *[
+      _type == "openSourceProject" &&
+      ^._id in supportedCloudProviders[]._ref
+    ] | order(lower(name) asc) {
+      ${OPEN_SOURCE_PROJECT_BASE}
     },
   } { ..., "_updatedAt": _updatedAt | order(coalesce(timestamp, "") desc) [0].timestamp }
 `;

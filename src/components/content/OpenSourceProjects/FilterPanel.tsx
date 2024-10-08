@@ -1,7 +1,6 @@
 'use client';
 
-import { useFilters } from '@/components/content/Vendors/Context';
-import { ORGANIZATION_TYPES } from '@/lib/sanity/schemas/objects/organizationType';
+import { useFilters } from '@/components/content/OpenSourceProjects/Context';
 import {
   CLOUD_PROVIDERS_QUERYResult,
   PRODUCT_CATEGORIES_QUERYResult,
@@ -33,11 +32,9 @@ import { IconType } from 'react-icons/lib';
 
 export default function FilterPanel({
   productCategories,
-  organizationTypes,
   cloudProviders,
 }: {
   productCategories: PRODUCT_CATEGORIES_QUERYResult;
-  organizationTypes: string[];
   cloudProviders: CLOUD_PROVIDERS_QUERYResult;
 }) {
   const [filtersMobileMenuOpen, setFiltersMobileMenuOpen] = useState(false);
@@ -84,23 +81,12 @@ export default function FilterPanel({
     [],
   );
 
-  const filteredOrganizationTypes = useMemo(
-    () =>
-      ORGANIZATION_TYPES.filter((type) =>
-        organizationTypes.includes(type.value),
-      ),
-    [organizationTypes],
-  );
-
   useEffect(() => {
     if (filters.paginated) {
       const params = new URLSearchParams();
 
       filters.productCategories.forEach((slug) => {
         params.append('category', slug);
-      });
-      filters.organizationTypes.forEach((type) => {
-        params.append('type', type);
       });
       filters.supportedCloudProviders.forEach((slug) => {
         params.append('provider', slug);
@@ -163,47 +149,6 @@ export default function FilterPanel({
               Filters
             </button>
             <PopoverGroup className="-mx-4 hidden items-center divide-x divide-gray-200 sm:flex">
-              <Popover className="relative z-20 ml-auto inline-block px-4 text-left">
-                <PopoverButton className="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
-                  <span>Organization type</span>
-                  {filters.organizationTypes.length ? (
-                    <span className="ml-1.5 rounded bg-gray-200 px-1.5 py-0.5 text-xs font-semibold tabular-nums text-gray-700">
-                      {filters.organizationTypes.length}
-                    </span>
-                  ) : null}
-                  <HiChevronDown className="ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500 data-[open]:rotate-180" />
-                </PopoverButton>
-                <PopoverPanel className="absolute right-2 z-10 mt-2 origin-top-right rounded-md bg-white p-4 shadow-2xl ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:opacity-0">
-                  <form className="space-y-4">
-                    {filteredOrganizationTypes.map((type) => (
-                      <div className="flex items-center" key={type.value}>
-                        <input
-                          defaultValue="public"
-                          checked={filters.organizationTypes.includes(
-                            type.value,
-                          )}
-                          id={`filter-type-${type.value}`}
-                          name="organizationTypes[]"
-                          type="checkbox"
-                          className="h-4 w-4 rounded border-gray-300 text-cyan-600 focus:ring-cyan-500"
-                          onChange={() =>
-                            setFilters({
-                              type: 'organizationType',
-                              value: type.value,
-                            })
-                          }
-                        />
-                        <label
-                          htmlFor={`filter-type-${type.value}`}
-                          className="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-gray-900"
-                        >
-                          {type.title}
-                        </label>
-                      </div>
-                    ))}
-                  </form>
-                </PopoverPanel>
-              </Popover>
               <Popover className="relative z-20 ml-auto inline-block px-4 text-left">
                 <PopoverButton className="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
                   <span>Supported cloud providers</span>
@@ -510,59 +455,6 @@ export default function FilterPanel({
               </button>
             </div>
             <form className="mt-4">
-              <Disclosure
-                as="div"
-                className="border-t border-gray-200 px-4 py-6"
-              >
-                <h3 className="-mx-2 -my-3 flow-root">
-                  <DisclosureButton className="group flex w-full items-center justify-between bg-white px-2 py-3 text-sm text-gray-400">
-                    <span className="flex items-center gap-x-1.5 font-medium text-gray-900">
-                      Organization types
-                      {filters.organizationTypes.length ? (
-                        <span className="ml-1.5 rounded bg-gray-200 px-1.5 py-0.5 text-xs font-semibold tabular-nums text-gray-700">
-                          {filters.organizationTypes.length}
-                        </span>
-                      ) : null}
-                    </span>
-                    <span className="ml-6 flex items-center">
-                      <HiChevronDown className="h-5 w-5 rotate-0 transform group-data-[open]:-rotate-180" />
-                    </span>
-                  </DisclosureButton>
-                </h3>
-                <DisclosurePanel className="pt-6">
-                  <div className="space-y-6">
-                    {filteredOrganizationTypes.map((type) => (
-                      <div
-                        key={`mobile-${type.value}`}
-                        className="flex items-center gap-x-1.5"
-                      >
-                        <input
-                          defaultValue={type.value}
-                          checked={filters.organizationTypes.includes(
-                            type.value,
-                          )}
-                          id={`type-${type.value}`}
-                          name="organizationTypes[]"
-                          type="checkbox"
-                          className="mx-0.5 h-4 w-4 rounded border-gray-300 text-cyan-600 focus:ring-cyan-500"
-                          onChange={() =>
-                            setFilters({
-                              type: 'organizationType',
-                              value: type.value,
-                            })
-                          }
-                        />
-                        <label
-                          htmlFor={`type-${type.value}`}
-                          className="text-sm text-gray-500"
-                        >
-                          {type.title}
-                        </label>
-                      </div>
-                    ))}
-                  </div>
-                </DisclosurePanel>
-              </Disclosure>
               <Disclosure
                 as="div"
                 className="border-t border-gray-200 px-4 py-6"
