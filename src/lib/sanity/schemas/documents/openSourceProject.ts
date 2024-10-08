@@ -131,14 +131,7 @@ export default defineType({
       title: 'Product categories',
       type: 'array',
       of: [
-        {
-          type: 'reference',
-          weak: true,
-          to: [{ type: 'productCategory' }],
-          options: {
-            disableNew: true,
-          },
-        },
+        { type: 'reference', weak: true, to: [{ type: 'productCategory' }] },
       ],
       fieldset: 'product',
       validation: (rule) => rule.unique(),
@@ -147,16 +140,7 @@ export default defineType({
       name: 'supportedCloudProviders',
       title: 'Supported cloud providers',
       type: 'array',
-      of: [
-        {
-          type: 'reference',
-          weak: true,
-          to: [{ type: 'cloudProvider' }],
-          options: {
-            disableNew: true,
-          },
-        },
-      ],
+      of: [{ type: 'reference', weak: true, to: [{ type: 'cloudProvider' }] }],
       fieldset: 'product',
       validation: (rule) => rule.unique(),
     }),

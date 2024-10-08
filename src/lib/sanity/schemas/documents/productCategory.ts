@@ -95,14 +95,7 @@ export default defineType({
       title: 'Similar categories',
       type: 'array',
       of: [
-        {
-          type: 'reference',
-          weak: true,
-          to: [{ type: 'productCategory' }],
-          options: {
-            disableNew: true,
-          },
-        },
+        { type: 'reference', weak: true, to: [{ type: 'productCategory' }] },
       ],
       validation: (rule) => rule.unique(),
     }),

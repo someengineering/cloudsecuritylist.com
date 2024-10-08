@@ -176,10 +176,7 @@ export default defineType({
         {
           type: 'reference',
           to: [{ type: 'page' }],
-          options: {
-            disableNew: true,
-            filter: '!defined(unlisted) || unlisted == false',
-          },
+          options: { filter: '!defined(unlisted) || unlisted == false' },
         },
       ],
       fieldset: 'homepage',
