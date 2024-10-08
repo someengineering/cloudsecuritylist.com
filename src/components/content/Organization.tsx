@@ -14,7 +14,7 @@ import {
   HiOutlineSparkles,
 } from 'react-icons/hi2';
 import { IconType } from 'react-icons/lib';
-import { SiCrunchbase, SiGithub, SiLinkedin } from 'react-icons/si';
+import { SiCrunchbase, SiGithub, SiGitlab, SiLinkedin } from 'react-icons/si';
 
 export default async function Organization({
   organization,
@@ -49,6 +49,13 @@ export default async function Organization({
       href: organization.github,
       props: { target: '_blank', rel: 'noopener noreferrer' },
       icon: SiGithub,
+    });
+  } else if ('gitlab' in organization && organization.gitlab) {
+    links.push({
+      label: 'GitLab',
+      href: organization.gitlab,
+      props: { target: '_blank', rel: 'noopener noreferrer' },
+      icon: SiGitlab,
     });
   }
 

@@ -40,7 +40,10 @@ export const NON_ACQUIRED_ENTITY = groq`
   productCategories[] -> { ${PRODUCT_CATEGORY} },
   supportedCloudProviders[] -> { ${CLOUD_PROVIDER} },
   ...(*[_type == "openSourceProject" && organization.ref == ^.id && name == ^.name] [0] {
-    ...select(repository match "*github.com" => { "github": repository })
+    ...select(
+      repository match "*github.com" => { "github": repository },
+      repository match "*gitlab.com" => { "gitlab": repository },
+    )
   }),
   "openSourceProjects": *[
     _type == "openSourceProject" && organization._ref == ^._id && name != ^.name
