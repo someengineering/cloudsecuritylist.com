@@ -155,10 +155,24 @@ export default function List({
                           rel="noopener noreferrer"
                           className="text-gray-400 hover:text-gray-500 focus:outline-none"
                         >
-                          <span className="sr-only">Parent organization</span>
+                          <span className="sr-only">
+                            Parent{' '}
+                            {parentOrganizationType.title
+                              .toLowerCase()
+                              .includes('company')
+                              ? 'company'
+                              : 'organization'}{' '}
+                            ({project.organization.name})
+                          </span>
                           <parentOrganizationType.icon
                             className="h-5 w-5"
-                            title="Parent organization"
+                            title={`Parent ${
+                              parentOrganizationType.title
+                                .toLowerCase()
+                                .includes('company')
+                                ? 'company'
+                                : 'organization'
+                            } (${project.organization.name})`}
                           />
                         </Link>
                       </li>
