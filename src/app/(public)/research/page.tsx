@@ -14,7 +14,7 @@ export async function generateMetadata(
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
   const parentMetadata = await parent;
-  const { title, description } = (await getPage(slug)) ?? {};
+  const { title, description, unlisted } = (await getPage(slug)) ?? {};
 
   if (!title) {
     return notFoundMetadata;
@@ -28,6 +28,7 @@ export async function generateMetadata(
       url: `/${slug}`,
       title,
     },
+    ...(unlisted ? { robots: { index: false, follow: false } } : {}),
   };
 }
 

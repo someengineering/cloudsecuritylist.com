@@ -7,6 +7,7 @@ export const PAGE = groq`
   description,
   "icon": icon.name,
   ...select(!defined(listType) => { longTitle, textContent[] }),
+  unlisted,
 `;
 
 // @sanity-typegen-ignore
