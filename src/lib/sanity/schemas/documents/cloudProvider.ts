@@ -63,7 +63,15 @@ export default defineType({
       title: 'LinkedIn URL',
       type: 'url',
       fieldset: 'links',
-      validation: (rule) => rule.uri({ scheme: 'https' }),
+      validation: (rule) =>
+        rule
+          .uri({ scheme: 'https' })
+          .custom(
+            (value) =>
+              !value ||
+              new URL(value).host === 'linkedin.com' ||
+              'URL host must be linkedin.com.',
+          ),
     }),
     defineField({
       name: 'sharedResponsibilityModel',

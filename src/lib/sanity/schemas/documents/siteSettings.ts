@@ -4,7 +4,12 @@ import {
   notEmpty,
 } from '@/lib/sanity/schemas/validation/block';
 import { LinkIcon, SearchIcon } from '@sanity/icons';
-import { defineField, defineType, PortableTextTextBlock } from 'sanity';
+import {
+  defineField,
+  defineType,
+  PortableTextTextBlock,
+  ValidationContext,
+} from 'sanity';
 
 export default defineType({
   name: 'siteSettings',
@@ -55,7 +60,14 @@ export default defineType({
       name: 'url',
       title: 'Site URL',
       type: 'url',
-      validation: (rule) => rule.required().uri({ scheme: 'https' }),
+      validation: (rule) =>
+        rule
+          .required()
+          .uri({ scheme: 'https' })
+          .custom(
+            (value) =>
+              !value?.endsWith('/') || 'URL must not have a trailing slash.',
+          ),
     }),
     defineField({
       name: 'copyright',
@@ -88,7 +100,19 @@ export default defineType({
                 'Should be a relative path for internal links (e.g., /some-path).',
               type: 'url',
               validation: (rule) =>
-                rule.required().uri({ allowRelative: true }),
+                rule
+                  .required()
+                  .uri({ allowRelative: true })
+                  .custom(
+                    (value: string, context: ValidationContext) =>
+                      value.startsWith('/') ||
+                      (new URL(value).protocol === 'https:' &&
+                        (!context.document?.url ||
+                          !value?.startsWith(
+                            context.document.url as string,
+                          ))) ||
+                      'Internal links must be relative paths beginning with a forward slash (/). External URLs must begin with https://.',
+                  ),
             },
           ],
         },
