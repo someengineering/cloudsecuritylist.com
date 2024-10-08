@@ -4,7 +4,7 @@ import { notoSans } from '@/app/font';
 import Footer from '@/components/layout/Footer';
 import Header from '@/components/layout/Header';
 import { getSiteSettings } from '@/lib/sanity';
-import { clsx } from 'clsx';
+import clsx from 'clsx';
 import { Metadata } from 'next';
 import PlausibleProvider from 'next-plausible';
 

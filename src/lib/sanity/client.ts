@@ -35,8 +35,8 @@ export async function sanityFetch<QueryResponse>({
   }
 
   let dynamicRevalidate = revalidate;
-  if (isDraftMode) {
-    // Do not cache in Draft Mode
+  if (isDraftMode || process.env.NEXT_PUBLIC_VERCEL_ENV !== 'production') {
+    // Do not cache in Draft Mode or when not in production
     dynamicRevalidate = 0;
   } else if (tags.length) {
     // Cache indefinitely if tags supplied, purge with revalidateTag()

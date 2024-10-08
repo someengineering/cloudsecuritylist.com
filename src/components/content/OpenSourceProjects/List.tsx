@@ -7,8 +7,10 @@ import {
 import { urlFor } from '@/lib/sanity/image';
 import { ORGANIZATION_TYPES } from '@/lib/sanity/schemas/objects/organizationType';
 import { OPEN_SOURCE_PROJECTS_QUERYResult } from '@/lib/sanity/types';
+import clsx from 'clsx';
 import Image from 'next/image';
 import Link from 'next/link';
+import parseGithubUrl from 'parse-github-url';
 import { useEffect, useState } from 'react';
 import { HiCodeBracket } from 'react-icons/hi2';
 import { SiGithub, SiGitlab } from 'react-icons/si';
@@ -77,11 +79,32 @@ export default function List({
       className="container mx-auto mt-10 grid max-w-7xl auto-rows-fr grid-cols-1 gap-4 px-6 md:grid-cols-2 lg:grid-cols-3 lg:px-8"
     >
       {openSourceProjects.map((project) => {
-        const mark = project.mark ?? project.organization?.mark;
-        const parentOrganizationType = project.organization
+        const githubOwner = project.repository.includes('github.com')
+          ? parseGithubUrl(project.repository)?.owner
+          : undefined;
+        const imageUrl = project.mark
+          ? urlFor(project.mark).url()
+          : githubOwner
+            ? `https://avatars.githubusercontent.com/${githubOwner}`
+            : project.organization?.mark
+              ? urlFor(project.organization.mark).url()
+              : undefined;
+
+        const organizationType = project.organization
           ? ORGANIZATION_TYPES.find(
               (type) => type.value === project.organization?.organizationType,
             )
+          : undefined;
+        const organizationLabel = project.organization
+          ? project.organization.name !== project.name
+            ? `Parent ${
+                organizationType?.title.toLowerCase().includes('company')
+                  ? 'company'
+                  : 'organization'
+              } (${project.organization.name})`
+            : organizationType?.title.toLowerCase().includes('company')
+              ? 'Company'
+              : 'Organization'
           : undefined;
 
         return (
@@ -90,15 +113,19 @@ export default function List({
             className="relative flex flex-col space-y-4 rounded-lg border border-gray-300 bg-white p-4 shadow-sm focus-within:ring-2 focus-within:ring-cyan-500 focus-within:ring-offset-2 hover:border-gray-400 lg:px-5"
           >
             <div className="flex items-center space-x-3">
-              {mark ? (
+              {imageUrl ? (
                 <div className="flex-shrink-0">
                   <Image
-                    src={urlFor(mark).url()}
+                    src={imageUrl}
                     width={56}
                     height={56}
                     alt=""
                     aria-hidden="true"
-                    className="h-12 w-12 object-cover xs:h-14 xs:w-14"
+                    className={clsx(
+                      'h-12 w-12 object-cover xs:h-14 xs:w-14',
+                      imageUrl.includes('avatars.githubusercontent.com') &&
+                        'rounded',
+                    )}
                   />
                 </div>
               ) : (
@@ -147,7 +174,7 @@ export default function List({
                         )}
                       </Link>
                     </li>
-                    {project.organization && parentOrganizationType ? (
+                    {project.organization && organizationType ? (
                       <li>
                         <Link
                           href={`/organization/${project.organization.slug}`}
@@ -155,24 +182,10 @@ export default function List({
                           rel="noopener noreferrer"
                           className="text-gray-400 hover:text-gray-500 focus:outline-none"
                         >
-                          <span className="sr-only">
-                            Parent{' '}
-                            {parentOrganizationType.title
-                              .toLowerCase()
-                              .includes('company')
-                              ? 'company'
-                              : 'organization'}{' '}
-                            ({project.organization.name})
-                          </span>
-                          <parentOrganizationType.icon
+                          <span className="sr-only">{organizationLabel}</span>
+                          <organizationType.icon
                             className="h-5 w-5"
-                            title={`Parent ${
-                              parentOrganizationType.title
-                                .toLowerCase()
-                                .includes('company')
-                                ? 'company'
-                                : 'organization'
-                            } (${project.organization.name})`}
+                            title={organizationLabel}
                           />
                         </Link>
                       </li>

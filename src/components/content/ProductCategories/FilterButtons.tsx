@@ -2,7 +2,7 @@
 
 import { useFilters } from '@/components/content/ProductCategories/Context';
 import { MARKET_SEGMENTS_QUERYResult } from '@/lib/sanity/types';
-import { clsx } from 'clsx';
+import clsx from 'clsx';
 import dynamic from 'next/dynamic';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useMemo } from 'react';

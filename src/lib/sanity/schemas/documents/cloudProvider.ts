@@ -1,4 +1,4 @@
-import { getExtension, getImageDimensions } from '@sanity/asset-utils';
+import { getImageDimensions } from '@sanity/asset-utils';
 import { DatabaseIcon, LinkIcon } from '@sanity/icons';
 import { CustomValidatorResult, defineField, defineType } from 'sanity';
 
@@ -111,12 +111,6 @@ export default defineType({
               return 'Brand mark image is required.';
             }
 
-            const filetype = getExtension(value.asset._ref);
-
-            if (filetype !== 'svg') {
-              return 'Brand mark must be an SVG image.';
-            }
-
             const { width, height } = getImageDimensions(value.asset._ref);
 
             if (width !== height) {
@@ -142,12 +136,6 @@ export default defineType({
         rule.custom((value): CustomValidatorResult => {
           if (!value?.asset?._ref) {
             return true;
-          }
-
-          const filetype = getExtension(value.asset._ref);
-
-          if (filetype !== 'svg') {
-            return 'Logo must be an SVG image.';
           }
 
           const { width, height } = getImageDimensions(value.asset._ref);

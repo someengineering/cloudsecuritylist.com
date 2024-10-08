@@ -1,5 +1,5 @@
 import { ORGANIZATION_TYPE } from '@/lib/sanity/schemas/objects/organizationType';
-import { getExtension, getImageDimensions } from '@sanity/asset-utils';
+import { getImageDimensions } from '@sanity/asset-utils';
 import { CodeIcon } from '@sanity/icons';
 import { CustomValidatorResult, defineField, defineType } from 'sanity';
 
@@ -65,10 +65,9 @@ export default defineType({
     defineField({
       name: 'mark',
       title: 'Brand mark',
-      description: 'Square brand mark image in SVG format.',
+      description: 'Square brand mark image.',
       type: 'image',
       options: {
-        accept: 'image/svg+xml',
         sources: [],
         storeOriginalFilename: false,
       },
@@ -77,12 +76,6 @@ export default defineType({
         rule.custom((value): CustomValidatorResult => {
           if (!value?.asset?._ref) {
             return true;
-          }
-
-          const filetype = getExtension(value.asset._ref);
-
-          if (filetype !== 'svg') {
-            return 'Brand mark must be an SVG image.';
           }
 
           const { width, height } = getImageDimensions(value.asset._ref);
@@ -97,10 +90,9 @@ export default defineType({
     defineField({
       name: 'logo',
       title: 'Logo',
-      description: 'Horizontal (landscape) logo image in SVG format.',
+      description: 'Horizontal (landscape) logo image.',
       type: 'image',
       options: {
-        accept: 'image/svg+xml',
         sources: [],
         storeOriginalFilename: false,
       },
@@ -109,12 +101,6 @@ export default defineType({
         rule.custom((value): CustomValidatorResult => {
           if (!value?.asset?._ref) {
             return true;
-          }
-
-          const filetype = getExtension(value.asset._ref);
-
-          if (filetype !== 'svg') {
-            return 'Logo must be an SVG image.';
           }
 
           const { width, height } = getImageDimensions(value.asset._ref);

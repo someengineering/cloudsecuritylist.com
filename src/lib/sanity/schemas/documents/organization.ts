@@ -261,12 +261,6 @@ export default defineType({
             return true;
           }
 
-          const filetype = getExtension(value.asset._ref);
-
-          if (filetype !== 'svg') {
-            return 'Logo must be an SVG image.';
-          }
-
           const { width, height } = getImageDimensions(value.asset._ref);
 
           if (width <= height) {

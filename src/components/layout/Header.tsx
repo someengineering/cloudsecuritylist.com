@@ -2,7 +2,7 @@
 
 import Logo from '@/assets/logo-horizontal.svg';
 import { Dialog, DialogPanel } from '@headlessui/react';
-import { clsx } from 'clsx';
+import clsx from 'clsx';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
