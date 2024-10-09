@@ -48,5 +48,5 @@ export const CLOUD_PROVIDER_QUERY = groq`
     ] | order(lower(name) asc) {
       ${OPEN_SOURCE_PROJECT_BASE}
     },
-  } { ..., "_updatedAt": _updatedAt | order(coalesce(timestamp, "") desc) [0].timestamp }
+  } { ..., "_updatedAt": coalesce(_updatedAt | order(coalesce(timestamp, "") desc) [0].timestamp, "") }
 `;

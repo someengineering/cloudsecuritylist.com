@@ -22,14 +22,14 @@ import {
 import { debounce, sortBy, uniqBy } from 'lodash';
 import dynamic from 'next/dynamic';
 import { usePathname, useRouter } from 'next/navigation';
-import { useEffect, useMemo, useState } from 'react';
+import { ComponentType, useEffect, useMemo, useState } from 'react';
 import {
   HiChevronDown,
   HiMagnifyingGlass,
   HiOutlineSparkles,
   HiXMark,
 } from 'react-icons/hi2';
-import { IconType } from 'react-icons/lib';
+import { IconBaseProps, IconType } from 'react-icons/lib';
 
 export default function FilterPanel({
   productCategories,
@@ -63,25 +63,27 @@ export default function FilterPanel({
       ),
     [productCategories],
   );
-
   const marketSegmentIcons = useMemo(
     () =>
-      marketSegments.map((segment) => ({
-        slug: segment.slug,
-        icon: segment.icon
-          ? dynamic(() =>
-              import('react-icons/hi2')
-                .then(
-                  (mod) =>
-                    (mod[segment.icon as keyof typeof mod] as IconType) ??
-                    HiOutlineSparkles,
-                )
-                .catch(() => HiOutlineSparkles),
-            )
-          : HiOutlineSparkles,
-      })),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
+      marketSegments.reduce(
+        (icons, segment) => {
+          icons[segment.slug] = segment.icon
+            ? dynamic(() =>
+                import('react-icons/hi2')
+                  .then(
+                    (mod) =>
+                      (mod[segment.icon as keyof typeof mod] as IconType) ??
+                      HiOutlineSparkles,
+                  )
+                  .catch(() => HiOutlineSparkles),
+              )
+            : HiOutlineSparkles;
+
+          return icons;
+        },
+        {} as { [key: string]: IconType | ComponentType<IconBaseProps> },
+      ),
+    [marketSegments],
   );
 
   const filteredOrganizationTypes = useMemo(
@@ -315,9 +317,7 @@ export default function FilterPanel({
         <DisclosurePanel className="hidden border-y border-gray-200 py-10 sm:block">
           <div className="mx-auto grid max-w-7xl auto-rows-min grid-cols-3 gap-x-6 gap-y-8 px-6 text-sm md:grid-cols-4 lg:grid-cols-5 lg:px-8 xl:grid-cols-7">
             {marketSegments.map((segment) => {
-              const Icon =
-                marketSegmentIcons.find((icon) => icon.slug === segment.slug)
-                  ?.icon ?? HiOutlineSparkles;
+              const Icon = marketSegmentIcons[segment.slug];
 
               return (
                 <fieldset key={segment._id}>
@@ -407,9 +407,7 @@ export default function FilterPanel({
             </div>
             <form className="mt-4">
               {marketSegments.map((segment) => {
-                const Icon =
-                  marketSegmentIcons.find((icon) => icon.slug === segment.slug)
-                    ?.icon ?? HiOutlineSparkles;
+                const Icon = marketSegmentIcons[segment.slug];
 
                 return (
                   <Disclosure

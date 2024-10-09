@@ -48,7 +48,7 @@ export async function generateMetadata(
   };
 }
 
-export default async function OrganizationPage({
+export default async function CategoryPage({
   params,
 }: {
   params: { slug: string };

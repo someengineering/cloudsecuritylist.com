@@ -33,7 +33,7 @@ export async function generateMetadata(
   };
 }
 
-export default async function ProductCategoriesPage({
+export default async function CategoriesPage({
   searchParams,
 }: {
   searchParams: { [key: string]: string | string[] | undefined };

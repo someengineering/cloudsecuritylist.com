@@ -1,19 +1,21 @@
+import DescriptionList from '@/components/page/DescriptionList';
 import PageHeader from '@/components/page/Header';
+import IconDescriptionList from '@/components/page/IconDescriptionList';
 import LogoGrid from '@/components/page/LogoGrid';
 import OffsetSection from '@/components/page/OffsetSection';
 import { urlFor } from '@/lib/sanity/image';
 import { ORGANIZATION_QUERYResult } from '@/lib/sanity/types';
 import { toSentenceCase } from '@/utils/string';
 import { getImageDimensions } from '@sanity/asset-utils';
+import { uniqBy } from 'lodash';
 import dynamic from 'next/dynamic';
-import Link from 'next/link';
-import React from 'react';
+import React, { ComponentType, useMemo } from 'react';
 import {
   HiArrowTrendingUp,
   HiOutlineGlobeAlt,
   HiOutlineSparkles,
 } from 'react-icons/hi2';
-import { IconType } from 'react-icons/lib';
+import { IconBaseProps, IconType } from 'react-icons/lib';
 import { SiCrunchbase, SiGithub, SiGitlab, SiLinkedin } from 'react-icons/si';
 
 export default async function Organization({
@@ -21,6 +23,34 @@ export default async function Organization({
 }: {
   organization: ORGANIZATION_QUERYResult;
 }) {
+  const marketSegmentIcons = useMemo(
+    () =>
+      organization && 'productCategories' in organization
+        ? uniqBy(organization.productCategories ?? [], 'marketSegment.slug')
+            .map((category) => category.marketSegment)
+            .reduce(
+              (icons, segment) => {
+                icons[segment.slug] = segment.icon
+                  ? dynamic(() =>
+                      import('react-icons/hi2')
+                        .then(
+                          (mod) =>
+                            (mod[
+                              segment.icon as keyof typeof mod
+                            ] as IconType) ?? HiOutlineSparkles,
+                        )
+                        .catch(() => HiOutlineSparkles),
+                    )
+                  : HiOutlineSparkles;
+
+                return icons;
+              },
+              {} as { [key: string]: IconType | ComponentType<IconBaseProps> },
+            )
+        : {},
+    [organization],
+  );
+
   if (!organization) {
     return null;
   }
@@ -92,55 +122,22 @@ export default async function Organization({
         title={organization.name}
         description={organization.description}
         links={links}
-        image={
-          organization.mark?.asset?._ref
-            ? urlFor(organization.mark).url()
-            : undefined
-        }
+        image={organization.mark ? urlFor(organization.mark).url() : undefined}
       />
       {'productCategories' in organization &&
       organization.productCategories?.length ? (
         <OffsetSection heading="Product categories">
-          <dl className="grid grid-cols-1 gap-x-8 gap-y-16 lg:grid-cols-2">
-            {organization.productCategories.map((category) => {
-              const Icon = category.marketSegment.icon
-                ? dynamic(() =>
-                    import('react-icons/hi2')
-                      .then(
-                        (mod) =>
-                          (mod[
-                            category.marketSegment.icon as keyof typeof mod
-                          ] as IconType) ?? HiOutlineSparkles,
-                      )
-                      .catch(() => HiOutlineSparkles),
-                  )
-                : HiOutlineSparkles;
-
-              return (
-                <div key={category._id} className="group relative">
-                  <dt>
-                    <div className="mb-6 flex h-10 w-10 items-center justify-center rounded-lg bg-cyan-600">
-                      <Icon className="h-6 w-6 text-white" />
-                    </div>
-                    <Link
-                      href={`/category/${category.slug}`}
-                      className="text-lg font-semibold leading-8 text-cyan-600 focus:outline-none group-hover:text-cyan-700"
-                    >
-                      <span aria-hidden="true" className="absolute inset-0" />
-                      {category.expansion
-                        ? `${toSentenceCase(
-                            category.expansion,
-                          )} (${category.name})`
-                        : toSentenceCase(category.name)}
-                    </Link>
-                  </dt>
-                  <dd className="mt-2 max-w-prose leading-7 text-gray-600">
-                    {category.description}
-                  </dd>
-                </div>
-              );
-            })}
-          </dl>
+          <IconDescriptionList
+            items={organization.productCategories.map((category) => ({
+              title: category.expansion
+                ? `${toSentenceCase(category.expansion)} (${category.name})`
+                : toSentenceCase(category.name),
+              slug: category.slug,
+              href: `/category/${category.slug}`,
+              description: category.description,
+              icon: marketSegmentIcons[category.marketSegment.slug],
+            }))}
+          />
         </OffsetSection>
       ) : null}
       {'supportedCloudProviders' in organization &&
@@ -173,115 +170,58 @@ export default async function Organization({
       {'openSourceProjects' in organization &&
       organization.openSourceProjects.length ? (
         <OffsetSection heading="Open-source projects">
-          <dl className="space-y-16">
-            {organization.openSourceProjects.map((project) => {
-              return (
-                <div key={project._id} className="group relative">
-                  <dt className="text-lg font-semibold leading-8">
-                    <Link
-                      href={project.repository}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-cyan-600 focus:outline-none group-hover:text-cyan-700"
-                    >
-                      <span aria-hidden="true" className="absolute inset-0" />
-                      {project.name}
-                    </Link>
-                  </dt>
-                  <dd className="mt-2 max-w-prose leading-7 text-gray-600">
-                    {project.description}
-                  </dd>
-                </div>
-              );
-            })}
-          </dl>
+          <DescriptionList
+            items={organization.openSourceProjects.map((project) => ({
+              title: project.name,
+              slug: project.slug,
+              href: `/open-source/${project.slug}`,
+              description: project.description,
+            }))}
+          />
         </OffsetSection>
       ) : null}
       {'research' in organization && organization.research.length ? (
         <OffsetSection heading="Research">
-          <dl className="space-y-16">
-            {organization.research.map((research) => {
-              return (
-                <div key={research._id} className="group relative">
-                  <dt className="text-lg font-semibold leading-8">
-                    <Link
-                      href={research.website}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-cyan-600 focus:outline-none group-hover:text-cyan-700"
-                    >
-                      <span aria-hidden="true" className="absolute inset-0" />
-                      {research.name}
-                    </Link>
-                  </dt>
-                  <dd className="mt-2 max-w-prose leading-7 text-gray-600">
-                    {research.description}
-                  </dd>
-                </div>
-              );
-            })}
-          </dl>
+          <DescriptionList
+            items={organization.research.map((research) => ({
+              title: research.name,
+              href: research.website,
+              description: research.description,
+            }))}
+          />
         </OffsetSection>
       ) : null}
       {'acquiredEntities' in organization &&
       organization.acquiredEntities.length ? (
         <OffsetSection heading="Acquisitions">
-          <dl className="space-y-16">
-            {organization.acquiredEntities.map((acquiredEntity) => {
-              return (
-                <div
-                  key={acquiredEntity._id}
-                  id={acquiredEntity.slug}
-                  className="group relative"
-                >
-                  <dt className="text-gray-900">
-                    {acquiredEntity.pressRelease ? (
-                      <Link
-                        href={acquiredEntity.pressRelease}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-lg font-semibold leading-8 text-cyan-600 focus:outline-none group-hover:text-cyan-700"
-                      >
-                        <span aria-hidden="true" className="absolute inset-0" />
-                        {acquiredEntity.name}
-                      </Link>
-                    ) : (
-                      <span className="text-lg font-semibold leading-8">
-                        {acquiredEntity.name}
-                      </span>
-                    )}
-                    {acquiredEntity.acquisitionDate ||
-                    acquiredEntity.acquisitionPrice ? (
-                      <>
-                        {' '}
-                        (acquired
-                        {acquiredEntity.acquisitionDate
-                          ? ` on ${new Intl.DateTimeFormat('en-US', {
-                              year: 'numeric',
-                              month: 'long',
-                              day: 'numeric',
-                            }).format(
-                              new Date(acquiredEntity.acquisitionDate),
-                            )}`
-                          : null}
-                        {acquiredEntity.acquisitionPrice
-                          ? ` for ${new Intl.NumberFormat('en-US', {
-                              style: 'currency',
-                              currency: 'USD',
-                              notation: 'compact',
-                            }).format(acquiredEntity.acquisitionPrice)}`
-                          : null}
-                        )
-                      </>
-                    ) : null}
-                  </dt>
-                  <dd className="mt-2 max-w-prose leading-7 text-gray-600">
-                    {acquiredEntity.description}
-                  </dd>
-                </div>
-              );
-            })}
-          </dl>
+          <DescriptionList
+            items={organization.acquiredEntities.map((entity) => ({
+              title: entity.name,
+              titleDescription:
+                entity.acquisitionDate || entity.acquisitionPrice
+                  ? `acquired${
+                      entity.acquisitionDate
+                        ? ` on ${new Intl.DateTimeFormat('en-US', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                          }).format(new Date(entity.acquisitionDate))}`
+                        : ''
+                    }${
+                      entity.acquisitionPrice
+                        ? ` for ${new Intl.NumberFormat('en-US', {
+                            style: 'currency',
+                            currency: 'USD',
+                            notation: 'compact',
+                          }).format(entity.acquisitionPrice)}`
+                        : ''
+                    }`
+                  : undefined,
+              slug: entity.slug,
+              href: entity.pressRelease ?? undefined,
+              description: entity.description,
+            }))}
+          />
         </OffsetSection>
       ) : null}
     </>

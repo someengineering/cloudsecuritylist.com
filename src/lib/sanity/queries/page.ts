@@ -19,5 +19,5 @@ export const PAGE_QUERY = groq`
     _createdAt,
     "_updatedAt": ${PAGE_UPDATED_AT},
     ${PAGE}
-  } { ..., "_updatedAt": _updatedAt | order(coalesce(timestamp, "") desc) [0].timestamp }
+  } { ..., "_updatedAt": coalesce(_updatedAt | order(coalesce(timestamp, "") desc) [0].timestamp, "") }
 `;

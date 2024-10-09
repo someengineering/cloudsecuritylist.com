@@ -47,7 +47,7 @@ export async function generateMetadata(
   };
 }
 
-export default async function OrganizationPage({
+export default async function ProviderPage({
   params,
 }: {
   params: { slug: string };
@@ -63,7 +63,7 @@ export default async function OrganizationPage({
   return (
     <>
       <JsonLd schema={await getCloudProviderProfilePage(cloudProvider)} />
-      <CloudProvider cloudProvider={cloudProvider} />
+      <CloudProvider provider={cloudProvider} />
     </>
   );
 }

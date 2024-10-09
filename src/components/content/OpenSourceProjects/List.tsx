@@ -4,13 +4,12 @@ import {
   Filters,
   useFilters,
 } from '@/components/content/OpenSourceProjects/Context';
-import { urlFor } from '@/lib/sanity/image';
 import { ORGANIZATION_TYPES } from '@/lib/sanity/schemas/objects/organizationType';
 import { OPEN_SOURCE_PROJECTS_QUERYResult } from '@/lib/sanity/types';
+import { projectImage } from '@/utils/openSourceProject';
 import clsx from 'clsx';
 import Image from 'next/image';
 import Link from 'next/link';
-import parseGithubUrl from 'parse-github-url';
 import { useEffect, useState } from 'react';
 import { HiCodeBracket } from 'react-icons/hi2';
 import { SiGithub, SiGitlab } from 'react-icons/si';
@@ -79,16 +78,11 @@ export default function List({
       className="container mx-auto mt-10 grid max-w-7xl auto-rows-fr grid-cols-1 gap-4 px-6 md:grid-cols-2 lg:grid-cols-3 lg:px-8"
     >
       {openSourceProjects.map((project) => {
-        const githubOwner = project.repository.includes('github.com')
-          ? parseGithubUrl(project.repository)?.owner
-          : undefined;
-        const imageUrl = project.mark
-          ? urlFor(project.mark).url()
-          : githubOwner
-            ? `https://avatars.githubusercontent.com/${githubOwner}`
-            : project.organization?.mark
-              ? urlFor(project.organization.mark).url()
-              : undefined;
+        const markUrl = projectImage({
+          mark: project.mark,
+          repository: project.repository,
+          organizationMark: project.organization?.mark,
+        });
 
         const organizationType = project.organization
           ? ORGANIZATION_TYPES.find(
@@ -113,17 +107,17 @@ export default function List({
             className="relative flex flex-col space-y-4 rounded-lg border border-gray-300 bg-white p-4 shadow-sm focus-within:ring-2 focus-within:ring-cyan-500 focus-within:ring-offset-2 hover:border-gray-400 lg:px-5"
           >
             <div className="flex items-center space-x-3">
-              {imageUrl ? (
+              {markUrl ? (
                 <div className="flex-shrink-0">
                   <Image
-                    src={imageUrl}
+                    src={markUrl}
                     width={56}
                     height={56}
                     alt=""
                     aria-hidden="true"
                     className={clsx(
                       'h-12 w-12 object-cover xs:h-14 xs:w-14',
-                      imageUrl.includes('avatars.githubusercontent.com') &&
+                      markUrl.includes('avatars.githubusercontent.com') &&
                         'rounded',
                     )}
                   />
@@ -135,7 +129,7 @@ export default function List({
                 <div className="flex items-center justify-between">
                   <div className="flex flex-col items-start">
                     <Link
-                      href={project.repository}
+                      href={`/open-source/${project.slug}`}
                       className="line-clamp-1 font-semibold text-gray-900 focus:outline-none"
                     >
                       <span aria-hidden="true" className="absolute inset-0" />

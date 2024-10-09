@@ -12,7 +12,12 @@ export default function Summary({
   return (
     <div tw="flex">
       {logo ? (
-        <div tw="-mt-5 mr-6 flex h-28 w-28 overflow-hidden rounded-full bg-white p-4">
+        <div
+          tw={clsx(
+            '-mt-5 mr-6 flex h-28 w-28 overflow-hidden rounded-full',
+            !logo.includes('avatars.githubusercontent.com') && 'bg-white p-4',
+          )}
+        >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={logo} alt="" tw="h-full w-full" />
         </div>

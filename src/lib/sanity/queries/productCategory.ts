@@ -47,5 +47,5 @@ export const PRODUCT_CATEGORY_QUERY = groq`
       ${OPEN_SOURCE_PROJECT_BASE}
     },
     similarCategories[] -> { ${PRODUCT_CATEGORY} },
-  } { ..., "_updatedAt": _updatedAt | order(coalesce(timestamp, "") desc) [0].timestamp }
+  } { ..., "_updatedAt": coalesce(_updatedAt | order(coalesce(timestamp, "") desc) [0].timestamp, "") }
 `;

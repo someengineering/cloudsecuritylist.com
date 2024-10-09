@@ -23,7 +23,7 @@ export const ORGANIZATION_QUERY = groq`
     _createdAt,
     "_updatedAt": ${ORGANIZATION_UPDATED_AT},
     ${ORGANIZATION}
-  } { ..., "_updatedAt": _updatedAt | order(coalesce(timestamp, "") desc) [0].timestamp }
+  } { ..., "_updatedAt": coalesce(_updatedAt | order(coalesce(timestamp, "") desc) [0].timestamp, "") }
 `;
 
 export const VENDORS_COUNT_QUERY = groq`

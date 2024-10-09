@@ -5,9 +5,9 @@ import { MARKET_SEGMENTS_QUERYResult } from '@/lib/sanity/types';
 import clsx from 'clsx';
 import dynamic from 'next/dynamic';
 import { usePathname, useRouter } from 'next/navigation';
-import { useEffect, useMemo } from 'react';
+import { ComponentType, useEffect, useMemo } from 'react';
 import { HiOutlineSparkles, HiXMark } from 'react-icons/hi2';
-import { IconType } from 'react-icons/lib';
+import { IconBaseProps, IconType } from 'react-icons/lib';
 
 export default function FilterButtons({
   marketSegments,
@@ -20,22 +20,25 @@ export default function FilterButtons({
 
   const marketSegmentIcons = useMemo(
     () =>
-      marketSegments.map((segment) => ({
-        slug: segment.slug,
-        icon: segment.icon
-          ? dynamic(() =>
-              import('react-icons/hi2')
-                .then(
-                  (mod) =>
-                    (mod[segment.icon as keyof typeof mod] as IconType) ??
-                    HiOutlineSparkles,
-                )
-                .catch(() => HiOutlineSparkles),
-            )
-          : HiOutlineSparkles,
-      })),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
+      marketSegments.reduce(
+        (icons, segment) => {
+          icons[segment.slug] = segment.icon
+            ? dynamic(() =>
+                import('react-icons/hi2')
+                  .then(
+                    (mod) =>
+                      (mod[segment.icon as keyof typeof mod] as IconType) ??
+                      HiOutlineSparkles,
+                  )
+                  .catch(() => HiOutlineSparkles),
+              )
+            : HiOutlineSparkles;
+
+          return icons;
+        },
+        {} as { [key: string]: IconType | ComponentType<IconBaseProps> },
+      ),
+    [marketSegments],
   );
 
   useEffect(() => {
@@ -56,9 +59,7 @@ export default function FilterButtons({
     <div className="mx-auto mb-10 max-w-5xl">
       <div className="isolate grid grid-cols-2 overflow-hidden rounded-md shadow-sm sm:grid-cols-3 lg:grid-cols-7">
         {marketSegments.map((segment, idx) => {
-          const Icon =
-            marketSegmentIcons.find((icon) => icon.slug === segment.slug)
-              ?.icon ?? HiOutlineSparkles;
+          const Icon = marketSegmentIcons[segment.slug];
 
           return (
             <button

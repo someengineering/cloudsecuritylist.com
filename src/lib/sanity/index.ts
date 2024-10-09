@@ -11,6 +11,8 @@ import {
   MARKET_SEGMENTS_QUERY,
 } from '@/lib/sanity/queries/marketSegment';
 import {
+  OPEN_SOURCE_PROJECT_QUERY,
+  OPEN_SOURCE_PROJECT_SLUGS_QUERY,
   OPEN_SOURCE_PROJECTS_QUERY,
   UNPAGINATED_OPEN_SOURCE_PROJECTS_QUERY,
 } from '@/lib/sanity/queries/openSourceProject';
@@ -46,6 +48,8 @@ import {
   CLOUD_PROVIDERS_QUERYResult,
   MARKET_SEGMENT_QUERYResult,
   MARKET_SEGMENTS_QUERYResult,
+  OPEN_SOURCE_PROJECT_QUERYResult,
+  OPEN_SOURCE_PROJECT_SLUGS_QUERYResult,
   OPEN_SOURCE_PROJECTS_QUERYResult,
   ORGANIZATION_QUERYResult,
   ORGANIZATION_SLUGS_QUERYResult,
@@ -292,6 +296,26 @@ export const getVendors = async ({
             ),
           ]
         : ['organization'],
+  });
+
+  return data;
+};
+
+export const getOpenSourceProjectSlugs = async () => {
+  const data = await sanityFetch<OPEN_SOURCE_PROJECT_SLUGS_QUERYResult>({
+    query: OPEN_SOURCE_PROJECT_SLUGS_QUERY,
+    tags: ['openSourceProject'],
+    allowDraftMode: false,
+  });
+
+  return data;
+};
+
+export const getOpenSourceProject = async (slug: string) => {
+  const data = await sanityFetch<OPEN_SOURCE_PROJECT_QUERYResult>({
+    query: OPEN_SOURCE_PROJECT_QUERY,
+    params: { slug },
+    tags: [`openSourceProject:${slug}`],
   });
 
   return data;

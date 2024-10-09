@@ -4,6 +4,7 @@ import { getPage, getSiteSettings } from '@/lib/sanity';
 import { urlFor } from '@/lib/sanity/image';
 import {
   CLOUD_PROVIDER_QUERYResult,
+  OPEN_SOURCE_PROJECT_QUERYResult,
   ORGANIZATION_QUERYResult,
 } from '@/lib/sanity/types';
 import {
@@ -69,7 +70,7 @@ export const getWebPage = async ({
   title: string;
   path: string;
   datePublished?: string;
-  dateModified?: string | null;
+  dateModified?: string;
   parentPageSlug?: string;
 }): Promise<
   WithContext<WebSite | WebPage>[] | WithContext<WebPage> | undefined
@@ -89,7 +90,7 @@ export const getWebPage = async ({
     identifier: url,
     url,
     datePublished,
-    dateModified: dateModified ?? undefined,
+    dateModified,
     breadcrumb:
       path !== '/'
         ? await getBreadcrumbList({
@@ -137,7 +138,7 @@ export const getOrganizationProfilePage = async (
     title: organization.name,
     path: `/organization/${organization.slug}`,
     datePublished: organization._createdAt,
-    dateModified: organization._updatedAt ?? undefined,
+    dateModified: organization._updatedAt,
     parentPageSlug:
       'productCategories' in organization &&
       organization.productCategories?.length
@@ -188,7 +189,7 @@ export const getCloudProviderProfilePage = async (
     title: cloudProvider.name,
     path: `/provider/${cloudProvider.slug}`,
     datePublished: cloudProvider._createdAt,
-    dateModified: cloudProvider._updatedAt ?? undefined,
+    dateModified: cloudProvider._updatedAt,
     parentPageSlug: 'providers',
   });
 
@@ -216,6 +217,46 @@ export const getCloudProviderProfilePage = async (
       description: cloudProvider.description,
       url: cloudProvider.website,
       sameAs,
+      image,
+    },
+  };
+};
+
+export const getOpenSourceProjectProfilePage = async (
+  openSourceProject: OPEN_SOURCE_PROJECT_QUERYResult,
+): Promise<WithContext<ProfilePage> | undefined> => {
+  if (!openSourceProject) {
+    return;
+  }
+
+  const webPage = await getWebPage({
+    title: openSourceProject.name,
+    path: `/open-source/${openSourceProject.slug}`,
+    datePublished: openSourceProject._createdAt,
+    dateModified: openSourceProject._updatedAt,
+    parentPageSlug: 'open-source',
+  });
+
+  const image = [];
+
+  if (openSourceProject.mark) {
+    image.push(urlFor(openSourceProject.mark).url());
+  }
+
+  if (openSourceProject.logo) {
+    image.push(urlFor(openSourceProject.logo).url());
+  }
+
+  return {
+    ...webPage,
+    '@context': 'https://schema.org',
+    '@type': 'ProfilePage',
+    mainEntity: {
+      '@type': 'Organization',
+      name: openSourceProject.name,
+      identifier: openSourceProject._id,
+      description: openSourceProject.description,
+      url: openSourceProject.repository,
       image,
     },
   };

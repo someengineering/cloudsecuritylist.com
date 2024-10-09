@@ -1,20 +1,20 @@
 import CTA from '@/components/page/CTA';
+import DescriptionList from '@/components/page/DescriptionList';
 import PageHeader from '@/components/page/Header';
 import LogoGrid from '@/components/page/LogoGrid';
 import OffsetSection from '@/components/page/OffsetSection';
 import { urlFor } from '@/lib/sanity/image';
 import { CLOUD_PROVIDER_QUERYResult } from '@/lib/sanity/types';
 import { getImageDimensions } from '@sanity/asset-utils';
-import Link from 'next/link';
 import { HiOutlineGlobeAlt } from 'react-icons/hi2';
 import { SiLinkedin } from 'react-icons/si';
 
 export default async function CloudProvider({
-  cloudProvider,
+  provider,
 }: {
-  cloudProvider: CLOUD_PROVIDER_QUERYResult;
+  provider: CLOUD_PROVIDER_QUERYResult;
 }) {
-  if (!cloudProvider) {
+  if (!provider) {
     return null;
   }
 
@@ -28,16 +28,16 @@ export default async function CloudProvider({
   }[] = [
     {
       label: 'Website',
-      href: cloudProvider.website,
+      href: provider.website,
       props: { target: '_blank', rel: 'noopener noreferrer' },
       icon: HiOutlineGlobeAlt,
     },
   ];
 
-  if (cloudProvider.linkedin) {
+  if (provider.linkedin) {
     links.push({
       label: 'LinkedIn',
-      href: cloudProvider.linkedin,
+      href: provider.linkedin,
       props: { target: '_blank', rel: 'noopener noreferrer' },
       icon: SiLinkedin,
     });
@@ -46,55 +46,40 @@ export default async function CloudProvider({
   return (
     <>
       <PageHeader
-        title={`${cloudProvider.name}${cloudProvider.abbreviation ? ` (${cloudProvider.abbreviation})` : ''}`}
-        description={cloudProvider.description}
+        title={`${provider.name}${provider.abbreviation ? ` (${provider.abbreviation})` : ''}`}
+        description={provider.description}
         links={links}
-        image={urlFor(cloudProvider.mark).url()}
+        image={urlFor(provider.mark).url()}
       />
       <CTA
         heading="Understand security responsibilities"
-        description={`See how security tasks are shared between you and ${cloudProvider.name} to ensure your cloud environment is protected.`}
+        description={`See how security tasks are shared between you and ${provider.name} to ensure your cloud environment is protected.`}
         secondaryButton={
-          cloudProvider.sharedResponsibilityModel
+          provider.sharedResponsibilityModel
             ? {
                 label: 'View shared responsibility model',
-                href: cloudProvider.sharedResponsibilityModel,
+                href: provider.sharedResponsibilityModel,
                 props: { target: '_blank', rel: 'noopener noreferrer' },
               }
             : undefined
         }
       />
-      {cloudProvider.nativeProducts?.length ? (
+      {provider.nativeProducts?.length ? (
         <OffsetSection heading="Native security products">
-          <dl className="space-y-16">
-            {cloudProvider.nativeProducts.map((product) => {
-              return (
-                <div key={product.name} className="group relative">
-                  <dt className="text-lg font-semibold leading-8">
-                    <Link
-                      href={product.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-cyan-600 focus:outline-none group-hover:text-cyan-700"
-                    >
-                      <span aria-hidden="true" className="absolute inset-0" />
-                      {product.name}
-                    </Link>
-                  </dt>
-                  <dd className="mt-2 max-w-prose leading-7 text-gray-600">
-                    {product.description}
-                  </dd>
-                </div>
-              );
-            })}
-          </dl>
+          <DescriptionList
+            items={provider.nativeProducts.map((product) => ({
+              title: product.name,
+              href: product.link,
+              description: product.description,
+            }))}
+          />
         </OffsetSection>
       ) : null}
-      {cloudProvider.vendors.length ? (
+      {provider.vendors.length ? (
         <OffsetSection heading="Product vendors" slug="vendors">
           <LogoGrid
             items={
-              cloudProvider.vendors
+              provider.vendors
                 .map((vendor) => {
                   const image = vendor.logo ?? vendor.mark;
 
@@ -116,30 +101,16 @@ export default async function CloudProvider({
           />
         </OffsetSection>
       ) : null}
-      {cloudProvider.openSourceProjects.length ? (
+      {provider.openSourceProjects.length ? (
         <OffsetSection heading="Open-source projects" slug="open-source">
-          <dl className="space-y-16">
-            {cloudProvider.openSourceProjects.map((project) => {
-              return (
-                <div key={project.name} className="group relative">
-                  <dt className="text-lg font-semibold leading-8">
-                    <Link
-                      href={project.repository}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-cyan-600 focus:outline-none group-hover:text-cyan-700"
-                    >
-                      <span aria-hidden="true" className="absolute inset-0" />
-                      {project.name}
-                    </Link>
-                  </dt>
-                  <dd className="mt-2 max-w-prose leading-7 text-gray-600">
-                    {project.description}
-                  </dd>
-                </div>
-              );
-            })}
-          </dl>
+          <DescriptionList
+            items={provider.openSourceProjects.map((project) => ({
+              title: project.name,
+              slug: project.slug,
+              href: `/open-source/${project.slug}`,
+              description: project.description,
+            }))}
+          />
         </OffsetSection>
       ) : null}
     </>

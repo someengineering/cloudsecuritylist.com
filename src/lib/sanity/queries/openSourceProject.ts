@@ -1,6 +1,17 @@
-import { OPEN_SOURCE_PROJECT } from '@/lib/sanity/queries/fragments/openSourceProject';
+import {
+  OPEN_SOURCE_PROJECT,
+  OPEN_SOURCE_PROJECT_UPDATED_AT,
+} from '@/lib/sanity/queries/fragments/openSourceProject';
 import { ORGANIZATION_BASE } from '@/lib/sanity/queries/fragments/organization';
 import { groq } from 'next-sanity';
+
+export const OPEN_SOURCE_PROJECT_SLUGS_QUERY = groq`
+  *[
+    _type == "openSourceProject" &&
+    defined(slug.current) &&
+    name != organization->name
+  ].slug.current
+`;
 
 export const OPEN_SOURCE_PROJECTS_QUERY = groq`
   *[
@@ -44,7 +55,9 @@ export const OPEN_SOURCE_PROJECT_QUERY = groq`
     _type == "openSourceProject" &&
     slug.current == $slug
   ][0] {
+    _createdAt,
+    "_updatedAt": ${OPEN_SOURCE_PROJECT_UPDATED_AT},
     ${OPEN_SOURCE_PROJECT}
     organization -> { ${ORGANIZATION_BASE} },
-  }
+  } { ..., "_updatedAt": coalesce(_updatedAt | order(coalesce(timestamp, "") desc) [0].timestamp, "") }
 `;

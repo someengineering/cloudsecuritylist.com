@@ -33,7 +33,7 @@ export async function generateMetadata(
   };
 }
 
-export default async function VendorsPage({
+export default async function OpenSourcePage({
   searchParams,
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
