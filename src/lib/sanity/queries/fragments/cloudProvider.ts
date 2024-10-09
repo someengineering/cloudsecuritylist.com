@@ -11,14 +11,14 @@ export const CLOUD_PROVIDER = groq`
   mark,
   logo,
   website,
-  linkedin,
+  linkedin
 `;
 
 // @sanity-typegen-ignore
 export const CLOUD_PROVIDER_UPDATED_AT = groq`
   [
-    { "timestamp": _updatedAt },
-    { "timestamp": *[_type == "organization" && organizationType != "acquired" && ^._id in supportedCloudProviders[]._ref] | order(_updatedAt desc) [0]._updatedAt },
-    { "timestamp": *[_type == "openSourceProject" && ^._id in supportedCloudProviders[]._ref] | order(_updatedAt desc) [0]._updatedAt },
-  ]
+    _updatedAt,
+    *[_type == "organization" && organizationType != "acquired" && ^._id in supportedCloudProviders[]._ref] | order(_updatedAt desc) [0]._updatedAt,
+    *[_type == "openSourceProject" && ^._id in supportedCloudProviders[]._ref] | order(_updatedAt desc) [0]._updatedAt
+  ] [defined(@)] | order(@ desc) [0]
 `;

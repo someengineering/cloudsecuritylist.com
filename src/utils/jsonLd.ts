@@ -70,7 +70,7 @@ export const getWebPage = async ({
   title: string;
   path: string;
   datePublished?: string;
-  dateModified?: string;
+  dateModified?: string | null;
   parentPageSlug?: string;
 }): Promise<
   WithContext<WebSite | WebPage>[] | WithContext<WebPage> | undefined
@@ -90,7 +90,7 @@ export const getWebPage = async ({
     identifier: url,
     url,
     datePublished,
-    dateModified,
+    dateModified: dateModified ?? undefined,
     breadcrumb:
       path !== '/'
         ? await getBreadcrumbList({

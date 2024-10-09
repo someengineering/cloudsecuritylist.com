@@ -78,7 +78,7 @@ const nextConfig = withPlausibleProxy()(
         },
         ...(
           await sanityClient.fetch(
-            groq`*[ _type == "cloudProvider" && defined(abbreviation) ] {
+            groq`*[_type == "cloudProvider" && defined(abbreviation)] {
               "slug": slug.current,
               name,
               abbreviation,
@@ -91,7 +91,7 @@ const nextConfig = withPlausibleProxy()(
         })),
         ...(
           await sanityClient.fetch(
-            groq`*[ _type == "productCategory" && defined(expansion) ] {
+            groq`*[_type == "productCategory" && defined(expansion)] {
               "slug": slug.current,
               name,
               expansion

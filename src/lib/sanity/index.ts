@@ -22,7 +22,6 @@ import {
   ORGANIZATION_SLUGS_QUERY,
   UNPAGINATED_ACQUISITIONS_QUERY,
   UNPAGINATED_VENDORS_QUERY,
-  VENDORS_COUNT_QUERY,
   VENDORS_QUERY,
 } from '@/lib/sanity/queries/organization';
 import { PAGE_QUERY, PAGE_SLUGS_QUERY } from '@/lib/sanity/queries/page';
@@ -62,9 +61,9 @@ import {
   RESEARCHES_QUERYResult,
   SITE_SETTINGS_QUERYResult,
   SITEMAP_QUERYResult,
-  VENDORS_COUNT_QUERYResult,
   VENDORS_QUERYResult,
 } from '@/lib/sanity/types';
+import { groq } from 'next-sanity';
 
 export const getSitemap = async () => {
   const data = await sanityFetch<SITEMAP_QUERYResult>({
@@ -219,27 +218,19 @@ export const getOrganization = async (slug: string) => {
 };
 
 export const getVendorTypes = async () => {
-  const data = (
-    await Promise.all(
-      ORGANIZATION_TYPES.filter(
-        (type) => type.value !== ORGANIZATION_TYPE.ACQUIRED,
-      ).map(async (type) => {
-        const count = await sanityFetch<VENDORS_COUNT_QUERYResult>({
-          query: VENDORS_COUNT_QUERY,
+  const data = await Promise.all(
+    ORGANIZATION_TYPES.map((type) => type.value).filter(
+      async (type) =>
+        type !== ORGANIZATION_TYPE.ACQUIRED &&
+        (await sanityFetch<boolean>({
+          query: groq`defined(*[_type == "organization" && organizationType != "acquired" && organizationType == $organizationType][0])`,
           params: {
-            productCategories: [],
-            organizationTypes: [type.value],
-            supportedCloudProviders: [],
+            organizationType: type,
           },
-          tags: [`organizationType:${type.value}`],
-        });
-
-        return { value: type.value, count };
-      }),
-    )
-  )
-    .filter((type) => type.count)
-    .map((type) => type.value);
+          tags: [`organizationType:${type}`],
+        })),
+    ),
+  );
 
   return data;
 };
