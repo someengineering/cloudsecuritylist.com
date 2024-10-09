@@ -68,7 +68,6 @@ export default async function Organization({
     links.push({
       label: 'Website',
       href: organization.website,
-      props: { target: '_blank', rel: 'noopener noreferrer' },
       icon: HiOutlineGlobeAlt,
     });
   }
@@ -77,14 +76,12 @@ export default async function Organization({
     links.push({
       label: 'GitHub',
       href: organization.github,
-      props: { target: '_blank', rel: 'noopener noreferrer' },
       icon: SiGithub,
     });
   } else if ('gitlab' in organization && organization.gitlab) {
     links.push({
       label: 'GitLab',
       href: organization.gitlab,
-      props: { target: '_blank', rel: 'noopener noreferrer' },
       icon: SiGitlab,
     });
   }
@@ -93,7 +90,6 @@ export default async function Organization({
     links.push({
       label: 'LinkedIn',
       href: organization.linkedin,
-      props: { target: '_blank', rel: 'noopener noreferrer' },
       icon: SiLinkedin,
     });
   }
@@ -102,16 +98,14 @@ export default async function Organization({
     links.push({
       label: 'Crunchbase',
       href: organization.crunchbase,
-      props: { target: '_blank', rel: 'noopener noreferrer' },
       icon: SiCrunchbase,
     });
   }
 
   if (organization.stockSymbol) {
     links.push({
-      label: 'Stock',
+      label: `Stock (${organization.stockSymbol})`,
       href: `https://finance.yahoo.com/quote/${organization.stockSymbol}`,
-      props: { target: '_blank', rel: 'noopener noreferrer' },
       icon: HiArrowTrendingUp,
     });
   }

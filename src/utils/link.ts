@@ -3,18 +3,33 @@ import 'server-only';
 import { getSiteSettings } from '@/lib/sanity';
 
 export const isExternalLink = async (href: string) => {
-  if (href.startsWith('/') || !href.includes('http')) {
+  try {
+    const url = new URL(href);
+
+    const siteSettings = await getSiteSettings();
+    if (!siteSettings?.url) {
+      return true;
+    }
+
+    return url.host !== new URL(siteSettings.url)?.host.replace('www.', '');
+  } catch {
     return false;
   }
-
-  return href === (await transformUrl(href));
 };
 
 export const transformUrl = async (href: string) => {
-  const siteSettings = await getSiteSettings();
-  const url = siteSettings?.url ? new URL(siteSettings.url) : null;
+  try {
+    const url = new URL(href);
 
-  return url && href.includes(url.host)
-    ? href.slice(href.indexOf(url.host) + url.host.length) || '/'
-    : href;
+    const siteSettings = await getSiteSettings();
+    if (!siteSettings?.url) {
+      return href;
+    }
+
+    return url.host === new URL(siteSettings.url)?.host.replace('www.', '')
+      ? `${url.pathname}${url.search}${url.hash}`
+      : href;
+  } catch {
+    return href.startsWith('/') ? href : `/${href}`;
+  }
 };

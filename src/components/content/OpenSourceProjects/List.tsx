@@ -172,8 +172,6 @@ export default function List({
                       <li>
                         <Link
                           href={`/organization/${project.organization.slug}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
                           className="text-gray-400 hover:text-gray-500 focus:outline-none"
                         >
                           <span className="sr-only">{organizationLabel}</span>

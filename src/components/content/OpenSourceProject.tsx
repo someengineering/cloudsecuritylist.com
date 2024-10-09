@@ -69,7 +69,7 @@ export default async function OpenSourceProject({
           organizationType.title.toLowerCase().includes('company')
             ? 'company'
             : 'organization'
-        }`,
+        } (${project.organization.name}))`,
         href: `/organization/${project.organization.slug}`,
         icon: organizationType.icon,
       });

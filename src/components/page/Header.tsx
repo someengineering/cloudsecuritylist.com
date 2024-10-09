@@ -1,4 +1,4 @@
-import { transformUrl } from '@/utils/link';
+import { isExternalLink, transformUrl } from '@/utils/link';
 import { PortableText } from '@portabletext/react';
 import { PortableTextBlock } from '@portabletext/types';
 import Image from 'next/image';
@@ -18,7 +18,6 @@ export default async function PageHeader({
   links?: {
     label: string;
     href: string;
-    props?: { target?: string; rel?: string };
     icon: IconType;
   }[];
   image?: string;
@@ -87,12 +86,9 @@ export default async function PageHeader({
                     return (
                       <Link
                         href={href}
-                        target={href.startsWith('/') ? undefined : '_blank'}
-                        rel={
-                          href.startsWith('/')
-                            ? undefined
-                            : 'noopener noreferrer'
-                        }
+                        {...((await isExternalLink(href))
+                          ? { target: '_blank', rel: 'noopener noreferrer' }
+                          : null)}
                         className="font-semibold text-cyan-600 hover:text-cyan-700"
                       >
                         {children}
@@ -107,18 +103,22 @@ export default async function PageHeader({
       </div>
       {links?.length ? (
         <ul role="list" className="mt-8 flex justify-center gap-x-6">
-          {links.map((link) => (
-            <li key={link.href}>
-              <Link
-                href={link.href}
-                {...link.props}
-                className="text-gray-400 hover:text-gray-500 focus:outline-none"
-              >
-                <span className="sr-only">{link.label}</span>
-                <link.icon className="h-8 w-8" title={link.label} />
-              </Link>
-            </li>
-          ))}
+          {await Promise.all(
+            links.map(async (link) => (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  {...((await isExternalLink(link.href))
+                    ? { target: '_blank', rel: 'noopener noreferrer' }
+                    : null)}
+                  className="text-gray-400 hover:text-gray-500 focus:outline-none"
+                >
+                  <span className="sr-only">{link.label}</span>
+                  <link.icon className="h-8 w-8" title={link.label} />
+                </Link>
+              </li>
+            )),
+          )}
         </ul>
       ) : null}
     </section>
