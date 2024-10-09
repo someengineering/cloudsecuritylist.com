@@ -29,7 +29,6 @@ export default async function CloudProvider({
     {
       label: 'Website',
       href: provider.website,
-      props: { target: '_blank', rel: 'noopener noreferrer' },
       icon: HiOutlineGlobeAlt,
     },
   ];
@@ -38,7 +37,6 @@ export default async function CloudProvider({
     links.push({
       label: 'LinkedIn',
       href: provider.linkedin,
-      props: { target: '_blank', rel: 'noopener noreferrer' },
       icon: SiLinkedin,
     });
   }
@@ -59,7 +57,6 @@ export default async function CloudProvider({
             ? {
                 label: 'View shared responsibility model',
                 href: provider.sharedResponsibilityModel,
-                props: { target: '_blank', rel: 'noopener noreferrer' },
               }
             : undefined
         }

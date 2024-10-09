@@ -1,4 +1,4 @@
-import { transformUrl } from '@/utils/link';
+import { isExternalLink, transformUrl } from '@/utils/link';
 import { slugify } from '@/utils/slug';
 import { PortableText, PortableTextReactComponents } from '@portabletext/react';
 import { PortableTextBlock } from '@portabletext/types';
@@ -25,8 +25,9 @@ const components: Partial<PortableTextReactComponents> = {
       return (
         <Link
           href={href}
-          target={href.startsWith('/') ? undefined : '_blank'}
-          rel={href.startsWith('/') ? undefined : 'noopener noreferrer'}
+          {...((await isExternalLink(href))
+            ? { target: '_blank', rel: 'noopener noreferrer' }
+            : null)}
           className="font-semibold text-cyan-600 hover:text-cyan-700"
         >
           {children}
