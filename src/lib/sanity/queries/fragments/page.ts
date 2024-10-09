@@ -7,13 +7,13 @@ export const PAGE = groq`
   description,
   "icon": icon.name,
   ...select(!defined(listType) => { longTitle, textContent[] }),
-  unlisted,
+  unlisted
 `;
 
 // @sanity-typegen-ignore
 export const PAGE_UPDATED_AT = groq`
   [
-    { "timestamp": _updatedAt },
-    select(defined(listType) => { "timestamp": *[_type == ^.listType] | order(_updatedAt desc) [0]._updatedAt }),
-  ]
+    _updatedAt,
+    select(defined(listType) => *[_type == ^.listType] | order(_updatedAt desc) [0]._updatedAt)
+  ] [defined(@)] | order(@ desc) [0]
 `;

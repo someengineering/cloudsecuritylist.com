@@ -3,20 +3,15 @@ import { RESEARCH } from '@/lib/sanity/queries/fragments/research';
 import { groq } from 'next-sanity';
 
 export const RESEARCHES_QUERY = groq`
-  *[
-    _type == "research"
-  ] | order(lower(name) asc) {
-    ${RESEARCH}
-    organization -> { ${ORGANIZATION_BASE} },
+  *[_type == "research"] | order(lower(name) asc) {
+    ${RESEARCH},
+    organization -> { ${ORGANIZATION_BASE} }
   }
 `;
 
 export const RESEARCH_QUERY = groq`
-  *[
-    _type == "research" &&
-    slug.current == $slug
-  ][0] {
-    ${RESEARCH}
-    organization -> { ${ORGANIZATION_BASE} },
+  *[_type == "research" && slug.current == $slug][0] {
+    ${RESEARCH},
+    organization -> { ${ORGANIZATION_BASE} }
   }
 `;

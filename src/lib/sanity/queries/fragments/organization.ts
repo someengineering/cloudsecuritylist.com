@@ -16,27 +16,27 @@ export const ORGANIZATION_BASE = groq`
   crunchbase,
   stockSymbol,
   mark,
-  logo,
+  logo
 `;
 
 // @sanity-typegen-ignore
 export const VENDOR = groq`
-  ${ORGANIZATION_BASE}
+  ${ORGANIZATION_BASE},
   productCategories[] -> { ${PRODUCT_CATEGORY} },
-  supportedCloudProviders[] -> { ${CLOUD_PROVIDER} },
+  supportedCloudProviders[] -> { ${CLOUD_PROVIDER} }
 `;
 
 // @sanity-typegen-ignore
 export const ACQUIRED_ENTITY = groq`
-  ${ORGANIZATION_BASE}
+  ${ORGANIZATION_BASE},
   acquisitionDate,
   acquisitionPrice,
-  pressRelease,
+  pressRelease
 `;
 
 // @sanity-typegen-ignore
 export const NON_ACQUIRED_ENTITY = groq`
-  ${ORGANIZATION_BASE}
+  ${ORGANIZATION_BASE},
   productCategories[] -> { ${PRODUCT_CATEGORY} },
   supportedCloudProviders[] -> { ${CLOUD_PROVIDER} },
   ...(*[_type == "openSourceProject" && organization.ref == ^.id && name == ^.name] [0] {
@@ -45,46 +45,36 @@ export const NON_ACQUIRED_ENTITY = groq`
       repository match "*gitlab.com" => { "gitlab": repository },
     )
   }),
-  "openSourceProjects": *[
-    _type == "openSourceProject" && organization._ref == ^._id && name != ^.name
-  ] {
+  "openSourceProjects": *[_type == "openSourceProject" && organization._ref == ^._id && name != ^.name] {
     ${OPEN_SOURCE_PROJECT_BASE}
   },
-  "research": *[
-    _type == "research" && organization._ref == ^._id
-  ] {
+  "research": *[_type == "research" && organization._ref == ^._id] {
     ${RESEARCH}
   },
-  "acquiredEntities": *[
-    _type == "organization" && parentOrganization._ref == ^._id
-  ] | order(acquisitionDate desc) {
+  "acquiredEntities": *[_type == "organization" && parentOrganization._ref == ^._id] | order(acquisitionDate desc) {
     ${ACQUIRED_ENTITY}
-  },
+  }
 `;
 
 // @sanity-typegen-ignore
 export const ORGANIZATION = groq`
   ...select(
     organizationType == "acquired" => {
-      ${ACQUIRED_ENTITY}
-      parentOrganization -> {
-        ${ORGANIZATION_BASE}
-      },
+      ${ACQUIRED_ENTITY},
+      parentOrganization -> { ${ORGANIZATION_BASE} },
     },
-    organizationType != "acquired" => {
-      ${NON_ACQUIRED_ENTITY}
-    },
-  ),
+    organizationType != "acquired" => { ${NON_ACQUIRED_ENTITY} }
+  )
 `;
 
 // @sanity-typegen-ignore
 export const ORGANIZATION_UPDATED_AT = groq`
   [
-    { "timestamp": _updatedAt },
-    { "timestamp": *[_type == "organization" && organizationType == "acquired" && parentOrganization._ref == ^._id] | order(_updatedAt desc) [0]._updatedAt },
-    { "timestamp": *[_type == "productCategory" && _id in ^.productCategories[]._ref] | order(_updatedAt desc) [0]._updatedAt },
-    { "timestamp": *[_type == "cloudProvider" && _id in ^.supportedCloudProviders[]._ref] | order(_updatedAt desc) [0]._updatedAt },
-    { "timestamp": *[_type == "openSourceProject" && organization._ref == ^._id] | order(_updatedAt desc) [0]._updatedAt },
-    { "timestamp": *[_type == "research" && organization._ref == ^._id] | order(_updatedAt desc) [0]._updatedAt },
-  ]
+    _updatedAt,
+    *[_type == "organization" && organizationType == "acquired" && parentOrganization._ref == ^._id] | order(_updatedAt desc) [0]._updatedAt,
+    *[_type == "productCategory" && _id in ^.productCategories[]._ref] | order(_updatedAt desc) [0]._updatedAt,
+    *[_type == "cloudProvider" && _id in ^.supportedCloudProviders[]._ref] | order(_updatedAt desc) [0]._updatedAt,
+    *[_type == "openSourceProject" && organization._ref == ^._id] | order(_updatedAt desc) [0]._updatedAt,
+    *[_type == "research" && organization._ref == ^._id] | order(_updatedAt desc) [0]._updatedAt
+  ] [defined(@)] | order(@ desc) [0]
 `;

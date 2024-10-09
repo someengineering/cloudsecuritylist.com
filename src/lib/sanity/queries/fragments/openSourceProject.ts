@@ -10,22 +10,22 @@ export const OPEN_SOURCE_PROJECT_BASE = groq`
   description,
   repository,
   mark,
-  logo,
+  logo
 `;
 
 // @sanity-typegen-ignore
 export const OPEN_SOURCE_PROJECT = groq`
-  ${OPEN_SOURCE_PROJECT_BASE}
+  ${OPEN_SOURCE_PROJECT_BASE},
   productCategories[] -> { ${PRODUCT_CATEGORY} },
-  supportedCloudProviders[] -> { ${CLOUD_PROVIDER} },
+  supportedCloudProviders[] -> { ${CLOUD_PROVIDER} }
 `;
 
 // @sanity-typegen-ignore
 export const OPEN_SOURCE_PROJECT_UPDATED_AT = groq`
   [
-    { "timestamp": _updatedAt },
-    { "timestamp": *[_type == "organization" && organizationType == "acquired" && _id == ^.organization._ref] | order(_updatedAt desc) [0]._updatedAt },
-    { "timestamp": *[_type == "productCategory" && _id in ^.productCategories[]._ref] | order(_updatedAt desc) [0]._updatedAt },
-    { "timestamp": *[_type == "cloudProvider" && _id in ^.supportedCloudProviders[]._ref] | order(_updatedAt desc) [0]._updatedAt },
-  ]
+    _updatedAt,
+    *[_type == "organization" && organizationType == "acquired" && _id == ^.organization._ref] | order(_updatedAt desc) [0]._updatedAt,
+    *[_type == "productCategory" && _id in ^.productCategories[]._ref] | order(_updatedAt desc) [0]._updatedAt,
+    *[_type == "cloudProvider" && _id in ^.supportedCloudProviders[]._ref] | order(_updatedAt desc) [0]._updatedAt
+  ] [defined(@)] | order(@ desc) [0]
 `;

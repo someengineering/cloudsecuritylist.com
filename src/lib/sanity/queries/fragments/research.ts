@@ -6,5 +6,5 @@ export const RESEARCH = groq`
   "slug": slug.current,
   name,
   description,
-  website,
+  website
 `;
