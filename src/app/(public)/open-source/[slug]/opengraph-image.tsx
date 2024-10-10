@@ -20,13 +20,18 @@ export default async function OpenGraphImage({
 }: {
   params: { slug: string };
 }) {
-  const { name, description, mark, repository, organization } =
-    (await sanityFetch<OPEN_SOURCE_PROJECT_QUERYResult>({
-      query: OPEN_SOURCE_PROJECT_QUERY,
-      params: { slug: params.slug },
-      tags: [`openSourceProject:${params.slug}`],
-      allowDraftMode: false,
-    })) ?? {};
+  const {
+    name,
+    description,
+    mark,
+    repository: repositoryUrl,
+    organization,
+  } = (await sanityFetch<OPEN_SOURCE_PROJECT_QUERYResult>({
+    query: OPEN_SOURCE_PROJECT_QUERY,
+    params: { slug: params.slug },
+    tags: [`openSourceProject:${params.slug}`],
+    allowDraftMode: false,
+  })) ?? {};
 
   return new ImageResponse(
     (
@@ -36,7 +41,7 @@ export default async function OpenGraphImage({
           description={description ?? ''}
           logo={projectImage({
             mark,
-            repository,
+            repositoryUrl,
             organizationMark: organization?.mark,
           })}
         />

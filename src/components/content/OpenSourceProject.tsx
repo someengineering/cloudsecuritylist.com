@@ -84,7 +84,7 @@ export default async function OpenSourceProject({
         links={links}
         image={projectImage({
           mark: project.mark,
-          repository: project.repository,
+          repositoryUrl: project.repository,
           organizationMark: project.organization?.mark,
         })}
       />

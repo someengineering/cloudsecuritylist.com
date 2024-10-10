@@ -6,7 +6,7 @@ import {
 } from '@/components/content/OpenSourceProjects/Context';
 import { ORGANIZATION_TYPES } from '@/lib/sanity/schemas/objects/organizationType';
 import { OPEN_SOURCE_PROJECTS_QUERYResult } from '@/lib/sanity/types';
-import { projectImage } from '@/utils/openSourceProject';
+import { projectImage, repositoryHost } from '@/utils/openSourceProject';
 import clsx from 'clsx';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -80,7 +80,7 @@ export default function List({
       {openSourceProjects.map((project) => {
         const markUrl = projectImage({
           mark: project.mark,
-          repository: project.repository,
+          repositoryUrl: project.repository,
           organizationMark: project.organization?.mark,
         });
 
@@ -101,6 +101,8 @@ export default function List({
               : 'Organization'
           : undefined;
 
+        const repoHost = repositoryHost(project.repository);
+
         return (
           <li
             key={project._id}
@@ -117,8 +119,9 @@ export default function List({
                     aria-hidden="true"
                     className={clsx(
                       'h-12 w-12 object-cover xs:h-14 xs:w-14',
-                      markUrl.includes('avatars.githubusercontent.com') &&
-                        'rounded',
+                      new URL(markUrl).hostname.includes(
+                        'avatars.githubusercontent.com',
+                      ) && 'rounded',
                     )}
                   />
                 </div>
@@ -147,12 +150,12 @@ export default function List({
                         rel="noopener noreferrer"
                         className="text-gray-400 hover:text-gray-500 focus:outline-none"
                       >
-                        {project.repository.includes('github.com') ? (
+                        {repoHost?.includes('github.com') ? (
                           <>
                             <span className="sr-only">GitHub</span>
                             <SiGithub className="h-5 w-5" title="GitHub" />
                           </>
-                        ) : project.repository.includes('gitlab.com') ? (
+                        ) : repoHost?.includes('gitlab.com') ? (
                           <>
                             <span className="sr-only">GitLab</span>
                             <SiGitlab className="h-5 w-5" title="GitLab" />
