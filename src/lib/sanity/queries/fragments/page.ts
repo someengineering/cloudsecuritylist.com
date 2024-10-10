@@ -6,7 +6,7 @@ export const PAGE = groq`
   title,
   description,
   "icon": icon.name,
-  ...select(!defined(listType) => { longTitle, textContent[] }),
+  ...select(!defined(listType) => { longTitle, textContent[], displayUpdatedAt }),
   unlisted
 `;
 

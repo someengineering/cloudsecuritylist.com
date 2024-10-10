@@ -1360,10 +1360,6 @@
                     },
                     {
                       "type": "string",
-                      "value": "h1"
-                    },
-                    {
-                      "type": "string",
                       "value": "h2"
                     },
                     {
@@ -1471,6 +1467,13 @@
               }
             }
           }
+        },
+        "optional": true
+      },
+      "displayUpdatedAt": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "boolean"
         },
         "optional": true
       },

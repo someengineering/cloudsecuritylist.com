@@ -47,6 +47,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
     title,
     longTitle,
     textContent,
+    displayUpdatedAt,
     _createdAt: datePublished,
     _updatedAt: dateModified,
   } = (isValidSlug(params.slug) && (await getPage(params.slug))) || {};
@@ -74,6 +75,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
       <MainText
         title={longTitle ?? title}
         blocks={textContent as PortableTextBlock[]}
+        lastUpdated={(displayUpdatedAt && dateModified) || undefined}
       />
     </>
   );

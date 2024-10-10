@@ -7,9 +7,11 @@ import Link from 'next/link';
 export default async function MainText({
   title,
   blocks,
+  lastUpdated,
 }: {
   title: string;
   blocks: PortableTextBlock[];
+  lastUpdated?: string;
 }) {
   const slug = slugify(title);
 
@@ -113,6 +115,16 @@ export default async function MainText({
           },
         }}
       />
+      {lastUpdated ? (
+        <p className="mt-8 max-w-2xl">
+          Last updated:{' '}
+          {new Intl.DateTimeFormat('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+          }).format(new Date(lastUpdated))}
+        </p>
+      ) : null}
     </section>
   );
 }

@@ -135,9 +135,18 @@ export default defineType({
           }),
     }),
     defineField({
+      name: 'displayUpdatedAt',
+      title: 'Display "Updated at" date below text content',
+      type: 'boolean',
+      initialValue: false,
+      fieldset: 'content',
+      hidden: ({ parent }) => !!parent.listType,
+    }),
+    defineField({
       name: 'unlisted',
       title: 'Unlisted',
       type: 'boolean',
+      initialValue: false,
     }),
     defineField({
       name: 'icon',
