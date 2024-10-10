@@ -1,17 +1,13 @@
 import 'server-only';
 
-import { getSiteSettings } from '@/lib/sanity';
+import { getSiteUrl } from '@/lib/sanity';
 
 export const isExternalLink = async (href: string) => {
   try {
     const url = new URL(href);
+    const siteUrl = await getSiteUrl();
 
-    const siteSettings = await getSiteSettings();
-    if (!siteSettings?.url) {
-      return true;
-    }
-
-    return url.host !== new URL(siteSettings.url)?.host.replace('www.', '');
+    return !siteUrl || url.host !== new URL(siteUrl).host.replace('www.', '');
   } catch {
     return false;
   }
@@ -20,13 +16,9 @@ export const isExternalLink = async (href: string) => {
 export const transformUrl = async (href: string) => {
   try {
     const url = new URL(href);
+    const siteUrl = await getSiteUrl();
 
-    const siteSettings = await getSiteSettings();
-    if (!siteSettings?.url) {
-      return href;
-    }
-
-    return url.host === new URL(siteSettings.url)?.host.replace('www.', '')
+    return url.host === new URL(siteUrl ?? '').host.replace('www.', '')
       ? `${url.pathname}${url.search}${url.hash}`
       : href;
   } catch {

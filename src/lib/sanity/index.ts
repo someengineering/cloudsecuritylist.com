@@ -34,8 +34,14 @@ import {
   RESEARCH_QUERY,
   RESEARCHES_QUERY,
 } from '@/lib/sanity/queries/research';
-import { SITEMAP_QUERY } from '@/lib/sanity/queries/sitemap';
-import { SITE_SETTINGS_QUERY } from '@/lib/sanity/queries/siteSettings';
+import {
+  SITEMAP_QUERY,
+  UPDATED_URLS_QUERY,
+} from '@/lib/sanity/queries/sitemap';
+import {
+  SITE_SETTINGS_QUERY,
+  SITE_URL_QUERY,
+} from '@/lib/sanity/queries/siteSettings';
 import {
   ORGANIZATION_TYPE,
   ORGANIZATION_TYPES,
@@ -60,7 +66,9 @@ import {
   RESEARCH_QUERYResult,
   RESEARCHES_QUERYResult,
   SITE_SETTINGS_QUERYResult,
+  SITE_URL_QUERYResult,
   SITEMAP_QUERYResult,
+  UPDATED_URLS_QUERYResult,
   VENDORS_QUERYResult,
 } from '@/lib/sanity/types';
 import { groq } from 'next-sanity';
@@ -69,6 +77,26 @@ export const getSitemap = async () => {
   const data = await sanityFetch<SITEMAP_QUERYResult>({
     query: SITEMAP_QUERY,
     tags: ['sitemap'],
+    allowDraftMode: false,
+  });
+
+  return data;
+};
+
+export const getUpdatedUrls = async (): Promise<string[]> => {
+  const data = await sanityFetch<UPDATED_URLS_QUERYResult>({
+    query: UPDATED_URLS_QUERY,
+    tags: ['sitemap'],
+    allowDraftMode: false,
+  });
+
+  return data ?? [];
+};
+
+export const getSiteUrl = async () => {
+  const data = await sanityFetch<SITE_URL_QUERYResult>({
+    query: SITE_URL_QUERY,
+    tags: ['siteSettings'],
     allowDraftMode: false,
   });
 

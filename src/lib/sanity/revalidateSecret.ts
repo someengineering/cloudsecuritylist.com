@@ -5,7 +5,7 @@ import { experimental_taintUniqueValue } from 'react';
 export const revalidateSecret = process.env.SANITY_REVALIDATE_SECRET;
 
 if (!revalidateSecret) {
-  throw new Error('Missing SANITY_REVALIDATE_SECRET');
+  throw new Error('Missing environment variable: SANITY_REVALIDATE_SECRET');
 }
 
 experimental_taintUniqueValue(

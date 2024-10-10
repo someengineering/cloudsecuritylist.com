@@ -1,8 +1,8 @@
-import { getSiteSettings } from '@/lib/sanity';
+import { getSiteUrl } from '@/lib/sanity';
 import type { MetadataRoute } from 'next';
 
 export default async function robots(): Promise<MetadataRoute.Robots> {
-  const { url } = (await getSiteSettings()) ?? {};
+  const url = await getSiteUrl();
 
   return {
     rules:
