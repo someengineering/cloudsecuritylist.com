@@ -60,6 +60,9 @@ export default async function PageHeader({
                       {children}
                     </span>
                   ),
+                  underline: ({ children }) => (
+                    <span className="underline underline-offset-3 decoration-8 decoration-cyan-600">{children}</span>
+                  )
                 },
               }}
             />

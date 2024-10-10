@@ -84,6 +84,15 @@ export default defineType({
       of: [
         {
           type: 'block',
+          styles: [
+            { title: 'Normal', value: 'normal' },
+            { title: 'H2', value: 'h2' },
+            { title: 'H3', value: 'h3' },
+            { title: 'H4', value: 'h4' },
+            { title: 'H5', value: 'h5' },
+            { title: 'H6', value: 'h6' },
+            { title: 'Quote', value: 'blockquote' },
+          ],
           validation: (rule) =>
             rule
               .custom((value: PortableTextTextBlock) => notEmpty(value))
@@ -101,24 +110,25 @@ export default defineType({
           .min(3)
           .custom((value: PortableTextTextBlock[] | undefined) =>
             value?.length
-              ? value[0].style === 'h1' || {
-                  message: 'First block must be a level 1 heading.',
-                  path: [{ _key: value[0]._key }],
+              ? !(value[value.length - 1].style ?? '').match(/^h[1-6]$/) || {
+                  message: 'Last block may not be a heading.',
+                  path: [{ _key: value[value.length - 1]._key }],
                 }
               : true,
           )
           .custom((value: PortableTextTextBlock[] | undefined) => {
-            if (!value?.length) {
+            if (!value?.length || value[0].style !== 'h2') {
               return true;
             }
 
             const offendingPaths = value
-              .filter((block, index) => block.style === 'h1' && index > 0)
+              .filter((block, index) => block.style === 'h2' && index > 0)
               .map((block) => ({ _key: block._key }));
 
             return (
               !offendingPaths.length || {
-                message: 'Only the first block may be a level 1 heading.',
+                message:
+                  'If the first block is a level 2 heading, other blocks must be subheadings.',
                 path: [offendingPaths[0]],
               }
             );
