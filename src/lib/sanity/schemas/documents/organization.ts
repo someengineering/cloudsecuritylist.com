@@ -195,7 +195,7 @@ export default defineType({
           .custom(
             (value) =>
               !value ||
-              new URL(value).host === 'linkedin.com' ||
+              !!new URL(value).host.match(/^(www\.)?linkedin.com$/) ||
               'URL host must be linkedin.com.',
           ),
     }),
@@ -210,7 +210,7 @@ export default defineType({
           .custom(
             (value) =>
               !value ||
-              new URL(value).host === 'crunchbase.com' ||
+              !!new URL(value).host.match(/^(www\.)?crunchbase.com$/) ||
               'URL host must be crunchbase.com.',
           ),
     }),
