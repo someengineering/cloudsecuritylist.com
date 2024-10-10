@@ -2226,6 +2226,13 @@
         },
         "optional": false
       },
+      "description": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        },
+        "optional": false
+      },
       "icon": {
         "type": "objectAttribute",
         "value": {

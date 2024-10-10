@@ -370,6 +370,7 @@ export type MarketSegment = {
   _rev: string;
   name: string;
   slug: Slug;
+  description: string;
   icon: IconPicker;
 };
 
@@ -676,7 +677,7 @@ export type MARKET_SEGMENTS_QUERYResult = Array<{
   _id: string;
   slug: string;
   name: string;
-  description: null;
+  description: string;
   icon: string | null;
 }>;
 // Variable: MARKET_SEGMENT_QUERY
@@ -685,7 +686,7 @@ export type MARKET_SEGMENT_QUERYResult = {
   _id: string;
   slug: string;
   name: string;
-  description: null;
+  description: string;
   icon: string | null;
   productCategories: Array<{
     _id: string;
@@ -739,7 +740,7 @@ export type OPEN_SOURCE_PROJECTS_QUERYResult = Array<{
       _id: string;
       slug: string;
       name: string;
-      description: null;
+      description: string;
       icon: string | null;
     };
   }> | null;
@@ -849,7 +850,7 @@ export type UNPAGINATED_OPEN_SOURCE_PROJECTS_QUERYResult = Array<{
       _id: string;
       slug: string;
       name: string;
-      description: null;
+      description: string;
       icon: string | null;
     };
   }> | null;
@@ -961,7 +962,7 @@ export type OPEN_SOURCE_PROJECT_QUERYResult = {
       _id: string;
       slug: string;
       name: string;
-      description: null;
+      description: string;
       icon: string | null;
     };
   }> | null;
@@ -1083,7 +1084,7 @@ export type ORGANIZATION_QUERYResult =
           _id: string;
           slug: string;
           name: string;
-          description: null;
+          description: string;
           icon: string | null;
         };
       }> | null;
@@ -1237,7 +1238,7 @@ export type ORGANIZATION_QUERYResult =
           _id: string;
           slug: string;
           name: string;
-          description: null;
+          description: string;
           icon: string | null;
         };
       }> | null;
@@ -1391,7 +1392,7 @@ export type ORGANIZATION_QUERYResult =
           _id: string;
           slug: string;
           name: string;
-          description: null;
+          description: string;
           icon: string | null;
         };
       }> | null;
@@ -1616,7 +1617,7 @@ export type VENDORS_QUERYResult = Array<{
       _id: string;
       slug: string;
       name: string;
-      description: null;
+      description: string;
       icon: string | null;
     };
   }> | null;
@@ -1697,7 +1698,7 @@ export type UNPAGINATED_VENDORS_QUERYResult = Array<{
       _id: string;
       slug: string;
       name: string;
-      description: null;
+      description: string;
       icon: string | null;
     };
   }> | null;
@@ -1929,7 +1930,7 @@ export type PRODUCT_CATEGORIES_QUERYResult = Array<{
     _id: string;
     slug: string;
     name: string;
-    description: null;
+    description: string;
     icon: string | null;
   };
 }>;
@@ -1947,7 +1948,7 @@ export type PRODUCT_CATEGORY_QUERYResult = {
     _id: string;
     slug: string;
     name: string;
-    description: null;
+    description: string;
     icon: string | null;
   };
   explanationHeading: string;
@@ -2041,7 +2042,7 @@ export type PRODUCT_CATEGORY_QUERYResult = {
       _id: string;
       slug: string;
       name: string;
-      description: null;
+      description: string;
       icon: string | null;
     };
   }> | null;
