@@ -1,11 +1,15 @@
 import { metadata as notFoundMetadata } from '@/app/not-found';
 import OpenSourceProject from '@/components/content/OpenSourceProject';
 import JsonLd from '@/components/page/JsonLd';
-import { getOpenSourceProject, getOpenSourceProjectSlugs } from '@/lib/sanity';
+import {
+  getOpenSourceProject,
+  getOpenSourceProjectSlugs,
+  getRedirect,
+} from '@/lib/sanity';
 import { getOpenSourceProjectProfilePage } from '@/utils/jsonLd';
 import { isValidSlug } from '@/utils/slug';
 import { Metadata, ResolvingMetadata } from 'next';
-import { notFound, redirect } from 'next/navigation';
+import { notFound, permanentRedirect, redirect } from 'next/navigation';
 
 export async function generateStaticParams() {
   const slugs = await getOpenSourceProjectSlugs();
@@ -56,6 +60,12 @@ export default async function OpenSourceProjectPage({
     : null;
 
   if (!project) {
+    const redirectSlug = await getRedirect('openSourceProject', params.slug);
+
+    if (redirectSlug) {
+      permanentRedirect(`/open-source/${redirectSlug}`);
+    }
+
     notFound();
   }
 

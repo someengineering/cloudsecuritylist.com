@@ -1,12 +1,16 @@
 import { metadata as notFoundMetadata } from '@/app/not-found';
 import Organization from '@/components/content/Organization';
 import JsonLd from '@/components/page/JsonLd';
-import { getOrganization, getOrganizationSlugs } from '@/lib/sanity';
+import {
+  getOrganization,
+  getOrganizationSlugs,
+  getRedirect,
+} from '@/lib/sanity';
 import { ORGANIZATION_TYPE } from '@/lib/sanity/schemas/objects/organizationType';
 import { getOrganizationProfilePage } from '@/utils/jsonLd';
 import { isValidSlug } from '@/utils/slug';
 import { Metadata, ResolvingMetadata } from 'next';
-import { notFound, redirect } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 
 export async function generateStaticParams() {
   const slugs = await getOrganizationSlugs();
@@ -64,6 +68,12 @@ export default async function OrganizationPage({
     : null;
 
   if (!organization) {
+    const redirectSlug = await getRedirect('organization', params.slug);
+
+    if (redirectSlug) {
+      permanentRedirect(`/organization/${redirectSlug}`);
+    }
+
     notFound();
   }
 
@@ -72,7 +82,7 @@ export default async function OrganizationPage({
       'parentOrganization' in organization &&
       organization.parentOrganization?.slug
     ) {
-      redirect(
+      permanentRedirect(
         `/organization/${organization.parentOrganization.slug}#${organization.slug}`,
       );
     }

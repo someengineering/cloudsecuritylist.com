@@ -30,6 +30,7 @@ import {
   PRODUCT_CATEGORY_QUERY,
   PRODUCT_CATEGORY_SLUGS_QUERY,
 } from '@/lib/sanity/queries/productCategory';
+import { REDIRECT_QUERY } from '@/lib/sanity/queries/redirect';
 import {
   RESEARCH_QUERY,
   RESEARCHES_QUERY,
@@ -63,6 +64,7 @@ import {
   PRODUCT_CATEGORIES_QUERYResult,
   PRODUCT_CATEGORY_QUERYResult,
   PRODUCT_CATEGORY_SLUGS_QUERYResult,
+  REDIRECT_QUERYResult,
   RESEARCH_QUERYResult,
   RESEARCHES_QUERYResult,
   SITE_SETTINGS_QUERYResult,
@@ -73,93 +75,74 @@ import {
 } from '@/lib/sanity/types';
 import { groq } from 'next-sanity';
 
-export const getSitemap = async () => {
-  const data = await sanityFetch<SITEMAP_QUERYResult>({
+export const getSitemap = async () =>
+  await sanityFetch<SITEMAP_QUERYResult>({
     query: SITEMAP_QUERY,
     tags: ['sitemap'],
     allowDraftMode: false,
   });
 
-  return data;
-};
-
-export const getUpdatedUrls = async (): Promise<string[]> => {
-  const data = await sanityFetch<UPDATED_URLS_QUERYResult>({
+export const getUpdatedUrls = async (): Promise<string[]> =>
+  (await sanityFetch<UPDATED_URLS_QUERYResult>({
     query: UPDATED_URLS_QUERY,
     tags: ['sitemap'],
     allowDraftMode: false,
+  })) ?? [];
+
+export const getRedirect = async (type: string, slug: string) =>
+  await sanityFetch<REDIRECT_QUERYResult>({
+    query: REDIRECT_QUERY,
+    params: { type, slug },
+    tags: [`${type}:${slug}`],
+    allowDraftMode: false,
   });
 
-  return data ?? [];
-};
-
-export const getSiteUrl = async () => {
-  const data = await sanityFetch<SITE_URL_QUERYResult>({
+export const getSiteUrl = async () =>
+  await sanityFetch<SITE_URL_QUERYResult>({
     query: SITE_URL_QUERY,
     tags: ['siteSettings'],
     allowDraftMode: false,
   });
 
-  return data;
-};
-
-export const getSiteSettings = async () => {
-  const data = await sanityFetch<SITE_SETTINGS_QUERYResult>({
+export const getSiteSettings = async () =>
+  await sanityFetch<SITE_SETTINGS_QUERYResult>({
     query: SITE_SETTINGS_QUERY,
     tags: ['siteSettings'],
   });
 
-  return data;
-};
-
-export const getPageSlugs = async () => {
-  const data = await sanityFetch<PAGE_SLUGS_QUERYResult>({
+export const getPageSlugs = async () =>
+  await sanityFetch<PAGE_SLUGS_QUERYResult>({
     query: PAGE_SLUGS_QUERY,
     tags: ['page'],
     allowDraftMode: false,
   });
 
-  return data;
-};
-
-export const getPage = async (slug: string) => {
-  const data = await sanityFetch<PAGE_QUERYResult>({
+export const getPage = async (slug: string) =>
+  await sanityFetch<PAGE_QUERYResult>({
     query: PAGE_QUERY,
     params: { slug },
     tags: [`page:${slug}`],
   });
 
-  return data;
-};
-
-export const getMarketSegments = async () => {
-  const data = await sanityFetch<MARKET_SEGMENTS_QUERYResult>({
+export const getMarketSegments = async () =>
+  await sanityFetch<MARKET_SEGMENTS_QUERYResult>({
     query: MARKET_SEGMENTS_QUERY,
     tags: ['marketSegment'],
   });
 
-  return data;
-};
-
-export const getMarketSegment = async (slug: string) => {
-  const data = await sanityFetch<MARKET_SEGMENT_QUERYResult>({
+export const getMarketSegment = async (slug: string) =>
+  await sanityFetch<MARKET_SEGMENT_QUERYResult>({
     query: MARKET_SEGMENT_QUERY,
     params: { slug },
     tags: [`marketSegment:${slug}`],
   });
 
-  return data;
-};
-
-export const getProductCategorySlugs = async () => {
-  const data = await sanityFetch<PRODUCT_CATEGORY_SLUGS_QUERYResult>({
+export const getProductCategorySlugs = async () =>
+  await sanityFetch<PRODUCT_CATEGORY_SLUGS_QUERYResult>({
     query: PRODUCT_CATEGORY_SLUGS_QUERY,
     tags: ['productCategory'],
     allowDraftMode: false,
   });
-
-  return data;
-};
 
 export const getProductCategories = async ({
   marketSegment,
@@ -186,67 +169,49 @@ export const getProductCategories = async ({
   return data;
 };
 
-export const getProductCategory = async (slug: string) => {
-  const data = await sanityFetch<PRODUCT_CATEGORY_QUERYResult>({
+export const getProductCategory = async (slug: string) =>
+  await sanityFetch<PRODUCT_CATEGORY_QUERYResult>({
     query: PRODUCT_CATEGORY_QUERY,
     params: { slug },
     tags: [`productCategory:${slug}`],
   });
 
-  return data;
-};
-
-export const getCloudProviderSlugs = async () => {
-  const data = await sanityFetch<CLOUD_PROVIDER_SLUGS_QUERYResult>({
+export const getCloudProviderSlugs = async () =>
+  await sanityFetch<CLOUD_PROVIDER_SLUGS_QUERYResult>({
     query: CLOUD_PROVIDER_SLUGS_QUERY,
     tags: ['cloudProvider'],
     allowDraftMode: false,
   });
 
-  return data;
-};
-
-export const getCloudProviders = async () => {
-  const data = await sanityFetch<CLOUD_PROVIDERS_QUERYResult>({
+export const getCloudProviders = async () =>
+  await sanityFetch<CLOUD_PROVIDERS_QUERYResult>({
     query: CLOUD_PROVIDERS_QUERY,
     tags: ['cloudProvider'],
   });
 
-  return data;
-};
-
-export const getCloudProvider = async (slug: string) => {
-  const data = await sanityFetch<CLOUD_PROVIDER_QUERYResult>({
+export const getCloudProvider = async (slug: string) =>
+  await sanityFetch<CLOUD_PROVIDER_QUERYResult>({
     query: CLOUD_PROVIDER_QUERY,
     params: { slug },
     tags: [`cloudProvider:${slug}`],
   });
 
-  return data;
-};
-
-export const getOrganizationSlugs = async () => {
-  const data = await sanityFetch<ORGANIZATION_SLUGS_QUERYResult>({
+export const getOrganizationSlugs = async () =>
+  await sanityFetch<ORGANIZATION_SLUGS_QUERYResult>({
     query: ORGANIZATION_SLUGS_QUERY,
     tags: ['organization'],
     allowDraftMode: false,
   });
 
-  return data;
-};
-
-export const getOrganization = async (slug: string) => {
-  const data = await sanityFetch<ORGANIZATION_QUERYResult>({
+export const getOrganization = async (slug: string) =>
+  await sanityFetch<ORGANIZATION_QUERYResult>({
     query: ORGANIZATION_QUERY,
     params: { slug },
     tags: [`organization:${slug}`],
   });
 
-  return data;
-};
-
-export const getVendorTypes = async () => {
-  const data = await Promise.all(
+export const getVendorTypes = async () =>
+  await Promise.all(
     ORGANIZATION_TYPES.map((type) => type.value).filter(
       async (type) =>
         type !== ORGANIZATION_TYPE.ACQUIRED &&
@@ -259,9 +224,6 @@ export const getVendorTypes = async () => {
         })),
     ),
   );
-
-  return data;
-};
 
 export const getVendors = async ({
   productCategories,
@@ -277,8 +239,8 @@ export const getVendors = async ({
   searchQuery?: string;
   prev?: string;
   paginated?: boolean;
-}) => {
-  const data = await sanityFetch<VENDORS_QUERYResult>({
+}) =>
+  await sanityFetch<VENDORS_QUERYResult>({
     query: paginated ? VENDORS_QUERY : UNPAGINATED_VENDORS_QUERY,
     params: {
       productCategories: (
@@ -317,28 +279,19 @@ export const getVendors = async ({
         : ['organization'],
   });
 
-  return data;
-};
-
-export const getOpenSourceProjectSlugs = async () => {
-  const data = await sanityFetch<OPEN_SOURCE_PROJECT_SLUGS_QUERYResult>({
+export const getOpenSourceProjectSlugs = async () =>
+  await sanityFetch<OPEN_SOURCE_PROJECT_SLUGS_QUERYResult>({
     query: OPEN_SOURCE_PROJECT_SLUGS_QUERY,
     tags: ['openSourceProject'],
     allowDraftMode: false,
   });
 
-  return data;
-};
-
-export const getOpenSourceProject = async (slug: string) => {
-  const data = await sanityFetch<OPEN_SOURCE_PROJECT_QUERYResult>({
+export const getOpenSourceProject = async (slug: string) =>
+  await sanityFetch<OPEN_SOURCE_PROJECT_QUERYResult>({
     query: OPEN_SOURCE_PROJECT_QUERY,
     params: { slug },
     tags: [`openSourceProject:${slug}`],
   });
-
-  return data;
-};
 
 export const getOpenSourceProjects = async ({
   productCategories,
@@ -352,8 +305,8 @@ export const getOpenSourceProjects = async ({
   searchQuery?: string;
   prev?: string;
   paginated?: boolean;
-}) => {
-  const data = await sanityFetch<OPEN_SOURCE_PROJECTS_QUERYResult>({
+}) =>
+  await sanityFetch<OPEN_SOURCE_PROJECTS_QUERYResult>({
     query: paginated
       ? OPEN_SOURCE_PROJECTS_QUERY
       : UNPAGINATED_OPEN_SOURCE_PROJECTS_QUERY,
@@ -388,9 +341,6 @@ export const getOpenSourceProjects = async ({
         : ['openSourceProject'],
   });
 
-  return data;
-};
-
 export const getAcquisitions = async ({
   paginated = true,
   prevDate,
@@ -399,8 +349,8 @@ export const getAcquisitions = async ({
   paginated?: boolean;
   prevDate?: string;
   prevId?: string;
-}) => {
-  const data = await sanityFetch<ACQUISITIONS_QUERYResult>({
+}) =>
+  await sanityFetch<ACQUISITIONS_QUERYResult>({
     query: paginated ? ACQUISITIONS_QUERY : UNPAGINATED_ACQUISITIONS_QUERY,
     params: {
       prevDate: prevDate ?? '',
@@ -409,24 +359,15 @@ export const getAcquisitions = async ({
     tags: [`organizationType:${ORGANIZATION_TYPE.ACQUIRED}`],
   });
 
-  return data;
-};
-
-export const getResearches = async () => {
-  const data = await sanityFetch<RESEARCHES_QUERYResult>({
+export const getResearches = async () =>
+  await sanityFetch<RESEARCHES_QUERYResult>({
     query: RESEARCHES_QUERY,
     tags: ['research'],
   });
 
-  return data;
-};
-
-export const getResearch = async (slug: string) => {
-  const data = await sanityFetch<RESEARCH_QUERYResult>({
+export const getResearch = async (slug: string) =>
+  await sanityFetch<RESEARCH_QUERYResult>({
     query: RESEARCH_QUERY,
     params: { slug },
     tags: [`research:${slug}`],
   });
-
-  return data;
-};

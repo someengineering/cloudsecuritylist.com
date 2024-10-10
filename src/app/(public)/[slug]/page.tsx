@@ -1,12 +1,12 @@
 import { metadata as notFoundMetadata } from '@/app/not-found';
 import JsonLd from '@/components/page/JsonLd';
 import MainText from '@/components/page/MainText';
-import { getPage, getPageSlugs } from '@/lib/sanity';
+import { getPage, getPageSlugs, getRedirect } from '@/lib/sanity';
 import { getWebPage } from '@/utils/jsonLd';
 import { isValidSlug } from '@/utils/slug';
 import { PortableTextBlock } from '@portabletext/types';
 import { Metadata, ResolvingMetadata } from 'next';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 
 export async function generateStaticParams() {
   const slugs = await getPageSlugs();
@@ -52,6 +52,12 @@ export default async function Page({ params }: { params: { slug: string } }) {
   } = (isValidSlug(params.slug) && (await getPage(params.slug))) || {};
 
   if (!title || !textContent) {
+    const redirectSlug = await getRedirect('page', params.slug);
+
+    if (redirectSlug) {
+      redirect(`/${redirectSlug}`);
+    }
+
     notFound();
   }
 

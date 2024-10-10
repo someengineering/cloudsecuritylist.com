@@ -359,6 +359,28 @@
     }
   },
   {
+    "name": "alternateSlugs",
+    "type": "type",
+    "value": {
+      "type": "array",
+      "of": {
+        "type": "object",
+        "attributes": {
+          "_key": {
+            "type": "objectAttribute",
+            "value": {
+              "type": "string"
+            }
+          }
+        },
+        "rest": {
+          "type": "inline",
+          "name": "slug"
+        }
+      }
+    }
+  },
+  {
     "name": "siteSettings",
     "type": "document",
     "attributes": {
@@ -1221,6 +1243,14 @@
         },
         "optional": false
       },
+      "alternateSlugs": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "inline",
+          "name": "alternateSlugs"
+        },
+        "optional": true
+      },
       "description": {
         "type": "objectAttribute",
         "value": {
@@ -1510,6 +1540,14 @@
           "name": "slug"
         },
         "optional": false
+      },
+      "alternateSlugs": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "inline",
+          "name": "alternateSlugs"
+        },
+        "optional": true
       },
       "organization": {
         "type": "objectAttribute",
@@ -1818,6 +1856,14 @@
           "name": "slug"
         },
         "optional": false
+      },
+      "alternateSlugs": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "inline",
+          "name": "alternateSlugs"
+        },
+        "optional": true
       },
       "description": {
         "type": "objectAttribute",
@@ -2309,6 +2355,14 @@
           "name": "slug"
         },
         "optional": false
+      },
+      "alternateSlugs": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "inline",
+          "name": "alternateSlugs"
+        },
+        "optional": true
       },
       "description": {
         "type": "objectAttribute",

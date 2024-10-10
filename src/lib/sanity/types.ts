@@ -76,6 +76,12 @@ export type OrganizationType =
   | 'government'
   | 'academic';
 
+export type AlternateSlugs = Array<
+  {
+    _key: string;
+  } & Slug
+>;
+
 export type SiteSettings = {
   _id: string;
   _type: 'siteSettings';
@@ -206,6 +212,7 @@ export type Page = {
   title: string;
   longTitle?: string;
   slug: Slug;
+  alternateSlugs?: AlternateSlugs;
   description: string;
   listType?:
     | 'cloudProvider'
@@ -245,6 +252,7 @@ export type OpenSourceProject = {
   _rev: string;
   name: string;
   slug: Slug;
+  alternateSlugs?: AlternateSlugs;
   organization?: {
     _ref: string;
     _type: 'reference';
@@ -299,6 +307,7 @@ export type Organization = {
   _rev: string;
   name: string;
   slug: Slug;
+  alternateSlugs?: AlternateSlugs;
   description: string;
   organizationType: OrganizationType;
   stockSymbol?: string;
@@ -384,6 +393,7 @@ export type CloudProvider = {
   name: string;
   abbreviation?: string;
   slug: Slug;
+  alternateSlugs?: AlternateSlugs;
   description: string;
   website: string;
   linkedin?: string;
@@ -497,6 +507,7 @@ export type AllSanitySchemaTypes =
   | SanityFileAsset
   | Geopoint
   | OrganizationType
+  | AlternateSlugs
   | SiteSettings
   | Research
   | ProductCategory
@@ -2034,6 +2045,11 @@ export type PRODUCT_CATEGORY_QUERYResult = {
   }> | null;
 } | null;
 
+// Source: ./src/lib/sanity/queries/redirect.ts
+// Variable: REDIRECT_QUERY
+// Query: *[_type == $type && $slug in alternateSlugs[].current][0].slug.current
+export type REDIRECT_QUERYResult = string | null;
+
 // Source: ./src/lib/sanity/queries/research.ts
 // Variable: RESEARCHES_QUERY
 // Query: *[_type == "research"] | order(lower(name) asc) {      _id,  "slug": slug.current,  name,  description,  website,    organization -> {   _id,  "slug": slug.current,  name,  description,  organizationType,  website,  linkedin,  crunchbase,  stockSymbol,  mark,  logo }  }
@@ -2232,6 +2248,7 @@ declare module '@sanity/client' {
     '\n  *[_type == "productCategory" && defined(slug.current)].slug.current\n': PRODUCT_CATEGORY_SLUGS_QUERYResult;
     '\n  *[\n    _type == "productCategory" &&\n    ($marketSegment == "" || $marketSegment == marketSegment._ref) &&\n    (length($referenceType) == 0 || count(*[_type == $referenceType && references(^._id)]) > 0)\n  ] | order(lower(name) asc) {\n    \n  _id,\n  "slug": slug.current,\n  name,\n  expansion,\n  description,\n  marketSegment -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name\n }\n\n  }\n': PRODUCT_CATEGORIES_QUERYResult;
     '\n  *[_type == "productCategory" && slug.current == $slug][0] {\n    _createdAt,\n    "_updatedAt": \n  [\n    _updatedAt,\n    *[_type == "marketSegment" && _id == ^.marketSegment._ref] | order(_updatedAt desc) [0]._updatedAt,\n    *[_type == "organization" && organizationType != "acquired" && ^._id in productCategories[]._ref] | order(_updatedAt desc) [0]._updatedAt,\n    *[_type == "openSourceProject" && ^._id in productCategories[]._ref] | order(_updatedAt desc) [0]._updatedAt,\n    *[_type == "productCategory" && _id in ^.similarCategories[]._ref] | order(_updatedAt desc) [0]._updatedAt\n  ] [defined(@)] | order(@ desc) [0]\n,\n    \n  _id,\n  "slug": slug.current,\n  name,\n  expansion,\n  description,\n  marketSegment -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name\n }\n,\n    explanationHeading,\n    explanation[],\n    "vendors": *[_type == "organization" && organizationType != "acquired" && ^._id in productCategories[]._ref] | order(lower(name) asc) {\n      \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo\n\n    },\n    "openSourceProjects": *[_type == "openSourceProject" && ^._id in productCategories[]._ref] | order(lower(name) asc) {\n      \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  repository,\n  mark,\n  logo\n\n    },\n    similarCategories[] -> { \n  _id,\n  "slug": slug.current,\n  name,\n  expansion,\n  description,\n  marketSegment -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  "icon": icon.name\n }\n }\n  }\n': PRODUCT_CATEGORY_QUERYResult;
+    '\n  *[_type == $type && $slug in alternateSlugs[].current][0].slug.current\n': REDIRECT_QUERYResult;
     '\n  *[_type == "research"] | order(lower(name) asc) {\n    \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  website\n,\n    organization -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo\n }\n  }\n': RESEARCHES_QUERYResult;
     '\n  *[_type == "research" && slug.current == $slug][0] {\n    \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  website\n,\n    organization -> { \n  _id,\n  "slug": slug.current,\n  name,\n  description,\n  organizationType,\n  website,\n  linkedin,\n  crunchbase,\n  stockSymbol,\n  mark,\n  logo\n }\n  }\n': RESEARCH_QUERYResult;
     '\n  *[_type == "siteSettings" && _id == "siteSettings"][0].url\n': SITE_URL_QUERYResult;

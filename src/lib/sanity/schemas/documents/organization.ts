@@ -53,6 +53,11 @@ export default defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: 'alternateSlugs',
+      title: 'Alternate slugs',
+      type: 'alternateSlugs',
+    }),
+    defineField({
       name: 'description',
       title: 'Description',
       description: 'Description length must be between 50 and 160 characters.',

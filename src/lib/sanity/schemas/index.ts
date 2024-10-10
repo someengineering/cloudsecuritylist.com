@@ -7,6 +7,7 @@ import page from '@/lib/sanity/schemas/documents/page';
 import productCategory from '@/lib/sanity/schemas/documents/productCategory';
 import research from '@/lib/sanity/schemas/documents/research';
 import siteSettings from '@/lib/sanity/schemas/documents/siteSettings';
+import alternateSlugs from '@/lib/sanity/schemas/objects/alternateSlugs';
 import organizationType, {
   ORGANIZATION_TYPE,
 } from '@/lib/sanity/schemas/objects/organizationType';
@@ -27,6 +28,7 @@ export const schema: { types: SchemaTypeDefinition[]; templates: Template[] } =
       siteSettings,
 
       // Objects
+      alternateSlugs,
       organizationType,
     ],
     templates: [

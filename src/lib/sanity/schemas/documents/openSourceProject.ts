@@ -39,6 +39,11 @@ export default defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: 'alternateSlugs',
+      title: 'Alternate slugs',
+      type: 'alternateSlugs',
+    }),
+    defineField({
       name: 'organization',
       title: 'Organization',
       type: 'reference',

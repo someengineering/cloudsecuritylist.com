@@ -1,11 +1,15 @@
 import { metadata as notFoundMetadata } from '@/app/not-found';
 import CloudProvider from '@/components/content/CloudProvider';
 import JsonLd from '@/components/page/JsonLd';
-import { getCloudProvider, getCloudProviderSlugs } from '@/lib/sanity';
+import {
+  getCloudProvider,
+  getCloudProviderSlugs,
+  getRedirect,
+} from '@/lib/sanity';
 import { getCloudProviderProfilePage } from '@/utils/jsonLd';
 import { isValidSlug } from '@/utils/slug';
 import { Metadata, ResolvingMetadata } from 'next';
-import { notFound } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 
 export async function generateStaticParams() {
   const slugs = await getCloudProviderSlugs();
@@ -57,6 +61,12 @@ export default async function ProviderPage({
     : null;
 
   if (!cloudProvider) {
+    const redirectSlug = await getRedirect('cloudProvider', params.slug);
+
+    if (redirectSlug) {
+      permanentRedirect(`/provider/${redirectSlug}`);
+    }
+
     notFound();
   }
 
