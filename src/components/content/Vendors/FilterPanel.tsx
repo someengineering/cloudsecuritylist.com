@@ -1,7 +1,10 @@
 'use client';
 
 import { useFilters } from '@/components/content/Vendors/Context';
-import { ORGANIZATION_TYPES } from '@/lib/sanity/schemas/objects/organizationType';
+import {
+  ORGANIZATION_TYPE,
+  ORGANIZATION_TYPES,
+} from '@/lib/sanity/schemas/objects/organizationType';
 import {
   CLOUD_PROVIDERS_QUERYResult,
   PRODUCT_CATEGORIES_QUERYResult,
@@ -37,7 +40,7 @@ export default function FilterPanel({
   cloudProviders,
 }: {
   productCategories: PRODUCT_CATEGORIES_QUERYResult;
-  organizationTypes: string[];
+  organizationTypes: ORGANIZATION_TYPE[];
   cloudProviders: CLOUD_PROVIDERS_QUERYResult;
 }) {
   const [filtersMobileMenuOpen, setFiltersMobileMenuOpen] = useState(false);
@@ -84,14 +87,6 @@ export default function FilterPanel({
         {} as { [key: string]: IconType | ComponentType<IconBaseProps> },
       ),
     [marketSegments],
-  );
-
-  const filteredOrganizationTypes = useMemo(
-    () =>
-      ORGANIZATION_TYPES.filter((type) =>
-        organizationTypes.includes(type.value),
-      ),
-    [organizationTypes],
   );
 
   useEffect(() => {
@@ -177,29 +172,27 @@ export default function FilterPanel({
                 </PopoverButton>
                 <PopoverPanel className="absolute right-2 z-10 mt-2 origin-top-right rounded-md bg-white p-4 shadow-2xl ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:opacity-0">
                   <form className="space-y-4">
-                    {filteredOrganizationTypes.map((type) => (
-                      <div className="flex items-center" key={type.value}>
+                    {organizationTypes.map((type) => (
+                      <div className="flex items-center" key={type}>
                         <input
                           defaultValue="public"
-                          checked={filters.organizationTypes.includes(
-                            type.value,
-                          )}
-                          id={`filter-type-${type.value}`}
+                          checked={filters.organizationTypes.includes(type)}
+                          id={`filter-type-${type}`}
                           name="organizationTypes[]"
                           type="checkbox"
                           className="h-4 w-4 rounded border-gray-300 text-cyan-600 focus:ring-cyan-500"
                           onChange={() =>
                             setFilters({
                               type: 'organizationType',
-                              value: type.value,
+                              value: type,
                             })
                           }
                         />
                         <label
-                          htmlFor={`filter-type-${type.value}`}
+                          htmlFor={`filter-type-${type}`}
                           className="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-gray-900"
                         >
-                          {type.title}
+                          {ORGANIZATION_TYPES[type].title}
                         </label>
                       </div>
                     ))}
@@ -529,32 +522,30 @@ export default function FilterPanel({
                 </h3>
                 <DisclosurePanel className="pt-6">
                   <div className="space-y-6">
-                    {filteredOrganizationTypes.map((type) => (
+                    {organizationTypes.map((type) => (
                       <div
-                        key={`mobile-${type.value}`}
+                        key={`mobile-${type}`}
                         className="flex items-center gap-x-1.5"
                       >
                         <input
-                          defaultValue={type.value}
-                          checked={filters.organizationTypes.includes(
-                            type.value,
-                          )}
-                          id={`type-${type.value}`}
+                          defaultValue={type}
+                          checked={filters.organizationTypes.includes(type)}
+                          id={`type-${type}`}
                           name="organizationTypes[]"
                           type="checkbox"
                           className="mx-0.5 h-4 w-4 rounded border-gray-300 text-cyan-600 focus:ring-cyan-500"
                           onChange={() =>
                             setFilters({
                               type: 'organizationType',
-                              value: type.value,
+                              value: type,
                             })
                           }
                         />
                         <label
-                          htmlFor={`type-${type.value}`}
+                          htmlFor={`type-${type}`}
                           className="text-sm text-gray-500"
                         >
-                          {type.title}
+                          {ORGANIZATION_TYPES[type].title}
                         </label>
                       </div>
                     ))}

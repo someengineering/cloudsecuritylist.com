@@ -85,9 +85,7 @@ export default function List({
         });
 
         const organizationType = project.organization
-          ? ORGANIZATION_TYPES.find(
-              (type) => type.value === project.organization?.organizationType,
-            )
+          ? ORGANIZATION_TYPES[project.organization.organizationType]
           : undefined;
         const organizationLabel = project.organization
           ? project.organization.name !== project.name

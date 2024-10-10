@@ -6,6 +6,7 @@ import {
   HiPuzzlePiece,
   HiShieldCheck,
 } from 'react-icons/hi2';
+import { IconType } from 'react-icons/lib';
 import { defineType } from 'sanity';
 
 export enum ORGANIZATION_TYPE {
@@ -17,47 +18,44 @@ export enum ORGANIZATION_TYPE {
   ACADEMIC = 'academic',
 }
 
-export const ORGANIZATION_TYPES = [
-  {
+export const ORGANIZATION_TYPES: Record<
+  ORGANIZATION_TYPE,
+  { title: string; icon: IconType }
+> = {
+  [ORGANIZATION_TYPE.PUBLIC]: {
     title: 'Public company',
-    value: ORGANIZATION_TYPE.PUBLIC,
     icon: HiBuildingOffice2,
   },
-  {
+  [ORGANIZATION_TYPE.PRIVATE]: {
     title: 'Private company',
-    value: ORGANIZATION_TYPE.PRIVATE,
     icon: HiBuildingOffice,
   },
-  {
+  [ORGANIZATION_TYPE.ACQUIRED]: {
     title: 'Acquired entity',
-    value: ORGANIZATION_TYPE.ACQUIRED,
     icon: HiPuzzlePiece,
   },
-  {
+  [ORGANIZATION_TYPE.NONPROFIT]: {
     title: 'Nonprofit',
-    value: ORGANIZATION_TYPE.NONPROFIT,
     icon: HiGiftTop,
   },
-  {
+  [ORGANIZATION_TYPE.GOVERNMENT]: {
     title: 'Government entity',
-    value: ORGANIZATION_TYPE.GOVERNMENT,
     icon: HiShieldCheck,
   },
-  {
+  [ORGANIZATION_TYPE.ACADEMIC]: {
     title: 'Academic institution',
-    value: ORGANIZATION_TYPE.ACADEMIC,
     icon: HiAcademicCap,
   },
-];
+};
 
 export default defineType({
   name: 'organizationType',
   title: 'Organization type',
   type: 'string',
   options: {
-    list: ORGANIZATION_TYPES.map((type) => ({
+    list: Object.entries(ORGANIZATION_TYPES).map(([value, type]) => ({
       title: type.title,
-      value: type.value,
+      value,
     })),
   },
   validation: (rule) => rule.required(),

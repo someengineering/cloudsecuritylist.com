@@ -70,9 +70,7 @@ export default function List({
       className="container mx-auto mt-10 grid max-w-7xl auto-rows-fr grid-cols-1 gap-4 px-6 md:grid-cols-2 lg:grid-cols-3 lg:px-8"
     >
       {vendors.map((vendor) => {
-        const organizationType = ORGANIZATION_TYPES.find(
-          (type) => type.value === vendor.organizationType,
-        );
+        const organizationType = ORGANIZATION_TYPES[vendor.organizationType];
 
         return (
           <li
@@ -104,15 +102,13 @@ export default function List({
                       <span aria-hidden="true" className="absolute inset-0" />
                       {vendor.name}
                     </Link>
-                    {organizationType ? (
-                      <span className="mt-0.5 inline-flex items-center gap-x-1 rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
-                        <organizationType.icon
-                          className="h-4 w-4"
-                          title={organizationType.title}
-                        />
-                        {organizationType.title}
-                      </span>
-                    ) : null}
+                    <span className="mt-0.5 inline-flex items-center gap-x-1 rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
+                      <organizationType.icon
+                        className="h-4 w-4"
+                        title={organizationType.title}
+                      />
+                      {organizationType.title}
+                    </span>
                   </div>
                   <ul
                     role="list"

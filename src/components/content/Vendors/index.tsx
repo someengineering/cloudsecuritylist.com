@@ -4,8 +4,8 @@ import List from '@/components/content/Vendors/List';
 import {
   getCloudProviders,
   getProductCategories,
+  getVendorOrganizationTypes,
   getVendors,
-  getVendorTypes,
 } from '@/lib/sanity';
 
 export default async function Vendors({
@@ -16,7 +16,7 @@ export default async function Vendors({
   const productCategoriesData = getProductCategories({
     referenceType: 'organization',
   });
-  const organizationTypesData = getVendorTypes();
+  const organizationTypesData = getVendorOrganizationTypes();
   const cloudProvidersData = getCloudProviders();
   const vendorsData = getVendors(filters ?? {});
 

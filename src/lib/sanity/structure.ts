@@ -56,9 +56,9 @@ export const structure: StructureResolver = (S) =>
             .id('organizationType')
             .title('Organization types')
             .items(
-              ORGANIZATION_TYPES.map((type) =>
+              Object.entries(ORGANIZATION_TYPES).map(([value, type]) =>
                 S.listItem()
-                  .id(type.value)
+                  .id(value)
                   .title(type.title)
                   .icon(type.icon)
                   .child((organizationType) =>

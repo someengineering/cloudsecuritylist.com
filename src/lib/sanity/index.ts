@@ -43,10 +43,7 @@ import {
   SITE_SETTINGS_QUERY,
   SITE_URL_QUERY,
 } from '@/lib/sanity/queries/siteSettings';
-import {
-  ORGANIZATION_TYPE,
-  ORGANIZATION_TYPES,
-} from '@/lib/sanity/schemas/objects/organizationType';
+import { ORGANIZATION_TYPE } from '@/lib/sanity/schemas/objects/organizationType';
 import {
   ACQUISITIONS_QUERYResult,
   CLOUD_PROVIDER_QUERYResult,
@@ -210,9 +207,9 @@ export const getOrganization = async (slug: string) =>
     tags: [`organization:${slug}`],
   });
 
-export const getVendorTypes = async () =>
+export const getVendorOrganizationTypes = async () =>
   await Promise.all(
-    ORGANIZATION_TYPES.map((type) => type.value).filter(
+    Object.values(ORGANIZATION_TYPE).filter(
       async (type) =>
         type !== ORGANIZATION_TYPE.ACQUIRED &&
         (await sanityFetch<boolean>({

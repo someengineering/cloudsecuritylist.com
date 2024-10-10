@@ -59,21 +59,18 @@ export default async function OpenSourceProject({
   }[] = [{ label: 'Repository', href: project.repository, icon: SiGithub }];
 
   if (project.organization) {
-    const organizationType = ORGANIZATION_TYPES.find(
-      (type) => type.value === project.organization?.organizationType,
-    );
+    const organizationType =
+      ORGANIZATION_TYPES[project.organization.organizationType];
 
-    if (organizationType) {
-      links.push({
-        label: `Parent ${
-          organizationType.title.toLowerCase().includes('company')
-            ? 'company'
-            : 'organization'
-        } (${project.organization.name}))`,
-        href: `/organization/${project.organization.slug}`,
-        icon: organizationType.icon,
-      });
-    }
+    links.push({
+      label: `Parent ${
+        organizationType.title.toLowerCase().includes('company')
+          ? 'company'
+          : 'organization'
+      } (${project.organization.name}))`,
+      href: `/organization/${project.organization.slug}`,
+      icon: organizationType.icon,
+    });
   }
 
   return (
