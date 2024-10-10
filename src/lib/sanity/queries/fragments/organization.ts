@@ -46,7 +46,8 @@ export const NON_ACQUIRED_ENTITY = groq`
     )
   }),
   "openSourceProjects": *[_type == "openSourceProject" && organization._ref == ^._id && name != ^.name] {
-    ${OPEN_SOURCE_PROJECT_BASE}
+    ${OPEN_SOURCE_PROJECT_BASE},
+    organization -> { ${ORGANIZATION_BASE} }
   },
   "research": *[_type == "research" && organization._ref == ^._id] {
     ${RESEARCH}

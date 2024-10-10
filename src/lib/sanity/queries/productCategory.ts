@@ -31,7 +31,8 @@ export const PRODUCT_CATEGORY_QUERY = groq`
       ${ORGANIZATION_BASE}
     },
     "openSourceProjects": *[_type == "openSourceProject" && ^._id in productCategories[]._ref] | order(lower(name) asc) {
-      ${OPEN_SOURCE_PROJECT_BASE}
+      ${OPEN_SOURCE_PROJECT_BASE},
+      organization -> { ${ORGANIZATION_BASE} }
     },
     similarCategories[] -> { ${PRODUCT_CATEGORY} }
   }

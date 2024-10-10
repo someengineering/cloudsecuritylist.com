@@ -86,7 +86,7 @@ export default function List({
                     height={56}
                     alt=""
                     aria-hidden="true"
-                    className="h-12 w-12 object-cover xs:h-14 xs:w-14"
+                    className="h-12 w-12 xs:h-14 xs:w-14"
                   />
                 </div>
               ) : (

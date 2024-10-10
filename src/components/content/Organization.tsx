@@ -1,10 +1,12 @@
 import DescriptionList from '@/components/page/DescriptionList';
 import PageHeader from '@/components/page/Header';
 import IconDescriptionList from '@/components/page/IconDescriptionList';
+import ImageDescriptionList from '@/components/page/ImageDescriptionList';
 import LogoGrid from '@/components/page/LogoGrid';
 import OffsetSection from '@/components/page/OffsetSection';
 import { urlFor } from '@/lib/sanity/image';
 import { ORGANIZATION_QUERYResult } from '@/lib/sanity/types';
+import { projectImage } from '@/utils/openSourceProject';
 import { toSentenceCase } from '@/utils/string';
 import { getImageDimensions } from '@sanity/asset-utils';
 import { uniqBy } from 'lodash';
@@ -163,13 +165,18 @@ export default async function Organization({
       ) : null}
       {'openSourceProjects' in organization &&
       organization.openSourceProjects.length ? (
-        <OffsetSection heading="Open-source projects">
-          <DescriptionList
+        <OffsetSection heading="Open-source projects" slug="open-source">
+          <ImageDescriptionList
             items={organization.openSourceProjects.map((project) => ({
               title: project.name,
               slug: project.slug,
               href: `/open-source/${project.slug}`,
               description: project.description,
+              imageSrc: projectImage({
+                mark: project.mark,
+                repositoryUrl: project.repository,
+                organizationMark: project.organization?.mark,
+              }),
             }))}
           />
         </OffsetSection>

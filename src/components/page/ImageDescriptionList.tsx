@@ -1,10 +1,10 @@
 import { isExternalLink } from '@/utils/link';
 import { slugify } from '@/utils/slug';
+import clsx from 'clsx';
+import Image from 'next/image';
 import Link from 'next/link';
-import { ComponentType } from 'react';
-import { IconBaseProps, IconType } from 'react-icons/lib';
 
-export default async function IconDescriptionList({
+export default async function ImageDescriptionList({
   items,
 }: {
   items: {
@@ -13,7 +13,7 @@ export default async function IconDescriptionList({
     slug?: string;
     href?: string;
     description: string;
-    icon: IconType | ComponentType<IconBaseProps>;
+    imageSrc?: string;
   }[];
 }) {
   if (!items.length) {
@@ -29,9 +29,23 @@ export default async function IconDescriptionList({
           return (
             <div key={slug} id={slug} className="group relative">
               <dt className="text-gray-900">
-                <div className="mb-6 flex h-10 w-10 items-center justify-center rounded-lg bg-cyan-600">
-                  <item.icon className="h-6 w-6 text-white" />
-                </div>
+                {item.imageSrc ? (
+                  <Image
+                    src={item.imageSrc}
+                    width={64}
+                    height={64}
+                    alt=""
+                    aria-hidden="true"
+                    className={clsx(
+                      'mb-6 h-10 w-10',
+                      new URL(item.imageSrc).hostname.endsWith(
+                        'avatars.githubusercontent.com',
+                      ) && 'rounded',
+                    )}
+                  />
+                ) : (
+                  <div className="h-10 w-10 flex-shrink-0 rounded bg-slate-100" />
+                )}
                 {item.href ? (
                   <Link
                     href={item.href}

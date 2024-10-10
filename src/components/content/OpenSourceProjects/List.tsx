@@ -116,7 +116,7 @@ export default function List({
                     alt=""
                     aria-hidden="true"
                     className={clsx(
-                      'h-12 w-12 object-cover xs:h-14 xs:w-14',
+                      'h-12 w-12 xs:h-14 xs:w-14',
                       new URL(markUrl).hostname.endsWith(
                         'avatars.githubusercontent.com',
                       ) && 'rounded',

@@ -11,7 +11,6 @@ export default async function DescriptionList({
     slug?: string;
     href?: string;
     description: string;
-    imageSrc?: string;
   }[];
 }) {
   if (!items.length) {

@@ -27,7 +27,7 @@ export default async function CloudProviders() {
                     height={64}
                     alt=""
                     aria-hidden="true"
-                    className="h-16 w-16 object-cover"
+                    className="h-16 w-16"
                   />
                 </div>
               ) : (

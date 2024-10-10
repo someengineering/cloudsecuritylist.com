@@ -1,10 +1,12 @@
 import CTA from '@/components/page/CTA';
 import DescriptionList from '@/components/page/DescriptionList';
 import PageHeader from '@/components/page/Header';
+import ImageDescriptionList from '@/components/page/ImageDescriptionList';
 import LogoGrid from '@/components/page/LogoGrid';
 import OffsetSection from '@/components/page/OffsetSection';
 import { urlFor } from '@/lib/sanity/image';
 import { CLOUD_PROVIDER_QUERYResult } from '@/lib/sanity/types';
+import { projectImage } from '@/utils/openSourceProject';
 import { getImageDimensions } from '@sanity/asset-utils';
 import { HiOutlineGlobeAlt } from 'react-icons/hi2';
 import { SiLinkedin } from 'react-icons/si';
@@ -98,12 +100,17 @@ export default async function CloudProvider({
       ) : null}
       {provider.openSourceProjects.length ? (
         <OffsetSection heading="Open-source projects" slug="open-source">
-          <DescriptionList
+          <ImageDescriptionList
             items={provider.openSourceProjects.map((project) => ({
               title: project.name,
               slug: project.slug,
               href: `/open-source/${project.slug}`,
               description: project.description,
+              imageSrc: projectImage({
+                mark: project.mark,
+                repositoryUrl: project.repository,
+                organizationMark: project.organization?.mark,
+              }),
             }))}
           />
         </OffsetSection>

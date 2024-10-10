@@ -29,7 +29,8 @@ export const CLOUD_PROVIDER_QUERY = groq`
       ${ORGANIZATION_BASE}
     },
     "openSourceProjects": *[_type == "openSourceProject" && ^._id in supportedCloudProviders[]._ref] | order(lower(name) asc) {
-      ${OPEN_SOURCE_PROJECT_BASE}
+      ${OPEN_SOURCE_PROJECT_BASE},
+      organization -> { ${ORGANIZATION_BASE} }
     }
   }
 `;
