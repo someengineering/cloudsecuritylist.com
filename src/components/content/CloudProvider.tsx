@@ -49,18 +49,16 @@ export default async function CloudProvider({
         links={links}
         image={urlFor(provider.mark).url()}
       />
-      <CTA
-        heading="Understand security responsibilities"
-        description={`See how security tasks are shared between you and ${provider.name} to ensure your cloud environment is protected.`}
-        secondaryButton={
-          provider.sharedResponsibilityModel
-            ? {
-                label: 'View shared responsibility model',
-                href: provider.sharedResponsibilityModel,
-              }
-            : undefined
-        }
-      />
+      {provider.sharedResponsibilityModel ? (
+        <CTA
+          heading="Understand security responsibilities"
+          description={`See how security tasks are shared between you and ${provider.name} to ensure your cloud environment is protected.`}
+          secondaryButton={{
+            label: 'View shared responsibility model',
+            href: provider.sharedResponsibilityModel,
+          }}
+        />
+      ) : undefined}
       {provider.nativeProducts?.length ? (
         <OffsetSection heading="Native security products">
           <DescriptionList
