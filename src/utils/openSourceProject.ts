@@ -26,7 +26,7 @@ export const projectImage = ({
   try {
     if (
       repositoryUrl &&
-      new URL(repositoryUrl).hostname.includes('github.com')
+      new URL(repositoryUrl).hostname.endsWith('github.com')
     ) {
       const githubOwner = parseGithubUrl(repositoryUrl)?.owner;
 

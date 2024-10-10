@@ -15,7 +15,7 @@ export default function Summary({
         <div
           tw={clsx(
             '-mt-5 mr-6 flex h-28 w-28 overflow-hidden rounded-full',
-            !new URL(logo).hostname.includes('avatars.githubusercontent.com') &&
+            !new URL(logo).hostname.endsWith('avatars.githubusercontent.com') &&
               'bg-white p-4',
           )}
         >

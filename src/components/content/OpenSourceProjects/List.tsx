@@ -117,7 +117,7 @@ export default function List({
                     aria-hidden="true"
                     className={clsx(
                       'h-12 w-12 object-cover xs:h-14 xs:w-14',
-                      new URL(markUrl).hostname.includes(
+                      new URL(markUrl).hostname.endsWith(
                         'avatars.githubusercontent.com',
                       ) && 'rounded',
                     )}
@@ -148,12 +148,12 @@ export default function List({
                         rel="noopener noreferrer"
                         className="text-gray-400 hover:text-gray-500 focus:outline-none"
                       >
-                        {repoHost?.includes('github.com') ? (
+                        {repoHost?.endsWith('github.com') ? (
                           <>
                             <span className="sr-only">GitHub</span>
                             <SiGithub className="h-5 w-5" title="GitHub" />
                           </>
-                        ) : repoHost?.includes('gitlab.com') ? (
+                        ) : repoHost?.endsWith('gitlab.com') ? (
                           <>
                             <span className="sr-only">GitLab</span>
                             <SiGitlab className="h-5 w-5" title="GitLab" />
