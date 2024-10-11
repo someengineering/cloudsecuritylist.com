@@ -169,7 +169,10 @@ export default defineType({
           styles: [],
           lists: [],
           marks: {
-            decorators: [{ title: 'Underline', value: 'underline' }],
+            decorators: [
+              { title: 'Strong', value: 'strong' },
+              { title: 'Underline', value: 'underline' },
+            ],
             annotations: [],
           },
           validation: (rule) =>
