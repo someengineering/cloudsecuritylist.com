@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { HiChevronRight, HiOutlineSparkles } from 'react-icons/hi2';
 import { IconType } from 'react-icons/lib';
 
-export default async function FeaturedPages({
+export default function FeaturedPages({
   pages,
   homeLink,
 }: {

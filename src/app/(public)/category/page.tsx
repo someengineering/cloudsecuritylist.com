@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
 
-export default async function CategoriesPage() {
+export default function CategoriesPage() {
   redirect('/categories');
 }

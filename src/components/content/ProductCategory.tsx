@@ -16,7 +16,7 @@ import { ComponentType, useMemo } from 'react';
 import { HiOutlineSparkles } from 'react-icons/hi2';
 import { IconBaseProps, IconType } from 'react-icons/lib';
 
-export default async function ProductCategory({
+export default function ProductCategory({
   productCategory,
 }: {
   productCategory: PRODUCT_CATEGORY_QUERYResult;

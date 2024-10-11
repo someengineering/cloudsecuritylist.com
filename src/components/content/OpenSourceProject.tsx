@@ -15,7 +15,7 @@ import { HiOutlineSparkles } from 'react-icons/hi2';
 import { IconBaseProps, IconType } from 'react-icons/lib';
 import { SiGithub } from 'react-icons/si';
 
-export default async function OpenSourceProject({
+export default function OpenSourceProject({
   project,
 }: {
   project: OPEN_SOURCE_PROJECT_QUERYResult;

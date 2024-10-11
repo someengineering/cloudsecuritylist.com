@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import Image from 'next/image';
 import Link from 'next/link';
 
-export default async function LogoGrid({
+export default function LogoGrid({
   items,
 }: {
   items: {

@@ -1,6 +1,6 @@
 import { Thing, WithContext } from 'schema-dts';
 
-export default async function PageHeader({
+export default function PageHeader({
   schema,
 }: {
   schema?: WithContext<Thing> | WithContext<Thing>[];

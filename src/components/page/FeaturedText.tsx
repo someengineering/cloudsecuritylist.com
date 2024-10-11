@@ -1,34 +1,10 @@
 import { isExternalLink, transformUrl } from '@/utils/link';
 import { slugify } from '@/utils/slug';
-import { PortableText, PortableTextReactComponents } from '@portabletext/react';
+import { PortableText } from '@portabletext/react';
 import { PortableTextBlock } from '@portabletext/types';
 import Link from 'next/link';
 
-const components: Partial<PortableTextReactComponents> = {
-  block: {
-    normal: ({ children }) => <p className="mb-6">{children}</p>,
-  },
-
-  marks: {
-    link: async ({ children, value }) => {
-      const href = await transformUrl(value.href);
-
-      return (
-        <Link
-          href={href}
-          {...((await isExternalLink(href))
-            ? { target: '_blank', rel: 'noopener noreferrer' }
-            : null)}
-          className="font-semibold text-cyan-600 hover:text-cyan-700"
-        >
-          {children}
-        </Link>
-      );
-    },
-  },
-};
-
-export default async function FeaturedText({
+export default function FeaturedText({
   heading,
   blocks,
 }: {
@@ -50,7 +26,32 @@ export default async function FeaturedText({
           {heading}
         </h2>
         <div className="mt-10 columns-md gap-8 leading-7 text-gray-700">
-          <PortableText value={blocks} components={components} />
+          <PortableText
+            value={blocks}
+            components={{
+              block: {
+                normal: ({ children }) => <p className="mb-6">{children}</p>,
+              },
+
+              marks: {
+                link: async ({ children, value }) => {
+                  const href = await transformUrl(value.href);
+
+                  return (
+                    <Link
+                      href={href}
+                      {...((await isExternalLink(href))
+                        ? { target: '_blank', rel: 'noopener noreferrer' }
+                        : null)}
+                      className="font-semibold text-cyan-600 hover:text-cyan-700"
+                    >
+                      {children}
+                    </Link>
+                  );
+                },
+              },
+            }}
+          />
         </div>
       </div>
     </section>

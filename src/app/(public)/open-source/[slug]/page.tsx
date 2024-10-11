@@ -12,9 +12,7 @@ import { Metadata, ResolvingMetadata } from 'next';
 import { notFound, permanentRedirect, redirect } from 'next/navigation';
 
 export async function generateStaticParams() {
-  const slugs = await getOpenSourceProjectSlugs();
-
-  return slugs.map((slug) => ({ slug }));
+  return (await getOpenSourceProjectSlugs()).map((slug) => ({ slug }));
 }
 
 export async function generateMetadata(

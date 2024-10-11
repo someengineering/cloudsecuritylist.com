@@ -9,9 +9,7 @@ import { Metadata, ResolvingMetadata } from 'next';
 import { notFound, redirect } from 'next/navigation';
 
 export async function generateStaticParams() {
-  const slugs = await getPageSlugs();
-
-  return slugs.map((slug) => ({ slug }));
+  return (await getPageSlugs()).map((slug) => ({ slug }));
 }
 
 export async function generateMetadata(

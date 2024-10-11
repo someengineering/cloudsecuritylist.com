@@ -12,9 +12,7 @@ import { Metadata, ResolvingMetadata } from 'next';
 import { notFound, permanentRedirect } from 'next/navigation';
 
 export async function generateStaticParams() {
-  const slugs = await getCloudProviderSlugs();
-
-  return slugs.map((slug) => ({ slug }));
+  return (await getCloudProviderSlugs()).map((slug) => ({ slug }));
 }
 
 export async function generateMetadata(

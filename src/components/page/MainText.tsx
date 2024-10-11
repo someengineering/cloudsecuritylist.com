@@ -4,7 +4,7 @@ import { PortableText } from '@portabletext/react';
 import { PortableTextBlock } from '@portabletext/types';
 import Link from 'next/link';
 
-export default async function MainText({
+export default function MainText({
   title,
   blocks,
   lastUpdated,

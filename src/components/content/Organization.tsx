@@ -20,7 +20,7 @@ import {
 import { IconBaseProps, IconType } from 'react-icons/lib';
 import { SiCrunchbase, SiGithub, SiGitlab, SiLinkedin } from 'react-icons/si';
 
-export default async function Organization({
+export default function Organization({
   organization,
 }: {
   organization: ORGANIZATION_QUERYResult;

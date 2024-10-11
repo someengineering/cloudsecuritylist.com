@@ -1,6 +1,6 @@
 import { slugify } from '@/utils/slug';
 
-export default async function OffsetSection({
+export default function OffsetSection({
   heading,
   slug,
   children,

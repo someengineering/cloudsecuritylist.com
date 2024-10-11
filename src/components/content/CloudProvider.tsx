@@ -11,7 +11,7 @@ import { getImageDimensions } from '@sanity/asset-utils';
 import { HiOutlineGlobeAlt } from 'react-icons/hi2';
 import { SiLinkedin } from 'react-icons/si';
 
-export default async function CloudProvider({
+export default function CloudProvider({
   provider,
 }: {
   provider: CLOUD_PROVIDER_QUERYResult;
