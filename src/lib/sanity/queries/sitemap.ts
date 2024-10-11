@@ -38,5 +38,5 @@ export const SITEMAP_QUERY = groq`
 `;
 
 export const UPDATED_URLS_QUERY = groq`
-  ${SITEMAP_QUERY} [dateTime(now()) - dateTime(lastModified) < 86400] | order(lastModified asc).url
+  ${SITEMAP_QUERY} [dateTime(now()) - dateTime(lastModified) < 86400] [0...10000] | order(lastModified asc).url
 `;
