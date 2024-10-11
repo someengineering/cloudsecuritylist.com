@@ -6,7 +6,6 @@ export const config = {
     /*
      * Match all request paths except for the ones starting with:
      * - api (API routes)
-     * - proxy (proxy routes)
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
@@ -18,7 +17,7 @@ export const config = {
      */
     {
       source:
-        '/((?!api|proxy|_next/static|_next/image|favicon.ico|apple-touch-icon|icon-|icon.svg|site.webmanifest|ac57c66264d940ccae81e47b25ac74fc.txt).*)',
+        '/((?!api|_next/static|_next/image|favicon.ico|apple-touch-icon|icon-|icon.svg|site.webmanifest|ac57c66264d940ccae81e47b25ac74fc.txt).*)',
       missing: [
         { type: 'header', key: 'next-router-prefetch' },
         { type: 'header', key: 'purpose', value: 'prefetch' },

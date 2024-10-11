@@ -6,7 +6,7 @@ import Header from '@/components/layout/Header';
 import { getSiteSettings } from '@/lib/sanity';
 import clsx from 'clsx';
 import { Metadata } from 'next';
-import PlausibleProvider from 'next-plausible';
+import Script from 'next/script';
 
 export async function generateMetadata(): Promise<Metadata> {
   const { name, tagline, description, url } = (await getSiteSettings()) ?? {};
@@ -45,7 +45,11 @@ export default async function PublicLayout({
   return (
     <html lang="en" className={clsx('h-full scroll-smooth', notoSans.variable)}>
       <head>
-        <PlausibleProvider domain="cloudsecuritylist.com" trackOutboundLinks />
+        <Script
+          src="/js/script.js"
+          data-domain="cloudsecuritylist.com"
+          strategy="afterInteractive"
+        />
       </head>
       <body className="bg-white">
         <Header title={name} navigation={navigation} />
