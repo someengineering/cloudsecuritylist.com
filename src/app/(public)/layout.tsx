@@ -39,7 +39,8 @@ export default async function PublicLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { name, navigation, copyright } = (await getSiteSettings()) ?? {};
+  const { name, navigation, footerLinks, copyright } =
+    (await getSiteSettings()) ?? {};
 
   return (
     <html lang="en" className={clsx('h-full scroll-smooth', notoSans.variable)}>
@@ -49,7 +50,7 @@ export default async function PublicLayout({
       <body className="bg-white">
         <Header title={name} navigation={navigation} />
         <main>{children}</main>
-        <Footer copyright={copyright} navigation={navigation} />
+        <Footer copyright={copyright} links={footerLinks} />
       </body>
     </html>
   );

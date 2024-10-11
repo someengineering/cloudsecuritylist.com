@@ -18,6 +18,20 @@ export default defineType({
   icon: SearchIcon,
   fieldsets: [
     {
+      name: 'header',
+      title: 'Header',
+      options: {
+        collapsible: true,
+      },
+    },
+    {
+      name: 'footer',
+      title: 'Footer',
+      options: {
+        collapsible: true,
+      },
+    },
+    {
       name: 'homepage',
       title: 'Homepage',
       options: {
@@ -70,13 +84,6 @@ export default defineType({
           ),
     }),
     defineField({
-      name: 'copyright',
-      title: 'Copyright text',
-      type: 'text',
-      rows: 1,
-      validation: (rule) => rule.required().min(10),
-    }),
-    defineField({
       name: 'navigation',
       title: 'Navigation items',
       description: 'Links to display in the header navigation bar.',
@@ -117,7 +124,67 @@ export default defineType({
           ],
         },
       ],
-      validation: (rule) => rule.required().min(1),
+      fieldset: 'header',
+      validation: (rule) => rule.required().min(3).max(8).unique(),
+    }),
+    defineField({
+      name: 'footerLinks',
+      title: 'Footer links',
+      description: 'Links to display in the header navigation bar.',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          name: 'inline',
+          icon: LinkIcon,
+          fields: [
+            {
+              name: 'name',
+              title: 'Name',
+              type: 'string',
+              validation: (rule) => rule.required().min(1),
+            },
+            {
+              name: 'href',
+              title: 'Target',
+              description:
+                'Should be a relative path for internal links (e.g., /some-path).',
+              type: 'url',
+              validation: (rule) =>
+                rule
+                  .required()
+                  .uri({ allowRelative: true })
+                  .custom(
+                    (value: string, context: ValidationContext) =>
+                      value.startsWith('/') ||
+                      (new URL(value).protocol === 'https:' &&
+                        (!context.document?.url ||
+                          !value?.startsWith(
+                            context.document.url as string,
+                          ))) ||
+                      'Internal links must be relative paths beginning with a forward slash (/). External URLs must begin with https://.',
+                  ),
+            },
+            {
+              name: 'nofollow',
+              title: 'Nofollow',
+              description: 'Instruct search engines not to follow this link.',
+              type: 'boolean',
+              initialValue: false,
+            },
+          ],
+        },
+      ],
+      fieldset: 'footer',
+      validation: (rule) => rule.required().min(3).max(8).unique(),
+    }),
+    defineField({
+      name: 'copyright',
+      title: 'Copyright text',
+      type: 'text',
+      rows: 1,
+      fieldset: 'footer',
+      validation: (rule) => rule.required().min(10),
     }),
     defineField({
       name: 'heroTitle',
@@ -129,7 +196,7 @@ export default defineType({
           styles: [],
           lists: [],
           marks: {
-            decorators: [{ title: 'Strong', value: 'strong' }],
+            decorators: [{ title: 'Underline', value: 'underline' }],
             annotations: [],
           },
           validation: (rule) =>

@@ -47,6 +47,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
     title,
     longTitle,
     textContent,
+    nofollow,
     displayUpdatedAt,
     _createdAt: datePublished,
     _updatedAt: dateModified,
@@ -76,6 +77,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
         title={longTitle ?? title}
         blocks={textContent as PortableTextBlock[]}
         lastUpdated={(displayUpdatedAt && dateModified) || undefined}
+        nofollowLinks={!!nofollow}
       />
     </>
   );

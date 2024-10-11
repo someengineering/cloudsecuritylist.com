@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 };
 
 export default async function NotFoundPage() {
-  const { name, navigation, copyright, featuredPages } =
+  const { name, navigation, featuredPages, footerLinks, copyright } =
     (await getSiteSettings()) ?? {};
 
   return (
@@ -39,7 +39,7 @@ export default async function NotFoundPage() {
           />
           <FeaturedPages pages={featuredPages ?? []} homeLink={true} />
         </main>
-        <Footer copyright={copyright} navigation={navigation} />
+        <Footer copyright={copyright} links={footerLinks} />
       </body>
     </html>
   );

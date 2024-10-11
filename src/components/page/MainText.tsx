@@ -8,10 +8,12 @@ export default async function MainText({
   title,
   blocks,
   lastUpdated,
+  nofollowLinks,
 }: {
   title: string;
   blocks: PortableTextBlock[];
   lastUpdated?: string;
+  nofollowLinks?: boolean;
 }) {
   const slug = slugify(title);
 
@@ -104,8 +106,11 @@ export default async function MainText({
                 <Link
                   href={href}
                   {...((await isExternalLink(href))
-                    ? { target: '_blank', rel: 'noopener noreferrer' }
-                    : null)}
+                    ? {
+                        target: '_blank',
+                        rel: `noopener noreferrer${nofollowLinks ? ' nofollow' : ''}`,
+                      }
+                    : { rel: nofollowLinks ? 'nofollow' : undefined })}
                   className="font-semibold text-cyan-600 hover:text-cyan-700"
                 >
                   {children}

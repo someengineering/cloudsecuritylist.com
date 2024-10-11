@@ -143,8 +143,17 @@ export default defineType({
       hidden: ({ parent }) => !!parent.listType,
     }),
     defineField({
+      name: 'nofollow',
+      title: 'Nofollow',
+      description: 'Instruct search engines not to follow links on this page.',
+      type: 'boolean',
+      initialValue: false,
+      hidden: ({ parent }) => !!parent.listType,
+    }),
+    defineField({
       name: 'unlisted',
       title: 'Unlisted',
+      description: 'Instruct search engines not to crawl or index this page.',
       type: 'boolean',
       initialValue: false,
     }),

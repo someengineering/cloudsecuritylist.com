@@ -450,13 +450,6 @@
         },
         "optional": false
       },
-      "copyright": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "string"
-        },
-        "optional": false
-      },
       "navigation": {
         "type": "objectAttribute",
         "value": {
@@ -498,6 +491,64 @@
               }
             }
           }
+        },
+        "optional": false
+      },
+      "footerLinks": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "array",
+          "of": {
+            "type": "object",
+            "attributes": {
+              "name": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": false
+              },
+              "href": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": false
+              },
+              "nofollow": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "boolean"
+                },
+                "optional": true
+              },
+              "_type": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string",
+                  "value": "inline"
+                }
+              }
+            },
+            "rest": {
+              "type": "object",
+              "attributes": {
+                "_key": {
+                  "type": "objectAttribute",
+                  "value": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "optional": false
+      },
+      "copyright": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
         },
         "optional": false
       },
@@ -1471,6 +1522,13 @@
         "optional": true
       },
       "displayUpdatedAt": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "boolean"
+        },
+        "optional": true
+      },
+      "nofollow": {
         "type": "objectAttribute",
         "value": {
           "type": "boolean"

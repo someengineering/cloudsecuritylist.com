@@ -14,6 +14,7 @@ export const SITE_SETTINGS_QUERY = groq`
     url,
     copyright,
     navigation[] { name, href },
+    footerLinks[] { name, href, nofollow },
     heroTitle[0],
     heroDescription[],
     featuredPages[] -> { ${PAGE} }
