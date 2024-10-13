@@ -13,11 +13,11 @@ export const config = {
      * - icon- (icon files)
      * - icon.svg (SVG icon file)
      * - site.webmanifest (web manifest file)
-     * - ac57c66264d940ccae81e47b25ac74fc.txt (IndexNow key file)
+     * - a6f541fae06c457b9f469863882bd0e3.txt (IndexNow key file)
      */
     {
       source:
-        '/((?!api|_next/static|_next/image|favicon.ico|apple-touch-icon|icon-|icon.svg|site.webmanifest|ac57c66264d940ccae81e47b25ac74fc.txt).*)',
+        '/((?!api|_next/static|_next/image|favicon.ico|apple-touch-icon|icon-|icon.svg|site.webmanifest|a6f541fae06c457b9f469863882bd0e3.txt).*)',
       missing: [
         { type: 'header', key: 'next-router-prefetch' },
         { type: 'header', key: 'purpose', value: 'prefetch' },

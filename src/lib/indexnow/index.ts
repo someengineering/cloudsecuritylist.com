@@ -1,6 +1,6 @@
 import 'server-only';
 
-import { indexnowKey as key } from '@/lib/indexnow/env';
+import { apiKey as key } from '@/lib/indexnow/key';
 import { getSiteUrl, getUpdatedUrls } from '@/lib/sanity';
 
 export const submitUrls = async () => {
@@ -16,6 +16,7 @@ export const submitUrls = async () => {
       body: JSON.stringify({
         host,
         key,
+        keyLocation: `${url}/${key}.txt`,
         urlList,
       }),
     });

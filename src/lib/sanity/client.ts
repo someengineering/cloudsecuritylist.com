@@ -46,7 +46,7 @@ export async function sanityFetch<QueryResponse>({
   return client.fetch<QueryResponse>(query, params, {
     ...(isDraftMode &&
       ({
-        token: token,
+        token,
         perspective: 'previewDrafts',
         stega: true,
       } satisfies QueryOptions)),

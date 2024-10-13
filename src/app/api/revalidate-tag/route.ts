@@ -27,9 +27,9 @@ export async function POST(req: NextRequest) {
     body.tags.forEach((tag) => revalidateTag(tag));
 
     return new Response();
-  } catch (err) {
-    console.error(err);
+  } catch (e) {
+    console.error(e);
 
-    return new Response((err as Error).message, { status: 500 });
+    return new Response((e as Error).message, { status: 500 });
   }
 }

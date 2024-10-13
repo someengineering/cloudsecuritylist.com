@@ -1,5 +1,5 @@
 import { submitUrls } from '@/lib/indexnow';
-import { cronSecret } from '@/lib/indexnow/cronSecret';
+import { cronSecret } from '@/lib/cron/cronSecret';
 import { type NextRequest } from 'next/server';
 
 export async function GET(req: NextRequest) {
@@ -15,9 +15,9 @@ export async function GET(req: NextRequest) {
     await submitUrls();
 
     return new Response();
-  } catch (err) {
-    console.error(err);
+  } catch (e) {
+    console.error(e);
 
-    return new Response((err as Error).message, { status: 500 });
+    return new Response((e as Error).message, { status: 500 });
   }
 }
