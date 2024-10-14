@@ -42,17 +42,19 @@ export default function FilterButtons({
   );
 
   useEffect(() => {
-    const params = new URLSearchParams();
+    if (pathname) {
+      const params = new URLSearchParams();
 
-    if (filters.marketSegment) {
-      params.set('segment', filters.marketSegment);
+      if (filters.marketSegment) {
+        params.set('segment', filters.marketSegment);
+      }
+
+      router.push(`${pathname}?${params.toString()}${window.location.hash}`, {
+        scroll: false,
+        // @ts-expect-error 'shallow' does not exist in type 'NavigateOptions'
+        shallow: true,
+      });
     }
-
-    router.push(`${pathname}?${params.toString()}${window.location.hash}`, {
-      scroll: false,
-      // @ts-expect-error 'shallow' does not exist in type 'NavigateOptions'
-      shallow: true,
-    });
   }, [filters, pathname, router]);
 
   return (

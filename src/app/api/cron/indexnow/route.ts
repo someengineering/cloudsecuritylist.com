@@ -1,5 +1,5 @@
-import { submitUrls } from '@/lib/indexnow';
 import { cronSecret } from '@/lib/cron/cronSecret';
+import { submitUrls } from '@/lib/indexnow';
 import { type NextRequest } from 'next/server';
 
 export async function GET(req: NextRequest) {

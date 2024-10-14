@@ -90,7 +90,7 @@ export default function FilterPanel({
   );
 
   useEffect(() => {
-    if (filters.paginated) {
+    if (pathname && filters.paginated) {
       const params = new URLSearchParams();
 
       filters.productCategories.forEach((slug) => {

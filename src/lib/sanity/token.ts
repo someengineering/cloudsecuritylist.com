@@ -1,7 +1,7 @@
 import 'server-only';
 
-import { experimental_taintUniqueValue } from 'react';
 import { assertValue } from '@/utils/env';
+import { experimental_taintUniqueValue } from 'react';
 
 export const token = assertValue(
   process.env.SANITY_API_READ_TOKEN,
