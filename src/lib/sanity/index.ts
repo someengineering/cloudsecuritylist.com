@@ -82,7 +82,7 @@ export const getSitemap = async () =>
 export const getUpdatedUrls = async (): Promise<string[]> =>
   (await sanityFetch<UPDATED_URLS_QUERYResult>({
     query: UPDATED_URLS_QUERY,
-    tags: ['sitemap'],
+    revalidate: 0,
     allowDraftMode: false,
   })) ?? [];
 
