@@ -1,5 +1,6 @@
 'use client';
 
+import CardGrid from '@/components/common/CardGrid';
 import {
   Filters,
   useFilters,
@@ -7,9 +8,6 @@ import {
 import { ORGANIZATION_TYPES } from '@/lib/sanity/schemas/objects/organizationType';
 import { OPEN_SOURCE_PROJECTS_QUERYResult } from '@/lib/sanity/types';
 import { projectImage, repositoryHost } from '@/utils/openSourceProject';
-import clsx from 'clsx';
-import Image from 'next/image';
-import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { HiCodeBracket } from 'react-icons/hi2';
 import { SiGithub, SiGitlab } from 'react-icons/si';
@@ -73,192 +71,72 @@ export default function List({
   }
 
   return (
-    <ul
-      role="list"
-      className="container mx-auto mt-10 grid max-w-7xl auto-rows-fr grid-cols-1 gap-4 px-6 md:grid-cols-2 lg:grid-cols-3 lg:px-8"
-    >
-      {openSourceProjects.map((project) => {
-        const markUrl = projectImage({
-          mark: project.mark,
-          repositoryUrl: project.repository,
-          organizationMark: project.organization?.mark,
-        });
-
+    <CardGrid
+      cards={openSourceProjects.map((project) => {
         const organizationType = project.organization
           ? ORGANIZATION_TYPES[project.organization.organizationType]
-          : undefined;
-        const organizationLabel = project.organization
-          ? project.organization.name !== project.name
-            ? `Parent ${
-                organizationType?.title.toLowerCase().includes('company')
-                  ? 'company'
-                  : 'organization'
-              } (${project.organization.name})`
-            : organizationType?.title.toLowerCase().includes('company')
-              ? 'Company'
-              : 'Organization'
           : undefined;
 
         const repoHost = repositoryHost(project.repository);
 
-        return (
-          <li
-            key={project._id}
-            className="relative flex flex-col space-y-4 rounded-lg border border-gray-300 bg-white p-4 shadow-sm focus-within:ring-2 focus-within:ring-cyan-500 focus-within:ring-offset-2 hover:border-gray-400 lg:px-5"
-          >
-            <div className="flex items-center space-x-3">
-              {markUrl ? (
-                <div className="flex-shrink-0">
-                  <Image
-                    src={markUrl}
-                    width={56}
-                    height={56}
-                    alt=""
-                    aria-hidden="true"
-                    className={clsx(
-                      'h-12 w-12 xs:h-14 xs:w-14',
-                      new URL(markUrl).hostname.endsWith(
-                        'avatars.githubusercontent.com',
-                      ) && 'rounded',
-                    )}
-                  />
-                </div>
-              ) : (
-                <div className="h-12 w-12 flex-shrink-0 rounded bg-slate-100 xs:h-14 xs:w-14" />
-              )}
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center justify-between">
-                  <div className="flex flex-col items-start">
-                    <Link
-                      href={`/open-source/${project.slug}`}
-                      className="line-clamp-1 font-semibold text-gray-900 focus:outline-none"
-                    >
-                      <span aria-hidden="true" className="absolute inset-0" />
-                      {project.name}
-                    </Link>
-                  </div>
-                  <ul
-                    role="list"
-                    className="z-10 hidden items-end gap-x-2.5 xs:flex"
-                  >
-                    <li>
-                      <Link
-                        href={project.repository}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-gray-400 hover:text-gray-500 focus:outline-none"
-                      >
-                        {repoHost?.endsWith('github.com') ? (
-                          <>
-                            <span className="sr-only">GitHub</span>
-                            <SiGithub className="h-5 w-5" title="GitHub" />
-                          </>
-                        ) : repoHost?.endsWith('gitlab.com') ? (
-                          <>
-                            <span className="sr-only">GitLab</span>
-                            <SiGitlab className="h-5 w-5" title="GitLab" />
-                          </>
-                        ) : (
-                          <>
-                            <span className="sr-only">Repository</span>
-                            <HiCodeBracket
-                              className="h-5 w-5"
-                              title="Repository"
-                            />
-                          </>
-                        )}
-                      </Link>
-                    </li>
-                    {project.organization && organizationType ? (
-                      <li>
-                        <Link
-                          href={`/organization/${project.organization.slug}`}
-                          className="text-gray-400 hover:text-gray-500 focus:outline-none"
-                        >
-                          <span className="sr-only">{organizationLabel}</span>
-                          <organizationType.icon
-                            className="h-5 w-5"
-                            title={organizationLabel}
-                          />
-                        </Link>
-                      </li>
-                    ) : null}
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <div className="text-sm text-gray-500">{project.description}</div>
-            {project.productCategories?.length ? (
-              <div className="flex grow flex-wrap content-end items-end gap-x-2 gap-y-1.5">
-                {project.productCategories.map((category) => (
-                  <Link
-                    href={`/category/${category.slug}`}
-                    className="z-10 inline-flex items-center rounded-md bg-cyan-50 px-2 py-1 text-xs font-medium text-cyan-600 ring-1 ring-inset ring-cyan-500/10 hover:text-cyan-700 hover:ring-cyan-500/20"
-                    key={category._id}
-                  >
-                    {category.expansion ? (
-                      <abbr title={category.expansion} className="no-underline">
-                        {category.name}
-                      </abbr>
-                    ) : (
-                      category.name
-                    )}
-                  </Link>
-                ))}
-              </div>
-            ) : null}
-          </li>
-        );
+        return {
+          href: `/open-source/${project.slug}`,
+          imageSrc: projectImage({
+            mark: project.mark,
+            repositoryUrl: project.repository,
+            organizationMark: project.organization?.mark,
+          }),
+          title: project.name,
+          description: project.description,
+          links: [
+            {
+              href: project.repository,
+              ...(repoHost?.endsWith('github.com')
+                ? { title: 'GitHub', icon: SiGithub }
+                : repoHost?.endsWith('gitlab.com')
+                  ? { title: 'GitLab', icon: SiGitlab }
+                  : { title: 'Repository', icon: HiCodeBracket }),
+            },
+            ...(project.organization && organizationType
+              ? [
+                  {
+                    title:
+                      project.organization.name !== project.name
+                        ? `Parent ${
+                            organizationType?.title
+                              .toLowerCase()
+                              .includes('company')
+                              ? 'company'
+                              : 'organization'
+                          } (${project.organization.name})`
+                        : organizationType?.title
+                              .toLowerCase()
+                              .includes('company')
+                          ? 'Company'
+                          : 'Organization',
+                    href: `/organization/${project.organization.slug}`,
+                    icon: organizationType.icon,
+                  },
+                ]
+              : []),
+          ],
+          tags: project.productCategories?.map((category) => ({
+            text: category.expansion ? (
+              <abbr title={category.expansion} className="no-underline">
+                {category.name}
+              </abbr>
+            ) : (
+              category.name
+            ),
+            href: `/category/${category.slug}`,
+          })),
+        };
       })}
-      {filters.paginated && !error && (loading || lastItem) ? (
-        <li
-          ref={sentryRef}
-          className="relative rounded-lg border border-gray-300 bg-white p-4 shadow-sm lg:px-5"
-          aria-hidden="true"
-        >
-          <div className="flex h-full animate-pulse flex-col space-y-4">
-            <div className="flex items-center space-x-3">
-              <div className="h-12 w-12 flex-shrink-0 rounded bg-slate-200 sm:h-14 sm:w-14" />
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center justify-between">
-                  <div className="flex flex-grow flex-col items-start">
-                    <div className="mb-2.5 h-5 w-3/4 rounded bg-slate-200" />
-                  </div>
-                  <ul role="list" className="flex items-end gap-x-2.5">
-                    <li>
-                      <div className="h-5 w-5 rounded bg-slate-200" />
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <div className="space-y-3 pt-1.5">
-              <div className="grid grid-cols-3 gap-4">
-                <div className="col-span-2 h-2 rounded bg-slate-200" />
-                <div className="col-span-1 h-2 rounded bg-slate-200" />
-              </div>
-              <div className="grid grid-cols-5 gap-4">
-                <div className="col-span-2 h-2 rounded bg-slate-200" />
-                <div className="col-span-3 h-2 rounded bg-slate-200" />
-              </div>
-              <div className="grid grid-cols-5 gap-4">
-                <div className="col-span-1 h-2 rounded bg-slate-200" />
-                <div className="col-span-2 h-2 rounded bg-slate-200" />
-                <div className="col-span-2 h-2 rounded bg-slate-200" />
-              </div>
-              <div className="h-2 w-1/2 rounded bg-slate-200" />
-            </div>
-            <div className="flex grow flex-wrap items-end gap-x-2 gap-y-1.5 pb-1">
-              {[...Array(5)].map((_val, idx) => (
-                <div
-                  className="flex h-4 w-10 rounded bg-slate-200"
-                  key={`skeleton-tag-${idx}`}
-                />
-              ))}
-            </div>
-          </div>
-        </li>
-      ) : null}
-    </ul>
+      sentryRef={
+        filters.paginated && !error && (loading || lastItem)
+          ? sentryRef
+          : undefined
+      }
+    />
   );
 }

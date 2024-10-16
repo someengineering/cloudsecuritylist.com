@@ -1,6 +1,6 @@
 import { metadata as notFoundMetadata } from '@/app/not-found';
+import MainText from '@/components/common/MainText';
 import JsonLd from '@/components/page/JsonLd';
-import MainText from '@/components/page/MainText';
 import { getPage, getPageSlugs, getRedirect } from '@/lib/sanity';
 import { getWebPage } from '@/utils/jsonLd';
 import { isValidSlug } from '@/utils/slug';

@@ -1,9 +1,9 @@
-import DescriptionList from '@/components/page/DescriptionList';
+import DescriptionList from '@/components/common/DescriptionList';
+import IconDescriptionList from '@/components/common/IconDescriptionList';
+import ImageDescriptionList from '@/components/common/ImageDescriptionList';
+import LogoGrid from '@/components/common/LogoGrid';
+import OffsetSection from '@/components/common/OffsetSection';
 import PageHeader from '@/components/page/Header';
-import IconDescriptionList from '@/components/page/IconDescriptionList';
-import ImageDescriptionList from '@/components/page/ImageDescriptionList';
-import LogoGrid from '@/components/page/LogoGrid';
-import OffsetSection from '@/components/page/OffsetSection';
 import { urlFor } from '@/lib/sanity/image';
 import { ORGANIZATION_QUERYResult } from '@/lib/sanity/types';
 import { projectImage } from '@/utils/openSourceProject';

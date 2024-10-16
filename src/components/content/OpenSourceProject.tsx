@@ -1,7 +1,7 @@
+import IconDescriptionList from '@/components/common/IconDescriptionList';
+import LogoGrid from '@/components/common/LogoGrid';
+import OffsetSection from '@/components/common/OffsetSection';
 import PageHeader from '@/components/page/Header';
-import IconDescriptionList from '@/components/page/IconDescriptionList';
-import LogoGrid from '@/components/page/LogoGrid';
-import OffsetSection from '@/components/page/OffsetSection';
 import { urlFor } from '@/lib/sanity/image';
 import { ORGANIZATION_TYPES } from '@/lib/sanity/schemas/objects/organizationType';
 import { OPEN_SOURCE_PROJECT_QUERYResult } from '@/lib/sanity/types';

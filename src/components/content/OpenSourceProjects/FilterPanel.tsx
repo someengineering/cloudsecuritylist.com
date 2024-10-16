@@ -110,7 +110,7 @@ export default function FilterPanel({
   }, [debouncedRouterPush, filters, pathname, router]);
 
   return (
-    <>
+    <div className="mb-10">
       <section
         aria-labelledby="filter-heading"
         className="mx-auto max-w-7xl px-6 lg:px-8"
@@ -510,6 +510,6 @@ export default function FilterPanel({
           </DialogPanel>
         </div>
       </Dialog>
-    </>
+    </div>
   );
 }
