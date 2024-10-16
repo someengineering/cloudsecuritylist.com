@@ -3,6 +3,10 @@ import 'server-only';
 import { getSiteUrl } from '@/lib/sanity';
 
 export const isExternalLink = async (href: string) => {
+  if (href.startsWith('mailto:')) {
+    return true;
+  }
+
   try {
     const url = new URL(href);
     const siteUrl = await getSiteUrl();
@@ -14,6 +18,10 @@ export const isExternalLink = async (href: string) => {
 };
 
 export const transformUrl = async (href: string) => {
+  if (href.startsWith('mailto:')) {
+    return href;
+  }
+
   try {
     const url = new URL(href);
     const siteUrl = await getSiteUrl();
