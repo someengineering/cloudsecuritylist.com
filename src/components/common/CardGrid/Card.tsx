@@ -39,7 +39,7 @@ export default function Card({
             <div className="flex flex-col items-start">
               <Link
                 href={href}
-                {...(href.startsWith('/')
+                {...(!href.startsWith('/')
                   ? { target: '_blank', rel: 'noopener noreferrer' }
                   : null)}
                 className="line-clamp-1 font-semibold text-gray-900 focus:outline-none"
@@ -49,7 +49,9 @@ export default function Card({
               </Link>
               {label ? (
                 <span className="mt-0.5 inline-flex items-center gap-x-1 rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
-                  <label.icon className="h-4 w-4" title={label.title} />
+                  {label.icon ? (
+                    <label.icon className="h-4 w-4" title={label.title} />
+                  ) : null}
                   {label.title}
                 </span>
               ) : null}
@@ -63,7 +65,7 @@ export default function Card({
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      {...(link.href.startsWith('/')
+                      {...(!link.href.startsWith('/')
                         ? { target: '_blank', rel: 'noopener noreferrer' }
                         : null)}
                       className="text-gray-400 hover:text-gray-500 focus:outline-none"
@@ -84,6 +86,9 @@ export default function Card({
           {tags.map((tag) => (
             <Link
               href={tag.href}
+              {...(!tag.href.startsWith('/')
+                ? { target: '_blank', rel: 'noopener noreferrer' }
+                : null)}
               className="z-10 inline-flex items-center rounded-md bg-cyan-50 px-2 py-1 text-xs font-medium text-cyan-600 ring-1 ring-inset ring-cyan-500/10 hover:text-cyan-700 hover:ring-cyan-500/20"
               key={tag.href}
             >

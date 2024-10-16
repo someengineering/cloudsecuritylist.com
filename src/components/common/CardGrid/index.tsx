@@ -9,7 +9,7 @@ export type CardProps = {
   imageSrc?: string;
   title: string;
   description: string;
-  label?: { title: string; icon: IconType };
+  label?: { title: string; icon?: IconType };
   links?: { title: string; href: string; icon: IconType }[];
   tags?: { text: string | React.JSX.Element; href: string }[];
 };
