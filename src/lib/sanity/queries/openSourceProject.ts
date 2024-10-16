@@ -5,9 +5,7 @@ import {
 import { ORGANIZATION_BASE } from '@/lib/sanity/queries/fragments/organization';
 import { groq } from 'next-sanity';
 
-export const OPEN_SOURCE_PROJECT_SLUGS_QUERY = groq`
-  *[_type == "openSourceProject" && defined(slug.current) && name != organization->name].slug.current
-`;
+export const OPEN_SOURCE_PROJECT_SLUGS_QUERY = groq`*[_type == "openSourceProject" && defined(slug.current) && name != organization->name].slug.current`;
 
 export const OPEN_SOURCE_PROJECTS_QUERY = groq`
   *[

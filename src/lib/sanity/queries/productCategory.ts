@@ -15,9 +15,7 @@ export const PRODUCT_CATEGORIES_QUERY = groq`
     _type == "productCategory" &&
     ($marketSegment == "" || $marketSegment == marketSegment._ref) &&
     (length($referenceType) == 0 || count(*[_type == $referenceType && references(^._id)]) > 0)
-  ] | order(lower(name) asc) {
-    ${PRODUCT_CATEGORY}
-  }
+  ] | order(lower(name) asc) { ${PRODUCT_CATEGORY} }
 `;
 
 export const PRODUCT_CATEGORY_QUERY = groq`

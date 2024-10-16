@@ -76,11 +76,7 @@ const nextConfig = {
       },
       ...(
         await sanityClient.fetch(
-          groq`*[_type == "cloudProvider" && defined(abbreviation)] {
-              "slug": slug.current,
-              name,
-              abbreviation,
-            }`,
+          groq`*[_type == "cloudProvider" && defined(abbreviation)] { "slug": slug.current, name, abbreviation }`,
         )
       ).map(({ slug, name, abbreviation }) => ({
         source: `/provider/(${slugify(name)}-)?${slugify(abbreviation)}`,
@@ -89,11 +85,7 @@ const nextConfig = {
       })),
       ...(
         await sanityClient.fetch(
-          groq`*[_type == "productCategory" && defined(expansion)] {
-              "slug": slug.current,
-              name,
-              expansion
-            }`,
+          groq`*[_type == "productCategory" && defined(expansion)] { "slug": slug.current, name, expansion }`,
         )
       ).map(({ slug, name, expansion }) => ({
         source: `/category/${slugify(expansion)}(-${slugify(name)})?`,

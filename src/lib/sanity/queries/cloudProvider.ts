@@ -6,13 +6,9 @@ import { OPEN_SOURCE_PROJECT_BASE } from '@/lib/sanity/queries/fragments/openSou
 import { ORGANIZATION_BASE } from '@/lib/sanity/queries/fragments/organization';
 import { groq } from 'next-sanity';
 
-export const CLOUD_PROVIDER_SLUGS_QUERY = groq`
-  *[_type == "cloudProvider" && defined(slug.current)].slug.current
-`;
+export const CLOUD_PROVIDER_SLUGS_QUERY = groq`*[_type == "cloudProvider" && defined(slug.current)].slug.current`;
 
-export const CLOUD_PROVIDERS_QUERY = groq`
-  *[_type == "cloudProvider"] | order(lower(name) asc) { ${CLOUD_PROVIDER} }
-`;
+export const CLOUD_PROVIDERS_QUERY = groq`*[_type == "cloudProvider"] | order(lower(name) asc) { ${CLOUD_PROVIDER} }`;
 
 export const CLOUD_PROVIDER_QUERY = groq`
   *[_type == "cloudProvider" && slug.current == $slug][0] {

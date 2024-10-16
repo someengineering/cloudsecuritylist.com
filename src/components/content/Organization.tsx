@@ -5,8 +5,9 @@ import LogoGrid from '@/components/common/LogoGrid';
 import OffsetSection from '@/components/common/OffsetSection';
 import PageHeader from '@/components/page/Header';
 import { urlFor } from '@/lib/sanity/image';
+import { ORGANIZATION_TYPE } from '@/lib/sanity/schemas/objects/organizationType';
 import { ORGANIZATION_QUERYResult } from '@/lib/sanity/types';
-import { projectImage } from '@/utils/openSourceProject';
+import { projectImage, repositoryHost } from '@/utils/openSourceProject';
 import { toSentenceCase } from '@/utils/string';
 import { getImageDimensions } from '@sanity/asset-utils';
 import { uniqBy } from 'lodash';
@@ -14,6 +15,7 @@ import dynamic from 'next/dynamic';
 import React, { ComponentType, useMemo } from 'react';
 import {
   HiArrowTrendingUp,
+  HiCodeBracket,
   HiOutlineGlobeAlt,
   HiOutlineSparkles,
 } from 'react-icons/hi2';
@@ -53,7 +55,10 @@ export default function Organization({
     [organization],
   );
 
-  if (!organization) {
+  if (
+    !organization ||
+    organization.organizationType === ORGANIZATION_TYPE.ACQUIRED
+  ) {
     return null;
   }
 
@@ -74,17 +79,16 @@ export default function Organization({
     });
   }
 
-  if ('github' in organization && organization.github) {
+  if (organization.repository) {
+    const repoHost = repositoryHost(organization.repository);
+
     links.push({
-      label: 'GitHub',
-      href: organization.github,
-      icon: SiGithub,
-    });
-  } else if ('gitlab' in organization && organization.gitlab) {
-    links.push({
-      label: 'GitLab',
-      href: organization.gitlab,
-      icon: SiGitlab,
+      href: organization.repository,
+      ...(repoHost?.endsWith('github.com')
+        ? { label: 'GitHub', icon: SiGithub }
+        : repoHost?.endsWith('gitlab.com')
+          ? { label: 'GitLab', icon: SiGitlab }
+          : { label: 'Repository', icon: HiCodeBracket }),
     });
   }
 
@@ -120,8 +124,20 @@ export default function Organization({
         links={links}
         image={organization.mark ? urlFor(organization.mark).url() : undefined}
       />
-      {'productCategories' in organization &&
-      organization.productCategories?.length ? (
+      {organization.cloudServices.length ? (
+        <OffsetSection heading="Cloud services">
+          <ImageDescriptionList
+            items={organization.cloudServices.map((service) => ({
+              title: service.name,
+              slug: service.slug,
+              href: `/provider/${service.slug}`,
+              description: service.description,
+              imageSrc: urlFor(service.mark).url(),
+            }))}
+          />
+        </OffsetSection>
+      ) : null}
+      {organization.productCategories?.length ? (
         <OffsetSection heading="Product categories">
           <IconDescriptionList
             items={organization.productCategories.map((category) => ({
@@ -136,8 +152,12 @@ export default function Organization({
           />
         </OffsetSection>
       ) : null}
-      {'supportedCloudProviders' in organization &&
-      organization.supportedCloudProviders?.length ? (
+      {organization.supportedCloudProviders?.filter(
+        (provider) =>
+          !organization.cloudServices.some(
+            (service) => service.slug === provider.slug,
+          ),
+      ).length ? (
         <OffsetSection heading="Supported cloud providers">
           <LogoGrid
             items={
@@ -163,8 +183,7 @@ export default function Organization({
           />
         </OffsetSection>
       ) : null}
-      {'openSourceProjects' in organization &&
-      organization.openSourceProjects.length ? (
+      {organization.openSourceProjects.length ? (
         <OffsetSection heading="Open-source projects" slug="open-source">
           <ImageDescriptionList
             items={organization.openSourceProjects.map((project) => ({
@@ -181,7 +200,7 @@ export default function Organization({
           />
         </OffsetSection>
       ) : null}
-      {'research' in organization && organization.research.length ? (
+      {organization.research.length ? (
         <OffsetSection heading="Research">
           <DescriptionList
             items={organization.research.map((research) => ({
@@ -192,8 +211,7 @@ export default function Organization({
           />
         </OffsetSection>
       ) : null}
-      {'acquiredEntities' in organization &&
-      organization.acquiredEntities.length ? (
+      {organization.acquiredEntities.length ? (
         <OffsetSection heading="Acquisitions">
           <DescriptionList
             items={organization.acquiredEntities.map((entity) => ({

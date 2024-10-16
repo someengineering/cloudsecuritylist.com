@@ -37,24 +37,16 @@ export const ACQUIRED_ENTITY = groq`
 // @sanity-typegen-ignore
 export const NON_ACQUIRED_ENTITY = groq`
   ${ORGANIZATION_BASE},
+  "cloudServices": *[_type == "cloudProvider" && organization._ref == ^._id] { ${ORGANIZATION_BASE} },
   productCategories[] -> { ${PRODUCT_CATEGORY} },
   supportedCloudProviders[] -> { ${CLOUD_PROVIDER} },
-  ...(*[_type == "openSourceProject" && organization.ref == ^.id && name == ^.name] [0] {
-    ...select(
-      repository match "*github.com" => { "github": repository },
-      repository match "*gitlab.com" => { "gitlab": repository },
-    )
-  }),
+  "repository": *[_type == "openSourceProject" && organization.ref == ^.id && name == ^.name] [0].repository,
   "openSourceProjects": *[_type == "openSourceProject" && organization._ref == ^._id && name != ^.name] {
     ${OPEN_SOURCE_PROJECT_BASE},
     organization -> { ${ORGANIZATION_BASE} }
   },
-  "research": *[_type == "research" && organization._ref == ^._id] {
-    ${RESEARCH}
-  },
-  "acquiredEntities": *[_type == "organization" && parentOrganization._ref == ^._id] | order(acquisitionDate desc) {
-    ${ACQUIRED_ENTITY}
-  }
+  "research": *[_type == "research" && organization._ref == ^._id] { ${RESEARCH} },
+  "acquiredEntities": *[_type == "organization" && parentOrganization._ref == ^._id] | order(acquisitionDate desc) { ${ACQUIRED_ENTITY} }
 `;
 
 // @sanity-typegen-ignore
@@ -62,9 +54,10 @@ export const ORGANIZATION = groq`
   ...select(
     organizationType == "acquired" => {
       ${ACQUIRED_ENTITY},
+      "organizationType": "acquired",
       parentOrganization -> { ${ORGANIZATION_BASE} },
     },
-    organizationType != "acquired" => { ${NON_ACQUIRED_ENTITY} }
+    { ${NON_ACQUIRED_ENTITY} }
   )
 `;
 

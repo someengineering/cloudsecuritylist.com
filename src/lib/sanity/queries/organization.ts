@@ -7,9 +7,7 @@ import {
 } from '@/lib/sanity/queries/fragments/organization';
 import { groq } from 'next-sanity';
 
-export const ORGANIZATION_SLUGS_QUERY = groq`
-  *[_type == "organization" && defined(slug.current) && organizationType != "acquired"].slug.current
-`;
+export const ORGANIZATION_SLUGS_QUERY = groq`*[_type == "organization" && defined(slug.current) && organizationType != "acquired"].slug.current`;
 
 export const ORGANIZATION_QUERY = groq`
   *[_type == "organization" && slug.current == $slug][0] {

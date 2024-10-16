@@ -1,3 +1,4 @@
+import { ORGANIZATION_TYPE } from '@/lib/sanity/schemas/objects/organizationType';
 import { getImageDimensions } from '@sanity/asset-utils';
 import { DatabaseIcon, LinkIcon } from '@sanity/icons';
 import { CustomValidatorResult, defineField, defineType } from 'sanity';
@@ -47,6 +48,16 @@ export default defineType({
       name: 'alternateSlugs',
       title: 'Alternate slugs',
       type: 'alternateSlugs',
+    }),
+    defineField({
+      name: 'organization',
+      title: 'Organization',
+      type: 'reference',
+      to: [{ type: 'organization' }],
+      options: {
+        filter: 'organizationType != $acquiredType',
+        filterParams: { acquiredType: ORGANIZATION_TYPE.ACQUIRED },
+      },
     }),
     defineField({
       name: 'description',
