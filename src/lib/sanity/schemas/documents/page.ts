@@ -71,6 +71,7 @@ export default defineType({
           { title: 'Open-source project', value: 'openSourceProject' },
           { title: 'Organization', value: 'organization' },
           { title: 'Product category', value: 'productCategory' },
+          { title: 'Publication', value: 'publication' },
           { title: 'Research', value: 'research' },
         ],
       },

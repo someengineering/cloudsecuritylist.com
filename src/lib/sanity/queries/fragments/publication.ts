@@ -1,8 +1,10 @@
 import { groq } from 'next-sanity';
 
 // @sanity-typegen-ignore
-export const RESEARCH = groq`
+export const PUBLICATION = groq`
   name,
   description,
-  website
+  author,
+  website,
+  mark
 `;

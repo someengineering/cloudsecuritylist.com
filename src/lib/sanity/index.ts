@@ -30,6 +30,7 @@ import {
   PRODUCT_CATEGORY_QUERY,
   PRODUCT_CATEGORY_SLUGS_QUERY,
 } from '@/lib/sanity/queries/productCategory';
+import { PUBLICATIONS_QUERY } from '@/lib/sanity/queries/publication';
 import { REDIRECT_QUERY } from '@/lib/sanity/queries/redirect';
 import {
   RESEARCH_QUERY,
@@ -44,6 +45,7 @@ import {
   SITE_URL_QUERY,
 } from '@/lib/sanity/queries/siteSettings';
 import { ORGANIZATION_TYPE } from '@/lib/sanity/schemas/objects/organizationType';
+import { PUBLICATION_TYPE } from '@/lib/sanity/schemas/objects/publicationType';
 import {
   ACQUISITIONS_QUERYResult,
   CLOUD_PROVIDER_QUERYResult,
@@ -61,6 +63,7 @@ import {
   PRODUCT_CATEGORIES_QUERYResult,
   PRODUCT_CATEGORY_QUERYResult,
   PRODUCT_CATEGORY_SLUGS_QUERYResult,
+  PUBLICATIONS_QUERYResult,
   REDIRECT_QUERYResult,
   RESEARCH_QUERYResult,
   RESEARCHES_QUERYResult,
@@ -367,4 +370,19 @@ export const getResearch = async (slug: string) =>
     query: RESEARCH_QUERY,
     params: { slug },
     tags: [`research:${slug}`],
+  });
+
+export const getPublications = async ({
+  publicationTypes,
+}: {
+  publicationTypes: PUBLICATION_TYPE[];
+}) =>
+  await sanityFetch<PUBLICATIONS_QUERYResult>({
+    query: PUBLICATIONS_QUERY,
+    params: {
+      publicationTypes: publicationTypes ?? [],
+    },
+    tags: publicationTypes.length
+      ? publicationTypes.map((slug) => `publicationType:${slug}`)
+      : ['publication'],
   });

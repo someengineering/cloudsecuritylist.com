@@ -15,13 +15,6 @@ export default defineType({
       validation: (rule) => rule.required().min(1),
     }),
     defineField({
-      name: 'slug',
-      title: 'Slug',
-      type: 'slug',
-      options: { source: 'name' },
-      validation: (rule) => rule.required(),
-    }),
-    defineField({
       name: 'organization',
       title: 'Organization',
       type: 'reference',

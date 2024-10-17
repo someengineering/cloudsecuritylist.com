@@ -24,7 +24,6 @@ export const OPEN_SOURCE_PROJECT = groq`
 export const OPEN_SOURCE_PROJECT_UPDATED_AT = groq`
   [
     _updatedAt,
-    *[_type == "organization" && organizationType == "acquired" && _id == ^.organization._ref] | order(_updatedAt desc) [0]._updatedAt,
     *[_type == "productCategory" && _id in ^.productCategories[]._ref] | order(_updatedAt desc) [0]._updatedAt,
     *[_type == "cloudProvider" && _id in ^.supportedCloudProviders[]._ref] | order(_updatedAt desc) [0]._updatedAt
   ] [defined(@)] | order(@ desc) [0]

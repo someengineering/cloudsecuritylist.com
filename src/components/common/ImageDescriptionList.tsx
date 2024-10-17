@@ -9,7 +9,7 @@ export default async function ImageDescriptionList({
 }: {
   items: {
     title: string;
-    titleDescription?: string;
+    titleDescription?: string | React.JSX.Element;
     slug?: string;
     href?: string;
     description: string;
@@ -37,14 +37,14 @@ export default async function ImageDescriptionList({
                     alt=""
                     aria-hidden="true"
                     className={clsx(
-                      'mb-6 h-10 w-10',
+                      'mb-4 h-10 w-10',
                       new URL(item.imageSrc).hostname.endsWith(
                         'avatars.githubusercontent.com',
                       ) && 'rounded',
                     )}
                   />
                 ) : (
-                  <div className="h-10 w-10 flex-shrink-0 rounded bg-slate-100" />
+                  <div className="mb-4 h-10 w-10 flex-shrink-0 rounded bg-slate-100" />
                 )}
                 {item.href ? (
                   <Link
@@ -62,7 +62,7 @@ export default async function ImageDescriptionList({
                     {item.title}
                   </span>
                 )}
-                {item.titleDescription ? ` (${item.titleDescription})` : null}
+                {item.titleDescription ? <> {item.titleDescription}</> : null}
               </dt>
               <dd className="mt-2 max-w-prose leading-7 text-gray-600">
                 {item.description}

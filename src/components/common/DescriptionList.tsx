@@ -7,7 +7,7 @@ export default async function DescriptionList({
 }: {
   items: {
     title: string;
-    titleDescription?: string;
+    titleDescription?: string | React.JSX.Element;
     slug?: string;
     href?: string;
     description: string;
@@ -42,7 +42,7 @@ export default async function DescriptionList({
                     {item.title}
                   </span>
                 )}
-                {item.titleDescription ? ` (${item.titleDescription})` : null}
+                {item.titleDescription ? <> {item.titleDescription}</> : null}
               </dt>
               <dd className="mt-2 max-w-prose leading-7 text-gray-600">
                 {item.description}

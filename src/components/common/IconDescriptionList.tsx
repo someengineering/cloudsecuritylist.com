@@ -9,7 +9,7 @@ export default async function IconDescriptionList({
 }: {
   items: {
     title: string;
-    titleDescription?: string;
+    titleDescription?: string | React.JSX.Element;
     slug?: string;
     href?: string;
     description: string;
@@ -29,7 +29,7 @@ export default async function IconDescriptionList({
           return (
             <div key={slug} id={slug} className="group relative">
               <dt className="text-gray-900">
-                <div className="mb-6 flex h-10 w-10 items-center justify-center rounded-lg bg-cyan-600">
+                <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-cyan-600">
                   <item.icon className="h-6 w-6 text-white" />
                 </div>
                 {item.href ? (
@@ -48,7 +48,7 @@ export default async function IconDescriptionList({
                     {item.title}
                   </span>
                 )}
-                {item.titleDescription ? ` (${item.titleDescription})` : null}
+                {item.titleDescription ? <> {item.titleDescription}</> : null}
               </dt>
               <dd className="mt-2 max-w-prose leading-7 text-gray-600">
                 {item.description}

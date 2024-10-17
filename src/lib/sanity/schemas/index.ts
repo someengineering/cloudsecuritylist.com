@@ -5,12 +5,15 @@ import openSourceProject from '@/lib/sanity/schemas/documents/openSourceProject'
 import organization from '@/lib/sanity/schemas/documents/organization';
 import page from '@/lib/sanity/schemas/documents/page';
 import productCategory from '@/lib/sanity/schemas/documents/productCategory';
+import publication from '@/lib/sanity/schemas/documents/publication';
 import research from '@/lib/sanity/schemas/documents/research';
 import siteSettings from '@/lib/sanity/schemas/documents/siteSettings';
 import alternateSlugs from '@/lib/sanity/schemas/objects/alternateSlugs';
 import organizationType, {
   ORGANIZATION_TYPE,
 } from '@/lib/sanity/schemas/objects/organizationType';
+import person from '@/lib/sanity/schemas/objects/person';
+import publicationType from '@/lib/sanity/schemas/objects/publicationType';
 import { Template, type SchemaTypeDefinition } from 'sanity';
 
 export const schema: { types: SchemaTypeDefinition[]; templates: Template[] } =
@@ -24,12 +27,15 @@ export const schema: { types: SchemaTypeDefinition[]; templates: Template[] } =
       organization,
       page,
       productCategory,
+      publication,
       research,
       siteSettings,
 
       // Objects
       alternateSlugs,
       organizationType,
+      person,
+      publicationType,
     ],
     templates: [
       {

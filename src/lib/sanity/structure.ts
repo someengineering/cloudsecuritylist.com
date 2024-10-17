@@ -157,6 +157,9 @@ export const structure: StructureResolver = (S) =>
       S.divider(),
       S.documentTypeListItem('research'),
       S.documentTypeListItem('openSourceProject').title('Open-source projects'),
+      S.documentTypeListItem('publication')
+        .title('Publications')
+        .icon(DocumentsIcon),
       S.documentTypeListItem('framework')
         .title('Frameworks')
         .icon(DocumentsIcon),

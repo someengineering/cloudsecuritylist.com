@@ -65,10 +65,11 @@ export const ORGANIZATION = groq`
 export const ORGANIZATION_UPDATED_AT = groq`
   [
     _updatedAt,
-    *[_type == "organization" && organizationType == "acquired" && parentOrganization._ref == ^._id] | order(_updatedAt desc) [0]._updatedAt,
+    *[_type == "cloudProvider" && organization._ref == ^._id] | order(_updatedAt desc) [0]._updatedAt,
     *[_type == "productCategory" && _id in ^.productCategories[]._ref] | order(_updatedAt desc) [0]._updatedAt,
     *[_type == "cloudProvider" && _id in ^.supportedCloudProviders[]._ref] | order(_updatedAt desc) [0]._updatedAt,
     *[_type == "openSourceProject" && organization._ref == ^._id] | order(_updatedAt desc) [0]._updatedAt,
-    *[_type == "research" && organization._ref == ^._id] | order(_updatedAt desc) [0]._updatedAt
+    *[_type == "research" && organization._ref == ^._id] | order(_updatedAt desc) [0]._updatedAt,
+    *[_type == "organization" && organizationType == "acquired" && parentOrganization._ref == ^._id] | order(_updatedAt desc) [0]._updatedAt
   ] [defined(@)] | order(@ desc) [0]
 `;
