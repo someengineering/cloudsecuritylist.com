@@ -6,18 +6,21 @@ export const config = {
     /*
      * Match all request paths except for the ones starting with:
      * - api (API routes)
+     * - js (JavaScript files)
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      * - apple-touch-icon (Apple touch icon files)
      * - icon- (icon files)
      * - icon.svg (SVG icon file)
-     * - site.webmanifest (web manifest file)
+     * - sitemap.xml (sitemap file)
+     * - manifest.webmanifest (web manifest file)
+     * - robots.txt (robots file)
      * - a6f541fae06c457b9f469863882bd0e3.txt (IndexNow key file)
      */
     {
       source:
-        '/((?!api|_next/static|_next/image|favicon.ico|apple-touch-icon|icon-|icon.svg|site.webmanifest|a6f541fae06c457b9f469863882bd0e3.txt).*)',
+        '/((?!api|js|_next/static|_next/image|favicon.ico|apple-touch-icon|icon-|icon.svg|sitemap.xml|manifest.webmanifest|robots.txt|a6f541fae06c457b9f469863882bd0e3.txt).*)',
       missing: [
         { type: 'header', key: 'next-router-prefetch' },
         { type: 'header', key: 'purpose', value: 'prefetch' },
