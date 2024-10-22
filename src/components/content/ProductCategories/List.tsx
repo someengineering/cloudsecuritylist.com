@@ -1,47 +1,13 @@
-'use client';
-
-import {
-  Filters,
-  useFilters,
-} from '@/components/content/ProductCategories/Context';
 import { PRODUCT_CATEGORIES_QUERYResult } from '@/lib/sanity/types';
 import { toSentenceCase } from '@/utils/string';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
 
 export default function List({
-  initialData,
-  getProductCategories,
+  productCategories,
 }: {
-  initialData: PRODUCT_CATEGORIES_QUERYResult;
-  getProductCategories: (
-    filters: Filters,
-  ) => Promise<PRODUCT_CATEGORIES_QUERYResult>;
+  productCategories: PRODUCT_CATEGORIES_QUERYResult;
 }) {
-  const { filters } = useFilters();
-  const [productCategories, setProductCategories] =
-    useState<PRODUCT_CATEGORIES_QUERYResult>(initialData);
-
-  useEffect(() => {
-    const fetchGlossary = async () => {
-      const data = await getProductCategories(filters);
-      setProductCategories(data);
-    };
-
-    fetchGlossary();
-  }, [filters, getProductCategories]);
-
-  useEffect(() => {
-    if (window.location.hash) {
-      const element = document.querySelector(window.location.hash);
-
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
-      }
-    }
-  }, [productCategories]);
-
-  if (!productCategories?.length) {
+  if (!productCategories.length) {
     return null;
   }
 
@@ -50,7 +16,6 @@ export default function List({
       {productCategories.map((category) => (
         <div
           key={category._id}
-          id={category.slug}
           className="relative pt-8 leading-7 md:grid md:grid-cols-4 md:gap-8"
         >
           <dt className="col-span-1">

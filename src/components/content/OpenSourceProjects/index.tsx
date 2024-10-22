@@ -39,11 +39,15 @@ export default async function OpenSourceProjects({
           initialData={openSourceProjects}
           getOpenSourceProjects={async (
             activeFilters: Partial<Filters>,
-            prev?: string,
+            prev: string,
           ) => {
             'use server';
 
-            return await getOpenSourceProjects({ ...activeFilters, prev });
+            if (typeof prev === 'string') {
+              return await getOpenSourceProjects({ ...activeFilters, prev });
+            }
+
+            return [];
           }}
         />
       </FiltersProvider>

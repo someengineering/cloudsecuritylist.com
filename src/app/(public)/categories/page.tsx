@@ -33,12 +33,10 @@ export async function generateMetadata(
   };
 }
 
-export default async function CategoriesPage({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string | string[] | undefined };
+export default async function CategoriesPage(props: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
-  const { segment: marketSegment } = searchParams;
+  const { segment: marketSegment } = await props.searchParams;
   const {
     title,
     description,

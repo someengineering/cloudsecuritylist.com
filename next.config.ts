@@ -1,3 +1,4 @@
+import type { NextConfig } from 'next';
 import { createClient, groq } from 'next-sanity';
 import speakingurl from 'speakingurl';
 
@@ -10,13 +11,12 @@ const sanityClient = createClient({
   useCdn: false,
 });
 
-const slugify = (value) => {
+const slugify = (value: string) => {
   const slugifyOpts = { truncate: 200, symbols: true };
   return value ? speakingurl(value, slugifyOpts) : '';
 };
 
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+const nextConfig: NextConfig = {
   env: {
     SC_DISABLE_SPEEDY: 'false',
   },
@@ -26,7 +26,6 @@ const nextConfig = {
   },
 
   reactStrictMode: true,
-  swcMinify: true,
 
   images: {
     remotePatterns: [
@@ -75,7 +74,9 @@ const nextConfig = {
         permanent: true,
       },
       ...(
-        await sanityClient.fetch(
+        await sanityClient.fetch<
+          { slug: string; name: string; abbreviation: string }[]
+        >(
           groq`*[_type == "cloudProvider" && defined(abbreviation)] { "slug": slug.current, name, abbreviation }`,
         )
       ).map(({ slug, name, abbreviation }) => ({
@@ -84,7 +85,9 @@ const nextConfig = {
         permanent: true,
       })),
       ...(
-        await sanityClient.fetch(
+        await sanityClient.fetch<
+          { slug: string; name: string; expansion: string }[]
+        >(
           groq`*[_type == "productCategory" && defined(expansion)] { "slug": slug.current, name, expansion }`,
         )
       ).map(({ slug, name, expansion }) => ({
@@ -110,7 +113,8 @@ const nextConfig = {
 
   webpack(config) {
     // Grab the existing rule that handles SVG imports
-    const fileLoaderRule = config.module.rules.find((rule) =>
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const fileLoaderRule = config.module.rules.find((rule: any) =>
       rule.test?.test?.('.svg'),
     );
 
@@ -147,10 +151,13 @@ const nextConfig = {
     return config;
   },
 
-  compiler: {
-    reactRemoveProperties: process.env.NEXT_PUBLIC_VERCEL_ENV === 'production',
-    removeConsole: process.env.NEXT_PUBLIC_VERCEL_ENV === 'production',
-  },
+  compiler:
+    process.env.NEXT_PUBLIC_VERCEL_ENV === 'production'
+      ? {
+          reactRemoveProperties: true,
+          removeConsole: true,
+        }
+      : undefined,
 
   experimental: {
     taint: true,

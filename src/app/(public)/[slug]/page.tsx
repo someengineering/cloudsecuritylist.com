@@ -13,16 +13,13 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata(
-  {
-    params,
-  }: {
-    params: { slug: string };
-  },
+  props: { params: Promise<{ slug: string }> },
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
+  const { slug } = await props.params;
   const parentMetadata = await parent;
   const { title, longTitle, description, unlisted } =
-    (await getPage(params.slug)) ?? {};
+    (await getPage(slug)) ?? {};
 
   if (!title) {
     return notFoundMetadata;
@@ -33,14 +30,17 @@ export async function generateMetadata(
     description,
     openGraph: {
       ...parentMetadata.openGraph,
-      url: `/${params.slug}`,
+      url: `/${slug}`,
       title: longTitle ?? title,
     },
     ...(unlisted ? { robots: { index: false, follow: false } } : null),
   };
 }
 
-export default async function Page({ params }: { params: { slug: string } }) {
+export default async function Page(props: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await props.params;
   const {
     title,
     longTitle,
@@ -49,10 +49,10 @@ export default async function Page({ params }: { params: { slug: string } }) {
     displayUpdatedAt,
     _createdAt: datePublished,
     _updatedAt: dateModified,
-  } = (isValidSlug(params.slug) && (await getPage(params.slug))) || {};
+  } = (isValidSlug(slug) && (await getPage(slug))) || {};
 
   if (!title || !textContent) {
-    const redirectSlug = await getRedirect('page', params.slug);
+    const redirectSlug = await getRedirect('page', slug);
 
     if (redirectSlug) {
       redirect(`/${redirectSlug}`);
@@ -66,7 +66,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
       <JsonLd
         schema={await getWebPage({
           title: longTitle ?? title,
-          path: `/${params.slug}`,
+          path: `/${slug}`,
           datePublished,
           dateModified,
         })}

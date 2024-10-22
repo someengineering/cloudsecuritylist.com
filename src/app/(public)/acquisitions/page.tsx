@@ -32,12 +32,10 @@ export async function generateMetadata(
   };
 }
 
-export default async function AcquisitionsPage({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string | string[] | undefined };
+export default async function AcquisitionsPage(props: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
-  const { isBot } = searchParams;
+  const { isBot } = await props.searchParams;
   const {
     title,
     description,

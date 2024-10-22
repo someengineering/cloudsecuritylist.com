@@ -44,7 +44,11 @@ export default async function Vendors({
           ) => {
             'use server';
 
-            return await getVendors({ ...activeFilters, prev });
+            if (typeof prev === 'string') {
+              return await getVendors({ ...activeFilters, prev });
+            }
+
+            return [];
           }}
         />
       </FiltersProvider>

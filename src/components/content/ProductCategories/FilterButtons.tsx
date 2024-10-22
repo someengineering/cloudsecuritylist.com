@@ -23,14 +23,16 @@ export default function FilterButtons({
       marketSegments.reduce(
         (icons, segment) => {
           icons[segment.slug] = segment.icon
-            ? dynamic(() =>
-                import('react-icons/hi2')
-                  .then(
-                    (mod) =>
-                      (mod[segment.icon as keyof typeof mod] as IconType) ??
-                      HiOutlineSparkles,
-                  )
-                  .catch(() => HiOutlineSparkles),
+            ? dynamic(
+                () =>
+                  import('react-icons/hi2')
+                    .then(
+                      (mod) =>
+                        (mod[segment.icon as keyof typeof mod] as IconType) ??
+                        HiOutlineSparkles,
+                    )
+                    .catch(() => HiOutlineSparkles),
+                { ssr: false },
               )
             : HiOutlineSparkles;
 
@@ -38,14 +40,18 @@ export default function FilterButtons({
         },
         {} as { [key: string]: IconType | ComponentType<IconBaseProps> },
       ),
-    [marketSegments],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
   );
 
   useEffect(() => {
     if (pathname) {
       const params = new URLSearchParams();
 
-      if (filters.marketSegment) {
+      if (
+        filters.marketSegment &&
+        marketSegments.some((segment) => segment.slug === filters.marketSegment)
+      ) {
         params.set('segment', filters.marketSegment);
       }
 
@@ -55,7 +61,11 @@ export default function FilterButtons({
         shallow: true,
       });
     }
-  }, [filters, pathname, router]);
+  }, [filters, marketSegments, pathname, router]);
+
+  if (!marketSegments.length) {
+    return null;
+  }
 
   return (
     <div className="mx-auto mb-10 max-w-5xl">

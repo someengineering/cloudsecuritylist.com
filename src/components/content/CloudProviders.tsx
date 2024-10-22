@@ -7,7 +7,7 @@ import { SiLinkedin } from 'react-icons/si';
 export default async function CloudProviders() {
   const cloudProviders = await getCloudProviders();
 
-  if (!cloudProviders?.length) {
+  if (!cloudProviders.length) {
     return null;
   }
 

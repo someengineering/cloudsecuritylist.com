@@ -20,7 +20,7 @@ export default function List({
   initialData: OPEN_SOURCE_PROJECTS_QUERYResult;
   getOpenSourceProjects: (
     filters: Filters,
-    prev?: string,
+    prev: string,
   ) => Promise<OPEN_SOURCE_PROJECTS_QUERYResult>;
 }) {
   const { filters } = useFilters();
@@ -66,7 +66,7 @@ export default function List({
     );
   }, [initialData]);
 
-  if (!openSourceProjects?.length) {
+  if (!openSourceProjects.length) {
     return null;
   }
 

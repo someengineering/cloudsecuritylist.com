@@ -155,6 +155,10 @@ export const getProductCategories = async ({
     ? (await getMarketSegment(marketSegment))?._id
     : undefined;
 
+  if (marketSegment && !marketSegmentId) {
+    return [];
+  }
+
   const data = await sanityFetch<PRODUCT_CATEGORIES_QUERYResult>({
     query: PRODUCT_CATEGORIES_QUERY,
     params: {
@@ -163,6 +167,7 @@ export const getProductCategories = async ({
     },
     tags: [
       marketSegment ? `marketSegment:${marketSegment}` : 'productCategory',
+      ...(referenceType ? [referenceType] : []),
     ],
   });
 

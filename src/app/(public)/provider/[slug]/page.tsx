@@ -16,20 +16,15 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata(
-  {
-    params,
-  }: {
-    params: { slug: string };
-  },
+  props: { params: Promise<{ slug: string }> },
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
+  const { slug } = await props.params;
   const parentMetadata = await parent;
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { images, ...parentOpenGraph } = parentMetadata.openGraph ?? {};
 
-  const cloudProvider = isValidSlug(params.slug)
-    ? await getCloudProvider(params.slug)
-    : null;
+  const cloudProvider = isValidSlug(slug) ? await getCloudProvider(slug) : null;
 
   if (!cloudProvider) {
     return notFoundMetadata;
@@ -43,23 +38,20 @@ export async function generateMetadata(
     description,
     openGraph: {
       ...parentOpenGraph,
-      url: `/provider/${params.slug}`,
+      url: `/provider/${slug}`,
       title,
     },
   };
 }
 
-export default async function ProviderPage({
-  params,
-}: {
-  params: { slug: string };
+export default async function ProviderPage(props: {
+  params: Promise<{ slug: string }>;
 }) {
-  const cloudProvider = isValidSlug(params.slug)
-    ? await getCloudProvider(params.slug)
-    : null;
+  const { slug } = await props.params;
+  const cloudProvider = isValidSlug(slug) ? await getCloudProvider(slug) : null;
 
   if (!cloudProvider) {
-    const redirectSlug = await getRedirect('cloudProvider', params.slug);
+    const redirectSlug = await getRedirect('cloudProvider', slug);
 
     if (redirectSlug) {
       permanentRedirect(`/provider/${redirectSlug}`);

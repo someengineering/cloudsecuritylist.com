@@ -26,7 +26,7 @@ export const VENDORS_QUERY = groq`
     (count($organizationTypes) == 0 || organizationType in $organizationTypes) &&
     (count($supportedCloudProviders) == 0 || references($supportedCloudProviders)) &&
     (
-      length($searchQuery) == 0 ||
+      $searchQuery == "" ||
       name match $searchQuery + "*" ||
       description match $searchQuery + "*" ||
       string::split(array::join(string::split(website, "https://"), ""), "/")[0] match $searchQuery + "*"
@@ -46,7 +46,7 @@ export const UNPAGINATED_VENDORS_QUERY = groq`
     (count($organizationTypes) == 0 || organizationType in $organizationTypes) &&
     (count($supportedCloudProviders) == 0 || references($supportedCloudProviders)) &&
     (
-      length($searchQuery) == 0 ||
+      $searchQuery == "" ||
       name match $searchQuery + "*" ||
       description match $searchQuery + "*" ||
       string::split(array::join(string::split(website, "https://"), ""), "/")[0] match $searchQuery + "*"

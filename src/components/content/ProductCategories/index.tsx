@@ -22,26 +22,15 @@ export default async function ProductCategories({
     productCategoriesData,
   ]);
 
-  if (!productCategories.length) {
+  if (!productCategories.length && filters.marketSegment) {
     redirect('/categories');
   }
 
   return (
     <section className="mx-auto max-w-7xl px-6 pb-12 sm:pb-16 lg:px-8">
       <FiltersProvider initialValues={filters}>
-        {marketSegments.length ? (
-          <FilterButtons marketSegments={marketSegments} />
-        ) : null}
-        <List
-          initialData={productCategories}
-          getProductCategories={async (activeFilters: Filters) => {
-            'use server';
-
-            return await getProductCategories({
-              marketSegment: activeFilters.marketSegment,
-            });
-          }}
-        />
+        <FilterButtons marketSegments={marketSegments} />
+        <List productCategories={productCategories} />
       </FiltersProvider>
     </section>
   );

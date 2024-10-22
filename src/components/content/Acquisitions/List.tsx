@@ -14,8 +14,8 @@ export default function List({
 }: {
   initialData: ACQUISITIONS_QUERYResult;
   getAcquisitions: (
-    prevDate?: string,
-    prevId?: string,
+    prevDate: string,
+    prevId: string,
   ) => Promise<ACQUISITIONS_QUERYResult>;
   paginated?: boolean;
 }) {
@@ -71,7 +71,7 @@ export default function List({
     );
   }, [initialData]);
 
-  if (!acquisitions?.length) {
+  if (!acquisitions.length) {
     return null;
   }
 

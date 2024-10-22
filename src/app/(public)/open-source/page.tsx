@@ -33,17 +33,15 @@ export async function generateMetadata(
   };
 }
 
-export default async function OpenSourcePage({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string | string[] | undefined };
+export default async function OpenSourcePage(props: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const {
     category: productCategories,
     provider: supportedCloudProviders,
     q: searchQuery,
     isBot,
-  } = searchParams;
+  } = await props.searchParams;
 
   const {
     title,

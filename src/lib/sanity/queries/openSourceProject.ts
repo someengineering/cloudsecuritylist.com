@@ -13,7 +13,7 @@ export const OPEN_SOURCE_PROJECTS_QUERY = groq`
     (count($productCategories) == 0 || references($productCategories)) &&
     (count($supportedCloudProviders) == 0 || references($supportedCloudProviders)) &&
     (
-      length($searchQuery) == 0 ||
+      $searchQuery == "" ||
       name match $searchQuery + "*" ||
       description match $searchQuery + "*" ||
       organization.name match $searchQuery + "*" ||
@@ -32,7 +32,7 @@ export const UNPAGINATED_OPEN_SOURCE_PROJECTS_QUERY = groq`
     (count($productCategories) == 0 || references($productCategories)) &&
     (count($supportedCloudProviders) == 0 || references($supportedCloudProviders)) &&
     (
-      length($searchQuery) == 0 ||
+      $searchQuery == "" ||
       name match $searchQuery + "*" ||
       description match $searchQuery + "*" ||
       organization.name match $searchQuery + "*" ||

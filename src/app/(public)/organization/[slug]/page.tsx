@@ -17,20 +17,15 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata(
-  {
-    params,
-  }: {
-    params: { slug: string };
-  },
+  props: { params: Promise<{ slug: string }> },
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
+  const { slug } = await props.params;
   const parentMetadata = await parent;
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { images, ...parentOpenGraph } = parentMetadata.openGraph ?? {};
 
-  const organization = isValidSlug(params.slug)
-    ? await getOrganization(params.slug)
-    : null;
+  const organization = isValidSlug(slug) ? await getOrganization(slug) : null;
 
   if (
     !organization ||
@@ -50,23 +45,20 @@ export async function generateMetadata(
     description,
     openGraph: {
       ...parentOpenGraph,
-      url: `/organization/${params.slug}`,
+      url: `/organization/${slug}`,
       title,
     },
   };
 }
 
-export default async function OrganizationPage({
-  params,
-}: {
-  params: { slug: string };
+export default async function OrganizationPage(props: {
+  params: Promise<{ slug: string }>;
 }) {
-  const organization = isValidSlug(params.slug)
-    ? await getOrganization(params.slug)
-    : null;
+  const { slug } = await props.params;
+  const organization = isValidSlug(slug) ? await getOrganization(slug) : null;
 
   if (!organization) {
-    const redirectSlug = await getRedirect('organization', params.slug);
+    const redirectSlug = await getRedirect('organization', slug);
 
     if (redirectSlug) {
       permanentRedirect(`/organization/${redirectSlug}`);

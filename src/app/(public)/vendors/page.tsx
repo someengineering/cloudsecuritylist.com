@@ -34,10 +34,8 @@ export async function generateMetadata(
   };
 }
 
-export default async function VendorsPage({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string | string[] | undefined };
+export default async function VendorsPage(props: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const {
     category: productCategories,
@@ -45,7 +43,7 @@ export default async function VendorsPage({
     provider: supportedCloudProviders,
     q: searchQuery,
     isBot,
-  } = searchParams;
+  } = await props.searchParams;
 
   const {
     title,

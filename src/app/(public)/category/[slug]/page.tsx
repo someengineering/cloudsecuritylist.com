@@ -13,26 +13,21 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata(
-  {
-    params,
-  }: {
-    params: { slug: string };
-  },
+  props: { params: Promise<{ slug: string }> },
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
+  const { slug } = await props.params;
   const parentMetadata = await parent;
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { images, ...parentOpenGraph } = parentMetadata.openGraph ?? {};
 
-  const productCategory = isValidSlug(params.slug)
-    ? await getProductCategory(params.slug)
-    : null;
+  const category = isValidSlug(slug) ? await getProductCategory(slug) : null;
 
-  if (!productCategory) {
+  if (!category) {
     return notFoundMetadata;
   }
 
-  const { name, expansion, description } = productCategory;
+  const { name, expansion, description } = category;
   const title = expansion ? `${toSentenceCase(expansion)} (${name})` : name;
 
   return {
@@ -40,22 +35,19 @@ export async function generateMetadata(
     description,
     openGraph: {
       ...parentOpenGraph,
-      url: `/category/${params.slug}`,
+      url: `/category/${slug}`,
       title,
     },
   };
 }
 
-export default async function CategoryPage({
-  params,
-}: {
-  params: { slug: string };
+export default async function CategoryPage(props: {
+  params: Promise<{ slug: string }>;
 }) {
-  const productCategory = isValidSlug(params.slug)
-    ? await getProductCategory(params.slug)
-    : null;
+  const { slug } = await props.params;
+  const category = isValidSlug(slug) ? await getProductCategory(slug) : null;
 
-  if (!productCategory) {
+  if (!category) {
     notFound();
   }
 
@@ -63,14 +55,14 @@ export default async function CategoryPage({
     <>
       <JsonLd
         schema={await getWebPage({
-          title: productCategory.name,
-          path: `/category/${params.slug}`,
-          datePublished: productCategory._createdAt,
-          dateModified: productCategory._updatedAt,
+          title: category.name,
+          path: `/category/${slug}`,
+          datePublished: category._createdAt,
+          dateModified: category._updatedAt,
           parentPageSlug: 'categories',
         })}
       />
-      <ProductCategory productCategory={productCategory} />
+      <ProductCategory category={category} />
     </>
   );
 }

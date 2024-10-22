@@ -16,20 +16,15 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata(
-  {
-    params,
-  }: {
-    params: { slug: string };
-  },
+  props: { params: Promise<{ slug: string }> },
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
+  const { slug } = await props.params;
   const parentMetadata = await parent;
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { images, ...parentOpenGraph } = parentMetadata.openGraph ?? {};
 
-  const project = isValidSlug(params.slug)
-    ? await getOpenSourceProject(params.slug)
-    : null;
+  const project = isValidSlug(slug) ? await getOpenSourceProject(slug) : null;
 
   if (!project) {
     return notFoundMetadata;
@@ -42,23 +37,20 @@ export async function generateMetadata(
     description,
     openGraph: {
       ...parentOpenGraph,
-      url: `/open-source/${params.slug}`,
+      url: `/open-source/${slug}`,
       title,
     },
   };
 }
 
-export default async function OpenSourceProjectPage({
-  params,
-}: {
-  params: { slug: string };
+export default async function OpenSourceProjectPage(props: {
+  params: Promise<{ slug: string }>;
 }) {
-  const project = isValidSlug(params.slug)
-    ? await getOpenSourceProject(params.slug)
-    : null;
+  const { slug } = await props.params;
+  const project = isValidSlug(slug) ? await getOpenSourceProject(slug) : null;
 
   if (!project) {
-    const redirectSlug = await getRedirect('openSourceProject', params.slug);
+    const redirectSlug = await getRedirect('openSourceProject', slug);
 
     if (redirectSlug) {
       permanentRedirect(`/open-source/${redirectSlug}`);

@@ -59,7 +59,7 @@ export default function List({
     );
   }, [initialData]);
 
-  if (!vendors?.length) {
+  if (!vendors.length) {
     return null;
   }
 

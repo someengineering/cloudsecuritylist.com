@@ -17,14 +17,14 @@ import { HiOutlineSparkles } from 'react-icons/hi2';
 import { IconBaseProps, IconType } from 'react-icons/lib';
 
 export default function ProductCategory({
-  productCategory,
+  category,
 }: {
-  productCategory: PRODUCT_CATEGORY_QUERYResult;
+  category: PRODUCT_CATEGORY_QUERYResult;
 }) {
   const marketSegmentIcons = useMemo(
     () =>
-      uniqBy(productCategory?.similarCategories ?? [], 'marketSegment.slug')
-        .map((category) => category.marketSegment)
+      uniqBy(category?.similarCategories ?? [], 'marketSegment.slug')
+        .map((similarCategory) => similarCategory.marketSegment)
         .reduce(
           (icons, segment) => {
             icons[segment.slug] = segment.icon
@@ -43,10 +43,10 @@ export default function ProductCategory({
           },
           {} as { [key: string]: IconType | ComponentType<IconBaseProps> },
         ),
-    [productCategory],
+    [category],
   );
 
-  if (!productCategory) {
+  if (!category) {
     return null;
   }
 
@@ -54,24 +54,22 @@ export default function ProductCategory({
     <>
       <PageHeader
         title={
-          productCategory.expansion
-            ? `${toSentenceCase(
-                productCategory.expansion,
-              )} (${productCategory.name})`
-            : toSentenceCase(productCategory.name)
+          category.expansion
+            ? `${toSentenceCase(category.expansion)} (${category.name})`
+            : toSentenceCase(category.name)
         }
-        description={productCategory.description}
-        eyebrow={`${toSentenceCase(productCategory.marketSegment.name)} security`}
+        description={category.description}
+        eyebrow={`${toSentenceCase(category.marketSegment.name)} security`}
       />
       <FeaturedText
-        heading={productCategory.explanationHeading}
-        blocks={productCategory.explanation as PortableTextBlock[]}
+        heading={category.explanationHeading}
+        blocks={category.explanation as PortableTextBlock[]}
       />
-      {productCategory.vendors.length ? (
+      {category.vendors.length ? (
         <OffsetSection heading="Product vendors" slug="vendors">
           <LogoGrid
             items={
-              productCategory.vendors
+              category.vendors
                 .map((vendor) => {
                   const image = vendor.logo ?? vendor.mark;
 
@@ -93,10 +91,10 @@ export default function ProductCategory({
           />
         </OffsetSection>
       ) : null}
-      {productCategory.openSourceProjects.length ? (
+      {category.openSourceProjects.length ? (
         <OffsetSection heading="Open-source projects" slug="open-source">
           <ImageDescriptionList
-            items={productCategory.openSourceProjects.map((project) => ({
+            items={category.openSourceProjects.map((project) => ({
               title: project.name,
               slug: project.slug,
               href: `/open-source/${project.slug}`,
@@ -110,17 +108,17 @@ export default function ProductCategory({
           />
         </OffsetSection>
       ) : null}
-      {productCategory.similarCategories?.length ? (
+      {category.similarCategories?.length ? (
         <OffsetSection heading="Similar categories">
           <IconDescriptionList
-            items={productCategory.similarCategories.map((category) => ({
-              title: category.expansion
-                ? `${toSentenceCase(category.expansion)} (${category.name})`
-                : toSentenceCase(category.name),
-              slug: category.slug,
-              href: `/category/${category.slug}`,
-              description: category.description,
-              icon: marketSegmentIcons[category.marketSegment.slug],
+            items={category.similarCategories.map((similarCategory) => ({
+              title: similarCategory.expansion
+                ? `${toSentenceCase(similarCategory.expansion)} (${similarCategory.name})`
+                : toSentenceCase(similarCategory.name),
+              slug: similarCategory.slug,
+              href: `/category/${similarCategory.slug}`,
+              description: similarCategory.description,
+              icon: marketSegmentIcons[similarCategory.marketSegment.slug],
             }))}
           />
         </OffsetSection>

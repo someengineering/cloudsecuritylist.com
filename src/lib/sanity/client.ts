@@ -29,7 +29,7 @@ export async function sanityFetch<QueryResponse>({
   tags?: string[];
   allowDraftMode?: boolean;
 }) {
-  const isDraftMode = allowDraftMode && draftMode().isEnabled;
+  const isDraftMode = allowDraftMode && (await draftMode()).isEnabled;
   if (isDraftMode && !token) {
     throw new Error('Missing environment variable SANITY_API_READ_TOKEN');
   }
@@ -50,6 +50,7 @@ export async function sanityFetch<QueryResponse>({
         perspective: 'previewDrafts',
         stega: true,
       } satisfies QueryOptions)),
+    cache: dynamicRevalidate === false ? 'force-cache' : undefined,
     next: {
       revalidate: dynamicRevalidate,
       tags,

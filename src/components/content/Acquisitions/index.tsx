@@ -8,17 +8,21 @@ export default async function Acquisitions({
 }) {
   const acquisitions = await getAcquisitions({ paginated });
 
-  if (!acquisitions?.length) {
+  if (!acquisitions.length) {
     return null;
   }
 
   return (
     <List
       initialData={acquisitions}
-      getAcquisitions={async (prevDate?: string, prevId?: string) => {
+      getAcquisitions={async (prevDate: string, prevId: string) => {
         'use server';
 
-        return await getAcquisitions({ prevDate, prevId });
+        if (typeof prevDate === 'string' && typeof prevId === 'string') {
+          return await getAcquisitions({ prevDate, prevId });
+        }
+
+        return [];
       }}
       paginated={paginated}
     />
