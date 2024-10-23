@@ -100,10 +100,6 @@ export default defineType({
       name: 'icon',
       title: 'Icon',
       type: 'iconPicker',
-      options: {
-        providers: ['si'],
-        outputFormat: 'react',
-      },
       fieldset: 'images',
       validation: (rule) => rule.required(),
     }),

@@ -9,6 +9,7 @@ import publication from '@/lib/sanity/schemas/documents/publication';
 import research from '@/lib/sanity/schemas/documents/research';
 import siteSettings from '@/lib/sanity/schemas/documents/siteSettings';
 import alternateSlugs from '@/lib/sanity/schemas/objects/alternateSlugs';
+import iconPicker from '@/lib/sanity/schemas/objects/iconPicker';
 import organizationType, {
   ORGANIZATION_TYPE,
 } from '@/lib/sanity/schemas/objects/organizationType';
@@ -33,6 +34,7 @@ export const schema: { types: SchemaTypeDefinition[]; templates: Template[] } =
 
       // Objects
       alternateSlugs,
+      iconPicker,
       organizationType,
       person,
       publicationType,

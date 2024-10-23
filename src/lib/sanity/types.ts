@@ -422,6 +422,12 @@ export type CloudProvider = {
   }>;
 };
 
+export type IconPicker = {
+  _type: 'iconPicker';
+  provider: string;
+  name: string;
+};
+
 export type Organization = {
   _id: string;
   _type: 'organization';
@@ -547,13 +553,6 @@ export type Slug = {
   source?: string;
 };
 
-export type IconPicker = {
-  _type: 'iconPicker';
-  provider?: string;
-  name?: string;
-  svg?: string;
-};
-
 export type AllSanitySchemaTypes =
   | SanityImagePaletteSwatch
   | SanityImagePalette
@@ -573,14 +572,14 @@ export type AllSanitySchemaTypes =
   | MarketSegment
   | Framework
   | CloudProvider
+  | IconPicker
   | Organization
   | SanityImageCrop
   | SanityImageHotspot
   | SanityImageAsset
   | SanityAssetSourceData
   | SanityImageMetadata
-  | Slug
-  | IconPicker;
+  | Slug;
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ./src/lib/sanity/queries/cloudProvider.ts
 // Variable: CLOUD_PROVIDER_SLUGS_QUERY
@@ -594,7 +593,7 @@ export type CLOUD_PROVIDERS_QUERYResult = Array<{
   name: string;
   abbreviation: string | null;
   description: string;
-  icon: string | null;
+  icon: string;
   mark: {
     asset: {
       _ref: string;
@@ -630,7 +629,7 @@ export type CLOUD_PROVIDER_QUERYResult = {
   name: string;
   abbreviation: string | null;
   description: string;
-  icon: string | null;
+  icon: string;
   mark: {
     asset: {
       _ref: string;
@@ -766,7 +765,7 @@ export type MARKET_SEGMENTS_QUERYResult = Array<{
   slug: string;
   name: string;
   description: string;
-  icon: string | null;
+  icon: string;
 }>;
 // Variable: MARKET_SEGMENT_QUERY
 // Query: *[_type == "marketSegment" && slug.current == $slug][0] {     _id,  "slug": slug.current,  name,  description,  "icon": icon.name,  "productCategories": *[_type == "productCategory" && marketSegment._ref == ^._id] | order(lower(name) asc) {    _id,    name,    "slug": slug.current,    expansion  }, }
@@ -775,7 +774,7 @@ export type MARKET_SEGMENT_QUERYResult = {
   slug: string;
   name: string;
   description: string;
-  icon: string | null;
+  icon: string;
   productCategories: Array<{
     _id: string;
     name: string;
@@ -829,7 +828,7 @@ export type OPEN_SOURCE_PROJECTS_QUERYResult = Array<{
       slug: string;
       name: string;
       description: string;
-      icon: string | null;
+      icon: string;
     };
   }> | null;
   supportedCloudProviders: Array<{
@@ -838,7 +837,7 @@ export type OPEN_SOURCE_PROJECTS_QUERYResult = Array<{
     name: string;
     abbreviation: string | null;
     description: string;
-    icon: string | null;
+    icon: string;
     mark: {
       asset: {
         _ref: string;
@@ -939,7 +938,7 @@ export type UNPAGINATED_OPEN_SOURCE_PROJECTS_QUERYResult = Array<{
       slug: string;
       name: string;
       description: string;
-      icon: string | null;
+      icon: string;
     };
   }> | null;
   supportedCloudProviders: Array<{
@@ -948,7 +947,7 @@ export type UNPAGINATED_OPEN_SOURCE_PROJECTS_QUERYResult = Array<{
     name: string;
     abbreviation: string | null;
     description: string;
-    icon: string | null;
+    icon: string;
     mark: {
       asset: {
         _ref: string;
@@ -1051,7 +1050,7 @@ export type OPEN_SOURCE_PROJECT_QUERYResult = {
       slug: string;
       name: string;
       description: string;
-      icon: string | null;
+      icon: string;
     };
   }> | null;
   supportedCloudProviders: Array<{
@@ -1060,7 +1059,7 @@ export type OPEN_SOURCE_PROJECT_QUERYResult = {
     name: string;
     abbreviation: string | null;
     description: string;
-    icon: string | null;
+    icon: string;
     mark: {
       asset: {
         _ref: string;
@@ -1206,7 +1205,7 @@ export type ORGANIZATION_QUERYResult =
           slug: string;
           name: string;
           description: string;
-          icon: string | null;
+          icon: string;
         };
       }> | null;
       supportedCloudProviders: Array<{
@@ -1215,7 +1214,7 @@ export type ORGANIZATION_QUERYResult =
         name: string;
         abbreviation: string | null;
         description: string;
-        icon: string | null;
+        icon: string;
         mark: {
           asset: {
             _ref: string;
@@ -1463,7 +1462,7 @@ export type VENDORS_QUERYResult = Array<{
       slug: string;
       name: string;
       description: string;
-      icon: string | null;
+      icon: string;
     };
   }> | null;
   supportedCloudProviders: Array<{
@@ -1472,7 +1471,7 @@ export type VENDORS_QUERYResult = Array<{
     name: string;
     abbreviation: string | null;
     description: string;
-    icon: string | null;
+    icon: string;
     mark: {
       asset: {
         _ref: string;
@@ -1544,7 +1543,7 @@ export type UNPAGINATED_VENDORS_QUERYResult = Array<{
       slug: string;
       name: string;
       description: string;
-      icon: string | null;
+      icon: string;
     };
   }> | null;
   supportedCloudProviders: Array<{
@@ -1553,7 +1552,7 @@ export type UNPAGINATED_VENDORS_QUERYResult = Array<{
     name: string;
     abbreviation: string | null;
     description: string;
-    icon: string | null;
+    icon: string;
     mark: {
       asset: {
         _ref: string;
@@ -1735,7 +1734,7 @@ export type PAGE_QUERYResult = {
   slug: string;
   title: string;
   description: string;
-  icon: string | null;
+  icon: string;
   longTitle: string | null;
   textContent: Array<{
     children?: Array<{
@@ -1777,7 +1776,7 @@ export type PRODUCT_CATEGORIES_QUERYResult = Array<{
     slug: string;
     name: string;
     description: string;
-    icon: string | null;
+    icon: string;
   };
 }>;
 // Variable: PRODUCT_CATEGORY_QUERY
@@ -1795,7 +1794,7 @@ export type PRODUCT_CATEGORY_QUERYResult = {
     slug: string;
     name: string;
     description: string;
-    icon: string | null;
+    icon: string;
   };
   explanationHeading: string;
   explanation: Array<{
@@ -1922,7 +1921,7 @@ export type PRODUCT_CATEGORY_QUERYResult = {
       slug: string;
       name: string;
       description: string;
-      icon: string | null;
+      icon: string;
     };
   }> | null;
 } | null;
@@ -2126,7 +2125,7 @@ export type SITE_SETTINGS_QUERYResult = {
     slug: string;
     title: string;
     description: string;
-    icon: string | null;
+    icon: string;
     longTitle: string | null;
     textContent: Array<{
       children?: Array<{

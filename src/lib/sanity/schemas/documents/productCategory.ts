@@ -5,7 +5,6 @@ import {
 } from '@/lib/sanity/schemas/validation/block';
 import { TagIcon } from '@sanity/icons';
 import { defineField, defineType, PortableTextTextBlock } from 'sanity';
-import { preview } from 'sanity-plugin-icon-picker';
 
 export default defineType({
   name: 'productCategory',
@@ -104,15 +103,6 @@ export default defineType({
     select: {
       title: 'name',
       subtitle: 'expansion',
-      iconName: 'marketSegment.icon.name',
-      iconProvider: 'marketSegment.icon.provider',
-    },
-    prepare({ title, subtitle, iconName, iconProvider }) {
-      return {
-        title,
-        subtitle,
-        media: preview({ name: iconName, provider: iconProvider }),
-      };
     },
   },
   __experimental_formPreviewTitle: false,
