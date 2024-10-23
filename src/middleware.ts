@@ -52,11 +52,11 @@ export function middleware(request: NextRequest) {
             .join('')
         : ''
     };
-    script-src 'self'${
+    script-src 'self' 'unsafe-inline'${
       process.env.NODE_ENV === 'production' ? '' : " 'unsafe-eval'"
     }${
       request.nextUrl.pathname.startsWith('/studio')
-        ? " 'unsafe-inline'"
+        ? ''
         : ` 'nonce-${nonce}' 'strict-dynamic'`
     };
     style-src 'self' 'unsafe-inline';
