@@ -1,6 +1,7 @@
+import { headers } from 'next/headers';
 import { Thing, WithContext } from 'schema-dts';
 
-export default function PageHeader({
+export default async function PageHeader({
   schema,
 }: {
   schema?: WithContext<Thing> | WithContext<Thing>[];
@@ -9,12 +10,15 @@ export default function PageHeader({
     return null;
   }
 
+  const nonce = (await headers()).get('x-nonce') ?? undefined;
+
   return (
     <script
       type="application/ld+json"
       dangerouslySetInnerHTML={{
         __html: JSON.stringify(schema),
       }}
+      nonce={nonce}
     />
   );
 }

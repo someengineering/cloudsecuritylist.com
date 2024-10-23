@@ -8,6 +8,7 @@ import PageHeader from '@/components/page/Header';
 import { getSiteSettings } from '@/lib/sanity';
 import clsx from 'clsx';
 import { Metadata } from 'next';
+import { headers } from 'next/headers';
 import Script from 'next/script';
 
 const title = 'Page not found';
@@ -21,6 +22,7 @@ export const metadata: Metadata = {
 };
 
 export default async function NotFoundPage() {
+  const nonce = (await headers()).get('x-nonce') ?? undefined;
   const { name, navigation, featuredPages, footerLinks, copyright } =
     (await getSiteSettings()) ?? {};
 
@@ -31,6 +33,7 @@ export default async function NotFoundPage() {
           src="/js/script.js"
           data-domain="cloudsecuritylist.com"
           strategy="afterInteractive"
+          nonce={nonce}
         />
       </head>
       <body className="bg-white">

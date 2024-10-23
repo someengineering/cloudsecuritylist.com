@@ -6,6 +6,7 @@ import Header from '@/components/layout/Header';
 import { getSiteSettings } from '@/lib/sanity';
 import clsx from 'clsx';
 import { Metadata } from 'next';
+import { headers } from 'next/headers';
 import Script from 'next/script';
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -39,6 +40,7 @@ export default async function PublicLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const nonce = (await headers()).get('x-nonce') ?? undefined;
   const { name, navigation, footerLinks, copyright } =
     (await getSiteSettings()) ?? {};
 
@@ -49,6 +51,7 @@ export default async function PublicLayout({
           src="/js/script.js"
           data-domain="cloudsecuritylist.com"
           strategy="afterInteractive"
+          nonce={nonce}
         />
       </head>
       <body className="bg-white">

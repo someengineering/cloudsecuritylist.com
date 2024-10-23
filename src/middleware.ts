@@ -5,10 +5,10 @@ export const config = {
   matcher: [
     /*
      * Match all request paths except for the ones starting with:
-     * - api (API routes)
-     * - js (JavaScript files)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
+     * - api/ (API routes)
+     * - js/ (JavaScript files)
+     * - _next/static/ (static files)
+     * - _next/image/ (image optimization files)
      * - favicon.ico (favicon file)
      * - apple-touch-icon (Apple touch icon files)
      * - icon- (icon files)
@@ -20,7 +20,7 @@ export const config = {
      */
     {
       source:
-        '/((?!api|js|_next/static|_next/image|favicon.ico|apple-touch-icon|icon-|icon.svg|sitemap.xml|manifest.webmanifest|robots.txt|a6f541fae06c457b9f469863882bd0e3.txt).*)',
+        '/((?!api/|js/|_next/static/|_next/image/|favicon.ico|apple-touch-icon|icon-|icon.svg|sitemap.xml|manifest.webmanifest|robots.txt|a6f541fae06c457b9f469863882bd0e3.txt).*(?!opengraph-image-).*)',
       missing: [
         { type: 'header', key: 'next-router-prefetch' },
         { type: 'header', key: 'purpose', value: 'prefetch' },
@@ -30,6 +30,7 @@ export const config = {
 };
 
 export function middleware(request: NextRequest) {
+  const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
   const { isBot } = userAgent(request);
 
   if (isBot) {
@@ -51,11 +52,15 @@ export function middleware(request: NextRequest) {
             .join('')
         : ''
     };
-    script-src 'self' 'unsafe-inline'${
+    script-src 'self'${
       process.env.NODE_ENV === 'production' ? '' : " 'unsafe-eval'"
+    }${
+      request.nextUrl.pathname.startsWith('/studio')
+        ? " 'unsafe-inline'"
+        : ` 'nonce-${nonce}' 'strict-dynamic'`
     };
     style-src 'self' 'unsafe-inline';
-    img-src 'self' blob: data: https://cdn.sanity.io ${
+    img-src 'self' blob: data: https://cdn.sanity.io${
       request.nextUrl.pathname.startsWith('/studio')
         ? ' https://lh3.googleusercontent.com'
         : ''
