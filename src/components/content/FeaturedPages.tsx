@@ -1,7 +1,8 @@
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
+import { ComponentType, useMemo } from 'react';
 import { HiChevronRight, HiOutlineSparkles } from 'react-icons/hi2';
-import { IconType } from 'react-icons/lib';
+import { IconBaseProps, IconType } from 'react-icons/lib';
 
 export default function FeaturedPages({
   pages,
@@ -15,6 +16,29 @@ export default function FeaturedPages({
   }[];
   homeLink?: boolean;
 }) {
+  const icons = useMemo(
+    () =>
+      pages.reduce(
+        (icons, page) => {
+          icons[page.slug] = page.icon
+            ? dynamic(() =>
+                import('react-icons/hi2')
+                  .then(
+                    (mod) =>
+                      (mod[page.icon as keyof typeof mod] as IconType) ??
+                      HiOutlineSparkles,
+                  )
+                  .catch(() => HiOutlineSparkles),
+              )
+            : HiOutlineSparkles;
+
+          return icons;
+        },
+        {} as { [key: string]: IconType | ComponentType<IconBaseProps> },
+      ),
+    [pages],
+  );
+
   if (!pages.length) {
     return null;
   }
@@ -29,17 +53,7 @@ export default function FeaturedPages({
       </h2>
       <ul role="list" className="-mt-6 divide-y divide-gray-900/5">
         {pages.map((page) => {
-          const Icon = page.icon
-            ? dynamic(() =>
-                import('react-icons/hi2')
-                  .then(
-                    (mod) =>
-                      (mod[page.icon as keyof typeof mod] as IconType) ??
-                      HiOutlineSparkles,
-                  )
-                  .catch(() => HiOutlineSparkles),
-              )
-            : HiOutlineSparkles;
+          const Icon = icons[page.slug];
 
           return (
             <li key={page.slug} className="group relative flex gap-x-6 py-6">

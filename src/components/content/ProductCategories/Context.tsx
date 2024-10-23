@@ -1,7 +1,7 @@
 'use client';
 
 import { isValidSlug } from '@/utils/slug';
-import React, { createContext, useContext, useReducer } from 'react';
+import { createContext, useContext, useReducer } from 'react';
 
 export type Filters = { marketSegment?: string };
 

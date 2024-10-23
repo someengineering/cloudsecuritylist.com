@@ -1,7 +1,6 @@
 import Card from '@/components/common/CardGrid/Card';
 import CardSkeleton from '@/components/common/CardGrid/CardSkeleton';
 import Link from 'next/link';
-import React from 'react';
 import { HiPlus } from 'react-icons/hi2';
 import { IconType } from 'react-icons/lib';
 import type { IntersectionObserverHookRefCallback } from 'react-intersection-observer-hook';

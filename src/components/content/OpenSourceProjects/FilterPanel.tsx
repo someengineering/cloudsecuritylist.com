@@ -20,7 +20,7 @@ import {
 } from '@headlessui/react';
 import { debounce, sortBy, uniqBy } from 'lodash';
 import dynamic from 'next/dynamic';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { ComponentType, useEffect, useMemo, useState } from 'react';
 import {
   HiChevronDown,
@@ -43,6 +43,7 @@ export default function FilterPanel({
   const { filters, setFilters } = useFilters();
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   const debouncedRouterPush = useMemo(
     () => debounce(router.push, 300),
@@ -65,14 +66,16 @@ export default function FilterPanel({
       marketSegments.reduce(
         (icons, segment) => {
           icons[segment.slug] = segment.icon
-            ? dynamic(() =>
-                import('react-icons/hi2')
-                  .then(
-                    (mod) =>
-                      (mod[segment.icon as keyof typeof mod] as IconType) ??
-                      HiOutlineSparkles,
-                  )
-                  .catch(() => HiOutlineSparkles),
+            ? dynamic(
+                () =>
+                  import('react-icons/hi2')
+                    .then(
+                      (mod) =>
+                        (mod[segment.icon as keyof typeof mod] as IconType) ??
+                        HiOutlineSparkles,
+                    )
+                    .catch(() => HiOutlineSparkles),
+                { ssr: false },
               )
             : HiOutlineSparkles;
 
@@ -98,16 +101,22 @@ export default function FilterPanel({
         params.append('q', filters.searchQuery);
       }
 
-      debouncedRouterPush(
-        `${pathname}?${params.toString()}${window.location.hash}`,
-        {
-          scroll: false,
-          // @ts-expect-error 'shallow' does not exist in type 'NavigateOptions'
-          shallow: true,
-        },
-      );
+      if (
+        searchParams.get('category') !== params.get('category') ||
+        searchParams.get('provider') !== params.get('provider') ||
+        searchParams.get('q') !== params.get('q')
+      ) {
+        debouncedRouterPush(
+          `${pathname}?${params.toString()}${window.location.hash}`,
+          {
+            scroll: false,
+            // @ts-expect-error 'shallow' does not exist in type 'NavigateOptions'
+            shallow: true,
+          },
+        );
+      }
     }
-  }, [debouncedRouterPush, filters, pathname, router]);
+  }, [debouncedRouterPush, filters, pathname, router, searchParams]);
 
   return (
     <div className="mb-10">

@@ -10,7 +10,7 @@ import { toSentenceCase } from '@/utils/string';
 import { getImageDimensions } from '@sanity/asset-utils';
 import { uniqBy } from 'lodash';
 import dynamic from 'next/dynamic';
-import React, { ComponentType, useMemo } from 'react';
+import { ComponentType, useMemo } from 'react';
 import { HiOutlineSparkles } from 'react-icons/hi2';
 import { IconBaseProps, IconType } from 'react-icons/lib';
 import { SiGithub } from 'react-icons/si';

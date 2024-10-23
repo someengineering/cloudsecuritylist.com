@@ -4,7 +4,7 @@ import { useFilters } from '@/components/content/ProductCategories/Context';
 import { MARKET_SEGMENTS_QUERYResult } from '@/lib/sanity/types';
 import clsx from 'clsx';
 import dynamic from 'next/dynamic';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { ComponentType, useEffect, useMemo } from 'react';
 import { HiOutlineSparkles, HiXMark } from 'react-icons/hi2';
 import { IconBaseProps, IconType } from 'react-icons/lib';
@@ -17,6 +17,7 @@ export default function FilterButtons({
   const { filters, setFilters } = useFilters();
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   const marketSegmentIcons = useMemo(
     () =>
@@ -48,20 +49,19 @@ export default function FilterButtons({
     if (pathname) {
       const params = new URLSearchParams();
 
-      if (
-        filters.marketSegment &&
-        marketSegments.some((segment) => segment.slug === filters.marketSegment)
-      ) {
+      if (filters.marketSegment) {
         params.set('segment', filters.marketSegment);
       }
 
-      router.push(`${pathname}?${params.toString()}${window.location.hash}`, {
-        scroll: false,
-        // @ts-expect-error 'shallow' does not exist in type 'NavigateOptions'
-        shallow: true,
-      });
+      if (searchParams.get('segment') !== params.get('segment')) {
+        router.push(`${pathname}?${params.toString()}${window.location.hash}`, {
+          scroll: false,
+          // @ts-expect-error 'shallow' does not exist in type 'NavigateOptions'
+          shallow: true,
+        });
+      }
     }
-  }, [filters, marketSegments, pathname, router]);
+  }, [filters, pathname, router, searchParams]);
 
   if (!marketSegments.length) {
     return null;

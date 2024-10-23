@@ -12,7 +12,7 @@ import { toSentenceCase } from '@/utils/string';
 import { getImageDimensions } from '@sanity/asset-utils';
 import { uniqBy } from 'lodash';
 import dynamic from 'next/dynamic';
-import React, { ComponentType, useMemo } from 'react';
+import { ComponentType, useMemo } from 'react';
 import {
   HiArrowTrendingUp,
   HiCodeBracket,
