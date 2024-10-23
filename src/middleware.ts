@@ -20,7 +20,7 @@ export const config = {
      */
     {
       source:
-        '/((?!api/|js/|_next/static/|_next/image/|favicon.ico|apple-touch-icon|icon-|icon.svg|sitemap.xml|manifest.webmanifest|robots.txt|a6f541fae06c457b9f469863882bd0e3.txt).*(?!opengraph-image-).*)',
+        '/((?!api/|js/|_next/static/|_next/image/|favicon.ico|apple-touch-icon|icon-|icon.svg|sitemap.xml|manifest.webmanifest|robots.txt|a6f541fae06c457b9f469863882bd0e3.txt)(?!.*opengraph-image-).*)',
       missing: [
         { type: 'header', key: 'next-router-prefetch' },
         { type: 'header', key: 'purpose', value: 'prefetch' },
