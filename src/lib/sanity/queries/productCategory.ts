@@ -14,7 +14,13 @@ export const PRODUCT_CATEGORIES_QUERY = groq`
   *[
     _type == "productCategory" &&
     ($marketSegment == "" || $marketSegment == marketSegment._ref) &&
-    ($referenceType == "" || count(*[_type == $referenceType && references(^._id)]) > 0)
+    ($referenceType == "" || count(*[_type == $referenceType && references(^._id)]) > 0) &&
+    (
+      $searchQuery == "" ||
+      name match $searchQuery + "*" ||
+      expansion match $searchQuery + "*" ||
+      description match $searchQuery + "*"
+    )
   ] | order(lower(name) asc) { ${PRODUCT_CATEGORY} }
 `;
 

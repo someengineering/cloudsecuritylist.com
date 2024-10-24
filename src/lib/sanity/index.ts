@@ -145,9 +145,11 @@ export const getProductCategorySlugs = async () =>
   });
 
 export const getProductCategories = async ({
+  searchQuery,
   marketSegment,
   referenceType,
 }: {
+  searchQuery?: string;
   marketSegment?: string;
   referenceType?: 'organization' | 'openSourceProject';
 }) => {
@@ -162,6 +164,7 @@ export const getProductCategories = async ({
   const data = await sanityFetch<PRODUCT_CATEGORIES_QUERYResult>({
     query: PRODUCT_CATEGORIES_QUERY,
     params: {
+      searchQuery: searchQuery ?? '',
       marketSegment: marketSegmentId ?? '',
       referenceType: referenceType ?? '',
     },

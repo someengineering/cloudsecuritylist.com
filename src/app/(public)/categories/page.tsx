@@ -38,7 +38,7 @@ export async function generateMetadata(
 export default async function CategoriesPage(props: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
-  const { segment: marketSegment } = await props.searchParams;
+  const { segment: marketSegment, q: searchQuery } = await props.searchParams;
   const {
     title,
     description,
@@ -68,6 +68,10 @@ export default async function CategoriesPage(props: {
               typeof marketSegment == 'string' && isValidSlug(marketSegment)
                 ? marketSegment
                 : undefined,
+            searchQuery:
+              typeof searchQuery === 'string'
+                ? searchQuery
+                : searchQuery?.join(' '),
           }}
         />
       </Suspense>

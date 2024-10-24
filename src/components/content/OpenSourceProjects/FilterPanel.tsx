@@ -117,7 +117,7 @@ export default function FilterPanel({
         <h2 id="filter-heading" className="sr-only">
           Filters
         </h2>
-        <div className="border-b border-gray-200 bg-white pb-4">
+        <div className="border-b border-gray-200 pb-4">
           <div className="flex items-center justify-between space-x-4">
             <div className="grow">
               <label htmlFor="search" className="sr-only">

@@ -3,12 +3,17 @@
 import { isValidSlug } from '@/utils/slug';
 import { createContext, useContext, useReducer } from 'react';
 
-export type Filters = { marketSegment?: string };
+export type Filters = { marketSegment?: string; searchQuery: string };
 
-type FiltersAction = {
-  type: 'marketSegment';
-  slug: string;
-};
+type FiltersAction =
+  | {
+      type: 'marketSegment';
+      slug: string;
+    }
+  | {
+      type: 'searchQuery';
+      value: string;
+    };
 
 const filtersReducer = (state: Filters, action: FiltersAction): Filters => {
   switch (action.type) {
@@ -22,12 +27,16 @@ const filtersReducer = (state: Filters, action: FiltersAction): Filters => {
       };
     }
 
+    case 'searchQuery': {
+      return { ...state, searchQuery: action.value };
+    }
+
     default:
       return state;
   }
 };
 
-const defaultValues: Filters = {};
+const defaultValues: Filters = { searchQuery: '' };
 
 const FiltersContext = createContext<{
   filters: Filters;
