@@ -7,6 +7,7 @@ import {
   getVendorOrganizationTypes,
   getVendors,
 } from '@/lib/sanity';
+import { ORGANIZATION_TYPE } from '@/lib/sanity/schemas/objects/organizationType';
 
 export default async function Vendors({
   filters,
@@ -30,7 +31,20 @@ export default async function Vendors({
 
   return (
     <section className="pb-12 sm:pb-16">
-      <FiltersProvider initialValues={filters}>
+      <FiltersProvider
+        initialValues={{
+          ...filters,
+          productCategories: filters?.productCategories?.filter((slug) =>
+            productCategories.some((category) => category.slug === slug),
+          ),
+          organizationTypes: filters?.organizationTypes?.filter(
+            (type) => type in ORGANIZATION_TYPE,
+          ),
+          supportedCloudProviders: filters?.supportedCloudProviders?.filter(
+            (slug) => cloudProviders.some((provider) => provider.slug === slug),
+          ),
+        }}
+      >
         <FilterPanel
           productCategories={productCategories}
           organizationTypes={organizationTypes}

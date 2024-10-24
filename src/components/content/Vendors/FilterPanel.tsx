@@ -22,12 +22,11 @@ import {
   PopoverGroup,
   PopoverPanel,
 } from '@headlessui/react';
-import { debounce, sortBy, uniqBy } from 'lodash';
+import { debounce, sortBy, uniqBy, xor } from 'lodash';
 import dynamic from 'next/dynamic';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { ComponentType, useEffect, useMemo, useState } from 'react';
 import {
-  HiArrowPath,
   HiChevronDown,
   HiMagnifyingGlass,
   HiOutlineSparkles,
@@ -82,10 +81,7 @@ export default function FilterPanel({
                         HiOutlineSparkles,
                     )
                     .catch(() => HiOutlineSparkles),
-                {
-                  ssr: false,
-                  loading: () => <HiArrowPath className="animate-spin" />,
-                },
+                { ssr: false },
               )
             : HiOutlineSparkles;
 
@@ -100,25 +96,29 @@ export default function FilterPanel({
     if (pathname && filters.paginated) {
       const params = new URLSearchParams();
 
-      filters.productCategories.forEach((slug) => {
-        params.append('category', slug);
-      });
-      filters.organizationTypes.forEach((type) => {
-        params.append('type', type);
-      });
-      filters.supportedCloudProviders.forEach((slug) => {
-        params.append('provider', slug);
-      });
+      filters.productCategories.forEach((slug) =>
+        params.append('category', slug),
+      );
+      filters.organizationTypes.forEach((type) => params.append('type', type));
+      filters.supportedCloudProviders.forEach((slug) =>
+        params.append('provider', slug),
+      );
 
       if (filters.searchQuery) {
         params.append('q', filters.searchQuery);
       }
 
       if (
-        searchParams.get('category') !== params.get('category') ||
-        searchParams.get('type') !== params.get('type') ||
-        searchParams.get('provider') !== params.get('provider') ||
-        searchParams.get('q') !== params.get('q')
+        searchParams.get('q') !== params.get('q') ||
+        searchParams.getAll('category').length !==
+          params.getAll('category').length ||
+        searchParams.getAll('type').length !== params.getAll('type').length ||
+        searchParams.getAll('provider').length !==
+          params.getAll('provider').length ||
+        xor(searchParams.getAll('category'), params.getAll('category'))
+          .length ||
+        xor(searchParams.getAll('type'), params.getAll('type')).length ||
+        xor(searchParams.getAll('provider'), params.getAll('provider')).length
       ) {
         debouncedRouterPush(
           `${pathname}?${params.toString()}${window.location.hash}`,
@@ -130,7 +130,15 @@ export default function FilterPanel({
         );
       }
     }
-  }, [debouncedRouterPush, filters, pathname, router, searchParams]);
+  }, [
+    cloudProviders,
+    debouncedRouterPush,
+    filters,
+    pathname,
+    productCategories,
+    router,
+    searchParams,
+  ]);
 
   return (
     <div className="mb-10">

@@ -30,7 +30,17 @@ export default async function OpenSourceProjects({
 
   return (
     <section className="pb-12 sm:pb-16">
-      <FiltersProvider initialValues={filters}>
+      <FiltersProvider
+        initialValues={{
+          ...filters,
+          productCategories: filters?.productCategories?.filter((slug) =>
+            productCategories.some((category) => category.slug === slug),
+          ),
+          supportedCloudProviders: filters?.supportedCloudProviders?.filter(
+            (slug) => cloudProviders.some((provider) => provider.slug === slug),
+          ),
+        }}
+      >
         <FilterPanel
           productCategories={productCategories}
           cloudProviders={cloudProviders}
