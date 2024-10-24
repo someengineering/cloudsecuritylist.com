@@ -1,4 +1,5 @@
 import { metadata as notFoundMetadata } from '@/app/not-found';
+import LoadingSpinner from '@/components/common/LoadingSpinner';
 import OpenSourceProjects from '@/components/content/OpenSourceProjects';
 import PageHeader from '@/components/page/Header';
 import JsonLd from '@/components/page/JsonLd';
@@ -7,6 +8,7 @@ import { getWebPage } from '@/utils/jsonLd';
 import { isValidSlug } from '@/utils/slug';
 import { Metadata, ResolvingMetadata } from 'next';
 import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
 
 const slug = 'open-source';
 
@@ -65,31 +67,33 @@ export default async function OpenSourcePage(props: {
         })}
       />
       <PageHeader title={title} description={description} />
-      <OpenSourceProjects
-        filters={{
-          productCategories:
-            typeof productCategories === 'string'
-              ? isValidSlug(productCategories)
-                ? [productCategories]
-                : []
-              : (productCategories ?? []).filter((category) =>
-                  isValidSlug(category),
-                ),
-          supportedCloudProviders:
-            typeof supportedCloudProviders === 'string'
-              ? isValidSlug(supportedCloudProviders)
-                ? [supportedCloudProviders]
-                : []
-              : (supportedCloudProviders ?? []).filter((provider) =>
-                  isValidSlug(provider),
-                ),
-          searchQuery:
-            typeof searchQuery === 'string'
-              ? searchQuery
-              : searchQuery?.join(' '),
-          paginated: !isBot,
-        }}
-      />
+      <Suspense fallback={<LoadingSpinner />}>
+        <OpenSourceProjects
+          filters={{
+            productCategories:
+              typeof productCategories === 'string'
+                ? isValidSlug(productCategories)
+                  ? [productCategories]
+                  : []
+                : (productCategories ?? []).filter((category) =>
+                    isValidSlug(category),
+                  ),
+            supportedCloudProviders:
+              typeof supportedCloudProviders === 'string'
+                ? isValidSlug(supportedCloudProviders)
+                  ? [supportedCloudProviders]
+                  : []
+                : (supportedCloudProviders ?? []).filter((provider) =>
+                    isValidSlug(provider),
+                  ),
+            searchQuery:
+              typeof searchQuery === 'string'
+                ? searchQuery
+                : searchQuery?.join(' '),
+            paginated: !isBot,
+          }}
+        />
+      </Suspense>
     </>
   );
 }

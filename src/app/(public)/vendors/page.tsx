@@ -1,4 +1,5 @@
 import { metadata as notFoundMetadata } from '@/app/not-found';
+import LoadingSpinner from '@/components/common/LoadingSpinner';
 import Vendors from '@/components/content/Vendors';
 import PageHeader from '@/components/page/Header';
 import JsonLd from '@/components/page/JsonLd';
@@ -8,6 +9,7 @@ import { getWebPage } from '@/utils/jsonLd';
 import { isValidSlug } from '@/utils/slug';
 import { Metadata, ResolvingMetadata } from 'next';
 import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
 
 const slug = 'vendors';
 
@@ -67,39 +69,45 @@ export default async function VendorsPage(props: {
         })}
       />
       <PageHeader title={title} description={description} />
-      <Vendors
-        filters={{
-          productCategories:
-            typeof productCategories === 'string'
-              ? isValidSlug(productCategories)
-                ? [productCategories]
-                : []
-              : (productCategories ?? []).filter((category) =>
-                  isValidSlug(category),
-                ),
-          organizationTypes:
-            typeof organizationTypes === 'string'
-              ? organizationTypes in ORGANIZATION_TYPE
-                ? [organizationTypes as ORGANIZATION_TYPE]
-                : []
-              : ((organizationTypes ?? []).filter(
-                  (type) => type in ORGANIZATION_TYPE,
-                ) as ORGANIZATION_TYPE[]),
-          supportedCloudProviders:
-            typeof supportedCloudProviders === 'string'
-              ? isValidSlug(supportedCloudProviders)
-                ? [supportedCloudProviders]
-                : []
-              : (supportedCloudProviders ?? []).filter((provider) =>
-                  isValidSlug(provider),
-                ),
-          searchQuery:
-            typeof searchQuery === 'string'
-              ? searchQuery
-              : searchQuery?.join(' '),
-          paginated: !isBot,
-        }}
-      />
+      <Suspense fallback={<LoadingSpinner />}>
+        <Vendors
+          filters={{
+            productCategories:
+              typeof productCategories === 'string'
+                ? isValidSlug(productCategories)
+                  ? [productCategories]
+                  : []
+                : (productCategories ?? []).filter((category) =>
+                    isValidSlug(category),
+                  ),
+            organizationTypes:
+              typeof organizationTypes === 'string'
+                ? (Object.values(ORGANIZATION_TYPE) as string[]).includes(
+                    organizationTypes,
+                  )
+                  ? [organizationTypes as ORGANIZATION_TYPE]
+                  : []
+                : ((organizationTypes ?? []).filter((type) =>
+                    (Object.values(ORGANIZATION_TYPE) as string[]).includes(
+                      type,
+                    ),
+                  ) as ORGANIZATION_TYPE[]),
+            supportedCloudProviders:
+              typeof supportedCloudProviders === 'string'
+                ? isValidSlug(supportedCloudProviders)
+                  ? [supportedCloudProviders]
+                  : []
+                : (supportedCloudProviders ?? []).filter((provider) =>
+                    isValidSlug(provider),
+                  ),
+            searchQuery:
+              typeof searchQuery === 'string'
+                ? searchQuery
+                : searchQuery?.join(' '),
+            paginated: !isBot,
+          }}
+        />
+      </Suspense>
     </>
   );
 }

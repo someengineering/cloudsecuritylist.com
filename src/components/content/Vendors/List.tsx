@@ -1,7 +1,7 @@
 'use client';
 
 import CardGrid from '@/components/common/CardGrid';
-import { Filters, useFilters } from '@/components/content/Vendors/Context';
+import { useFilters } from '@/components/content/Vendors/Context';
 import { urlFor } from '@/lib/sanity/image';
 import { ORGANIZATION_TYPES } from '@/lib/sanity/schemas/objects/organizationType';
 import { VENDORS_QUERYResult } from '@/lib/sanity/types';
@@ -12,10 +12,10 @@ import useInfiniteScroll from 'react-infinite-scroll-hook';
 
 export default function List({
   initialData,
-  getVendors,
+  fetchMore,
 }: {
   initialData: VENDORS_QUERYResult;
-  getVendors: (filters: Filters, prev?: string) => Promise<VENDORS_QUERYResult>;
+  fetchMore: (prev?: string) => Promise<VENDORS_QUERYResult>;
 }) {
   const { filters } = useFilters();
   const [vendors, setVendors] = useState<VENDORS_QUERYResult>(initialData);
@@ -32,7 +32,7 @@ export default function List({
       setLoading(true);
 
       if (lastItem) {
-        const data = await getVendors(filters, lastItem);
+        const data = await fetchMore(lastItem);
 
         if (!data) {
           setError(true);

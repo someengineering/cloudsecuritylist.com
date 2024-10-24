@@ -1,4 +1,5 @@
 import { metadata as notFoundMetadata } from '@/app/not-found';
+import LoadingSpinner from '@/components/common/LoadingSpinner';
 import ProductCategories from '@/components/content/ProductCategories';
 import PageHeader from '@/components/page/Header';
 import JsonLd from '@/components/page/JsonLd';
@@ -7,6 +8,7 @@ import { getWebPage } from '@/utils/jsonLd';
 import { isValidSlug } from '@/utils/slug';
 import { Metadata, ResolvingMetadata } from 'next';
 import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
 
 const slug = 'categories';
 
@@ -59,14 +61,16 @@ export default async function CategoriesPage(props: {
         })}
       />
       <PageHeader title={title} description={description} />
-      <ProductCategories
-        filters={{
-          marketSegment:
-            typeof marketSegment == 'string' && isValidSlug(marketSegment)
-              ? marketSegment
-              : undefined,
-        }}
-      />
+      <Suspense fallback={<LoadingSpinner />}>
+        <ProductCategories
+          filters={{
+            marketSegment:
+              typeof marketSegment == 'string' && isValidSlug(marketSegment)
+                ? marketSegment
+                : undefined,
+          }}
+        />
+      </Suspense>
     </>
   );
 }

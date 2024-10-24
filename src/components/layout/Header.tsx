@@ -39,9 +39,10 @@ export default function Header({
               className={clsx(
                 'text-sm leading-6',
                 pathname === item.href
-                  ? 'font-bold text-cyan-600 hover:text-cyan-700'
-                  : 'font-semibold text-gray-700 hover:text-gray-800',
+                  ? 'font-bold text-cyan-600 hover:text-cyan-800'
+                  : 'hover:text-gray-8900 font-semibold text-gray-600',
               )}
+              aria-current={pathname === item.href ? 'page' : undefined}
             >
               {item.name}
             </Link>
@@ -96,6 +97,7 @@ export default function Header({
                         ? 'bg-cyan-50 font-bold text-cyan-700 hover:text-cyan-900'
                         : 'font-semibold text-gray-700 hover:bg-gray-50 hover:text-gray-900',
                     )}
+                    aria-current={pathname === item.href ? 'page' : undefined}
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     {item.name}

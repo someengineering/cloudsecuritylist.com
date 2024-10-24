@@ -29,7 +29,7 @@ export default async function OpenSourceProjects({
     ]);
 
   return (
-    <section className="pb-12 sm:pb-16">
+    <section className="group pb-12 sm:pb-16">
       <FiltersProvider
         initialValues={{
           ...filters,
@@ -47,14 +47,11 @@ export default async function OpenSourceProjects({
         />
         <List
           initialData={openSourceProjects}
-          getOpenSourceProjects={async (
-            activeFilters: Partial<Filters>,
-            prev: string,
-          ) => {
+          fetchMore={async (prev: string) => {
             'use server';
 
-            if (typeof prev === 'string') {
-              return await getOpenSourceProjects({ ...activeFilters, prev });
+            if (filters.paginated && typeof prev === 'string') {
+              return await getOpenSourceProjects({ ...filters, prev });
             }
 
             return [];

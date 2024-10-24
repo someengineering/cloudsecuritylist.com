@@ -160,6 +160,7 @@ const nextConfig: NextConfig = {
       : undefined,
 
   experimental: {
+    staleTimes: { dynamic: 30 },
     taint: true,
     webpackBuildWorker: true,
   },

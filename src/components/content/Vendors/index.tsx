@@ -30,15 +30,15 @@ export default async function Vendors({
     ]);
 
   return (
-    <section className="pb-12 sm:pb-16">
+    <section className="group pb-12 sm:pb-16">
       <FiltersProvider
         initialValues={{
           ...filters,
           productCategories: filters?.productCategories?.filter((slug) =>
             productCategories.some((category) => category.slug === slug),
           ),
-          organizationTypes: filters?.organizationTypes?.filter(
-            (type) => type in ORGANIZATION_TYPE,
+          organizationTypes: filters?.organizationTypes?.filter((type) =>
+            (Object.values(ORGANIZATION_TYPE) as string[]).includes(type),
           ),
           supportedCloudProviders: filters?.supportedCloudProviders?.filter(
             (slug) => cloudProviders.some((provider) => provider.slug === slug),
@@ -52,14 +52,11 @@ export default async function Vendors({
         />
         <List
           initialData={vendors}
-          getVendors={async (
-            activeFilters: Partial<Filters>,
-            prev?: string,
-          ) => {
+          fetchMore={async (prev?: string) => {
             'use server';
 
-            if (typeof prev === 'string') {
-              return await getVendors({ ...activeFilters, prev });
+            if (filters.paginated && typeof prev === 'string') {
+              return await getVendors({ ...filters, prev });
             }
 
             return [];

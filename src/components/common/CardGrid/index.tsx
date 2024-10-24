@@ -29,7 +29,7 @@ export default function CardGrid({
   return (
     <ul
       role="list"
-      className="container mx-auto grid max-w-7xl auto-rows-fr grid-cols-1 gap-4 px-6 md:grid-cols-2 lg:grid-cols-3 lg:px-8"
+      className="container mx-auto grid max-w-7xl auto-rows-fr grid-cols-1 gap-4 px-6 group-has-[[data-pending]]:animate-pulse md:grid-cols-2 lg:grid-cols-3 lg:px-8"
     >
       {cards.map((card) => (
         <Card key={card.href} {...card} />

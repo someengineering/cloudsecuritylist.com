@@ -9,11 +9,11 @@ import useInfiniteScroll from 'react-infinite-scroll-hook';
 
 export default function List({
   initialData,
-  getAcquisitions,
+  fetchMore,
   paginated = true,
 }: {
   initialData: ACQUISITIONS_QUERYResult;
-  getAcquisitions: (
+  fetchMore: (
     prevDate: string,
     prevId: string,
   ) => Promise<ACQUISITIONS_QUERYResult>;
@@ -37,7 +37,7 @@ export default function List({
       setLoading(true);
 
       if (lastDate && lastId) {
-        const data = await getAcquisitions(lastDate, lastId);
+        const data = await fetchMore(lastDate, lastId);
 
         if (!data) {
           setError(true);

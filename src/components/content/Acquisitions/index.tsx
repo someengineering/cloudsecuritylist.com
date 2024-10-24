@@ -15,10 +15,14 @@ export default async function Acquisitions({
   return (
     <List
       initialData={acquisitions}
-      getAcquisitions={async (prevDate: string, prevId: string) => {
+      fetchMore={async (prevDate: string, prevId: string) => {
         'use server';
 
-        if (typeof prevDate === 'string' && typeof prevId === 'string') {
+        if (
+          paginated &&
+          typeof prevDate === 'string' &&
+          typeof prevId === 'string'
+        ) {
           return await getAcquisitions({ prevDate, prevId });
         }
 

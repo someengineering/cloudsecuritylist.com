@@ -27,7 +27,7 @@ export default async function ProductCategories({
   }
 
   return (
-    <section className="mx-auto max-w-7xl px-6 pb-12 sm:pb-16 lg:px-8">
+    <section className="group mx-auto max-w-7xl px-6 pb-12 sm:pb-16 lg:px-8">
       <FiltersProvider initialValues={filters}>
         <FilterButtons marketSegments={marketSegments} />
         <List productCategories={productCategories} />

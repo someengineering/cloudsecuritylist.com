@@ -24,8 +24,9 @@ import {
   PopoverPanel,
 } from '@headlessui/react';
 import { debounce, sortBy, uniqBy, xor } from 'lodash';
+import { NavigateOptions } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useTransition } from 'react';
 import { HiChevronDown, HiMagnifyingGlass, HiXMark } from 'react-icons/hi2';
 
 export default function FilterPanel({
@@ -44,9 +45,15 @@ export default function FilterPanel({
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const [isPending, startTransition] = useTransition();
 
   const debouncedRouterPush = useMemo(
-    () => debounce(router.push, 300),
+    () =>
+      debounce(
+        (href: string, options?: NavigateOptions) =>
+          startTransition(() => router.push(href, options)),
+        300,
+      ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
@@ -111,7 +118,7 @@ export default function FilterPanel({
   ]);
 
   return (
-    <div className="mb-10">
+    <div className="mb-10" data-pending={isPending ? '' : undefined}>
       <section
         aria-labelledby="filter-heading"
         className="mx-auto max-w-7xl px-6 lg:px-8"

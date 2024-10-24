@@ -1,10 +1,7 @@
 'use client';
 
 import CardGrid from '@/components/common/CardGrid';
-import {
-  Filters,
-  useFilters,
-} from '@/components/content/OpenSourceProjects/Context';
+import { useFilters } from '@/components/content/OpenSourceProjects/Context';
 import { ORGANIZATION_TYPES } from '@/lib/sanity/schemas/objects/organizationType';
 import { OPEN_SOURCE_PROJECTS_QUERYResult } from '@/lib/sanity/types';
 import { projectImage, repositoryHost } from '@/utils/openSourceProject';
@@ -15,13 +12,10 @@ import useInfiniteScroll from 'react-infinite-scroll-hook';
 
 export default function List({
   initialData,
-  getOpenSourceProjects,
+  fetchMore,
 }: {
   initialData: OPEN_SOURCE_PROJECTS_QUERYResult;
-  getOpenSourceProjects: (
-    filters: Filters,
-    prev: string,
-  ) => Promise<OPEN_SOURCE_PROJECTS_QUERYResult>;
+  fetchMore: (prev: string) => Promise<OPEN_SOURCE_PROJECTS_QUERYResult>;
 }) {
   const { filters } = useFilters();
   const [openSourceProjects, setOpenSourceProjects] =
@@ -39,7 +33,7 @@ export default function List({
       setLoading(true);
 
       if (lastItem) {
-        const data = await getOpenSourceProjects(filters, lastItem);
+        const data = await fetchMore(lastItem);
 
         if (!data) {
           setError(true);

@@ -1,4 +1,5 @@
 import { metadata as notFoundMetadata } from '@/app/not-found';
+import LoadingSpinner from '@/components/common/LoadingSpinner';
 import Acquisitions from '@/components/content/Acquisitions';
 import PageHeader from '@/components/page/Header';
 import JsonLd from '@/components/page/JsonLd';
@@ -6,6 +7,7 @@ import { getPage } from '@/lib/sanity';
 import { getWebPage } from '@/utils/jsonLd';
 import { Metadata, ResolvingMetadata } from 'next';
 import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
 
 const slug = 'acquisitions';
 
@@ -58,7 +60,9 @@ export default async function AcquisitionsPage(props: {
         })}
       />
       <PageHeader title={title} description={description} />
-      <Acquisitions paginated={!isBot} />
+      <Suspense fallback={<LoadingSpinner />}>
+        <Acquisitions paginated={!isBot} />
+      </Suspense>
     </>
   );
 }

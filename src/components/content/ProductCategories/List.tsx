@@ -12,7 +12,7 @@ export default function List({
   }
 
   return (
-    <dl className="mx-auto max-w-5xl space-y-8 divide-y divide-gray-900/10">
+    <dl className="mx-auto max-w-4xl space-y-8 divide-y divide-gray-900/10 group-has-[[data-pending]]:animate-pulse">
       {productCategories.map((category) => (
         <div
           key={category._id}
