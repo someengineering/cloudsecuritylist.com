@@ -118,9 +118,7 @@ export default function FilterPanel({
               setFilters({ type: 'marketSegment', slug: segment.slug })
             }
           >
-            <span className="h-5 w-5" aria-hidden="true">
-              <Icon name={segment.icon} className="h-full w-full" />
-            </span>
+            <Icon name={segment.icon} className="h-5 w-5" />
             {segment.name}
           </button>
         ))}
