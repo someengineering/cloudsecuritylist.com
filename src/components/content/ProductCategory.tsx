@@ -10,42 +10,12 @@ import { projectImage } from '@/utils/openSourceProject';
 import { toSentenceCase } from '@/utils/string';
 import { PortableTextBlock } from '@portabletext/types';
 import { getImageDimensions } from '@sanity/asset-utils';
-import { uniqBy } from 'lodash';
-import dynamic from 'next/dynamic';
-import { ComponentType, useMemo } from 'react';
-import { HiOutlineSparkles } from 'react-icons/hi2';
-import { IconBaseProps, IconType } from 'react-icons/lib';
 
 export default function ProductCategory({
   category,
 }: {
   category: PRODUCT_CATEGORY_QUERYResult;
 }) {
-  const marketSegmentIcons = useMemo(
-    () =>
-      uniqBy(category?.similarCategories ?? [], 'marketSegment.slug')
-        .map((similarCategory) => similarCategory.marketSegment)
-        .reduce(
-          (icons, segment) => {
-            icons[segment.slug] = segment.icon
-              ? dynamic(() =>
-                  import('react-icons/hi2')
-                    .then(
-                      (mod) =>
-                        (mod[segment.icon as keyof typeof mod] as IconType) ??
-                        HiOutlineSparkles,
-                    )
-                    .catch(() => HiOutlineSparkles),
-                )
-              : HiOutlineSparkles;
-
-            return icons;
-          },
-          {} as { [key: string]: IconType | ComponentType<IconBaseProps> },
-        ),
-    [category],
-  );
-
   if (!category) {
     return null;
   }
@@ -118,7 +88,7 @@ export default function ProductCategory({
               slug: similarCategory.slug,
               href: `/category/${similarCategory.slug}`,
               description: similarCategory.description,
-              icon: marketSegmentIcons[similarCategory.marketSegment.slug],
+              iconName: similarCategory.marketSegment.icon,
             }))}
           />
         </OffsetSection>

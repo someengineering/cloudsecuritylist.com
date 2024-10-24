@@ -10,16 +10,11 @@ import { ORGANIZATION_QUERYResult } from '@/lib/sanity/types';
 import { projectImage, repositoryHost } from '@/utils/openSourceProject';
 import { toSentenceCase } from '@/utils/string';
 import { getImageDimensions } from '@sanity/asset-utils';
-import { uniqBy } from 'lodash';
-import dynamic from 'next/dynamic';
-import { ComponentType, useMemo } from 'react';
 import {
   HiArrowTrendingUp,
   HiCodeBracket,
   HiOutlineGlobeAlt,
-  HiOutlineSparkles,
 } from 'react-icons/hi2';
-import { IconBaseProps, IconType } from 'react-icons/lib';
 import { SiCrunchbase, SiGithub, SiGitlab, SiLinkedin } from 'react-icons/si';
 
 export default function Organization({
@@ -27,34 +22,6 @@ export default function Organization({
 }: {
   organization: ORGANIZATION_QUERYResult;
 }) {
-  const marketSegmentIcons = useMemo(
-    () =>
-      organization && 'productCategories' in organization
-        ? uniqBy(organization.productCategories ?? [], 'marketSegment.slug')
-            .map((category) => category.marketSegment)
-            .reduce(
-              (icons, segment) => {
-                icons[segment.slug] = segment.icon
-                  ? dynamic(() =>
-                      import('react-icons/hi2')
-                        .then(
-                          (mod) =>
-                            (mod[
-                              segment.icon as keyof typeof mod
-                            ] as IconType) ?? HiOutlineSparkles,
-                        )
-                        .catch(() => HiOutlineSparkles),
-                    )
-                  : HiOutlineSparkles;
-
-                return icons;
-              },
-              {} as { [key: string]: IconType | ComponentType<IconBaseProps> },
-            )
-        : {},
-    [organization],
-  );
-
   if (
     !organization ||
     organization.organizationType === ORGANIZATION_TYPE.ACQUIRED
@@ -147,7 +114,7 @@ export default function Organization({
               slug: category.slug,
               href: `/category/${category.slug}`,
               description: category.description,
-              icon: marketSegmentIcons[category.marketSegment.slug],
+              iconName: category.marketSegment.icon,
             }))}
           />
         </OffsetSection>

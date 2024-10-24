@@ -1,0 +1,66 @@
+// This file is auto-generated. Do not edit directly.
+import type { IconType } from 'react-icons';
+
+import {
+  HiOutlineArrowsRightLeft,
+  HiOutlineBeaker,
+  HiOutlineBriefcase,
+  HiOutlineCircleStack,
+  HiOutlineCloud,
+  HiOutlineCodeBracket,
+  HiOutlineCog,
+  HiOutlineCubeTransparent,
+  HiOutlineDocumentText,
+  HiOutlineIdentification,
+  HiOutlineInformationCircle,
+  HiOutlineLockClosed,
+  HiOutlineNewspaper,
+  HiOutlinePlay,
+  HiOutlineServer,
+  HiOutlineTag,
+  HiOutlineXCircle,
+} from 'react-icons/hi2';
+import {
+  SiAkamai,
+  SiAlibabacloud,
+  SiAmazonwebservices,
+  SiDigitalocean,
+  SiGooglecloud,
+  SiHetzner,
+  SiIbmcloud,
+  SiMicrosoftazure,
+  SiOracle,
+  SiVmware,
+} from 'react-icons/si';
+
+export const iconComponents: Record<string, IconType> = {
+  HiOutlineXCircle,
+  HiOutlineArrowsRightLeft,
+  HiOutlineBeaker,
+  HiOutlineBriefcase,
+  HiOutlineCircleStack,
+  HiOutlineCloud,
+  HiOutlineCodeBracket,
+  HiOutlineCog,
+  HiOutlineCubeTransparent,
+  HiOutlineDocumentText,
+  HiOutlineIdentification,
+  HiOutlineInformationCircle,
+  HiOutlineLockClosed,
+  HiOutlineNewspaper,
+  HiOutlinePlay,
+  HiOutlineServer,
+  HiOutlineTag,
+  SiAkamai,
+  SiAlibabacloud,
+  SiAmazonwebservices,
+  SiDigitalocean,
+  SiGooglecloud,
+  SiHetzner,
+  SiIbmcloud,
+  SiMicrosoftazure,
+  SiOracle,
+  SiVmware,
+};
+
+export const fallbackIcon = HiOutlineXCircle;

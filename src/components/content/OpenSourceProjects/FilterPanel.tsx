@@ -1,5 +1,6 @@
 'use client';
 
+import Icon from '@/components/common/Icon';
 import { useFilters } from '@/components/content/OpenSourceProjects/Context';
 import {
   CLOUD_PROVIDERS_QUERYResult,
@@ -19,16 +20,9 @@ import {
   PopoverPanel,
 } from '@headlessui/react';
 import { debounce, sortBy, uniqBy, xor } from 'lodash';
-import dynamic from 'next/dynamic';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { ComponentType, useEffect, useMemo, useState } from 'react';
-import {
-  HiChevronDown,
-  HiMagnifyingGlass,
-  HiOutlineSparkles,
-  HiXMark,
-} from 'react-icons/hi2';
-import { IconBaseProps, IconType } from 'react-icons/lib';
+import { useEffect, useMemo, useState } from 'react';
+import { HiChevronDown, HiMagnifyingGlass, HiXMark } from 'react-icons/hi2';
 
 export default function FilterPanel({
   productCategories,
@@ -60,30 +54,6 @@ export default function FilterPanel({
         'name',
       ),
     [productCategories],
-  );
-  const marketSegmentIcons = useMemo(
-    () =>
-      marketSegments.reduce(
-        (icons, segment) => {
-          icons[segment.slug] = segment.icon
-            ? dynamic(
-                () =>
-                  import('react-icons/hi2')
-                    .then(
-                      (mod) =>
-                        (mod[segment.icon as keyof typeof mod] as IconType) ??
-                        HiOutlineSparkles,
-                    )
-                    .catch(() => HiOutlineSparkles),
-                { ssr: false },
-              )
-            : HiOutlineSparkles;
-
-          return icons;
-        },
-        {} as { [key: string]: IconType | ComponentType<IconBaseProps> },
-      ),
-    [marketSegments],
   );
 
   useEffect(() => {
@@ -283,65 +253,60 @@ export default function FilterPanel({
         </div>
         <DisclosurePanel className="hidden border-y border-gray-200 py-10 sm:block">
           <div className="mx-auto grid max-w-7xl auto-rows-min grid-cols-3 gap-x-6 gap-y-8 px-6 text-sm md:grid-cols-4 lg:grid-cols-5 lg:px-8 xl:grid-cols-7">
-            {marketSegments.map((segment) => {
-              const Icon = marketSegmentIcons[segment.slug];
-
-              return (
-                <fieldset key={segment._id}>
-                  <legend className="flex items-center gap-x-1.5 font-medium">
-                    <span className="h-5 w-5" aria-hidden="true">
-                      <Icon className="h-full w-full" />
-                    </span>
-                    {toSentenceCase(segment.name)}
-                  </legend>
-                  <div className="space-y-4 pt-4">
-                    {productCategories
-                      .filter(
-                        (category) =>
-                          category.marketSegment._id === segment._id,
-                      )
-                      .map((category) => (
-                        <div
-                          key={category._id}
-                          className="flex items-center gap-x-1.5"
+            {marketSegments.map((segment) => (
+              <fieldset key={segment._id}>
+                <legend className="flex items-center gap-x-1.5 font-medium">
+                  <span className="h-5 w-5" aria-hidden="true">
+                    <Icon name={segment.icon} className="h-full w-full" />
+                  </span>
+                  {toSentenceCase(segment.name)}
+                </legend>
+                <div className="space-y-4 pt-4">
+                  {productCategories
+                    .filter(
+                      (category) => category.marketSegment._id === segment._id,
+                    )
+                    .map((category) => (
+                      <div
+                        key={category._id}
+                        className="flex items-center gap-x-1.5"
+                      >
+                        <input
+                          defaultValue={category.slug}
+                          checked={filters.productCategories.includes(
+                            category.slug,
+                          )}
+                          id={`category-${category.slug}`}
+                          name="productCategories[]"
+                          type="checkbox"
+                          className="mx-0.5 h-4 w-4 flex-shrink-0 rounded border-gray-300 text-cyan-600 focus:ring-cyan-500"
+                          onChange={() =>
+                            setFilters({
+                              type: 'productCategory',
+                              slug: category.slug ?? '',
+                            })
+                          }
+                        />
+                        <label
+                          htmlFor={`category-${category.slug}`}
+                          className="min-w-0 flex-1 text-sm text-gray-600"
                         >
-                          <input
-                            defaultValue={category.slug}
-                            checked={filters.productCategories.includes(
-                              category.slug,
-                            )}
-                            id={`category-${category.slug}`}
-                            name="productCategories[]"
-                            type="checkbox"
-                            className="mx-0.5 h-4 w-4 flex-shrink-0 rounded border-gray-300 text-cyan-600 focus:ring-cyan-500"
-                            onChange={() =>
-                              setFilters({
-                                type: 'productCategory',
-                                slug: category.slug ?? '',
-                              })
-                            }
-                          />
-                          <label
-                            htmlFor={`category-${category.slug}`}
-                            className="min-w-0 flex-1 text-sm text-gray-600"
-                          >
-                            {category.expansion ? (
-                              <abbr
-                                title={category.expansion}
-                                className="no-underline"
-                              >
-                                {toSentenceCase(category.name)}
-                              </abbr>
-                            ) : (
-                              toSentenceCase(category.name)
-                            )}
-                          </label>
-                        </div>
-                      ))}
-                  </div>
-                </fieldset>
-              );
-            })}
+                          {category.expansion ? (
+                            <abbr
+                              title={category.expansion}
+                              className="no-underline"
+                            >
+                              {toSentenceCase(category.name)}
+                            </abbr>
+                          ) : (
+                            toSentenceCase(category.name)
+                          )}
+                        </label>
+                      </div>
+                    ))}
+                </div>
+              </fieldset>
+            ))}
           </div>
         </DisclosurePanel>
       </Disclosure>
@@ -373,78 +338,74 @@ export default function FilterPanel({
               </button>
             </div>
             <form className="mt-4">
-              {marketSegments.map((segment) => {
-                const Icon = marketSegmentIcons[segment.slug];
-
-                return (
-                  <Disclosure
-                    key={segment._id}
-                    as="div"
-                    className="border-t border-gray-200 px-4 py-6"
-                  >
-                    <h3 className="-mx-2 -my-3 flow-root">
-                      <DisclosureButton className="group flex w-full items-center justify-between bg-white px-2 py-3 text-sm text-gray-400">
-                        <span className="flex items-center gap-x-1.5 font-medium text-gray-900">
-                          <span className="h-5 w-5" aria-hidden="true">
-                            <Icon className="h-full w-full" />
-                          </span>
-                          {toSentenceCase(segment.name)}
+              {marketSegments.map((segment) => (
+                <Disclosure
+                  key={segment._id}
+                  as="div"
+                  className="border-t border-gray-200 px-4 py-6"
+                >
+                  <h3 className="-mx-2 -my-3 flow-root">
+                    <DisclosureButton className="group flex w-full items-center justify-between bg-white px-2 py-3 text-sm text-gray-400">
+                      <span className="flex items-center gap-x-1.5 font-medium text-gray-900">
+                        <span className="h-5 w-5" aria-hidden="true">
+                          <Icon name={segment.icon} className="h-full w-full" />
                         </span>
-                        <span className="ml-6 flex items-center">
-                          <HiChevronDown className="h-5 w-5 rotate-0 transform group-data-[open]:-rotate-180" />
-                        </span>
-                      </DisclosureButton>
-                    </h3>
-                    <DisclosurePanel className="pt-6">
-                      <div className="space-y-6">
-                        {productCategories
-                          .filter(
-                            (category) =>
-                              category.marketSegment._id === segment._id,
-                          )
-                          .map((category) => (
-                            <div
-                              key={`mobile-${category._id}`}
-                              className="flex items-center gap-x-1.5"
+                        {toSentenceCase(segment.name)}
+                      </span>
+                      <span className="ml-6 flex items-center">
+                        <HiChevronDown className="h-5 w-5 rotate-0 transform group-data-[open]:-rotate-180" />
+                      </span>
+                    </DisclosureButton>
+                  </h3>
+                  <DisclosurePanel className="pt-6">
+                    <div className="space-y-6">
+                      {productCategories
+                        .filter(
+                          (category) =>
+                            category.marketSegment._id === segment._id,
+                        )
+                        .map((category) => (
+                          <div
+                            key={`mobile-${category._id}`}
+                            className="flex items-center gap-x-1.5"
+                          >
+                            <input
+                              defaultValue={category.slug}
+                              checked={filters.productCategories.includes(
+                                category.slug,
+                              )}
+                              id={`category-${category.slug}`}
+                              name="productCategories[]"
+                              type="checkbox"
+                              className="mx-0.5 h-4 w-4 rounded border-gray-300 text-cyan-600 focus:ring-cyan-500"
+                              onChange={() =>
+                                setFilters({
+                                  type: 'productCategory',
+                                  slug: category.slug ?? '',
+                                })
+                              }
+                            />
+                            <label
+                              htmlFor={`category-${category.slug}`}
+                              className="text-sm text-gray-500"
                             >
-                              <input
-                                defaultValue={category.slug}
-                                checked={filters.productCategories.includes(
-                                  category.slug,
-                                )}
-                                id={`category-${category.slug}`}
-                                name="productCategories[]"
-                                type="checkbox"
-                                className="mx-0.5 h-4 w-4 rounded border-gray-300 text-cyan-600 focus:ring-cyan-500"
-                                onChange={() =>
-                                  setFilters({
-                                    type: 'productCategory',
-                                    slug: category.slug ?? '',
-                                  })
-                                }
-                              />
-                              <label
-                                htmlFor={`category-${category.slug}`}
-                                className="text-sm text-gray-500"
-                              >
-                                {category.expansion ? (
-                                  <abbr
-                                    title={category.expansion}
-                                    className="no-underline"
-                                  >
-                                    {toSentenceCase(category.name)}
-                                  </abbr>
-                                ) : (
-                                  toSentenceCase(category.name)
-                                )}
-                              </label>
-                            </div>
-                          ))}
-                      </div>
-                    </DisclosurePanel>
-                  </Disclosure>
-                );
-              })}
+                              {category.expansion ? (
+                                <abbr
+                                  title={category.expansion}
+                                  className="no-underline"
+                                >
+                                  {toSentenceCase(category.name)}
+                                </abbr>
+                              ) : (
+                                toSentenceCase(category.name)
+                              )}
+                            </label>
+                          </div>
+                        ))}
+                    </div>
+                  </DisclosurePanel>
+                </Disclosure>
+              ))}
             </form>
           </DialogPanel>
         </div>

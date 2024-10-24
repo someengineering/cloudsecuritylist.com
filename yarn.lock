@@ -2110,19 +2110,19 @@
     suspend-react "0.1.3"
     use-effect-event "^1.0.2"
 
-"@sanity/preview-kit-compat@1.5.11":
-  version "1.5.11"
-  resolved "https://registry.yarnpkg.com/@sanity/preview-kit-compat/-/preview-kit-compat-1.5.11.tgz#443959b4caedbd4d9943735d6a06b10d229696d5"
-  integrity sha512-I0u258jfLwuVRsNlJ+9qjqRK4S9IH1mh2KW9TzMjSmxd9RlaCC9IfOWOzB1PL/0Ym/BQhzwlLEv17pfRrb53VA==
+"@sanity/preview-kit-compat@1.5.12":
+  version "1.5.12"
+  resolved "https://registry.yarnpkg.com/@sanity/preview-kit-compat/-/preview-kit-compat-1.5.12.tgz#64aa24beec422d723784fe9230dd80b613de5c1f"
+  integrity sha512-v5huNQh0PQVuj++0cW9ZWcF9uzUof8TAuqKSBzPq6wXqBJMCAlxqDsHDH6XtBhwAJTwliLywux1L4bG36t3rbw==
   dependencies:
     "@sanity/comlink" "1.0.0"
 
-"@sanity/preview-kit@5.1.8":
-  version "5.1.8"
-  resolved "https://registry.yarnpkg.com/@sanity/preview-kit/-/preview-kit-5.1.8.tgz#b7ec0d75ce929bd87591c1875401670ca9233d9a"
-  integrity sha512-x0mHOCfniM3gZMyLjlqrH6kkFxDZYBJRXCW7FJLZykLei1G4tjcExv7ByJ/v5+eePpfY7J8y8trmDgew33a1GQ==
+"@sanity/preview-kit@5.1.9":
+  version "5.1.9"
+  resolved "https://registry.yarnpkg.com/@sanity/preview-kit/-/preview-kit-5.1.9.tgz#7661368ed5feea386d54fd6c3b472149cfce000c"
+  integrity sha512-1nlbYg/+4QcvZ8H8Z4GQmbx8BzoNi7csW3eKMp9ab7CtN/WnOd5xHknWTRegDwpHQJGKc4lssFRHONVnq86AVg==
   dependencies:
-    "@sanity/preview-kit-compat" "1.5.11"
+    "@sanity/preview-kit-compat" "1.5.12"
     mendoza "3.0.7"
 
 "@sanity/preview-url-secret@2.0.0":
@@ -4062,6 +4062,26 @@ dot-prop@^5.2.0:
   dependencies:
     is-obj "^2.0.0"
 
+dotenv-cli@7.4.2:
+  version "7.4.2"
+  resolved "https://registry.yarnpkg.com/dotenv-cli/-/dotenv-cli-7.4.2.tgz#c158a818de08e1fbc51d310f628cbace9075b734"
+  integrity sha512-SbUj8l61zIbzyhIbg0FwPJq6+wjbzdn9oEtozQpZ6kW2ihCcapKVZj49oCT3oPM+mgQm+itgvUQcG5szxVrZTA==
+  dependencies:
+    cross-spawn "^7.0.3"
+    dotenv "^16.3.0"
+    dotenv-expand "^10.0.0"
+    minimist "^1.2.6"
+
+dotenv-expand@^10.0.0:
+  version "10.0.0"
+  resolved "https://registry.yarnpkg.com/dotenv-expand/-/dotenv-expand-10.0.0.tgz#12605d00fb0af6d0a592e6558585784032e4ef37"
+  integrity sha512-GopVGCpVS1UKH75VKHGuQFqS1Gusej0z4FyQkPdwjil2gNIv+LNsqBlboOzpJFZKVT95GkCyWJbBSdFEFUWI2A==
+
+dotenv@^16.3.0:
+  version "16.4.5"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-16.4.5.tgz#cdd3b3b604cb327e286b4762e13502f717cb099f"
+  integrity sha512-ZmdL2rui+eB2YwhsWzjInR8LldtZHGDoQ1ugH85ppHKwpUHL7j7rN0Ti9NCnGiQbhaZ11FpR+7ao1dNsmduNUg==
+
 duplexify@^3.5.0, duplexify@^3.6.0:
   version "3.7.1"
   resolved "https://registry.yarnpkg.com/duplexify/-/duplexify-3.7.1.tgz#2a4df5317f6ccfd91f86d6fd25d8d8a103b88309"
@@ -4088,9 +4108,9 @@ eastasianwidth@^0.2.0:
   integrity sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==
 
 electron-to-chromium@^1.5.41:
-  version "1.5.44"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.5.44.tgz#0106d327c7d0e7b7bb66fd2da0aaf084ddf1fda5"
-  integrity sha512-Lz3POUa7wANQA8G+9btKAdH+cqkfWCBdkotvQZJVOqRXMYGm1tTD835Z01iCjWpEBf0RInPBWuPfzhGbxOCULw==
+  version "1.5.45"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.5.45.tgz#fa592ce6a88b44d23acbc7453a2feab98996e6c9"
+  integrity sha512-vOzZS6uZwhhbkZbcRyiy99Wg+pYFV5hk+5YaECvx0+Z31NR3Tt5zS6dze2OepT6PCTzVzT0dIJItti+uAW5zmw==
 
 emoji-regex@^10.3.0:
   version "10.4.0"
@@ -6261,15 +6281,15 @@ natural-compare@^1.4.0:
   resolved "https://registry.yarnpkg.com/natural-compare/-/natural-compare-1.4.0.tgz#4abebfeed7541f2c27acfb29bdbbd15c8d5ba4f7"
   integrity sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==
 
-next-sanity@9.8.4:
-  version "9.8.4"
-  resolved "https://registry.yarnpkg.com/next-sanity/-/next-sanity-9.8.4.tgz#e4626626bb2e3dd287b713e0ee891e6251651969"
-  integrity sha512-BfZfI09GEJjXSxPUMTiyFhTXSOTNijulST6VwS9U7euPY9BJ94r23/Fh7kAw2BrSGackEq7nkChGw8TdQ8X9JQ==
+next-sanity@9.8.5:
+  version "9.8.5"
+  resolved "https://registry.yarnpkg.com/next-sanity/-/next-sanity-9.8.5.tgz#529e52efc70fea26a00c4892604f45be1cbe8466"
+  integrity sha512-l2EJFMTY6DOPiQqUtr1BSDkljjQwfK6427K1w1ne135UaPqofuqBay0UZVAyBCeDcGs5B7ZQuCr8m/ssbOiUfA==
   dependencies:
     "@portabletext/react" "^3.1.0"
     "@sanity/client" "^6.22.2"
     "@sanity/next-loader" "1.0.7"
-    "@sanity/preview-kit" "5.1.8"
+    "@sanity/preview-kit" "5.1.9"
     "@sanity/preview-url-secret" "2.0.0"
     "@sanity/visual-editing" "2.3.1"
     groq "^3.62.0"

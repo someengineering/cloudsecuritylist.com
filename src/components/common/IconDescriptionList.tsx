@@ -1,8 +1,7 @@
+import Icon from '@/components/common/Icon';
 import { isExternalLink } from '@/utils/link';
 import { slugify } from '@/utils/slug';
 import Link from 'next/link';
-import { ComponentType } from 'react';
-import { IconBaseProps, IconType } from 'react-icons/lib';
 
 export default async function IconDescriptionList({
   items,
@@ -13,7 +12,7 @@ export default async function IconDescriptionList({
     slug?: string;
     href?: string;
     description: string;
-    icon: IconType | ComponentType<IconBaseProps>;
+    iconName: string;
   }[];
 }) {
   if (!items.length) {
@@ -30,7 +29,7 @@ export default async function IconDescriptionList({
             <div key={slug} id={slug} className="group relative">
               <dt className="text-gray-900">
                 <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-cyan-600">
-                  <item.icon className="h-6 w-6 text-white" />
+                  <Icon name={item.iconName} className="h-6 w-6 text-white" />
                 </div>
                 {item.href ? (
                   <Link

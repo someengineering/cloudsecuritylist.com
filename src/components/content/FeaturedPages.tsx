@@ -1,8 +1,6 @@
-import dynamic from 'next/dynamic';
+import Icon from '@/components/common/Icon';
 import Link from 'next/link';
-import { ComponentType, useMemo } from 'react';
-import { HiChevronRight, HiOutlineSparkles } from 'react-icons/hi2';
-import { IconBaseProps, IconType } from 'react-icons/lib';
+import { HiChevronRight } from 'react-icons/hi2';
 
 export default function FeaturedPages({
   pages,
@@ -16,29 +14,6 @@ export default function FeaturedPages({
   }[];
   homeLink?: boolean;
 }) {
-  const icons = useMemo(
-    () =>
-      pages.reduce(
-        (icons, page) => {
-          icons[page.slug] = page.icon
-            ? dynamic(() =>
-                import('react-icons/hi2')
-                  .then(
-                    (mod) =>
-                      (mod[page.icon as keyof typeof mod] as IconType) ??
-                      HiOutlineSparkles,
-                  )
-                  .catch(() => HiOutlineSparkles),
-              )
-            : HiOutlineSparkles;
-
-          return icons;
-        },
-        {} as { [key: string]: IconType | ComponentType<IconBaseProps> },
-      ),
-    [pages],
-  );
-
   if (!pages.length) {
     return null;
   }
@@ -53,12 +28,13 @@ export default function FeaturedPages({
       </h2>
       <ul role="list" className="-mt-6 divide-y divide-gray-900/5">
         {pages.map((page) => {
-          const Icon = icons[page.slug];
-
           return (
             <li key={page.slug} className="group relative flex gap-x-6 py-6">
               <div className="mx-auto flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full bg-cyan-50">
-                <Icon className="h-7 w-7 text-cyan-600 group-hover:text-cyan-700" />
+                <Icon
+                  name={page.icon ?? 'HiOutlineSparkles'}
+                  className="h-7 w-7 text-cyan-600 group-hover:text-cyan-700"
+                />
               </div>
               <div className="flex-auto">
                 <h3 className="text-balance text-lg font-semibold">

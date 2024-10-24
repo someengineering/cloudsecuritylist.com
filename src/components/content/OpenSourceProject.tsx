@@ -8,11 +8,6 @@ import { OPEN_SOURCE_PROJECT_QUERYResult } from '@/lib/sanity/types';
 import { projectImage } from '@/utils/openSourceProject';
 import { toSentenceCase } from '@/utils/string';
 import { getImageDimensions } from '@sanity/asset-utils';
-import { uniqBy } from 'lodash';
-import dynamic from 'next/dynamic';
-import { ComponentType, useMemo } from 'react';
-import { HiOutlineSparkles } from 'react-icons/hi2';
-import { IconBaseProps, IconType } from 'react-icons/lib';
 import { SiGithub } from 'react-icons/si';
 
 export default function OpenSourceProject({
@@ -20,31 +15,6 @@ export default function OpenSourceProject({
 }: {
   project: OPEN_SOURCE_PROJECT_QUERYResult;
 }) {
-  const marketSegmentIcons = useMemo(
-    () =>
-      uniqBy(project?.productCategories ?? [], 'marketSegment.slug')
-        .map((category) => category.marketSegment)
-        .reduce(
-          (icons, segment) => {
-            icons[segment.slug] = segment.icon
-              ? dynamic(() =>
-                  import('react-icons/hi2')
-                    .then(
-                      (mod) =>
-                        (mod[segment.icon as keyof typeof mod] as IconType) ??
-                        HiOutlineSparkles,
-                    )
-                    .catch(() => HiOutlineSparkles),
-                )
-              : HiOutlineSparkles;
-
-            return icons;
-          },
-          {} as { [key: string]: IconType | ComponentType<IconBaseProps> },
-        ),
-    [project],
-  );
-
   if (!project) {
     return null;
   }
@@ -95,7 +65,7 @@ export default function OpenSourceProject({
               slug: category.slug,
               href: `/category/${category.slug}`,
               description: category.description,
-              icon: marketSegmentIcons[category.marketSegment.slug],
+              iconName: category.marketSegment.icon,
             }))}
           />
         </OffsetSection>
