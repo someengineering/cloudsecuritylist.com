@@ -6,11 +6,24 @@ import {
 } from '@/lib/sanity/queries/fragments/productCategory';
 import { groq } from 'next-sanity';
 
-export const PRODUCT_CATEGORY_SLUGS_QUERY = groq`
-  *[_type == "productCategory" && defined(slug.current)].slug.current
-`;
+export const PRODUCT_CATEGORY_SLUGS_QUERY = groq`*[_type == "productCategory" && defined(slug.current)].slug.current | order(@ asc)`;
 
 export const PRODUCT_CATEGORIES_QUERY = groq`
+  *[
+    _type == "productCategory" &&
+    ($marketSegment == "" || $marketSegment == marketSegment._ref) &&
+    ($referenceType == "" || count(*[_type == $referenceType && references(^._id)]) > 0) &&
+    (
+      $searchQuery == "" ||
+      name match $searchQuery + "*" ||
+      expansion match $searchQuery + "*" ||
+      description match $searchQuery + "*"
+    ) &&
+    lower(name) > lower($prev)
+  ] | order(lower(name) asc) [0...20] { ${PRODUCT_CATEGORY} }
+`;
+
+export const UNPAGINAGED_PRODUCT_CATEGORIES_QUERY = groq`
   *[
     _type == "productCategory" &&
     ($marketSegment == "" || $marketSegment == marketSegment._ref) &&

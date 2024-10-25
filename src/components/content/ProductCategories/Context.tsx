@@ -3,7 +3,10 @@
 import { isValidSlug } from '@/utils/slug';
 import { createContext, useContext, useReducer } from 'react';
 
-export type Filters = { marketSegment?: string; searchQuery: string };
+export type Filters = {
+  marketSegment?: string;
+  searchQuery: string;
+};
 
 type FiltersAction =
   | {

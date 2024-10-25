@@ -12,14 +12,19 @@ import {
 
 export default async function OpenSourceProjects({
   filters,
+  paginated = true,
 }: {
   filters: Partial<Filters>;
+  paginated?: boolean;
 }) {
   const productCategoriesData = getProductCategories({
     referenceType: 'openSourceProject',
   });
   const cloudProvidersData = getCloudProviders();
-  const openSourceProjectsData = getOpenSourceProjects(filters ?? {});
+  const openSourceProjectsData = getOpenSourceProjects({
+    ...filters,
+    paginated,
+  });
 
   const [productCategories, cloudProviders, openSourceProjects] =
     await Promise.all([
@@ -50,12 +55,13 @@ export default async function OpenSourceProjects({
           fetchMore={async (prev: string) => {
             'use server';
 
-            if (filters.paginated && typeof prev === 'string') {
+            if (paginated && typeof prev === 'string') {
               return await getOpenSourceProjects({ ...filters, prev });
             }
 
             return [];
           }}
+          paginated={paginated}
         />
       </FiltersProvider>
     </section>

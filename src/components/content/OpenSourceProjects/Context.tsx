@@ -7,7 +7,6 @@ export type Filters = {
   productCategories: string[];
   supportedCloudProviders: string[];
   searchQuery: string;
-  paginated: boolean;
 };
 
 type FiltersAction =
@@ -70,7 +69,6 @@ const defaultValues: Filters = {
   productCategories: [],
   supportedCloudProviders: [],
   searchQuery: '',
-  paginated: true,
 };
 
 const FiltersContext = createContext<{

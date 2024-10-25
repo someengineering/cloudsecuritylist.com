@@ -1,12 +1,62 @@
+'use client';
+
 import { PRODUCT_CATEGORIES_QUERYResult } from '@/lib/sanity/types';
 import { toSentenceCase } from '@/utils/string';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import useInfiniteScroll from 'react-infinite-scroll-hook';
 
 export default function List({
-  productCategories,
+  initialData,
+  fetchMore,
+  paginated = true,
 }: {
-  productCategories: PRODUCT_CATEGORIES_QUERYResult;
+  initialData: PRODUCT_CATEGORIES_QUERYResult;
+  fetchMore: (prev: string) => Promise<PRODUCT_CATEGORIES_QUERYResult>;
+  paginated?: boolean;
 }) {
+  const [productCategories, setProductCategories] =
+    useState<PRODUCT_CATEGORIES_QUERYResult>(initialData);
+  const [lastItem, setLastItem] = useState<string | undefined>(
+    initialData[initialData.length - 1]?.name,
+  );
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
+
+  const [sentryRef] = useInfiniteScroll({
+    loading: loading,
+    hasNextPage: paginated && !!lastItem,
+    onLoadMore: async () => {
+      setLoading(true);
+
+      if (lastItem) {
+        const data = await fetchMore(lastItem);
+
+        if (!data) {
+          setError(true);
+          return;
+        }
+
+        if (data.length && data[data.length - 1].name !== lastItem) {
+          setLastItem(data[data.length - 1].name);
+          setProductCategories([...productCategories, ...data]);
+        } else {
+          setLastItem(undefined);
+        }
+      }
+
+      setLoading(false);
+    },
+    disabled: !paginated || error,
+  });
+
+  useEffect(() => {
+    setProductCategories(initialData);
+    setLastItem(
+      initialData.length ? initialData[initialData.length - 1].name : undefined,
+    );
+  }, [initialData]);
+
   if (!productCategories.length) {
     return null;
   }
@@ -38,6 +88,23 @@ export default function List({
           </dd>
         </div>
       ))}
+      {paginated && !error && (loading || lastItem) ? (
+        <div ref={sentryRef} className="pt-8" aria-hidden="true">
+          <div className="animate-pulse md:grid md:grid-cols-4 md:gap-8">
+            <div className="col-span-1">
+              <div className="h-6 w-3/4 bg-slate-200" />
+            </div>
+            <div className="mt-4 space-y-3.5 md:col-span-3 md:mt-1.5">
+              <div className="grid grid-cols-5 gap-4">
+                <div className="col-span-1 h-4 rounded bg-slate-200" />
+                <div className="col-span-2 h-4 rounded bg-slate-200" />
+                <div className="col-span-2 h-4 rounded bg-slate-200" />
+              </div>
+              <div className="h-4 w-1/2 rounded bg-slate-200" />
+            </div>
+          </div>
+        </div>
+      ) : null}
     </dl>
   );
 }

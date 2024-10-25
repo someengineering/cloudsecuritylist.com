@@ -9,7 +9,6 @@ export type Filters = {
   organizationTypes: ORGANIZATION_TYPE[];
   supportedCloudProviders: string[];
   searchQuery: string;
-  paginated: boolean;
 };
 
 type FiltersAction =
@@ -91,7 +90,6 @@ const defaultValues: Filters = {
   organizationTypes: [],
   supportedCloudProviders: [],
   searchQuery: '',
-  paginated: true,
 };
 
 const FiltersContext = createContext<{

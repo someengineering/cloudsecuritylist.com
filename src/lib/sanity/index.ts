@@ -29,6 +29,7 @@ import {
   PRODUCT_CATEGORIES_QUERY,
   PRODUCT_CATEGORY_QUERY,
   PRODUCT_CATEGORY_SLUGS_QUERY,
+  UNPAGINAGED_PRODUCT_CATEGORIES_QUERY,
 } from '@/lib/sanity/queries/productCategory';
 import { PUBLICATIONS_QUERY } from '@/lib/sanity/queries/publication';
 import { REDIRECT_QUERY } from '@/lib/sanity/queries/redirect';
@@ -148,10 +149,14 @@ export const getProductCategories = async ({
   searchQuery,
   marketSegment,
   referenceType,
+  prev,
+  paginated = true,
 }: {
   searchQuery?: string;
   marketSegment?: string;
   referenceType?: 'organization' | 'openSourceProject';
+  prev?: string;
+  paginated?: boolean;
 }) => {
   const marketSegmentId = marketSegment
     ? (await getMarketSegment(marketSegment))?._id
@@ -162,11 +167,14 @@ export const getProductCategories = async ({
   }
 
   const data = await sanityFetch<PRODUCT_CATEGORIES_QUERYResult>({
-    query: PRODUCT_CATEGORIES_QUERY,
+    query: paginated
+      ? PRODUCT_CATEGORIES_QUERY
+      : UNPAGINAGED_PRODUCT_CATEGORIES_QUERY,
     params: {
       searchQuery: searchQuery ?? '',
       marketSegment: marketSegmentId ?? '',
       referenceType: referenceType ?? '',
+      ...(paginated ? { prev: prev ?? '' } : null),
     },
     tags: [
       marketSegment ? `marketSegment:${marketSegment}` : 'productCategory',

@@ -9,14 +9,13 @@ import { redirect } from 'next/navigation';
 
 export default async function ProductCategories({
   filters,
+  paginated = true,
 }: {
   filters: Partial<Filters>;
+  paginated?: boolean;
 }) {
   const marketSegmentsData = getMarketSegments();
-  const productCategoriesData = getProductCategories({
-    ...filters,
-    referenceType: undefined,
-  });
+  const productCategoriesData = getProductCategories({ ...filters, paginated });
 
   const [marketSegments, productCategories] = await Promise.all([
     marketSegmentsData,
@@ -31,7 +30,19 @@ export default async function ProductCategories({
     <section className="group mx-auto max-w-7xl px-6 pb-12 sm:pb-16 lg:px-8">
       <FiltersProvider initialValues={filters}>
         <FilterPanel marketSegments={marketSegments} />
-        <List productCategories={productCategories} />
+        <List
+          initialData={productCategories}
+          fetchMore={async (prev: string) => {
+            'use server';
+
+            if (paginated && typeof prev === 'string') {
+              return await getProductCategories({ ...filters, prev });
+            }
+
+            return [];
+          }}
+          paginated={paginated}
+        />
       </FiltersProvider>
     </section>
   );

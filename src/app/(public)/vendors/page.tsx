@@ -104,8 +104,8 @@ export default async function VendorsPage(props: {
               typeof searchQuery === 'string'
                 ? searchQuery
                 : searchQuery?.join(' '),
-            paginated: !isBot,
           }}
+          paginated={!isBot}
         />
       </Suspense>
     </>

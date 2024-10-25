@@ -64,7 +64,7 @@ export default function FilterPanel({
   );
 
   useEffect(() => {
-    if (pathname && filters.paginated) {
+    if (pathname) {
       const params = new URLSearchParams();
 
       filters.productCategories.forEach((slug) =>

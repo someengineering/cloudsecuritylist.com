@@ -11,15 +11,17 @@ import { ORGANIZATION_TYPE } from '@/lib/sanity/schemas/objects/organizationType
 
 export default async function Vendors({
   filters,
+  paginated = true,
 }: {
   filters: Partial<Filters>;
+  paginated?: boolean;
 }) {
   const productCategoriesData = getProductCategories({
     referenceType: 'organization',
   });
   const organizationTypesData = getVendorOrganizationTypes();
   const cloudProvidersData = getCloudProviders();
-  const vendorsData = getVendors(filters ?? {});
+  const vendorsData = getVendors({ ...filters, paginated });
 
   const [productCategories, organizationTypes, cloudProviders, vendors] =
     await Promise.all([
@@ -55,12 +57,13 @@ export default async function Vendors({
           fetchMore={async (prev?: string) => {
             'use server';
 
-            if (filters.paginated && typeof prev === 'string') {
+            if (paginated && typeof prev === 'string') {
               return await getVendors({ ...filters, prev });
             }
 
             return [];
           }}
+          paginated={paginated}
         />
       </FiltersProvider>
     </section>

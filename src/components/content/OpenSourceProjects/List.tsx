@@ -1,7 +1,6 @@
 'use client';
 
 import CardGrid from '@/components/common/CardGrid';
-import { useFilters } from '@/components/content/OpenSourceProjects/Context';
 import { ORGANIZATION_TYPES } from '@/lib/sanity/schemas/objects/organizationType';
 import { OPEN_SOURCE_PROJECTS_QUERYResult } from '@/lib/sanity/types';
 import { projectImage, repositoryHost } from '@/utils/openSourceProject';
@@ -13,11 +12,12 @@ import useInfiniteScroll from 'react-infinite-scroll-hook';
 export default function List({
   initialData,
   fetchMore,
+  paginated = true,
 }: {
   initialData: OPEN_SOURCE_PROJECTS_QUERYResult;
   fetchMore: (prev: string) => Promise<OPEN_SOURCE_PROJECTS_QUERYResult>;
+  paginated?: boolean;
 }) {
-  const { filters } = useFilters();
   const [openSourceProjects, setOpenSourceProjects] =
     useState<OPEN_SOURCE_PROJECTS_QUERYResult>(initialData);
   const [lastItem, setLastItem] = useState<string | undefined>(
@@ -28,7 +28,7 @@ export default function List({
 
   const [sentryRef] = useInfiniteScroll({
     loading: loading,
-    hasNextPage: filters.paginated && !!lastItem,
+    hasNextPage: paginated && !!lastItem,
     onLoadMore: async () => {
       setLoading(true);
 
@@ -50,7 +50,7 @@ export default function List({
 
       setLoading(false);
     },
-    disabled: !filters.paginated || error,
+    disabled: !paginated || error,
   });
 
   useEffect(() => {
@@ -127,9 +127,7 @@ export default function List({
         };
       })}
       sentryRef={
-        filters.paginated && !error && (loading || lastItem)
-          ? sentryRef
-          : undefined
+        paginated && !error && (loading || lastItem) ? sentryRef : undefined
       }
     />
   );

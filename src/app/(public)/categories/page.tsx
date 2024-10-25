@@ -38,7 +38,11 @@ export async function generateMetadata(
 export default async function CategoriesPage(props: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
-  const { segment: marketSegment, q: searchQuery } = await props.searchParams;
+  const {
+    segment: marketSegment,
+    q: searchQuery,
+    isBot,
+  } = await props.searchParams;
   const {
     title,
     description,
@@ -73,6 +77,7 @@ export default async function CategoriesPage(props: {
                 ? searchQuery
                 : searchQuery?.join(' '),
           }}
+          paginated={!isBot}
         />
       </Suspense>
     </>
