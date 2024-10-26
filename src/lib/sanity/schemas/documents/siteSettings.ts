@@ -60,7 +60,7 @@ export default defineType({
       name: 'description',
       title: 'SEO description',
       description:
-        'SEO description length must be between 50 and 160 characters. (Note: The homepage hero text is configured below.)',
+        'Must be between 50 and 160 characters. (Note: The homepage hero text is configured below.)',
       type: 'text',
       rows: 3,
       validation: (rule) => rule.required().min(50).max(160),
@@ -79,9 +79,8 @@ export default defineType({
           ),
     }),
     defineField({
-      name: 'navigation',
+      name: 'headerNavigation',
       title: 'Navigation items',
-      description: 'Links to display in the header navigation bar.',
       type: 'array',
       of: [
         {
@@ -101,20 +100,31 @@ export default defineType({
               description: 'Should be an internal link (e.g., /some-path).',
               type: 'url',
               validation: (rule) =>
-                rule
-                  .required()
-                  .uri({ allowRelative: true, relativeOnly: true }),
+                rule.uri({ allowRelative: true, relativeOnly: true }),
+            },
+            {
+              name: 'children',
+              title: 'Children',
+              type: 'array',
+              of: [
+                {
+                  type: 'reference',
+                  to: [{ type: 'page' }],
+                  options: { filter: 'unlisted != true' },
+                },
+              ],
+              validation: (rule) => rule.unique(),
             },
           ],
+          validation: (rule) => rule.required(),
         },
       ],
       fieldset: 'header',
-      validation: (rule) => rule.required().min(3).max(8).unique(),
+      validation: (rule) => rule.required().min(3).max(5),
     }),
     defineField({
       name: 'footerLinks',
       title: 'Footer links',
-      description: 'Links to display in the header navigation bar.',
       type: 'array',
       of: [
         {
@@ -219,11 +229,11 @@ export default defineType({
         {
           type: 'reference',
           to: [{ type: 'page' }],
-          options: { filter: '!defined(unlisted) || unlisted == false' },
+          options: { filter: 'unlisted != true' },
         },
       ],
       fieldset: 'homepage',
-      validation: (rule) => rule.required().min(1),
+      validation: (rule) => rule.required().min(1).unique(),
     }),
   ],
   __experimental_formPreviewTitle: false,

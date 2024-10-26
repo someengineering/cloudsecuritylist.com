@@ -11,7 +11,7 @@ export const SITE_SETTINGS_QUERY = groq`
     description,
     url,
     copyright,
-    navigation[] { name, href },
+    headerNavigation[] { name, href, children[] -> { ${PAGE}, "description": coalesce(shortDescription, string::split(description, ".")[0]) } },
     footerLinks[] { name, href, nofollow },
     heroTitle[0],
     heroDescription[],

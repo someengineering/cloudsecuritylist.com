@@ -41,7 +41,7 @@ export default async function PublicLayout({
   children: React.ReactNode;
 }) {
   const nonce = (await headers()).get('x-nonce') ?? undefined;
-  const { name, navigation, footerLinks, copyright } =
+  const { name, headerNavigation, footerLinks, copyright } =
     (await getSiteSettings()) ?? {};
 
   return (
@@ -55,7 +55,7 @@ export default async function PublicLayout({
         />
       </head>
       <body className="bg-white">
-        <Header title={name} navigation={navigation} />
+        <Header title={name} navigation={headerNavigation} />
         <main>{children}</main>
         <Footer copyright={copyright} links={footerLinks} />
       </body>

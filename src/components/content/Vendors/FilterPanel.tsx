@@ -167,7 +167,7 @@ export default function FilterPanel({
                       {filters.organizationTypes.length}
                     </span>
                   ) : null}
-                  <HiChevronDown className="ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500 data-[open]:rotate-180" />
+                  <HiChevronDown className="ml-1 h-4 w-4 flex-shrink-0 text-gray-400 group-hover:text-gray-500 data-[open]:rotate-180" />
                 </PopoverButton>
                 <PopoverPanel className="absolute right-2 z-10 mt-2 origin-top-right rounded-md bg-white p-4 shadow-2xl ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:opacity-0">
                   <form className="space-y-4">
@@ -206,7 +206,7 @@ export default function FilterPanel({
                       {filters.supportedCloudProviders.length}
                     </span>
                   ) : null}
-                  <HiChevronDown className="ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500 data-[open]:rotate-180" />
+                  <HiChevronDown className="ml-1 h-4 w-4 flex-shrink-0 text-gray-400 group-hover:text-gray-500 data-[open]:rotate-180" />
                 </PopoverButton>
                 <PopoverPanel className="absolute right-2 z-10 mt-2 origin-top-right rounded-md bg-white p-4 shadow-2xl ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:opacity-0">
                   <form className="space-y-4">
@@ -255,7 +255,7 @@ export default function FilterPanel({
             >
               Product categories
               <span className="sr-only">, selected</span>
-              <HiChevronDown className="ml-1 hidden h-5 w-5 text-gray-400 group-hover:text-gray-500 group-data-[open]:rotate-180 sm:block" />
+              <HiChevronDown className="ml-1 hidden h-4 w-4 text-gray-400 group-hover:text-gray-500 group-data-[open]:rotate-180 sm:block" />
             </DisclosureButton>
             <div
               aria-hidden="true"
@@ -404,7 +404,7 @@ export default function FilterPanel({
                         {toSentenceCase(segment.name)}
                       </span>
                       <span className="ml-6 flex items-center">
-                        <HiChevronDown className="h-5 w-5 rotate-0 transform group-data-[open]:-rotate-180" />
+                        <HiChevronDown className="h-4 w-4 rotate-0 transform group-data-[open]:-rotate-180" />
                       </span>
                     </DisclosureButton>
                   </h3>
@@ -502,7 +502,7 @@ export default function FilterPanel({
                       ) : null}
                     </span>
                     <span className="ml-6 flex items-center">
-                      <HiChevronDown className="h-5 w-5 rotate-0 transform group-data-[open]:-rotate-180" />
+                      <HiChevronDown className="h-4 w-4 rotate-0 transform group-data-[open]:-rotate-180" />
                     </span>
                   </DisclosureButton>
                 </h3>
@@ -553,7 +553,7 @@ export default function FilterPanel({
                       ) : null}
                     </span>
                     <span className="ml-6 flex items-center">
-                      <HiChevronDown className="h-5 w-5 rotate-0 transform group-data-[open]:-rotate-180" />
+                      <HiChevronDown className="h-4 w-4 rotate-0 transform group-data-[open]:-rotate-180" />
                     </span>
                   </DisclosureButton>
                 </h3>

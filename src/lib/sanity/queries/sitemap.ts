@@ -9,7 +9,7 @@ export const SITEMAP_QUERY = groq`
   *[_type == "siteSettings" && _id == "siteSettings"][0] {
     "items":
       [{ url, "created": _createdAt, "lastModified": _updatedAt }] +
-      *[_type == "page" && defined(slug.current) && (!defined(unlisted) || unlisted == false)] | order(slug.current asc) {
+      *[_type == "page" && defined(slug.current) && (unlisted != true)] | order(slug.current asc) {
         "url": ^.url + "/" + slug.current,
         "created": _createdAt,
         "lastModified": ${PAGE_UPDATED_AT}

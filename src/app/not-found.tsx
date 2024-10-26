@@ -23,7 +23,7 @@ export const metadata: Metadata = {
 
 export default async function NotFoundPage() {
   const nonce = (await headers()).get('x-nonce') ?? undefined;
-  const { name, navigation, featuredPages, footerLinks, copyright } =
+  const { name, headerNavigation, featuredPages, footerLinks, copyright } =
     (await getSiteSettings()) ?? {};
 
   return (
@@ -37,7 +37,7 @@ export default async function NotFoundPage() {
         />
       </head>
       <body className="bg-white">
-        <Header title={name} navigation={navigation} />
+        <Header title={name} navigation={headerNavigation} />
         <main>
           <PageHeader
             title="Page not found"

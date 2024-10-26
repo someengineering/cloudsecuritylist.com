@@ -51,10 +51,17 @@ export default defineType({
     defineField({
       name: 'description',
       title: 'Description',
-      description: 'Description length must be between 50 and 160 characters.',
+      description: 'Must be between 50 and 160 characters.',
       type: 'text',
       rows: 3,
       validation: (rule) => rule.required().min(50).max(160),
+    }),
+    defineField({
+      name: 'shortDescription',
+      title: 'Short description',
+      description: 'Must be between 60 characters or less.',
+      type: 'string',
+      validation: (rule) => rule.min(1).max(60),
     }),
     defineField({
       name: 'listType',

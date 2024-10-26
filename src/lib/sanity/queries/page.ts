@@ -7,6 +7,7 @@ export const PAGE_QUERY = groq`
   *[_type == "page" && slug.current == $slug][0] {
     _createdAt,
     "_updatedAt": ${PAGE_UPDATED_AT},
-    ${PAGE}
+    ${PAGE},
+    ...select(!defined(listType) => { longTitle, textContent[], displayUpdatedAt })
   }
 `;
