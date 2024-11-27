@@ -41,32 +41,6 @@ export default async function OpenGraphImage({
         />
       </Layout>
     ),
-    {
-      ...size,
-      fonts: [
-        {
-          name: 'Noto Sans',
-          style: 'normal',
-          weight: 500,
-          data: await fetch(
-            new URL(
-              '../../../../assets/fonts/NotoSans-Medium.ttf',
-              import.meta.url,
-            ),
-          ).then((res) => res.arrayBuffer()),
-        },
-        {
-          name: 'Noto Sans',
-          style: 'normal',
-          weight: 700,
-          data: await fetch(
-            new URL(
-              '../../../../assets/fonts/NotoSans-Bold.ttf',
-              import.meta.url,
-            ),
-          ).then((res) => res.arrayBuffer()),
-        },
-      ],
-    },
+    { ...size },
   );
 }

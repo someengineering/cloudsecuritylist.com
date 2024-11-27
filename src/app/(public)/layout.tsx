@@ -46,18 +46,16 @@ export default async function PublicLayout({
 
   return (
     <html lang="en" className={clsx('h-full scroll-smooth', notoSans.variable)}>
-      <head>
+      <body className="bg-white">
+        <Header title={name} navigation={headerNavigation} />
+        <main>{children}</main>
+        <Footer copyright={copyright} links={footerLinks} />
         <Script
           src="/js/script.js"
           data-domain="cloudsecuritylist.com"
           strategy="afterInteractive"
           nonce={nonce}
         />
-      </head>
-      <body className="bg-white">
-        <Header title={name} navigation={headerNavigation} />
-        <main>{children}</main>
-        <Footer copyright={copyright} links={footerLinks} />
       </body>
     </html>
   );

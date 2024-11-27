@@ -24,7 +24,9 @@ export default function Summary({
         </div>
       ) : null}
       <div tw="flex flex-col">
-        <div tw="text-7xl font-bold leading-none tracking-tight">{title}</div>
+        <div tw="text-7xl font-semibold leading-none tracking-tight">
+          {title}
+        </div>
         <div tw={clsx('mt-5 text-4xl font-medium', logo ? 'w-7/8' : 'w-4/5')}>
           {description}
         </div>
